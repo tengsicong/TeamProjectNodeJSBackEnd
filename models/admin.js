@@ -7,5 +7,10 @@ module.exports = {
             .findOne({_id: id})
             .exec();
     },
+    getAdminByUserName: function getAdminByUserName(email) {
+        return admin
+            .findOne({UserName: email})
+            .exec();
+    }
 
 }
