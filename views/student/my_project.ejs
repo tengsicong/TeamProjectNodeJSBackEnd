@@ -10,8 +10,8 @@
                 <br>
                 <table width="100%">
                     <tr>
-                        <td width="30%"><P><%= 'Client : ' + proposal.GroupID.StaffID.Name %></P></td>
-                        <td width="30%"><p><%= 'Supervisor : ' + proposal.GroupID.StaffID.Name%></p></td>
+                        <td width="30%"><P><%= 'Client : ' + proposal.ClientID.Name %></P></td>
+                        <td width="30%"><p><%= 'Supervisor : ' + proposal.GroupID[0].StaffID.Name%></p></td>
                     </tr>
                 </table>
                 <br>
@@ -21,7 +21,7 @@
                             <h3 class="panel-title"> Panel Info</h3>
                         </div>
                         <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis quam sit amet nisi dictum, in iaculis dolor lobortis. Aenean placerat purus non faucibus sdljflsdjflsdjfojsdofjofjasjdfa us non faucibus sdljflsdjflsdjfojsdofjofjasjdfa.
+                            <%= proposal.Content %>
                         </div>
                     </div>
 <!--                </div>-->
@@ -46,36 +46,13 @@
                         <th>Place</th>
 
                     </tr>
+                    <% for (let i = 0; i < team.ClientMeetingID.length; i++) { %>
                     <tr>
-                        <th>Client Meeting 1</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-
+                        <th>Client Meeting <%=' ' + (i+1) %></th>
+                        <td><%= team.ClientMeetingID[i].Date.toISOString().replace(/T.*/,' ')+team.ClientMeetingID[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                        <td><%= team.ClientMeetingID[i].Place %></td>
                     </tr>
-                    <tr>
-                        <th>Client Meeting 2</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-
-                    </tr>
-                    <tr>
-                        <th>Client Meeting 3</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-
-                    </tr>
-                    <tr>
-                        <th>Client Meeting 4</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-
-                    </tr>
-                    <tr>
-                        <th>Client Meeting 5</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-
-                    </tr>
+                    <% } %>
                 </table>
             </div>
 
@@ -95,36 +72,20 @@
                         <th>Place</th>
                         <th>Supervisor</th>
                     </tr>
+                    <% for (let i = 0; i < team.StaffMeetingID.length; i++) {%>
                     <tr>
-                        <th>Supervisor Meeting 1</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-                        <td>Emma Norling</td>
+                        <th>Supervisor Meeting <% ' ' + (i+1)%></th>
+                        <td><%= team.StaffMeetingID[i].Date.toISOString().replace(/T.*/,' ')+team.StaffMeetingID[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                        <td><%= team.StaffMeetingID[i].Place %></td>
+                        <td>
+                            <% if (team.StaffMeetingID[i].TemporaryStaffID != undefined) {%>
+                                <%= team.StaffMeetingID[i].TemporaryStaffID.Name %>
+                            <% } else { %>
+                                    <%= team.StaffID.Name %>
+                            <% } %>
+                        </td>
                     </tr>
-                    <tr>
-                        <th>Supervisor Meeting 2</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-                        <td>Emma Norling</td>
-                    </tr>
-                    <tr>
-                        <th>Supervisor Meeting 3</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-                        <td>Emma Norling</td>
-                    </tr>
-                    <tr>
-                        <th>Supervisor Meeting 4</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-                        <td>Emma Norling</td>
-                    </tr>
-                    <tr>
-                        <th>Supervisor Meeting 5</th>
-                        <td>01/01/2020 12:00</td>
-                        <td>Broad Lane Building LT01</td>
-                        <td>Emma Norling</td>
-                    </tr>
+                    <% } %>
                 </table>
             </div>
         </div>

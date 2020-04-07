@@ -4,6 +4,12 @@ const team = mongo.teams;
 
 module.exports = {
 
+    getStudentByUserName: function getStudentByUserName(email) {
+        return student
+            .findOne({UserName: email})
+            .exec();
+    }
+
     /**
      * Author: TENG
      * User:

@@ -64,8 +64,8 @@ module.exports = {
             .populate('StaffID')
             .populate('Preference')
             .populate('Representer')
-            .populate('client_meetings')
-            .populate('staff_meetings')
+            .populate('ClientMeetingID')
+            .populate({path: 'StaffMeetingID', populate: {path: 'TemporaryStaffID'}})
             .exec();
     },
 

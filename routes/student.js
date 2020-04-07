@@ -95,20 +95,20 @@ router.get('/my_project', function(req, res) {
     Promise.all([
         studentModel.getStudentByStudentID(studentID),
         proposalModel.getProposalByStudentID(studentID),
+        teamModel.getTeamByStudentID(studentID),
     ])
         .then(function(result) {
             const student = result[0];
             const proposal = result[1];
-            console.log(proposal);
+            const team = result[2];
+            console.log(team)
             res.render('student/my_project', {
                 pageTitle: 'My Project',
                 student: student,
                 proposal: proposal,
+                team: team,
             });
         });
 })
-
-
-
 
 module.exports = router;
