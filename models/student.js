@@ -8,7 +8,7 @@ module.exports = {
         return student
             .findOne({UserName: email})
             .exec();
-    }
+    },
 
     /**
      * Author: TENG
