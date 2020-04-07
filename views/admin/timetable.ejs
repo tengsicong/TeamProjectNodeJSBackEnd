@@ -1,0 +1,161 @@
+<%- include('header1') %>
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="typography">
+        <div class="main-page" >
+
+            <div>
+                <table width="100%">
+                    <h2 align="center">TIMETABLE</h2>
+                </table>
+            </div>
+            <div class="alert alert-info" role="alert">
+                <table width="100%">
+                    <tr>
+                        <td width="90%" align="center">You have 2 change time requests !</td>
+                        <td width="10%" align="right"><input onclick="{location.href='./timetable_change'}" type="button" value="Check" class="btn btn-primary"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="agil-info-calendar" style="height:600px;margin-bottom:0px">
+                <!-- calendar -->
+                <div class="col-md-6 agile-calendar" style="background: white">
+                    <div class="calendar-widget">
+                        <header class="widget-header">
+                            <h4>Meeting Calender</h4>
+                        </header>
+                        <hr class="widget-separator">
+                        <!-- grids -->
+                        <div class="agile-calendar-grid">
+                            <div class="page">
+
+                                <div class="w3l-calendar-left">
+                                    <div class="calendar-heading">
+
+                                    </div>
+                                    <div class="monthly" id="mycalendar"></div>
+                                </div>
+
+                                <div class="clearfix"> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- calendar -->
+                <div  class="col-md-6 tables  scroll scrollbar1" style="height:584px">
+                    <div class="widget-shadow"style="width:645px;height:884px">
+                        <h4 style="padding-top:10px;padding-left:10px">Meeting Table</h4>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Meeting Number</th>
+                                <th>Team Number</th>
+                                <th>Meeting Time</th>
+                                <th>Meeting Status</th>
+                                <th>Meeting Client</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>1</td>
+                                <td>xx/xx/xxxx</td>
+                                <td>Done</td>
+                                <td>John</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>1</td>
+                                <td>xx/xx/xxxx</td>
+                                <td>Coming</td>
+                                <td>Lydia</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>2</td>
+                                <td>xx/xx/xxxx</td>
+                                <td>Coming</td>
+                                <td>Charlie</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>3</td>
+                                <td>xx/xx/xxxx</td>
+                                <td>Coming</td>
+                                <td>Vivian</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">6</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">7</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">8</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">9</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">10</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">11</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">12</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">13</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">14</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">15</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>

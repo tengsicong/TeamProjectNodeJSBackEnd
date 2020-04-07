@@ -1,0 +1,113 @@
+<%- include('header1') %>
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="typography">
+        <div class="main-page">
+
+            <div>
+                <table width="100%">
+                    <tr>
+                        <td width="70%"><h2 style="color:#629aa9">Student list</h2></td>
+                        <td width="10%"><input type="search" placeholder="student name..."></td>
+                        <td width="10%">
+                            <button type="button" class="btn btn-primary">search</button>
+                        </td>
+                        <td width="10%">
+                            <button type="button" class="btn btn-primary" style="float:right;">add student</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+
+            <div class="blank-page widget-shadow">
+                <table width="100%" class="table">
+                    <thead style=" width: calc( 100% - 1em )">
+                    <tr style="display: table;width: 100%;table-layout: fixed;">
+                        <h3><b>Allocated students</b></h3>
+                    </tr>
+                    <br>
+                    <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
+                        <th>Name</th>
+                        <th>E-mail</th>
+                        <th>Group</th>
+                        <th>Project</th>
+                        <th>Average Score</th>
+                    </tr>
+                    </thead>
+                    <tbody style="display: block; height: 180px;overflow-y: scroll;">
+                    <% for (var i =0,j = 0; i < allStudent.length ; i++) { %>
+                        <% if (allStudent[i].GroupID == undefined) { %>
+
+                        <% }else{ %>
+                            <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                            <% if(j % 2 == 0) { %>
+                                <%= j++;%>
+                                class="active"
+                                    <% }else { %>
+                                        <%= j++;%>
+                                    <% } %>
+                            >
+                                <a href="#">
+                                    <td scope="row"><%= allStudent[i].Name%></td>
+                                    <td><%= allStudent[i].UserName%></td>
+                                    <td><%= allStudent[i].GroupID.TeamName%></td>
+                                    <td><%= allStudent[i].GroupID.ProposalID%></td>
+                                    <td><%= allStudent[i].Mark%></td>
+                                </a>
+                            </tr>
+                        <% } %>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="blank-page widget-shadow" data-example-id="contextual-table" style="margin-top:10px">
+                <div class="table" width="100%">
+                    <table width="100%" class="table">
+                        <thead style=" width: calc( 100% - 1em )">
+                        <tr style="display: table;width: 100%;table-layout: fixed;">
+                            <h3><b>Unallocated students</b></h3>
+                        </tr>
+                        <br>
+                        <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
+                            <th>Name</th>
+                            <th>E-mail</th>
+                            <th>Group</th>
+                            <th>Project</th>
+                            <th>Average Score</th>
+                        </tr>
+                        </thead>
+                        <tbody style="display: block; height: 180px;overflow-y: scroll;">
+                        <% for (var i = 0, j = 0; i < allStudent.length ; i++) { %>
+                            <% if (allStudent[i].GroupID == undefined) { %>
+                                <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                                <% if(j % 2 == 0) { %>
+                                    <%= j++; %>;
+                                    class="active"
+                                        <% }else { %>
+                                    <%= j++; %>;
+                                        <% } %>
+                                >
+                                    <a href="#">
+                                        <td scope="row"><%= allStudent[i].Name%></td>
+                                        <td><%= allStudent[i].UserName%></td>
+                                        <td>None</td>
+                                        <td>None</td>
+                                        <td>None</td>
+                                    </a>
+                                </tr>
+                            <% }else{ %>
+
+                            <% } %>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

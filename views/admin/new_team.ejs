@@ -76,7 +76,114 @@
             </tr>
         </table>
     </div>
+    <div class="blank-page widget-shadow scroll" id="style-2 div1" style="width:43%; margin-left:1.3%;float:left; padding:2%;">
 
+        <table width="100%" class="auto-group">
+            <tr width="100%">
+                <td width="100%">
+                    <table width="100%" class="auto-group" style="margin-bottom: 8%">
+                        <tr>
+                            <td width="60%">
+                                <h2 style="color:#629aa9">Student list</h2>
+                            </td>
+                            <td width="13%">
+                                <input type="search" placeholder="student name..."
+                                       style="border-radius: 6px;height:22%;">
+                            </td>
+                            <td style="float: right">
+                                <input type="button" value="search"
+                                       class="btn btn-primary">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr width="100%" >
+                <table width="100%" class="table">
+                    <thead style=" width: calc( 100% - 1em )">
+                    <tr style="display: table;width: 100%;table-layout: fixed;" >
+                        <h3><b>Allocated students</b></h3>
+                    </tr>
+                    <br>
+                    <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
+                        <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Name</th>
+                        <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">E-mail</th>
+                        <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Group</th>
+                        <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Project</th>
+                        <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Average Score</th>
+                    </tr>
+                    </thead>
+                    <tbody style="display: block; height: 90px;overflow-y: scroll;">
+                    <% for (var i =0,j = 0; i < allStudent.length ; i++) { %>
+                        <% if (allStudent[i].GroupID == undefined) { %>
+
+                        <% }else{ %>
+                            <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                            <% if(j % 2 == 0) { %>
+                                <%= j++;%>
+                                class="active"
+                            <% }else { %>
+                                <%= j++;%>
+                                    <% } %>
+                            >
+                                <a href="#">
+                                    <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].Name%></td>
+                                    <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].UserName%></td>
+                                    <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].GroupID.TeamName%></td>
+                                    <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].GroupID.ProposalID%></td>
+                                    <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].Mark%></td>
+                                </a>
+                            </tr>
+                        <% } %>
+                    <% } %>
+                    </tbody>
+                </table>
+            </tr>
+        </table>
+        <table width="100%" class="table">
+            <thead style=" width: calc( 100% - 1em )">
+            <tr style="display: table;width: 100%;table-layout: fixed;" >
+                <h3><b>Unallocated students</b></h3>
+            </tr>
+            <br>
+            <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
+                <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Name</th>
+                <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">E-mail</th>
+                <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Group</th>
+                <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Project</th>
+                <th style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">Average Score</th>
+            </tr>
+            </thead>
+            <tbody style="display: block; height: 80px;overflow-y: scroll;">
+            <% for (var i = 0, j = 0; i < allStudent.length ; i++) { %>
+                <% if (allStudent[i].GroupID == undefined) { %>
+                    <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;text-overflow:ellipsis;"
+                    <% if(j % 2 == 0) { %>
+                        <%= j++; %>;
+                        class="active"
+                    <% }else { %>
+                        <%= j++; %>;
+                            <% } %>
+                    >
+                        <a href="#">
+                            <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].Name%></td>
+                            <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row"><%= allStudent[i].UserName%></td>
+                            <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">None</td>
+                            <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">None</td>
+                            <td style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" scope="row">None</td>
+                        </a>
+                    </tr>
+                <% }else{ %>
+
+                <% } %>
+            <% } %>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+</div>
 </div>
 
 

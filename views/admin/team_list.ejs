@@ -1,0 +1,89 @@
+<%- include('header1') %>
+<!-- main content start-->
+<div id="page-wrapper">
+    <!--auto grouping-->
+    <div class="blank-page widget-shadow scroll">
+        <table width="100%">
+            <tr>
+                <td>
+                    <h2><b>Auto Grouping</b></h2>
+                    <p>Click button to automatically group teams by students' preference.</p>
+                </td>
+                <td>
+                    <button onclick="{ location.href='./team_list#jump'}" type="button" class="btn btn-primary"
+                            style="float: right">Group
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <!--auto grouping-->
+    <!--team list-->
+    <div class="blank-page widget-shadow scroll">
+        <table width="100%">
+            <tr>
+                <td><h2 id="jump"><b>Team List</b></h2></td>
+                <td>
+                    <button onclick="{ location.href='./new_team'}" type="button"
+                            class="btn btn-primary btn-flat btn-pri" style="float: right"><i class="fa fa-plus"
+                                                                                             aria-hidden="true"></i>Create
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <% for (var i = 0; i < allTeam.length ; i++) { %>
+        <div class="grid_3 grid_5 widget-shadow">
+            <a href="./edit_team">
+                <div>
+                    <h3><b><%= 'SSIT Team' + allTeam[i].TeamName %></b>
+                        <% if (allTeam[i].ProposalID == undefined) { %>
+                            <span class="label label-danger" style="float:right;font-size:15px">Unallocated</span>
+
+                        <% } else { %>
+                            <span class="label label-success" style="float:right;font-size:15px">allocated</span>
+                        <% } %>
+                    </h3>
+                </div>
+                <div>
+                    <table width="100%">
+                        <tr>
+                            <td width="95%">
+                                <table width="100%" style="color: black">
+                                    <tr>
+                                        <th width="10%"><b>Project:</b></th>
+                                        <td>
+                                            <%if (allTeam[i].ProposalID == undefined) {%>
+                                                None
+                                            <% } else { %>
+                                                <%=allTeam[i].ProposalID.Topic%>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><b>Supervisor:</b></th>
+                                        <td><%= allTeam[i].StaffID.Name%></td>
+                                    </tr>
+                                    <tr>
+                                        <th><b>Student:</b></th>
+                                        <td>
+                                            <%= allTeam[i].StudentID[0].Name %>
+                                            <% for (let j = 1; j < allTeam[i].StudentID.length; j++) { %>
+                                                <%= ' / ' + allTeam[i].StudentID[j].Name %>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td><i class="fa fa-angle-right" style="float:right;font-size:20px"></i></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </a>
+        </div>
+        <% } %>
+    </div>
+</div>
+<%- include('footer') %>

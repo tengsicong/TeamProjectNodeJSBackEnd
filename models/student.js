@@ -24,6 +24,7 @@ module.exports = {
         return student
             .find()
             .populate('GroupID')
+            .populate('ProposalID')
             .exec();
     },
 

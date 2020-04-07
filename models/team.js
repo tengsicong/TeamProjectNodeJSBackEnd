@@ -44,6 +44,10 @@ module.exports = {
     getAllTeam: function getAllTeam() {
         return team
             .find()
+            .populate('StudentID')
+            .populate('StaffID')
+            .populate('ProposalID')
+
             .exec();
     },
 

@@ -1,0 +1,249 @@
+<%- include('header') %>
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="blank-page widget-shadow scroll">
+        <h2 class="title1">Request</h2>
+        <br>
+        <div class="row">
+            <table width="100%" frame=void rules=none>
+                <tr>
+                    <td width="80%">
+                        <table width="100%" border="1px" frame=void rules=none>
+                            <tr class="role2">
+                                <th width="5%">role</th>
+                                <th width="5%">name</th>
+                                <th width="10%">meeting number </th>
+                                <th width="15%">orgianl time</th>
+                                <th width="25%">request</th>
+                                <th width="30%">comment</th>
+                            </tr>
+                            <tr class="role2">
+                                <td >Staff</td>
+                                <td >Tom</td>
+                                <td >staff meeting 5</td>
+                                <td>01/01/2020 12:00-12:30</td>
+                                <td>change time to 02/01/2020 14:00-14:30</td>
+                                <td>i want to change time hhahahahahahahahahahahahah</td>
+                                <td width="5%">
+                                    <button type="button" class="btn btn-primary" style=" float: right">
+                                        Approved
+                                    </button>
+                                </td>
+                                <td width="5%">
+                                    <button type="button" class="btn btn-danger " data-toggle="modal"
+                                            data-target="#rejectereason" data-whatever="@Rejectereason"style=" float: right">
+                                        Rejected
+                                    </button>
+                                    <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="exampleModalLabel">Reject the request</h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group" style="align-items: center">
+                                                        <h4>feedback:&nbsp;reject reason </h4>
+                                                        <br>
+                                                        <textarea id="project_name" rows="1" class="form-control form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary">Set</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </td>
+                            </tr>
+                            <tr class="role2">
+                                <td>Client</td>
+                                <td>Alex</td>
+                                <td>client meeting 5</td>
+                                <td>11/02/2020 11:00-11:30</td>
+                                <td>change time to 12/02/2020 11:00-11:30</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="width: 100%; float: right">
+                                        Approved
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger " data-toggle="modal"
+                                            data-target="#rejectereason" data-whatever="@Rejectereason"style="width: 100%; float: right">
+                                        Rejected
+                                    </button>
+                                    <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="exampleModalLabel">Reject the request</h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group" style="align-items: center">
+                                                        <h4>feedback:&nbsp;reject reason </h4>
+                                                        <br>
+                                                        <textarea id="project_name" rows="1" class="form-control form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary">Set</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--                                <tr class="role2">-->
+                            <!--                                    <td>Staff</td>-->
+                            <!--                                    <td>Tom</td>-->
+                            <!--                                    <td>staff meeting 5</td>-->
+                            <!--                                    <td>01/01/2020 12:00-12:30</td>-->
+                            <!--                                    <td>change time to 02/01/2020 14:00-14:30</td>-->
+                            <!--                                    <td>-->
+                            <!--                                        <button type="button" class="btn btn-primary" style="width: 100%; float: right">-->
+                            <!--                                            Approved-->
+                            <!--                                        </button>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td>-->
+                            <!--                                        <button type="button" class="btn btn-danger " data-toggle="modal"-->
+                            <!--                                                data-target="#rejectereason" data-whatever="@Rejectereason"style="width: 100%; float: right">-->
+                            <!--                                            Rejected-->
+                            <!--                                        </button>-->
+                            <!--                                        <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"-->
+                            <!--                                             aria-labelledby="exampleModalLabel">-->
+                            <!--                                            <div class="modal-dialog" role="document">-->
+                            <!--                                                <div class="modal-content">-->
+                            <!--                                                    <div class="modal-header">-->
+                            <!--                                                        <h3 class="modal-title" id="exampleModalLabel">Reject the request</h3>-->
+                            <!--                                                    </div>-->
+                            <!--                                                    <div class="modal-body">-->
+                            <!--                                                        <div class="form-group" style="align-items: center">-->
+                            <!--                                                            <h4>feedback:&nbsp;reject reason </h4>-->
+                            <!--                                                            <br>-->
+                            <!--                                                            <textarea id="project_name" rows="1" class="form-control form-control"></textarea>-->
+                            <!--                                                        </div>-->
+                            <!--                                                    </div>-->
+                            <!--                                                    <div class="modal-footer">-->
+                            <!--                                                        <button type="button" class="btn btn-primary">Set</button>-->
+                            <!--                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close-->
+                            <!--                                                        </button>-->
+                            <!--                                                    </div>-->
+                            <!--                                                </div>-->
+                            <!--                                            </div>-->
+                            <!--                                        </div>-->
+                            <!--                                    </td>-->
+                            <!--                                </tr>-->
+                            <!--                                <tr class="role2">-->
+                            <!--                                    <td>Client</td>-->
+                            <!--                                    <td>Alex</td>-->
+                            <!--                                    <td>client meeting 5</td>-->
+                            <!--                                    <td>11/02/2020 11:00-11:30</td>-->
+                            <!--                                    <td>change time to 12/02/2020 11:00-11:30</td>-->
+                            <!--                                    <td>-->
+                            <!--                                        <button type="button" class="btn btn-primary" style="width: 100%; float: right">-->
+                            <!--                                            Approved-->
+                            <!--                                        </button>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td>-->
+                            <!--                                        <button type="button" class="btn btn-danger " data-toggle="modal"-->
+                            <!--                                                data-target="#rejectereason" data-whatever="@Rejectereason"style="width: 100%; float: right">-->
+                            <!--                                            Rejected-->
+                            <!--                                        </button>-->
+                            <!--                                        <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"-->
+                            <!--                                             aria-labelledby="exampleModalLabel">-->
+                            <!--                                            <div class="modal-dialog" role="document">-->
+                            <!--                                                <div class="modal-content">-->
+                            <!--                                                    <div class="modal-header">-->
+                            <!--                                                        <h3 class="modal-title" id="exampleModalLabel">Reject the request</h3>-->
+                            <!--                                                    </div>-->
+                            <!--                                                    <div class="modal-body">-->
+                            <!--                                                        <div class="form-group" style="align-items: center">-->
+                            <!--                                                            <h4>feedback:&nbsp;reject reason </h4>-->
+                            <!--                                                            <br>-->
+                            <!--                                                            <textarea id="project_name" rows="1" class="form-control form-control"></textarea>-->
+                            <!--                                                        </div>-->
+                            <!--                                                    </div>-->
+                            <!--                                                    <div class="modal-footer">-->
+                            <!--                                                        <button type="button" class="btn btn-primary">Set</button>-->
+                            <!--                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close-->
+                            <!--                                                        </button>-->
+                            <!--                                                    </div>-->
+                            <!--                                                </div>-->
+                            <!--                                            </div>-->
+                            <!--                                        </div>-->
+                            <!--                                    </td>-->
+                            <!--                                </tr>-->
+                        </table>
+                    </td>
+
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+    <br>
+
+    <div class="blank-page widget-shadow scroll">
+        <h2><b>Edit Meeting</b></h2>
+        <div class="row">
+            <br>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="selector1" class="col-sm-2 control-label">Role</label>
+                    <div class="col-sm-8">
+                        <select name="selector1" id="selector1" class="form-control-project">
+                            <option>Staff</option>
+                            <option>Client</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selector2" class="col-sm-2 control-label">Select Meeting</label>
+                    <div class="col-sm-8">
+                        <select name="selector2" id="selector2" class="form-control-project">
+                            <option>meeting 1</option>
+                            <option>meeting 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selector3" class="col-sm-2 control-label">Select Time</label>
+                    <div class="col-sm-8">
+                        <input id="selector3" type="datetime-local" name="client_changetime" style="width: 60%">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selector4" class="col-sm-2 control-label">Supervisor</label>
+                    <div class="col-sm-8">
+                        <select name="selector4" id="selector4" class="form-control-project">
+                            <option>person 1</option>
+                            <option>Person 1</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input" class="col-sm-2 control-label">Place</label>
+                    <div class="col-sm-8">
+                                <textarea class="form-control" rows="1" id="input"
+                                          placeholder="Enter Your Question Detail"></textarea>
+                    </div>
+                </div>
+            </form>
+            <div style="text-align: center">
+                <button onclick="window.location='team_list.html'" type="button" class="btn btn-primary">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--footer-->
+<div class="footer">
+    <p> &copy; 2020 Group 3 Team Project. </p>
+</div>
+<%- include('footer') %>

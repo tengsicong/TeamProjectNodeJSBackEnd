@@ -8,21 +8,18 @@ const studentModel = require('../models/student');
 
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-const Tid = mongoose.Types.ObjectId('5e7b6f794f4ed29e60233aa2');
+const Tid = mongoose.Types.ObjectId('5e87086fce306c528bc03145');
 const Temp = '5e7b6f794f4ed29e60233aa2';
-// adminModel.getAdminByID(adminID).then(console.log);
-// studentModel.getAllStudent().then(console.log);
-// teamModel.getTeamByTeamID(Tid).then(function(result) {
-//     console.log(result.StaffID);
-//     if (result.StaffID == undefined) {
-//         console.log('true');
-//     }
+// teamModel.getAllTeam().then(function(result) {
+//     console.log(result[0]);
 // });
+studentModel.getAllStudent().then(function (result) {
+    console.log('111'+result[1])
 
+});
 /* GET edit team page. */
 router.get('/edit_team', function(req, res) {
-    // const teamID = req.params.TeamId;
-    // console.log(teamID);
+
     Promise.all([
         adminModel.getAdminByID(adminID),
         teamModel.getTeamByTeamID(Tid),
@@ -48,7 +45,7 @@ router.get('/edit_team', function(req, res) {
         });
 });
 /* GET new team page. */
-router.get('/new_team', function(req, res, next) {
+router.get('/new_team', function(req, res) {
     // const teamID = req.params.TeamId;
     // console.log(teamID);
     Promise.all([
@@ -78,22 +75,64 @@ router.get('/new_team', function(req, res, next) {
             });
         });
 });
+router.get('/team_list', function(req, res) {
 
-router.get('/project_list', function(req, res, next) {
     Promise.all([
         adminModel.getAdminByID(adminID),
-        proposalModel.getAllProposals(),
-
+        teamModel.getAllTeam(),
     ])
         .then(function(result) {
             const admin = result[0];
+            const allTeam = result[1];
+            // console.log(allTeam)
+            res.render('admin/team_list', {
+                pageTitle: 'Team List',
+                admin: admin,
+                allTeam: allTeam,
+            });
+        });
+});
+router.get('/student_list', function(req, res) {
 
-            res.render('admin/project_list', {
-                proposal: result[1],
-                pageTitle: 'Project List',
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        studentModel.getAllStudent(),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+            const allStudent = result[1];
+            console.log(allStudent)
+            res.render('admin/student_list', {
+                pageTitle: 'Student List',
+                admin: admin,
+                allStudent: allStudent,
+            });
+        });
+});
+router.get('/timetable', function (req, res) {
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+            // console.log(allTeam)
+            res.render('admin/timetable', {
+                pageTitle: 'Timetable',
                 admin: admin,
             });
         });
 });
-
+router.get('/timetable_change', function (req, res) {
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+    ])
+        .then(function (result) {
+            const admin = result[0];
+            // console.log(allTeam)
+            res.render('admin/timetable_change', {
+                pageTitle: 'Change Timetable',
+                admin: admin,
+            });
+        });
+});
 module.exports = router;
