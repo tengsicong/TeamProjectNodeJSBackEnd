@@ -28,13 +28,13 @@
                 <%let j=1;%>
                 <% for(let i =0; i < proposal.length; i++) { %>
                     <% if (proposal[i].Status == "approved") { %>
-                    <tr class="active" onclick="window.location.href='project_approved.html'">
-                        <a href="project_approved.html">
+                    <tr class="active" onclick="window.location.href='/admin/project_list/project_approved?id=<%=proposal[i]._id%>'">
+                        <a href="/admin/project_list/project_approved?id=<%=proposal[i]._id%>">
                             <th scope="row"><%=j%></th>
                             <%j++;%>
                             <td style="cursor:pointer" width="40%"><b><%=proposal[i].Topic%></b></td>
-                            <td style="cursor: pointer" width="50%"><%= 'client name: ' + proposal[i].ClientID.Name %></td>
-                            <% if (proposal[i].GroupID != undefined) { %>
+                            <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal[i].ClientID.Name %></td>
+                            <% if (proposal[i].GroupID.length > 0) { %>
                                 <td width="5%"><span class="label label-success" style="float:right;font-size:15px">Allocated</span>
                                 </td>
                             <%} else { %>
@@ -59,12 +59,12 @@
                 <%let k=1;%>
                 <% for(let i =0 ; i < proposal.length; i++) { %>
                     <% if(proposal[i].Status == "pending"){ %>
-                    <tr class="active" onclick="window.location.href='project_pending.html'">
-                        <a href="project_approved.html">
+                    <tr class="active" onclick="window.location.href='/admin/project_list/project_pending?id=<%=proposal[i]._id%>'">
+                        <a href="/admin/project_list/project_pending?id=<%=proposal[i]._id%>">
                             <th scope="row"><%=k%></th>
                             <%k++;%>
                             <td style="cursor:pointer" width="40%"><b><%=proposal[i].Topic%></b></td>
-                            <td style="cursor: pointer" width="55%"><%= 'client name: ' + proposal[i].ClientID.Name %></td>
+                            <td style="cursor: pointer" width="55%"><%= 'Client name: ' + proposal[i].ClientID.Name %></td>
                             <td width="5%"><span class="label label-warning"
                                                  style="float:right;font-size:15px">Pending</span></td>
                         </a>
@@ -85,12 +85,12 @@
                 <%let l=1;%>
                 <% for(let i =0 ; i < proposal.length; i++) { %>
                     <% if(proposal[i].Status == "rejected"){ %>
-                    <tr class="active" onclick="window.location.href='project_rejected.html'">
-                        <a href="project_approved.html">
+                    <tr class="active" onclick="window.location.href='/admin/project_list/project_rejected?id=<%=proposal[i]._id%>'">
+                        <a href="/admin/project_list/project_rejected?id=<%=proposal[i]._id%>">
                             <th scope="row"><%=l%></th>
                             <%l++;%>
                             <td style="cursor:pointer; font-weight: bolder" width="40%"><b><%=proposal[i].Topic%></b></td>
-                            <td style="cursor: pointer" width="55%"><%= 'client name: ' + proposal[i].ClientID.Name %></td>
+                            <td style="cursor: pointer" width="55%"><%= 'Client name: ' + proposal[i].ClientID.Name %></td>
                             <td width="5%"><span class="label label-danger"
                                                  style="float:right;font-size:15px">Rejected</span></td>
                         </a>

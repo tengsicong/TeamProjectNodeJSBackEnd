@@ -135,4 +135,91 @@ router.get('/timetable_change', function (req, res) {
             });
         });
 });
+
+router.get('/project_list', function(req, res, next) {
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getAllProposals(),
+
+    ])
+        .then(function(result) {
+            const admin = result[0];
+
+            res.render('admin/project_list', {
+                proposal: result[1],
+                pageTitle: 'Project List',
+                admin: admin,
+            });
+        });
+});
+
+router.get('/project_list/edit_project', function(req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+            res.render('admin/edit_project', {
+                proposal: result[1],
+                pageTitle: 'Edit project',
+                admin: admin,
+            });
+        })
+        .catch(next);
+});
+
+router.get('/project_list/project_approved', function(req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+        teamModel.getAllTeam(),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+            res.render('admin/project_approved', {
+                proposal: result[1],
+                team: result[2],
+                pageTitle: result[1].Topic,
+                admin: admin,
+            });
+        })
+        .catch(next);
+});
+
+router.get('/project_list/project_pending', function(req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+            res.render('admin/project_pending', {
+                proposal: result[1],
+                pageTitle: result[1].Topic,
+                admin: admin,
+            });
+        })
+        .catch(next);
+});
+
+router.get('/project_list/project_rejected', function(req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+            res.render('admin/project_rejected', {
+                proposal: result[1],
+                pageTitle: result[1].Topic,
+                admin: admin,
+            });
+        })
+        .catch(next);
+});
 module.exports = router;

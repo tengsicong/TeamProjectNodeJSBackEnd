@@ -1,0 +1,118 @@
+<%- include('header') %>
+
+   <!-- main content start-->
+    <div id="page-wrapper">
+        <h2 class="title1">Project </h2>
+        <div class="blank-page widget-shadow scroll">
+            <h2><%=proposal.Topic%><span class="label label-success"
+                                                                                   style="float:right;font-size:15px">approved</span>
+            </h2>
+            <br>
+            <p><b>Client:</b> <%=proposal.ClientID.Name%></p>
+            <br>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Detail / Content / Description</h3>
+                </div>
+                <div class="panel-body">
+                    <%=proposal.Content%>
+                </div>
+            </div>
+            <table width="100%">
+                <tr>
+                    <td width="95%">
+                        <a href="/admin/project_list/edit_project?id=<%=proposal._id%>">
+                            <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
+                        </a>                    </td>
+                    <td>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <div class="blank-page widget-shadow scroll">
+            <h2 class="title1">Allocate team</h2>
+            <table width="100%">
+                </tr>
+                <tr>
+                    <td style="width:90%">
+                        <select name="selector1" id="selector1" class="form-control" style="width: 50%">
+                            <option>Team 1</option>
+                            <option>Team 2</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button onclick="{ location.href='project_approved.html#project'}" style="float: right" type="button" class="btn btn-primary">submit</button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+        <br>
+
+        <div class="blank-page widget-shadow scroll">
+            <h2><b>Allocated Team</b></h2>
+            <% for(let i =0; i < team.length; i++) { %>
+            <div class="grid_3 grid_5 widget-shadow">
+                <a href="#">
+                    <div>
+                        <h3><b>SSIT <%=team[i].TeamName%>  Team</b></h3>
+                    </div>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <td width="40%"><p><b>Supervisor:</b><%=team[i].StaffID.Name%></p></td>
+                                <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td>
+                            </tr>
+                                <td width="20em"><p><b>Student:</b>
+                                        <% for(let j =0; j < team[i].StudentID.length; j++) { %>
+                                        <%=team[i].StudentID[j].Name%>
+                                        &nbsp;
+                                        <%}%>
+                                    </p></td>
+                            </tr>
+                        </table>
+                    </div>
+                </a></div>
+            <% }%>
+
+            <!--<div class="grid_3 grid_5 widget-shadow">
+                <a href="#">
+                    <div>
+                        <h3><b>SSIT Team 1</b></h3>
+                    </div>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <td width="40%"><p><b>Supervisor:</b> String</p></td>
+                                <td width="20em"><p><b>Student:</b></p></td>
+                                <td><p></b>aaaaaa<br>bbbbbbb<br>ccccc</p></td>
+                                <td class="btn btn-danger" style="float: right">Delete</td>
+                            </tr>
+                        </table>
+                    </div>
+                </a></div>
+
+            <div class="grid_3 grid_5 widget-shadow">
+                <a href="#">
+                    <div>
+                        <h3><b>SSIT Team 1</b></h3>
+                    </div>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <td width="40%"><p><b>Supervisor:</b> String</p></td>
+                                <td width="20em"><p><b>Student:</b></p></td>
+                                <td><p></b>aaaaaa<br>bbbbbbb<br>ccccc</p></td>
+                                <td class="btn btn-danger" style="float: right">Delete</td>
+                            </tr>
+                        </table>
+                    </div>
+                </a></div>-->
+        </div>
+    </div>
+
+<%- include('footer') %>
