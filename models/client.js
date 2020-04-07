@@ -9,6 +9,12 @@ const proposal = mongo.proposals;
 
 module.exports = {
 
+    getClientByUserName: function getClientByUserName(email){
+        return client
+            .findOne({UserName:email})
+            .exec();
+    },
+
     /**
      * @param {ObjectId} id
      * @return {client} a client object
