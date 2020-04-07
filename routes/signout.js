@@ -7,12 +7,14 @@ const studentModel = require('../models/student');
 const staffModel = require('../models/staff');
 
 router.get('/', function(req, res) {
-    req.session.cookie.maxAge = 0;
-    req.session.destroy(function(err) {
-        if(err) {
-            console.log(err);
-        }
-    });
+    if(req.session !== undefined) {
+        req.session.cookie.maxAge = 0;
+        req.session.destroy(function(err) {
+            if(err) {
+                console.log(err);
+            }
+        });
+    }
 
     //console.log(req.session);
     res.render('portal/signout', {
