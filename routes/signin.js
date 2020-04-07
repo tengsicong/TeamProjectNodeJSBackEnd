@@ -8,8 +8,19 @@ const studentModel = require('../models/student');
 const staffModel = require('../models/staff');
 
 router.post('/', function(req, res) {
+    const role = req.query.role;
+    console.log('post' + role);
     const email = req.body.email;
     const pw = req.body.password;
+    if (role == 'student') {
+        const method = studentModel.getStudentByUserName(email)
+    } else (role == 'staff') {
+        const method = staffModel.getStaffByUserName(email)
+    } else (role == 'admin') {
+        const method =
+    } else (role == 'client') {
+        const method =
+    }
     //console.log('Login(username pw):' + email + ' ' + pw);
 
     Promise.all([staffModel.getStaffByUserName(email)])
@@ -31,13 +42,23 @@ router.post('/', function(req, res) {
 });
 
 router.get('/', function(req, res) {
-    if (req.session.userinfo) {
+    const role = req.query.role;
+    console.log(role)
+    if (req.session.role == 'student') {
+        res.redirect('/student/homepage');
+    } else if (req.session.role == 'staff') {
         res.redirect('/staff/my_project');
-    }
-    else {
+    } else if (req.session.role == 'admin') {
+        res.redirect('/admin/project_list')
+    } else if (req.session.role == 'client') {
+        res.redirect('/ClientPart/client_myproposals')
+    } else if (role != null) {
         res.render('portal/signin', {
-            pageTitle: 'Team Project - Signin',
+            pageTitle: role + 'Signin',
+            role: role,
         });
+    } else {
+        res.redirect('portal/role_select')
     }
 });
 
