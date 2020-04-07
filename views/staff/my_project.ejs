@@ -1,0 +1,45 @@
+<%- include('header') %>
+
+    <!-- main content start-->
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="blank-page widget-shadow scroll">
+                <h2><b>My Projects</b></h2>
+
+                <% if (allTeams.length == Number(0)) { %>
+                    <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
+                <% } else { %>
+                    <% for(var i = 0; i < allTeams.length; i++) {%>
+                        <div class="grid_3 grid_5 widget-shadow" style="cursor:pointer" onclick="window.location.href = 'project_detail'">
+                            <h3 class="project-name" >
+                                <b>
+                                    <% if (allTeams[i].ProposalID === undefined) { %>
+                                        Untitled Project
+                                    <% } else { %>
+                                        <%= allTeams[i].ProposalID.Topic %>
+                                    <% } %>
+                                </b>
+                                <span class="label label-success" style="float:right;font-size:15px">Ongoing</span>
+                            </h3>
+                            <p>
+                                <b>Representative:</b>
+                                <% if (allTeams[i].Representer === undefined) { %>
+                                    Have not appointed yet
+                                <% } else { %>
+                                    <%= allTeams[i].Representer.Name %>
+                                <% } %>
+                            </p>
+                            <p>
+                                <b>Group Member:</b> 
+                                <%= groupMember[i] %>
+                                <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
+                            </p>
+                        </div>
+                     <% } %>
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+
+<%- include('footer') %>

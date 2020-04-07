@@ -1,0 +1,193 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+
+    <table width="100%">
+        <tr>
+            <td width="50%">
+                <div class="blank-page widget-shadow scroll">
+                    <h2><b>My Calendar</b></h2>
+                    <div class="agil-info-calendar">
+                        <!-- calendar -->
+                        <div class="agile-calendar">
+                            <div class="calendar-widget">
+                                <hr class="widget-separator">
+                                <!-- grids -->
+                                <div class="agile-calendar-grid">
+                                    <div class="page">
+
+                                        <div class="w3l-calendar-left">
+                                            <div class="calendar-heading">
+
+                                            </div>
+                                            <div class="monthly" id="mycalendar"></div>
+                                        </div>
+
+                                        <div class="clearfix"> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td width="50%">
+                <!-- calendar -->
+                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 300px" >
+                    <div  class="tables  scroll scrollbar1" style="height: 100%">
+                        <div class="widget-shadow">
+                            <h2><b>Meeting Table</b></h2>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Meeting Number</th>
+                                    <th>Team Number</th>
+                                    <th>Meeting Time</th>
+                                    <th>Meeting Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_post.html" style="cursor: pointer">
+                                    <td>1</td>
+                                    <td>xx/xx/xxxx</td>
+                                    <td>Done</td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td>1</td>
+                                    <td>xx/xx/xxxx</td>
+                                    <td>Coming</td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td>2</td>
+                                    <td>xx/xx/xxxx</td>
+                                    <td>Coming</td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td>3</td>
+                                    <td>xx/xx/xxxx</td>
+                                    <td>Coming</td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;">
+                    <h2><b>Change Timetable</b></h2>
+                    <div class="form-body">
+                        <form style="padding-left: 30%">
+                            <div>Meeting Number:</div>
+                            <div class="form-group" style="align-items: center">
+                                <select class="form-control" style="width: 60%">
+                                    <option>-</option>
+                                    <option>Staff Meeting 1</option>
+                                    <option>Staff Meeting 2</option>
+                                    <option>Staff Meeting 3</option>
+                                    <option>Staff Meeting 4</option>
+                                    <option>Staff Meeting 5</option>
+                                    <option>Staff Meeting 6</option>
+                                </select>
+                            </div>
+                            <div>Change time to:</div>
+                            <div class="form-group" style="align-items: center">
+                                <input type="datetime-local" name="client_changetime" style="width: 60%">
+                            </div>
+                            <div>Change Supervisor:</div>
+                            <div class="form-group" style="align-items: center">
+                                <select class="form-control" style="width: 60%">
+                                    <option>-</option>
+                                    <option>Supervisor 1</option>
+                                    <option>Supervisor 2</option>
+                                    <option>Supervisor 3</option>
+                                    <option>Supervisor 4</option>
+                                    <option>Supervisor 5</option>
+                                    <option>Supervisor 6</option>
+                                </select>
+                            </div>
+                            <textarea name="t1" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                            <div>
+                                <button class="btn btn-primary" style="margin-left: 20%">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>
+</div>
+
+<%- include('footer') %>

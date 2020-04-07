@@ -1,0 +1,67 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="blank-page widget-shadow scroll" id="client_team1_member_div">
+        <h2><b>SSIT Team <%=team.TeamName%></b></h2>
+        <br>
+        <p><b>Supervisor:</b>  <%=team.StaffID.Name%></p>
+        <br>
+        <div class="panel panel-info" style="height:190px">
+            <div class="panel-heading">
+                <h3 class="panel-title">Team members</h3>
+            </div>
+            <% const representitive = team.Representer.Name%>
+            <div class="panel-body">Team representative: <%=representitive%>
+                <p>Team members:
+                    <% let students = team.StudentID;%>
+                    <%function arrayRemove(arr, value) { return arr.filter(function(ele){ return ele != value; });}%>
+                    <%result = arrayRemove(students,representitive)%>
+                    <% if (students.length>0){%>
+                    <% result.forEach(function (student){ %>
+                    <%=student.Name%>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <% })} %></p>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div class="blank-page widget-shadow scroll" id="client_team1_meeting_div">
+        <h2><b>Meeting List</b></h2>
+        <br>
+        <div class="panel panel-info">
+            <!-- Default panel contents -->
+            <div class="panel-heading"><b>Client Meeting</b></div>
+            <!-- Table -->
+            <table class="table">
+                <tr>
+                    <th>Meeting Number</th>
+                    <th>Time</th>
+                    <th>Place</th>
+
+                </tr>
+                <%for(let i=0;i<meetings.length;i++){%>
+                <tr>
+                    <th>Client Meeting <%=i+1%></th>
+                    <td><%=meetings[i].Date%></td>
+                    <td><%=meetings[i].Place%></td>
+                </tr>
+                <%}%>
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="blank-page widget-shadow scroll" id="client_team1_mark_div">
+        <div class="blank-page widget-shadow scroll">
+            <h3><b>Mark For This Team</b>
+                <a href="/client/myteam/teammark?id=<%=team._id%>">
+                    <button class="btn btn-primary btn-flat btn-pri" style="float:right" type="button"><i
+                                aria-hidden="true" class="fa fa-plus"></i>Mark
+                    </button>
+                </a>
+            </h3>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

@@ -1,0 +1,171 @@
+<%- include('component/header') %>
+
+<!-- main content start-->
+
+
+<div id="page-wrapper">
+    <div class="main-page">
+        <!--my team section -->
+        <br>
+        <div class="blank-page widget-shadow scroll">
+            <h2 class="title1"><b>My Team</b></h2>
+            <% if (myTeam == undefined) { %>
+                <div class="alert alert-danger" role="alert">You do not have a team currently!</div>
+                <br>
+                <div class="blank-page widget-shadow scroll" id="style-2 div1">
+                    <div class="media">
+                        <div class="media-body">
+                            <table width="100%">
+                                <tr>
+                                    <td>
+                                        <h4 class="media-heading">Personal teammate preference</h4>
+                                        <p>You could choose 1 person you would like to work with and at most 2 person you do
+                                            not like to work with.</p>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <a href="StudentPersonalPreference.html">
+                                            <button type="button" class="btn btn-primary" href="StudentPersonalPreference">
+                                                Edit
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+            <div class="blank-page widget-shadow scroll">
+                <h2><b>SSIT Team <%= myTeam.TeamName %></b></h2>
+                <br>
+                <table width="100%">
+                    <tr>
+                        <td width="80%">
+                            <table width="100%" id="TeamMemberTable">
+                                <tr>
+                                    <th width="200px">Supervisor:</th>
+                                    <td><%= myTeam.StaffID.Name %></td>
+                                </tr>
+                                <% for (let i = 0; i < myTeam.StudentID.length; i++) { %>
+                                    <tr>
+                                        <% if (i == 0) { %>
+                                            <th width="15%">Team Member:</th>
+                                        <% } else { %>
+                                            <td></td>
+                                        <% } %>
+                                        <td>
+                                            <%= myTeam.StudentID[i].Name  + ' (' + myTeam.StudentID[i].UserName + ')'%>
+                                            <% if (myTeam.StudentID[i]._id.equals(myTeam.Representer._id)) { %>
+                                                <span><b>--Team Representer</b></span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </table>
+                        </td>
+                        <td>
+                            <% if (student._id.equals(myTeam.Representer._id)) { %>
+                            <button type="button" class="btn btn-primary btn-lg" style="float:right" data-toggle="modal"
+                                    data-target="#set_new_representer" data-whatever="@SetNewRepresenter">Set new representer
+                            </button>
+                            <div class="modal fade" id="set_new_representer" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLabel">Set New Representer</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group" style="align-items: center">
+                                                <h4>Choose a team mumber to be the new team representer</h4>
+                                                <br>
+                                                <select class="form-control" style="width: 100%">
+                                                    <% for (let i = 0; i < myTeam.StudentID.length; i++) { %>
+                                                        <option><%=myTeam.StudentID[i].Name + ' (' + myTeam.StudentID[i].UserName + ')' %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary">Set</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--my team section end-->
+            <% } %>
+        </div>
+
+        <!--my project section (show if allocated)-->
+        <br>
+        <% if (myTeam != undefined) { %>
+        <div class="blank-page widget-shadow scroll">
+            <h2 class="title1"><b>My Project</b></h2>
+            <% if (myTeam.ProposalID == undefined) { %>
+                <div class="alert alert-warning" role="alert">Your Team is not assigned to a project currently!</div>
+                <br>
+                <% if (student._id.equals(myTeam.Representer._id)) { %>
+                    <div class="blank-page widget-shadow scroll">
+                        <div class="media">
+                            <div class="media-body">
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <h4 class="media-heading">Team project preference</h4>
+                                            <p>As the representer of the team, you could rank your team's favourite
+                                                projects. Please discuss it carefully and listen to everyone's opinion</p>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <a href="StudentTeamPreference.html">
+                                                <button type="button" class="btn btn-primary">RANK</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <% } else {%>
+                    <div class="alert alert-info" role="alert">As a team your team has a representer to rank your favourite project. Please discuss it carefully and listen to everyone's opinion</div>
+                <% } %>
+
+            <% } else { %>
+            <div class="blank-page widget-shadow scroll">
+                <a href="/student/my_project">
+                    <div>
+                        <h3 style="color:black"><b><%= myTeam.ProposalID.Topic %></b><span class="label label-success"
+                                                                      style="float:right;font-size:15px">Approved</span>
+                        </h3>
+                    </div>
+                    <br>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <td width="30%"><p><b>Client:</b><%= myTeam.ProposalID.ClientID.Name%></p></td>
+                                <td width="30%"><p><b>Supervisor:</b><%= myTeam.StaffID.Name%></p></td>
+                                <td width="30%"><p><b>Team:</b>SSIT Team <%= myTeam.TeamName %></p></td>
+                                <td><i class="fa fa-angle-right"
+                                       style="float:right;font-size:20px"></i></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    <div>
+                        <%= myTeam.ProposalID.Content.substring(0,200) + '...'%>
+                    </div>
+                </a>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('component/footer') %>

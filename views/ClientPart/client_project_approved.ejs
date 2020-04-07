@@ -1,0 +1,61 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="blank-page widget-shadow scroll">
+        <h2><b><%=proposal.Topic%></b><span class="label label-success"
+                                         style="float:right;font-size:15px">Approved</span></h2>
+        <br>
+        <div class="row">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Detail / content / Description</h3>
+                </div>
+                <div class="panel-body" data-example-id="embedded-scrollspy">
+                    <div data-spy="scroll" data-target="#navbar-example2"
+                         class="scrollspy-example scroll scrollbar1">
+                        <p><%=proposal.Content%></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="blank-page widget-shadow scroll">
+        <h2><b>Allocated Team</b></h2>
+        <% if(teams.length>0){%>
+        <% teams.forEach(function (team) { %>
+        <div class="grid_3 grid_5 widget-shadow">
+            <a href="/client/myteam/teampage?id=<%=team._id%>">
+                <div>
+                    <h3><b>SSIT #<%=team.TeamName%> Team</b></h3>
+                </div>
+                <div>
+                    <table width="100%">
+                        <tr>
+                            <td width="40%"><p><b>Supervisor: </b><%=team.StaffID.Name%><span><i class="fa fa-angle-right"
+                                                                                 style="float:right;font-size: 20px"/></span>
+                                </p></td>
+                        </tr>
+                        <td width="20em"><p><b>Student:</b>
+                                <%let students = team.StudentID;%>
+                                <% if (students.length>0){%>
+                                    <% students.forEach(function (student){ %>
+                                    <%=student.Name%>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <% })} %>
+                            </p></td>
+
+                        </tr>
+                    </table>
+                </div>
+            </a></div>
+        <% })%>
+        <%}else {%>
+        <div class="alert alert-danger" role="alert">Not allocated yet!</div>
+        <%}%>
+    </div>
+</div>
+
+<%- include('footer') %>

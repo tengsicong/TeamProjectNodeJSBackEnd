@@ -1,0 +1,290 @@
+.project-status {
+    width: 100%;
+}
+.project-list{
+    width: 12%;
+}
+.teacher-name{
+    font-size: large;
+    padding-left: 1%;
+    width: 100%;
+    height:80%
+}
+.textarea-comment{
+    width: 100%;
+    overflow: auto;
+    word-break: break-all;
+}
+.team-table{
+    width: 100%;
+    max-width:100%;
+    margin-bottom: 20px;
+    background-color: white;
+}
+.zz{
+    width: 100%;
+    height: 100%;
+    border: 1px #E0E0E0 solid;
+}
+.team-table1{
+    display: table;
+    border: 1px #e0e0e0 solid;
+    width: 90%;
+    margin: 5%;
+}
+#s1{
+    width: 70%;
+    height: 20%;
+    float: left;
+    padding: 2%;
+    border: 1px #E0E0E0 solid;
+    background-color: white;
+    margin: 0 0 0 0;
+    text-align: center;
+}
+#s2{
+    width: 30%;
+    height: 20%;
+    float: left;
+    padding: 2%;
+    border: 1px #E0E0E0 solid;
+    background-color: white;
+    margin: 0 0 0 0;
+    text-align: center;
+
+}
+#s3{
+    width: 70%;
+    height:80%;
+    float: left;
+    padding: 2%;
+    border: 1px #E0E0E0 solid;
+    background-color: white;
+    text-align: center;
+
+}
+#s4{
+    width: 30%;
+    height: 80%;
+    float: left;
+    padding: 2%;
+    border: 1px #E0E0E0 solid;
+    background-color: white;
+    font-size: small;
+    text-align: center;
+
+}
+.select{
+    width:80%;
+    margin: 1% 10% 1% 10%
+}
+.add-table {
+    display: table;
+    border: 1px #e0e0e0 solid;
+    width: 90%;
+    margin: 5%;
+}
+.add-table1 {
+    display: table;
+    border: 1px #e0e0e0 solid;
+    margin: 2%;
+}
+.role {
+    display: table-cell;
+    border: 1px #e0e0e0 solid;
+    padding-top: 2%;
+    padding-bottom: 1%;
+    width: 20%;
+}
+.searchbar{
+    width: 100%;
+    height: 100%;
+}
+.searchbar input {
+    border:2px solid #e0e0e0;
+    border-radius:5px;
+    background:transparent;
+    top:0;
+    right:0;
+    width: 100%;
+    height: 100%;
+
+}
+.searchbar button {
+    background: #e0e0e0;
+    border-radius:0 5px 5px 0;
+    width:10%;
+    top:0;
+    right:0;
+}
+.searchbar button:before {
+    content:"search";
+    font-size:13px;
+    color:#e9e9e9;
+}
+.auto-group{
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+.auto-group > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border: 0px solid #e9e9e9 ! important;
+}
+.auto-group1{
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+.auto-group1 > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border: 1px solid #e9e9e9 ! important;
+}
+.role2{
+    width: 100%;
+    height: 80%;
+}
+.role3{
+    width: 100%;
+    height: 80%;
+}
+.role3 th,tr,td{
+    border: none;
+    padding: 0.4%;
+}
+.form-timetable{
+    width:100%;
+    padding: 3%;
+    text-align: center;
+
+}
+form-timetable td{
+    text-align: center;
+    width: 60%;
+}
+.form-timetable-tr td{
+    width: 60%;
+}
+.form-control-timetable{
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    color: #616161;
+    background: #fff;
+    box-shadow: none !important;
+    width: 60%;
+    font-size: 0.85em;
+    font-weight: 300;
+    height: 40px;
+    border-radius: 0;
+    resize: none;
+}
+.form-control-project{
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    color: #616161;
+    background: #fff;
+    box-shadow: none !important;
+    width: 100%;
+    font-size: 0.85em;
+    font-weight: 300;
+    height: 40px;
+    border-radius: 0;
+    resize: none;
+}
+/*.table_sys{*/
+
+/*    border-spacing: 0;*/
+/*    border-collapse: collapse;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.table_sys > thead {*/
+/*        display: block;*/
+/*        width: 100%;*/
+/*    }*/
+/*.table_sys>  tbody{*/
+/*        display: block;*/
+/*        height: 70px;*/
+/*        overflow-y: auto;*/
+/*        width: 100%;*/
+/*    }*/
+/*.table_sys > tr{*/
+/*        display: block;*/
+/*        width: 100%;*/
+/*        border-bottom:0px solid #e9e9e9;*/
+/*    }*/
+/*.table_sys > td,th{*/
+/*        padding: 10px;*/
+/*        text-align: center;*/
+/*    }*/
+
+
+.role2 th,td{
+    border: 1px #e0e0e0 solid;
+    padding: 0.4%;
+}
+.role input{
+    width: 60%;
+}
+.role1{
+    display:table-cell;
+    border: 1px #e0e0e0 solid;
+    padding-top:2% ;
+    padding-bottom: 1%;
+    font-weight: bold;
+}
+#yearAndMon{
+    font-weight: bold;
+    padding: 2%;
+}
+#div1{
+    width:100%;
+    height:100%;
+    border:1px solid gray;
+    background-color: white;
+}
+#div2{
+    width: 80%;
+    height: 80%;
+    margin:auto;
+    margin-top: 15px;
+}
+#div21{
+    width: 50%;
+    height: 5%;
+    text-align: center;
+    margin:auto;
+    line-height: 5%;
+    margin:auto;
+}
+
+#div22{
+    width: 100%;
+    height: 80%;
+    margin:auto;
+    text-align: center;
+}
+#table1{
+    width: 100%;
+    height:80%;
+    border-spacing: 30px 33px;
+}
+#table1 tr td{
+    width: 14%;
+}
+#table2{
+    width: 100%;
+    height: 100%;
+    line-height: 30px;
+    border-spacing: 30px 0px;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+    padding: 2%;
+    margin-bottom: 3%;
+}
+#table2 tr{
+    height: 30px;
+}
+#table2 tr td{
+    border: 1px #e0e0e0 solid;
+    width: 14%;
+}

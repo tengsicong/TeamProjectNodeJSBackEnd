@@ -1,0 +1,62 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="main-page">
+        <h2 class="title1">My Project</h2>
+        <div class="blank-page widget-shadow scroll">
+            <h3>Project Name</h3>
+            <table width="100%">
+                <tr>
+                    <td width="30%"><P><b>Client : </b><%= team.ProposalID.ClientID.Name%></P></td>
+                    <td width="30%"><p><b>Supervisor : </b><%= team.StaffID.Name%></p></td>
+                    <td width="30%"><p><b>Team: </b> <%= team.TeamName.Name%></p></td>
+                </tr>
+            </table>
+            <p>
+                <b>Member : </b>
+                <%= teamMemberList%>
+            </p>
+            <br>
+            <!--                <div class="col-md-12 panel-grids">-->
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Project Detail</h3>
+                </div>
+                <div class="panel-body">
+                    <%= team.ProposalID.Content%>
+                </div>
+            </div>
+            <!--                </div>-->
+        </div>
+    </div>
+    <br>
+    <div class="blank-page widget-shadow scroll">
+        <h2><b>Meeting List</b></h2>
+        <br>
+        <br>
+        <div class="panel panel-info">
+            <!-- Default panel contents -->
+            <div class="panel-heading"><b>Meeting</b></div>
+            <!-- Table -->
+            <p><%= team.StaffMeetingID.length%></p>
+            <table class="table">
+                <tr>
+                    <th></th>
+                    <th>Time</th>
+                    <th>Place</th>
+                    <th>Supervisor</th>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="blank-page widget-shadow scroll">
+        <h3><b>Mark For This Team</b><button type="submit" class="btn btn-primary clickable-row" data-href="Marking.html" style="float: right">Mark</button></h3>
+
+    </div>
+</div>
+
+
+<%- include('footer') %>

@@ -1,0 +1,83 @@
+<%- include('header') %>
+<!-- main content start-->
+<div id="page-wrapper">
+    <h2 class="title1">Create a new team</h2>
+    <div class="blank-page widget-shadow scroll" style="width:55%;float:left; padding:2%;">
+        <table class="auto-group">
+            <tr width="100%">
+                <td style="width:60%;border:1px #E0E0E0 solid">
+                    <table class="auto-group">
+                        <tr width="100%">
+                            <th colspan="2" style="text-align: center">
+                                SSIT Team
+                                <%= allTeam.length %>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" style="text-align: center">
+                                Set this team
+                            </th>
+                        </tr>
+
+                    </table>
+                    <table class="auto-group">
+                        <tr width="100%">
+                            <th>
+                                Project/Client
+                            </th>
+                            <td>
+                                <select name="selector1" id="selector1" class="form-control-project">
+                                    <% for(let i = 0; i < allProposal.length; i++) { %>
+                                    <option value="<%=allProposal[i]._id%>"><%=allProposal[i].Topic + ' / ' + allProposal[i].ClientID.UserName %></option>
+                                    <%} %>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <th>
+                                Supervisor
+                            </th>
+                            <td>
+                                <select name="selector2" id="selector2" class="form-control-project">
+                                    <%for (let i = 0; i < allStaff.length; i++){ %>
+                                    <option value="<%=allStaff[i]._id%>"><%=allStaff[i].Name%></option>
+                                    <%} %>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <%for (let i = 0; i < 6; i++) {%>
+                        <tr width="100%">
+                            <th>
+                                Student <%= i+1%>
+                            </th>
+                            <td>
+                                <select name="selector<%=i+3%>" id="selector<%=i+3%>" class="form-control-project">
+                                    <%for (let j = 0; j < allStudent.length; j++){%>
+                                        <%if (allStudent.GroupID != undefined) { %>
+                                        <optgroup label="<%=allStudent[j].Name%>"></optgroup>
+                                        <%} else { %>
+                                        <option value="<%=allStudent[j]._id%>"><%=allStudent[j].Name%></option>
+                                        <%} }%>
+                                </select>
+                            </td>
+                        </tr>
+                        <%}%>
+
+                        <br>
+                        <tr style="border: none" width="100%">
+                            <td colspan="2">
+                                <button onclick="{ location.href='team_list.html'}" style="float:right" type="button" class="btn btn-primary">submit</button>
+                            </td>
+                        </tr>
+                        <br>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+
+<%- include('footer') %>

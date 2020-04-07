@@ -1,0 +1,106 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="tables">
+        <div class="blank-page widget-shadow scroll">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <h2><b>Auto Allocated</b></h2>
+                        <p>Click button to automatically allocate project for each team according to their preference</p>
+                    </td>
+                    <td>
+                        <button onclick="{ location.href='Project_List.html'}" type="button" class="btn btn-primary"
+                                style="float: right">Allocate
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="approved"></div>
+        <div class="bs-example widget-shadow" data-example-id="contextual-table">
+            <h3 style="color: #629aa9"><b>Approved</b></h3>
+            <br>
+            <table class="table">
+                <tbody>
+                <%let j=1;%>
+                <% for(let i =0; i < proposal.length; i++) { %>
+                    <% if (proposal[i].Status == "approved") { %>
+                    <tr class="active" onclick="window.location.href='project_approved.html'">
+                        <a href="project_approved.html">
+                            <th scope="row"><%=j%></th>
+                            <%j++;%>
+                            <td style="cursor:pointer" width="40%"><b><%=proposal[i].Topic%></b></td>
+                            <td style="cursor: pointer" width="50%"><%= 'client name: ' + proposal[i].ClientID.Name %></td>
+                            <% if (proposal[i].GroupID != undefined) { %>
+                                <td width="5%"><span class="label label-success" style="float:right;font-size:15px">Allocated</span>
+                                </td>
+                            <%} else { %>
+                            <td width="5%"><span class="label label-success" style="float:right;font-size:15px"></span>
+                                <%}%>
+                            <td width="5%"><span class="label label-success"
+                                                 style="float:right;font-size:15px">Approved</span></td>
+                        </a>
+                    </tr>
+                    <%}%>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="pending"></div>
+        <div class="bs-example widget-shadow" data-example-id="contextual-table">
+            <h3 style="color: #629aa9"><b>Pending</b></h3>
+            <br>
+            <table class="table">
+                <tbody>
+                <%let k=1;%>
+                <% for(let i =0 ; i < proposal.length; i++) { %>
+                    <% if(proposal[i].Status == "pending"){ %>
+                    <tr class="active" onclick="window.location.href='project_pending.html'">
+                        <a href="project_approved.html">
+                            <th scope="row"><%=k%></th>
+                            <%k++;%>
+                            <td style="cursor:pointer" width="40%"><b><%=proposal[i].Topic%></b></td>
+                            <td style="cursor: pointer" width="55%"><%= 'client name: ' + proposal[i].ClientID.Name %></td>
+                            <td width="5%"><span class="label label-warning"
+                                                 style="float:right;font-size:15px">Pending</span></td>
+                        </a>
+                    </tr>
+                    <%}%>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+        <br>
+
+        <div id="rejected"></div>
+        <div class="bs-example widget-shadow" data-example-id="contextual-table">
+            <h3 style="color: #629aa9"><b>Rejected</b></h3>
+            <br>
+            <table class="table">
+                <tbody>
+                <%let l=1;%>
+                <% for(let i =0 ; i < proposal.length; i++) { %>
+                    <% if(proposal[i].Status == "rejected"){ %>
+                    <tr class="active" onclick="window.location.href='project_rejected.html'">
+                        <a href="project_approved.html">
+                            <th scope="row"><%=l%></th>
+                            <%l++;%>
+                            <td style="cursor:pointer; font-weight: bolder" width="40%"><b><%=proposal[i].Topic%></b></td>
+                            <td style="cursor: pointer" width="55%"><%= 'client name: ' + proposal[i].ClientID.Name %></td>
+                            <td width="5%"><span class="label label-danger"
+                                                 style="float:right;font-size:15px">Rejected</span></td>
+                        </a>
+                    </tr>
+                    <%}%>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

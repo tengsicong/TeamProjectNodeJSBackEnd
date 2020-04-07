@@ -1,0 +1,21 @@
+
+/*--.reply-panel--*/
+.reply-panel {
+  padding: 1.5em;
+  margin: auto
+}
+.reply-panel p {
+  font-size: 1em;
+  color: #555;
+  line-height: 1.8em;
+}
+.reply-area {
+  width: 100%;
+  height: 12.0em;
+  resize: none;
+}
+
+.sub-reply {
+  margin-left: 95%;
+}
+/*--//.reply-panel--*/

@@ -1,0 +1,64 @@
+<%- include('component/header') %>
+
+    <!-- main content start-->
+    <div id="page-wrapper">
+        <div class="blank-page widget-shadow scroll">
+            <h2><b>My project</b></h2>
+            <br>
+
+            <% if (myProposal == undefined) { %>
+                <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
+            <% } else { %>
+            <div class="blank-page widget-shadow scroll">
+                <a href="approved.html">
+                    <div>
+                        <h3 style="color:black"><b><%=myProposal.Topic%></b><span class="label label-success"
+                                                                      style="float:right;font-size:15px">Approved</span>
+                        </h3>
+                    </div>
+                    <br>
+                    <div>
+                        <table width="100%">
+                                <td width="30%"><p><b>Client:</b><%=myProposal.ClientID.Name%></p></td>
+                                <td width="30%"><p><b>Supervisor:</b><%=myProposal.GroupID[0].StaffID.Name%></p></td>
+                                <td width="30%"><p><b>Team:</b> SSIT Team <%=myProposal.GroupID[0].TeamName%></p></td>
+                                <td><i class="fa fa-angle-right"
+                                       style="float:right;font-size:20px"></i></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    <div>
+                        <%=myProposal.Content.substring(0,200) + '...'%>
+                    </div>
+                </a>
+            </div>
+            <% } %>
+
+        </div>
+        <br>
+
+        <div class="blank-page widget-shadow scroll">
+            <h2><b>All Projects</b></h2>
+            <br>
+            <%for (let i = 0; i < allProposals.length; i++) {%>
+            <div class="blank-page widget-shadow scroll">
+                <a href="approved.html">
+                    <div>
+                        <h3 style="color:black"><b><%= allProposals[i].Topic %></b><span class="label label-success"
+                                                                      style="float:right;font-size:15px">Approved</span>
+                        </h3>
+                    </div>
+                    <br>
+                    <div>
+                        <%= allProposals[i].Content.substring(0,200) + '...' %><i class="fa fa-angle-right"
+                                                               style="float:right;font-size:20px"></i>
+                    </div>
+                </a>
+            </div>
+                <br>
+            <%}%>
+        </div>
+    </div>
+
+<%- include('component/footer') %>

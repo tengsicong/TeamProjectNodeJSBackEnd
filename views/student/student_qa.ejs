@@ -1,0 +1,82 @@
+<%- include('component/header') %>
+
+<!-- main content start-->
+
+<div id="page-wrapper">
+    <% if (student.GroupID == undefined) { %>
+    <div class="alert alert-info" role="alert">You do not have a team now, QA function will be available after you have
+        a team
+    </div>
+    <% } else { %>
+        <h2 class="title1">Ask a New Qustion</h2>
+        <div class="blank-page widget-shadow scroll">
+            <h2 style="text-align: center"><b>Create your question</b></h2>
+            <div class="row">
+                <br>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Question Topic</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control1" id="focusedinput"
+                                   placeholder="Enter Your Question Topic">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Content</label>
+                        <div class="col-sm-8">
+                                <textarea class="form-control" rows="6"
+                                          placeholder="Enter Your Question Detail"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div style="text-align: center">
+                    <button type="button" class="btn btn-primary">SUBMIT</button>
+
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="title1">Team Question Dashboard</h2>
+        <div class="blank-page widget-shadow scroll">
+            <h2><b>Question List</b></h2>
+            <br>
+            <% if (qa.length == 0) {%>
+                <div class="alert alert-danger" role="alert">You do not have a question currently!</div>
+            <% } else { %>
+                <% for (let i = 0; i < qa.length; i++) { %>
+                    <div class="panel panel-info discussion-item" style="cursor:pointer" onclick="window.location.href = '/student/student_qa_detail?id=<%=i%>'">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><%= qa[i].Topic %></h3>
+                            <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
+                        </div>
+                        <div class="panel-body">
+                            <p><%= qa[i].Replies[0].Comment%></p>
+                            <br>
+                            <p style="color: gray; font-weight:bold">
+                                By: <span style="color: black"><%= qa[i].Replies[0].Author%></span>
+                                | Post Time: <span style="color: black"><%= qa[i].Replies[0].ReplyDate.toISOString().replace(/T.*/,' ')+qa[i].Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></span>
+                                | Replies: <span style="color: black"><%= qa[i].Replies.length %></span>
+                                <%  let ms = new Date() - qa[i].Replies[(qa[i].Replies.length-1)].ReplyDate;
+                                    let day = Math.floor(ms / (1000 * 60 * 60 * 24));
+                                    let hour = Math.floor((ms / (1000 * 60 * 60)) - (day * 24));
+                                    let min = Math.ceil((ms / (1000 * 60)) - (day * 24 * 60) - (hour * 60));
+                                    let s = '';
+                                    if (day != 0) {
+                                        s = s + day + ' days ';
+                                    }
+                                    if (hour != 0) {
+                                        s = s + hour + ' hours ';
+                                    }
+                                    s = s + min + ' mins ago' %>
+                                | Latest update: <span style="color: black"><%= s %></span></p>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    <% } %>
+</div>
+
+
+<%- include('component/footer') %>

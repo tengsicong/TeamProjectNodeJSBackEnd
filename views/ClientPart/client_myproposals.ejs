@@ -1,0 +1,85 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="blank-page widget-shadow scroll" id="client_project_div">
+        <h2>
+            <b>My Projects</b>
+            <a href="/client/myproject/create_project">
+                <button class="btn btn-primary btn-flat btn-pri" style="float:right" type="button"><i
+                            aria-hidden="true" class="fa fa-plus"></i>Create
+                </button>
+            </a>
+        </h2>
+        <% proposals.forEach(function (proposal) { %>
+        <div class="grid_3 grid_5 widget-shadow">
+                <% if (proposal.Status == "approved") { %>
+            <a href="/client/myproject/project_approved?id=<%=proposal._id%>">
+                <div>
+                    <h3 class="hdg"><%=proposal.Topic%><span class="label label-success" style="float:right;font-size:15px">approved</span>
+                    </h3>
+                </div>
+                <div>
+                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
+                                              style="float:right;font-size:20px"></i>
+                </div>
+            </a>
+                <% } else if(proposal.Status == "pending"){ %>
+            <a href="/client/myproject/project_pending?id=<%=proposal._id%>">
+                <div>
+                <h3 class="hdg"><%=proposal.Topic%><span class="label label-warning"
+                                           style="float:right;font-size:15px">Pending</span>
+                </h3>
+                </div>
+                <div>
+                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
+                                              style="float:right;font-size:20px"></i>
+                </div>
+            </a>
+                <% } else if(proposal.Status == "rejected"){ %>
+            <a href="/client/myproject/project_rejected?id=<%=proposal._id%>">
+                <div>
+                    <h3 class="hdg"><%=proposal.Topic%><span class="label label-danger" style="float:right;font-size:15px">Rejected</span>
+                    </h3>
+                </div>
+                <div>
+                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
+                                              style="float:right;font-size:20px"></i>
+                </div>
+            </a>
+                <%} else { %>
+                        <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
+                <%}%>
+        </div>
+        <% }) %>
+<!--        <div class="grid_3 grid_5 widget-shadow">-->
+<!--            <a href="/client/myproject/project_pending">-->
+<!--                <div>-->
+<!--                    <h3 class="hdg">Topic<span class="label label-warning"-->
+<!--                                                   style="float:right;font-size:15px">Pending</span>-->
+<!--                    </h3>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    Here is the overview of the project.<i class="fa fa-angle-right"-->
+<!--                                                           style="float:right;font-size:20px"></i>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+
+<!--        <div class="grid_3 grid_5 widget-shadow">-->
+<!--            <a href="/client/myproject/project_rejected">-->
+<!--                <div>-->
+<!--                    <h3 class="hdg">mopic<span class="label label-danger" style="float:right;font-size:15px">Rejected</span>-->
+<!--                    </h3>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    Here is the overview of the project.<i class="fa fa-angle-right"-->
+<!--                                                           style="float:right;font-size:20px"></i>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+    </div>
+
+</div>
+
+<%- include('footer') %>

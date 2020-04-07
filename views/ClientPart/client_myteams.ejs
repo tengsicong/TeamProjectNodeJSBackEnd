@@ -1,0 +1,37 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="blank-page widget-shadow scroll">
+        <h2><b>My Teams</b></h2>
+        <%proposals.forEach(function (proposal) { %>
+        <%if(proposal.GroupID.length!=0){%>
+        <%for(let i = 0; i< proposal.GroupID.length; i++){%>
+        <div class="grid_3 grid_5 widget-shadow">
+            <a href="/client/myteam/teampage?id=<%=proposal.GroupID[i]._id%>">
+                <div>
+                    <h3><b>SSIT Team <%=proposal.GroupID[i].TeamName%></b></h3>
+                </div>
+                <div>
+                    <table width="100%">
+                        <tr>
+                            <td width="40%"><p><b>Supervisor:</b> <%=proposal.GroupID[i].StaffID.Name%><span><i class="fa fa-angle-right" style="float:right;font-size: 35px"/></span></p></td>
+                        </tr>
+                        <td width="20em"><p><b>Student:</b>
+                                <%let students = proposal.GroupID[i].StudentID;%>
+                                <%console.log(proposal.GroupID[i])%>
+                                <% if (students.length>0){%>
+                                    <% students.forEach(function (student){ %>
+                                    <%=student.Name%>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <% })} %>
+                            </p></td>
+                        </tr>
+                    </table>
+                </div>
+            </a></div>
+        <%}}%>
+        <% })%>
+    </div>
+</div>
+
+<%- include('footer') %>
