@@ -19,6 +19,12 @@ module.exports= {
                 return r;
             });
     },
+
+    getQAByGroupID: function getQAByGroupID(id) {
+        return studentStaffQa
+            .find({GroupID: id})
+            .exec();
+    },
 }
 
 // const mongoose = require('mongoose');

@@ -1,0 +1,46 @@
+<%- include('header') %>
+
+		<!-- main content start-->
+		<div id="page-wrapper">
+			<div class="main-page">
+                <div class="blank-page widget-shadow scroll">
+                    <h2><b>Discussion Board</b></h2>
+                    <br>
+                    <% if (qa.length == 0) {%>
+                        <div class="alert alert-danger" role="alert">No question yet</div>
+                    <% } else { %>
+                        <% for (let i = 0; i < qa.length; i++) { %>
+                            <div class="panel panel-info discussion-item" style="cursor:pointer" onclick="window.location.href = 'discussion_details?id=<%=i%>'">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><%= qa[i].Topic %></h3>
+                                    <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
+                                </div>
+                                <div class="panel-body">
+                                    <p><%= qa[i].Replies[0].Comment%></p>
+                                    <br>
+                                    <p style="color: gray; font-weight:bold">
+                                        By: <span style="color: black"><%= qa[i].Replies[0].Author%></span>
+                                        | Post Time: <span style="color: black"><%= qa[i].Replies[0].ReplyDate.toISOString().replace(/T.*/,' ')+qa[i].Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></span>
+                                        | Replies: <span style="color: black"><%= qa[i].Replies.length %></span>
+                                        <%  let ms = new Date() - qa[i].Replies[(qa[i].Replies.length-1)].ReplyDate;
+                                            let day = Math.floor(ms / (1000 * 60 * 60 * 24));
+                                            let hour = Math.floor((ms / (1000 * 60 * 60)) - (day * 24));
+                                            let min = Math.ceil((ms / (1000 * 60)) - (day * 24 * 60) - (hour * 60));
+                                            let s = '';
+                                            if (day != 0) {
+                                                s = s + day + ' days ';
+                                            }
+                                            if (hour != 0) {
+                                                s = s + hour + ' hours ';
+                                            }
+                                            s = s + min + ' mins ago' %>
+                                        | Latest update: <span style="color: black"><%= s %></span></p>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </div>
+			</div>
+		</div>
+
+<%- include('footer') %>

@@ -4,12 +4,13 @@ const studentModel = require('../models/student');
 const proposalModel = require('../models/proposal');
 const staffModel = require('../models/staff');
 const teamModel = require('../models/team');
+const qaModel = require('../models/student_staff_qa');
 const mongoose = require('mongoose')
 
 const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
 
 router.get('/my_project', function(req, res) {
-    console.log(req.session.role);
+    //console.log(req.session.role);
     if (req.session.role === 'staff') {
         Promise.all([
             staffModel.getStaffByStaffID(req.session.userinfo),
@@ -79,5 +80,81 @@ router.get('/project_detail', function(req, res) {
         });
 });
 
+router.get('/discussion', function(req, res) {
+    if (req.session.role === 'staff') {
+        const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
+        routePromise.then(function(result) {
+            const staff = result;
+            let qa = [];
+
+            const completedQAPromise = new Promise(function(resolve) {
+                let loaded = 0;
+
+                for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
+                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
+                    qaPromise.then(function(result) {
+                        qa.push(...result);
+                        loaded++;
+                        if(loaded == staff.AllocatedTeamID.length) {
+                            resolve(qa);
+                        }
+                    });
+                }
+            });
+ 
+            completedQAPromise.then(function(result){
+                //console.log(qa);
+
+                res.render('staff/discussion', {
+                    pageTitle: 'Discussion',
+                    username: staff.Name,
+                    qa: result,
+                });
+            });
+        });
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
+
+router.get('/discussion_details', function(req, res) {
+    if (req.session.role === 'staff') {
+        const questionID = req.query.id;
+
+        const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
+        routePromise.then(function(result) {
+            const staff = result;
+            let qa = [];
+
+            const completedQAPromise = new Promise(function(resolve) {
+                let loaded = 0;
+
+                for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
+                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
+                    qaPromise.then(function(result) {
+                        qa.push(...result);
+                        loaded++;
+                        if(loaded == staff.AllocatedTeamID.length) {
+                            resolve(qa);
+                        }
+                    });
+                }
+            });
+            completedQAPromise.then(function(result){
+                //console.log(qa);
+
+                res.render('staff/discussion_details', {
+                    pageTitle: 'Discussion details',
+                    username: staff.Name,
+                    qa: result[questionID],
+                });
+            });
+        });
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
 
 module.exports = router;
