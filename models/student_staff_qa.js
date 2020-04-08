@@ -4,6 +4,11 @@ const studentStaffQa = mongo.student_staff_qas;
 
 module.exports= {
 
+    /**
+     *
+     * @param id
+     * @returns {Promise|PromiseLike<[]>|Promise<[]>}
+     */
     getQAByStudentID: function getQAByStudentID(id) {
         return studentStaffQa
             .find()
