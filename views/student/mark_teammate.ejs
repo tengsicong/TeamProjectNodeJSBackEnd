@@ -1,0 +1,47 @@
+<%- include('component/header') %>
+
+<!-- main content start-->
+
+    <div id="page-wrapper">
+        <div class="blank-page widget-shadow scroll" style=" padding-left: 30%;padding-right: 30%;">
+            <h2 style="text-align: center;">Mark for my teammate</h2>
+            <p style="text-align: center; color:red">DEADLINE: 3pm 29th May 2020.</p>
+            <p>Each team mark has to be moderated to give a mark for each individual that is in proportion
+                to their individual performance. This is done by calculating a scaling factor that is derived from
+                scores (effectively marks) that are assigned to you by each of the members of your team. As part
+                of the personal evaluation at the end of the project, we will require each team member to mark
+                themselves and the other team members, where the one mark covers the following five aspects:</p>
+            <br>
+            <p>• Attendance and punctuality (to group meetings, joint coding sessions etc.).</p>
+            <p>• Ability to work effectively with other team members.</p>
+            <p>• Contribution to content and organisation of project deliverables.</p>
+            <p>• Quality of contributions.</p>
+                <p>• Timeliness of contributions.</p>
+            <p style="text-align: center; color:red"><em style="color:red">*</em>Required</p>
+        </div>
+        <br>
+
+        <div class="blank-page widget-shadow scroll">
+        <br>
+            <form class="form-horizontal">
+                <% for (let i = 0; i < team.StudentID.length; i++) { %>
+                <div class="form-group">
+                    <label for="input<%=i%>" class="col-sm-2 control-label"><%= team.StudentID[i].Name %></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control1" id="input<%=i%>"
+                               placeholder="Grade out of 100">
+                    </div>
+                </div>
+                <% } %>
+            </form>
+        <br>
+        <div style="text-align: center">
+            <a href="student/homepage">
+                <button type="button" class="btn btn-primary">SUBMIT</button>
+            </a>
+        </div>
+        </div>
+    </div>
+
+<%- include('component/footer') %>
+

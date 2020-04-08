@@ -10,7 +10,7 @@
                 <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
             <% } else { %>
             <div class="blank-page widget-shadow scroll">
-                <a href="approved.html">
+                <a href="/student/my_project">
                     <div>
                         <h3 style="color:black"><b><%=myProposal.Topic%></b><span class="label label-success"
                                                                       style="float:right;font-size:15px">Approved</span>
@@ -43,7 +43,7 @@
             <br>
             <%for (let i = 0; i < allProposals.length; i++) {%>
             <div class="blank-page widget-shadow scroll">
-                <a href="approved.html">
+                <a href="/student/project_detail?id=<%-allProposals[i]._id%>">
                     <div>
                         <h3 style="color:black"><b><%= allProposals[i].Topic %></b><span class="label label-success"
                                                                       style="float:right;font-size:15px">Approved</span>

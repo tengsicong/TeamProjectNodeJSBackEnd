@@ -1,0 +1,69 @@
+<%- include('component/header') %>
+
+<!-- main content start-->
+
+    <div id="page-wrapper">
+        <div class="blank-page widget-shadow scroll" style="text-align: center; padding-left: 30%;padding-right: 30%;">
+            <h2>COM3420 Software Hut Teammate Preference</h2>
+            <p style="color:red">DEADLINE: 3pm 1th February 2020.</p>
+            <p>In this module, you will build a project with 3-4 teammate, now you could choose 1 person that you would
+                like to work with and 2 persons that you would not like to work with. We try to allocate groups
+                according to each person's preferences, but we cannot guarantee that everyone will be satisfied </p>
+            <p style="color:red">Optional choose</p>
+        </div>
+        <br>
+
+        <div class="blank-page widget-shadow scroll">
+        <br>
+<!--        <div class="blank-page widget-shadow scroll">-->
+            <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
+                <h3>Person you like to work with</h3>
+                <select class="form-control" style="width: 100%">
+                    <% for (let i = 0; i < allStudent.length; i++) { %>
+                        <% if (!allStudent[i]._id.equals(student._id)) { %>
+                            <option><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </div>
+<!--        </div>-->
+
+        <br>
+<!--        <div class="blank-page widget-shadow scroll">-->
+            <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
+                <h3>Person you do not like to work with (1)</h3>
+                <select class="form-control" style="width: 100%">
+                    <% for (let i = 0; i < allStudent.length; i++) { %>
+                        <% if (!allStudent[i]._id.equals(student._id)) { %>
+                            <option><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </div>
+<!--        </div>-->
+
+        <br>
+<!--        <div class="blank-page widget-shadow scroll">-->
+            <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
+                <h3>Person you do not like to work with (2)</h3>
+                <select class="form-control" style="width: 100%">
+                    <% for (let i = 0; i < allStudent.length; i++) { %>
+                        <% if (!allStudent[i]._id.equals(student._id)) { %>
+                            <option><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </div>
+<!--        </div>-->
+
+        <br>
+        <div style="text-align: center">
+            <a href="student/homepage">
+                <button type="button" class="btn btn-primary">SUBMIT</button>
+            </a>
+        </div>
+        </div>
+    </div>
+
+<%- include('component/footer') %>
+

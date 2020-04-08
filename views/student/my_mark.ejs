@@ -1,0 +1,70 @@
+<%- include('component/header') %>
+
+<div id="page-wrapper">
+    <% if (stage.Stage != 2) { %>
+        <div class="alert alert-warning" role="alert" style="text-align: center">You can not check your mark during this stage!
+        </div>
+    <% } else { %>
+        <div class="blank-page widget-shadow scroll">
+            <h2><b>My Mark</b></h2>
+            <br>
+            <div class="panel panel-info">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><b>Teammate Mark</b></div>
+                <!--        <div class="panel-body">-->
+                <!--            During this module, you need to regular meeting with your client and gathering requirement by-->
+                <!--            interview your client. For each meeting detail, please see the table below!-->
+                <!--        </div>-->
+                <!-- Table -->
+                <table class="table" width="100%">
+                    <tr>
+                        <th width="90%">Description</th>
+                        <th width="10%">Mark</th>
+                    </tr>
+                    <tr>
+                        <td>Teammate mark for your contribution</td>
+                        <td>
+                            <% if (student.Mark.length == 0) { %>
+                                None
+                            <% } else { %>
+                                <% let m = 0;%>
+                                <% for (let i = 0; i < student.Mark.length; i++) { %>
+                                   <% m = m + student.Mark[i]; %>
+                                <% } %>
+                                <%= (m/student.Mark.length).toFixed(2)%>
+                            <% } %>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+
+            <br>
+            <div class="panel panel-info">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><b>Supervisor Meeting</b></div>
+                <div class="panel-body">
+                    <p>During this module, you need to regular meeting with your supervisor and report your progress.
+                        For each meeting detail, please see the table below!</p>
+                </div>
+                <!-- Table -->
+                <table class="table">
+                    <tr>
+                        <th></th>
+                        <th>Time</th>
+                        <th>Place</th>
+                        <th>Supervisor</th>
+                    </tr>
+
+                    <tr>
+
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<%- include('component/footer') %>

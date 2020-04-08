@@ -1,0 +1,28 @@
+<%- include('component/header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="main-page">
+        <h2 class="title1">Project Detail</h2>
+        <div class="blank-page widget-shadow scroll">
+            <h2><b><%= proposal.Topic%></b></h2>
+            <br>
+            <table width="100%">
+                <tr>
+                    <td width="30%"><P><%= 'Client : ' + proposal.ClientID.Name %></P></td>
+                </tr>
+            </table>
+            <br>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> Panel Info</h3>
+                </div>
+                <div class="panel-body">
+                    <%= proposal.Content %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('component/footer') %>

@@ -122,6 +122,7 @@ router.get('/timetable', function (req, res) {
             });
         });
 });
+
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),

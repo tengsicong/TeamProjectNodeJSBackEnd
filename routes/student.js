@@ -4,6 +4,7 @@ const studentModel = require('../models/student');
 const proposalModel = require('../models/proposal');
 const studentStaffQAModel = require('../models/student_staff_qa')
 const teamModel = require('../models/team');
+const stageModel = require('../models/stage');
 const mongoose = require('mongoose');
 const studentID = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');
 
@@ -11,14 +12,17 @@ router.get('/homepage', function(req, res) {
     Promise.all([
         studentModel.getStudentByStudentID(studentID),
         teamModel.getTeamByStudentID(studentID),
+        stageModel.getStage(),
     ])
         .then(function(result) {
             const student = result[0];
             const myTeam = result[1];
+            const stage = result[2][0];
             res.render('student/homepage', {
                 pageTitle: 'Homepage',
                 student: student,
                 myTeam: myTeam,
+                stage: stage,
             });
         });
 });
@@ -33,9 +37,6 @@ router.get('/all_projects', function(req, res) {
             const student = result[0];
             const allProposals = result[1];
             const myProposal = result[2];
-            // console.log('1' + student);
-            console.log('2' + allProposals);
-            // console.log('3' + myProposal.GroupID)
             res.render('student/all_projects', {
                 pageTitle: 'All Projects',
                 student: student,
@@ -101,7 +102,6 @@ router.get('/my_project', function(req, res) {
             const student = result[0];
             const proposal = result[1];
             const team = result[2];
-            console.log(team)
             res.render('student/my_project', {
                 pageTitle: 'My Project',
                 student: student,
@@ -110,5 +110,91 @@ router.get('/my_project', function(req, res) {
             });
         });
 })
+
+router.get('/project_detail', function(req, res) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        studentModel.getStudentByStudentID(studentID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function(result) {
+            const student = result[0];
+            const proposal = result[1];
+            res.render('student/project_detail', {
+                pageTitle: 'Project Detail',
+                student: student,
+                proposal: proposal,
+            });
+        });
+})
+
+router.get('/person_preference', function(req, res) {
+    Promise.all([
+        studentModel.getStudentByStudentID(studentID),
+        studentModel.getAllStudent(),
+    ])
+        .then(function(result) {
+            const student = result[0];
+            const allStudent = result[1];
+            res.render('student/person_preference', {
+                pageTitle: 'Person Preference',
+                student: student,
+                allStudent: allStudent,
+            })
+        })
+})
+
+router.get('/proposal_preference', function(req, res) {
+    Promise.all([
+        studentModel.getStudentByStudentID(studentID),
+        proposalModel.getAllProposals('approved'),
+    ])
+        .then(function(result) {
+            const student = result[0];
+            const allApprovedProposal = result[1];
+            res.render('student/proposal_preference', {
+                pageTitle: 'Proposal Preference',
+                student: student,
+                allApprovedProposal: allApprovedProposal,
+            })
+        })
+})
+
+router.get('/mark_teammate', function(req, res) {
+    Promise.all([
+        studentModel.getStudentByStudentID(studentID),
+        teamModel.getTeamByStudentID(studentID),
+    ])
+        .then(function(result) {
+            const student = result[0];
+            const team = result[1];
+            res.render('student/mark_teammate', {
+                pageTitle: 'Mark Teammate',
+                student: student,
+                team: team,
+            })
+        })
+})
+
+router.get('/my_mark', function(req, res) {
+    Promise.all([
+        studentModel.getStudentByStudentID(studentID),
+        teamModel.getTeamByStudentID(studentID),
+        stageModel.getStage(),
+    ])
+        .then(function(result) {
+            const student = result[0];
+            const team = result[1];
+            const stage = result[2][0];
+            console.log(team)
+            res.render('student/my_mark', {
+                pageTitle: 'My Mark',
+                student: student,
+                team: team,
+                stage: stage,
+            })
+        })
+})
+
 
 module.exports = router;

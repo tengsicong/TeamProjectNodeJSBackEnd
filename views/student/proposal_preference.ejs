@@ -1,0 +1,40 @@
+<%- include('component/header') %>
+
+
+<!-- main content start-->
+
+    <div id="page-wrapper">
+        <div class="blank-page widget-shadow scroll" style="text-align: center; padding-left: 30%;padding-right: 30%;">
+            <h2>COM3420 Software Hut project preferences</h2>
+            <p style="color:red">DEADLINE: 3pm 7th February 2020.</p>
+            <p>Teams are now specified in the Blackboard area for this module, as are brief descriptions of the
+                available projects. You should read the project descriptions, meet with your other team members (or at
+                the very least, discuss by email), and agree upon a ranking. Then ONE team member should submit the
+                ranking for your team. You MUST rank at least five projects. You can rank as many as you like of the
+                remaining projects.</p>
+        </div>
+
+        <br>
+        <div class="blank-page widget-shadow scroll">
+            <% for (let i = 0; i < 10; i++) {%>
+            <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
+                <h3><%= 'Rank No. ' + (i+1) %></h3>
+                <select class="form-control" style="width: 100%">
+                    <% for (let j = 0; j < allApprovedProposal.length; j++) { %>
+                        <option><%= allApprovedProposal[j].Topic + ' (' + allApprovedProposal[j].ClientID.Name + ')'%></option>
+                    <% } %>
+                </select>
+            </div>
+            <% } %>
+                <br>
+
+        <br>
+        <div style="text-align: center">
+            <a href="/student/homepage">
+                <button type="button" class="btn btn-primary">SUBMIT</button>
+            </a>
+        </div>
+    </div>
+    </div>
+
+<%- include('component/header') %>

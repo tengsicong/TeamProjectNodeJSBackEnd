@@ -3,7 +3,7 @@ const stage = mongo.stages;
 
 module.exports = {
     getStage: function getStage() {
-        stage
+        return stage
             .find()
             .exec();
     },

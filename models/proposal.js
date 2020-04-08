@@ -39,6 +39,7 @@ module.exports = {
     getProposalByProposalID: function getProposalByProposalID(id) {
         return proposal
             .findOne({_id: id})
+            .populate('ClientID')
             .populate({path:'GroupID',populate:{path: "StaffID"}})
             .exec();
     },
