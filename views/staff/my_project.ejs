@@ -9,8 +9,8 @@
                 <% if (allTeams.length == Number(0)) { %>
                     <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
                 <% } else { %>
-                    <% for(var i = 0; i < allTeams.length; i++) {%>
-                        <div class="grid_3 grid_5 widget-shadow" style="cursor:pointer" onclick="window.location.href = 'project_detail'">
+                    <% for(let i = 0; i < allTeams.length; i++) {%>
+                        <div class="grid_3 grid_5 widget-shadow" style="cursor:pointer" onclick="window.location.href = 'staff/project_detail?seq=<%=i%>'">
                             <h3 class="project-name" >
                                 <b>
                                     <% if (allTeams[i].ProposalID === undefined) { %>

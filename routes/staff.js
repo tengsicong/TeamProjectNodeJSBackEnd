@@ -49,6 +49,7 @@ router.get('/my_project', function(req, res) {
 });
 
 router.get('/project_detail', function(req, res) {
+    const teamID = parseInt(req.query.seq);
     Promise.all([
         staffModel.getStaffByStaffID(staffID),
         staffModel.getAllocatedTeamByStaffID(staffID),
@@ -58,20 +59,21 @@ router.get('/project_detail', function(req, res) {
             const allTeams = result[1];
             let groupMember;
             groupMember = '';
-            const max =allTeams[0].StudentID.length;
+            const max =allTeams[teamID].StudentID.length;
             for (let j = 0; j < max; j++) {
-                groupMember = groupMember + allTeams[0].StudentID[j].Name;
+                groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
                 if (j < max - 1) {
                     groupMember = groupMember + ', ';
                 }
             }
             let meetingList = [];
-            meetingList = allTeams[0].StaffMeetingID;
+            meetingList = allTeams[teamID].StaffMeetingID;
+            console.log(allTeams[teamID]);
             let nowtime = new Date();
             res.render('staff/project_detail', {
                 pageTitle: 'Project Detail',
                 username: staff.Name,
-                team: allTeams[0],
+                team: allTeams[teamID],
                 teamMemberList: groupMember,
                 allmeeting: meetingList,
                 nowtime: nowtime,

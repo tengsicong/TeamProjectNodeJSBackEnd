@@ -39,7 +39,6 @@
             <!-- Default panel contents -->
             <div class="panel-heading"><b>Meeting</b></div>
             <!-- Table -->
-            <p><%= team.StaffMeetingID.length%></p>
             <table class="table">
                 <tr>
                     <th></th>
@@ -47,7 +46,23 @@
                     <th>Place</th>
                     <th>Supervisor</th>
                 </tr>
-
+                <% for(var i=0;i<allmeeting.length;i++) { %>
+                    <%if(allmeeting.Date<nowtime) { %>
+                        <tr class="clickable-row" data-href="meeting_detail_post.html" style="cursor: pointer">
+                            <th>Meeting <%=i+1%></th>
+                            <td><%= team.StaffMeetingID[i].Date%></td>
+                            <td><%= team.StaffMeetingID[i].Place%></td>
+                            <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
+                        </tr>
+                    <%} else { %>
+                        <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
+                            <th>Meeting <%=i+1%></th>
+                            <td><%= team.StaffMeetingID[i].Date%></td>
+                            <td><%= team.StaffMeetingID[i].Place%></td>
+                            <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
+                        </tr>
+                    <% } %>
+                <% } %>
             </table>
         </div>
     </div>
