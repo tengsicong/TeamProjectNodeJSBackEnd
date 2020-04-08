@@ -208,3 +208,30 @@
 </div>
 
 <%- include('component/footer') %>
+<!-- set new representer -->
+<!--<script>-->
+<!--    function setNewRepresenter(){-->
+<!--        const representerID = document.getElementById(representerID).value;-->
+<!--        window.alert('representerID');-->
+<!--    }-->
+<!--</script>-->
+<script>
+    function setNewRepresenter() {
+        // alert(representerID);
+        let temp = document.createElement("form");
+        temp.action = '/student/set_new_representer';
+        temp.method = 'post';
+        temp.style.display = "none";
+        const inputElement = document.createElement("input")
+        inputElement.type = 'hidden';
+        inputElement.name = 'representerID';
+        inputElement.value = document.getElementById('representerID').value;
+        temp.appendChild(inputElement);
+        document.body.appendChild(temp);
+        temp.submit();
+        console.log(document)
+        return temp;
+    }
+</script>
+<!-- set new representer -->
+<%- include('component/footer_script') %>

@@ -40,4 +40,10 @@ module.exports = {
             .find({GroupID: id})
             .exec();
     },
+
+
+    postTeamNewRepresenter: function postTeamNewRepresenter(ID) {
+        student
+        
+}
 };

@@ -4,7 +4,7 @@ const studentStaffQa = mongo.student_staff_qas;
 
 module.exports= {
 
-    getQAByGroupID: function getQAByGroupID(id) {
+    getQAByStudentID: function getQAByStudentID(id) {
         return studentStaffQa
             .find()
             .populate({path: 'GroupID', match: {StudentID: {$elemMatch: {$eq: id}}}})
