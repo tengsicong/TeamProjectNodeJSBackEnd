@@ -88,7 +88,7 @@ router.get('/', function(req, res) {
 
         if (role !== undefined) {
             res.render('portal/signin', {
-                pageTitle: 'Team Project - Signin (' + role + ')',
+                pageTitle: 'Team Project - ' + role.substring(0,1).toUpperCase() + role.substring(1) + ' Login',
                 role: role,
             });
         } else {
