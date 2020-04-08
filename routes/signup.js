@@ -30,8 +30,7 @@ router.post('/', function(req, res) {
             if (client !== null) {
                 console.log('This email address has been already registered');
                 res.redirect('/signup?role=client');
-            }
-            else {
+            } else {
                 if(pw === confirmedpw) {
                     let doc = {
                         UserName: email,
@@ -41,7 +40,7 @@ router.post('/', function(req, res) {
                     }
 
                     let newClientPromise = signupModel.createClient(doc);
-                    newClientPromise.then(function(clientEntity){
+                    newClientPromise.then(function(clientEntity) {
                         console.log('Registration success ' + clientEntity);
                         req.session.userinfo = clientEntity._id;
                         req.session.username = email;

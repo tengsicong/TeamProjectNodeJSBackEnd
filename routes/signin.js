@@ -62,7 +62,7 @@ router.get('/', function(req, res) {
     const role = req.query.role;
     //console.log(role);
 
-    if(req.session.role === role) {
+    if(req.session.role !== undefined && req.session.role === role) {
         if (req.session.role === 'student') {
             res.redirect('/student/homepage');
         } else if (req.session.role === 'staff') {
@@ -88,7 +88,7 @@ router.get('/', function(req, res) {
 
         if (role !== undefined) {
             res.render('portal/signin', {
-                pageTitle: role + 'Signin',
+                pageTitle: 'Team Project - Signin (' + role + ')',
                 role: role,
             });
         } else {
