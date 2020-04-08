@@ -1,0 +1,71 @@
+<div class="blank-page widget-shadow scroll">
+    <h2><b>Edit Meeting</b></h2>
+    <div class="row">
+        <br>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="selector1" class="col-sm-2 control-label">Role</label>
+                <div class="col-sm-8">
+                    <select id="role" class="form-control" style="width: 60%">
+                        <option value="staff">Staff</option>
+                        <option value="client">Client</option>
+                    </select>
+                </div>
+                <% <script(file) >
+                jQuery(document).ready(function () {
+                    jQuery("#role").change(function () {
+                        role_value = jQuery(this).val();
+                        if (role_value == "staff") {
+                            rolemeeting = staffMeetings;
+                        } else {
+                            rolemeeting = clientMeetings;
+                        }
+                    });
+                    jQuery("#role").blur(function () {
+                        rolemeeting
+                    });
+                })
+                < /script>  %>
+
+            </div>
+            <div class="form-group">
+                <label for="selector2" class="col-sm-2 control-label">Select Meeting</label>
+                <div class="col-sm-8">
+                    <select class="form-control" style="width: 60%">
+                        <option>-</option>
+                        <% for(let i = 0;i < rolemeeting.length;i++){ %>
+                            <option id="<% rolemeeting[i]._id %>">
+                                <% role_value %>
+                                > Meeting <%= i+1 %></option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="selector3" class="col-sm-2 control-label">Select Time</label>
+                <div class="col-sm-8">
+                    <input id="selector3" type="datetime-local" name="client_changetime" style="width: 60%">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="selector4" class="col-sm-2 control-label">Supervisor</label>
+                <div class="col-sm-8">
+                    <select class="form-control" style="width: 60%">
+                        <option>person 1</option>
+                        <option>Person 1</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">Place</label>
+                <div class="col-sm-8">
+                                <textarea class="form-control" rows="1" id="input"
+                                          placeholder="Enter Your Question Detail"></textarea>
+                </div>
+            </div>
+        </form>
+        <div style="text-align: center">
+            <button onclick="window.location='team_list.html'" type="button" class="btn btn-primary">SUBMIT</button>
+        </div>
+    </div>
+</div>

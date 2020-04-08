@@ -30,7 +30,7 @@ module.exports = {
         return student
             .find()
             .populate('GroupID')
-            .populate('ProposalID')
+            .populate({path: 'GroupID',populate:{ path: 'ProposalID' }})
             .exec();
     },
 

@@ -1,4 +1,4 @@
-<%- include('header1') %>
+<%- include('header') %>
 <!-- main content start-->
 <div id="page-wrapper">
     <!--auto grouping-->
@@ -35,7 +35,7 @@
 
         <% for (var i = 0; i < allTeam.length ; i++) { %>
         <div class="grid_3 grid_5 widget-shadow">
-            <a href="./edit_team">
+            <a href="./edit_team?_id=<%= allTeam[i]._id %>">
                 <div>
                     <h3><b><%= 'SSIT Team' + allTeam[i].TeamName %></b>
                         <% if (allTeam[i].ProposalID == undefined) { %>
@@ -86,4 +86,15 @@
         <% } %>
     </div>
 </div>
+<script>
+    $('.blank-page widget-shadow scroll').hover(
+        function(){
+            var top=$('body').scrollTop();
+            $(window).scroll(function(){ //滚动时，固定页面滚动条到页顶的高度，使其不滚动
+                $('body').scrollTop(top);
+            });
+        },function(){
+            $(window).off('scroll'); //鼠标移开后，解除固定
+        });
+</script>
 <%- include('footer') %>

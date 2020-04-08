@@ -1,0 +1,15 @@
+<script>
+                    $(document).ready(function () {
+                        $("#role").change(function () {
+                            role_value = jQuery(this).val();
+                            if (role_value == "staff") {
+                                rolemeeting = staffMeetings;
+                            } else {
+                                rolemeeting = clientMeetings;
+                            }
+                        });
+                        // $("#role").blur(function () {
+                        //     rolemeeting.
+                        // });
+                    })
+</script>

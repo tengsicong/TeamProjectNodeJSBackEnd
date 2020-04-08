@@ -4,21 +4,37 @@ const proposalModel = require('../models/proposal');
 const teamModel = require('../models/team');
 const adminModel = require('../models/admin');
 const staffModel = require('../models/staff');
+const clientModel = require('../models/client');
 const studentModel = require('../models/student');
+const clientMeetingModel = require('../models/clientmeetings');
+const staffMeetingModel = require('../models/staffmeetings');
+const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
+const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
+
 
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-const Tid = mongoose.Types.ObjectId('5e87086fce306c528bc03145');
+const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
+const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
+const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
+
 const Temp = '5e7b6f794f4ed29e60233aa2';
-// teamModel.getAllTeam().then(function(result) {
+// clientMeetingModel.getClientMeetingByClientID(clientID).then(function(result) {
 //     console.log(result[0]);
 // });
 // studentModel.getAllStudent().then(function (result) {
-//     console.log('111'+result[1])
+//     console.log('----\n'+result[0])
+//
 // });
+// changeStaffMeetingRequestModel.getChangeStaffMeetingRequest().then(function (result) {
+//     console.log(result)
+// })
+//
+
+
 
 /* GET edit team page. */
-router.get('/edit_team', function(req, res) {
+router.get('/edit_team', function (req, res) {
 
     Promise.all([
         adminModel.getAdminByID(adminID),
@@ -27,7 +43,7 @@ router.get('/edit_team', function(req, res) {
         staffModel.getAllStaff(),
         studentModel.getAllStudent(),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             const team = result[1];
             const allProposal = result[2];
@@ -45,7 +61,7 @@ router.get('/edit_team', function(req, res) {
         });
 });
 /* GET new team page. */
-router.get('/new_team', function(req, res) {
+router.get('/new_team', function (req, res) {
     // const teamID = req.params.TeamId;
     // console.log(teamID);
     Promise.all([
@@ -56,7 +72,7 @@ router.get('/new_team', function(req, res) {
         studentModel.getAllStudent(),
         teamModel.getAllTeam(),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             const team = result [1];
             const allProposal = result[2];
@@ -75,13 +91,13 @@ router.get('/new_team', function(req, res) {
             });
         });
 });
-router.get('/team_list', function(req, res) {
+router.get('/team_list', function (req, res) {
 
     Promise.all([
         adminModel.getAdminByID(adminID),
         teamModel.getAllTeam(),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             const allTeam = result[1];
             // console.log(allTeam)
@@ -92,16 +108,17 @@ router.get('/team_list', function(req, res) {
             });
         });
 });
-router.get('/student_list', function(req, res) {
+router.get('/student_list', function (req, res) {
 
     Promise.all([
         adminModel.getAdminByID(adminID),
         studentModel.getAllStudent(),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             const allStudent = result[1];
-            console.log(allStudent)
+            console.log(allStudent[0].GroupID.ProposalID);
+
             res.render('admin/student_list', {
                 pageTitle: 'Student List',
                 admin: admin,
@@ -109,13 +126,13 @@ router.get('/student_list', function(req, res) {
             });
         });
 });
+
 router.get('/timetable', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
-            // console.log(allTeam)
             res.render('admin/timetable', {
                 pageTitle: 'Timetable',
                 admin: admin,
@@ -126,24 +143,42 @@ router.get('/timetable', function (req, res) {
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
+        staffMeetingModel.getStaffMeetingByStaffID(staffID),
+        clientMeetingModel.getClientMeetingByClientID(clientID),
+        staffModel.getStaffByStaffID((staffID)),
+        clientModel.getClientByClientID(clientID),
+        changeStaffMeetingRequestModel.getChangeStaffMeetingRequest(),
+        changeClientMeetingRequestModel.getChangeClientMeetingRequest(),
     ])
         .then(function (result) {
             const admin = result[0];
-            // console.log(allTeam)
+            const staffMeetings = result[1];
+            const clientMeetings = result[2];
+            const staff = result[3];
+            const client = result[4];
+            const changeStaffMeetingRequest = result[5];
+            const changeClientMeetingRequest = result[6];
+
             res.render('admin/timetable_change', {
                 pageTitle: 'Change Timetable',
                 admin: admin,
+                staffMeetings: staffMeetings,
+                clientMeetings: clientMeetings,
+                staff: staff,
+                client: client,
+                changeStaffMeetingRequest: changeStaffMeetingRequest,
+                changeClientMeetingRequest: changeClientMeetingRequest,
             });
-        });
+        })
 });
 
-router.get('/project_list', function(req, res, next) {
+router.get('/project_list', function (req, res, next) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getAllProposals(),
 
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
 
             res.render('admin/project_list', {
@@ -154,13 +189,13 @@ router.get('/project_list', function(req, res, next) {
         });
 });
 
-router.get('/project_list/edit_project', function(req, res, next) {
+router.get('/project_list/edit_project', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             res.render('admin/edit_project', {
                 proposal: result[1],
@@ -171,14 +206,14 @@ router.get('/project_list/edit_project', function(req, res, next) {
         .catch(next);
 });
 
-router.get('/project_list/project_approved', function(req, res, next) {
+router.get('/project_list/project_approved', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
         teamModel.getAllTeam(),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             res.render('admin/project_approved', {
                 proposal: result[1],
@@ -190,13 +225,13 @@ router.get('/project_list/project_approved', function(req, res, next) {
         .catch(next);
 });
 
-router.get('/project_list/project_pending', function(req, res, next) {
+router.get('/project_list/project_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             res.render('admin/project_pending', {
                 proposal: result[1],
@@ -208,13 +243,13 @@ router.get('/project_list/project_pending', function(req, res, next) {
         .catch(next);
 });
 
-router.get('/project_list/project_rejected', function(req, res, next) {
+router.get('/project_list/project_rejected', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             res.render('admin/project_rejected', {
                 proposal: result[1],
