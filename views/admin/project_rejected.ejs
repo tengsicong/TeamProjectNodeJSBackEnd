@@ -1,41 +1,41 @@
 <%- include('header') %>
 
 <!-- main content start-->
-    <div id="page-wrapper">
-        <h2 class="title1">Project </h2>
-        <div class="blank-page widget-shadow scroll">
-            <h2><%=proposal.Topic%><span class="label label-danger"
-                                                                                   style="float:right;font-size:15px">rejected</span>
-            </h2>
-            <br>
-            <p><b>Client:</b><%=proposal.ClientID.Name%></p>
-            <br>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Detail / content / Description</h3>
-                </div>
-                <div class="panel-body">
-                    <%=proposal.Content%>
-                </div>
-            </div>
-            <table width="100%">
-                <tr>
-                    <td width="95%">
-                        <a href="/admin/project_list/edit_project?id=<%=proposal._id%>">
-                            <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
-                        </a>                    </td>
-                    <td>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
+<div id="page-wrapper">
+    <h2 class="title1">Project </h2>
+    <div class="blank-page widget-shadow scroll">
+        <h2><%=proposal.Topic%><span class="label label-danger"
+                                     style="float:right;font-size:15px">rejected</span>
+        </h2>
         <br>
-        <div class="blank-page widget-shadow scroll">
-            <h3 style="color: #629aa9"><b>Client related projects</b></h3>
+        <p><b>Client:</b><%=proposal.ClientID.Name%></p>
+        <br>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Detail / content / Description</h3>
+            </div>
+            <div class="panel-body">
+                <%=proposal.Content%>
+            </div>
+        </div>
+        <table width="100%">
+            <tr>
+                <td width="95%">
+                    <a href="/admin/project_list/edit_project?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
+                    </a>                    </td>
+                <td>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <div class="blank-page widget-shadow scroll">
+        <h3 style="color: #629aa9"><b>Client related projects</b></h3>
 
-            <div class="bs-example widget-shadow" data-example-id="contextual-table">
+        <div class="bs-example widget-shadow" data-example-id="contextual-table">
 
             <table class="table">
                 <tbody>
@@ -44,7 +44,7 @@
                     <a href="project_approved.html">
                         <th scope="row">1</th>
                         <td style="cursor:pointer" width="40%"><b>"Help me to write my paper": Developping A Tool to
-                            Support Scientific Writing</b></td>
+                                Support Scientific Writing</b></td>
                         <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
                         <td width="5%"><span class="label label-success" style="float:right;font-size:15px">Allocated</span>
                         </td>
@@ -56,90 +56,63 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <br>
+    <div class="blank-page widget-shadow scroll">
+        <h2 class="title1"><b>Comments</b></h2>
+        <% if(proposal.Replies.length!=0){%>
+        <div class="bs-example widget-shadow" data-example-id="contextual-table" style="height:300px;overflow-y:auto;">
+            <table class="table">
+                <tbody>
+                <%if(proposal.Replies.length==1){%>
+                <tr class="active">
+                    <th scope="row"><b><%=proposal.Replies[0].Author+':'%></b></th>
+                    <td width="85%"><b><%=proposal.Replies[0].Comment%></b></td>
+                    <td width="10%"><%=proposal.Replies[0].ReplyDate%></td>
+                </tr>
+                <%}else{%>
+                <%for(let i=0;i<proposal.Replies.length;i+2){%>
+                <tr>
+                    <td><b><%=proposal.Replies[i].Author+':'%></b></td>
+                    <td><%=proposal.Replies[i].Comment%></td>
+                    <td width="10%"><%=proposal.Replies[i+1].ReplyDate%></td>
+                </tr>
+                <tr class="active">
+                    <th scope="row"><b><%=proposal.Replies[i+1].Author+':'%></b></th>
+                    <td width="85%"><b><%=proposal.Replies[i+1].Comment%></b></td>
+                    <td width="10%"><%=proposal.Replies[i+1].ReplyDate%></td>
+                </tr>
+                <%}}%>
+                </tbody>
+            </table>
         </div>
+        <%} else{%>
+            <div class="alert alert-danger" role="alert">No comment yet!</div>
+        <%}%>
         <br>
-        <div class="blank-page widget-shadow scroll">
-            <h2 class="title1"><b>Comments</b></h2>
-            <div class="bs-example widget-shadow" data-example-id="contextual-table" style="height:300px;overflow-y:auto;">
-                <table class="table">
-                    <tbody>
-                    <tr class="active">
-                        <th scope="row"><b>Client:</b></th>
-                        <td width="85%"><b>Hi, I want to create a team with xxx project.</b></td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr>
-                        <td><b>admin:</b></td>
-                        <td>xxxx. Sorry</td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr class="active">
-                        <th scope="row"><b>Client:</b></th>
-                        <td width="85%"><b>Hi, I want to create a team with xxx project.</b></td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr>
-                        <td><b>admin:</b></td>
-                        <td>xxxx. Sorry</td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr class="active">
-                        <th scope="row"><b>Client:</b></th>
-                        <td width="85%"><b>Hi, I want to create a team with xxx project.</b></td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr>
-                        <td><b>admin:</b></td>
-                        <td>xxxx. Sorry</td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr class="active">
-                        <th scope="row"><b>Client:</b></th>
-                        <td width="85%"><b>Hi, I want to create a team with xxx project.</b></td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr>
-                        <td><b>admin:</b></td>
-                        <td>xxxx. Sorry</td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr class="active">
-                        <th scope="row"><b>Client:</b></th>
-                        <td width="85%"><b>Hi, I want to create a team with xxx project.</b></td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    <tr>
-                        <td><b>admin:</b></td>
-                        <td>xxxx. Sorry</td>
-                        <td width="10%">01/01/2020 12:00</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="row">
             <br>
-            <div class="row">
-                <br>
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label for="project_name" class="col-sm-2 control-label">Make a comment</label>
-                        <div class="col-sm-8">
-                            <textarea id="project_name" rows="6" class="form-control form-control">asdfdsafs</textarea>
-                        </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="project_name" class="col-sm-2 control-label">Make a comment</label>
+                    <div class="col-sm-8">
+                        <textarea id="project_name" rows="6" class="form-control form-control">asdfdsafs</textarea>
                     </div>
-                </form>
-                <div style="text-align: center">
-                    <a href="project_pending.html.html">
-                        <button type="button" class="btn btn-primary">SUBMIT</button>
-                    </a>
-
                 </div>
-            </div>
-<!--            <textarea rows="6" class="form-control1 control2" placeholder="reject reason :"></textarea>-->
-<!--            <div>-->
-<!--                <button type="button" style="float: right" class="btn btn-primary">submit</button>-->
-<!--            </div>-->
-            <br>
+            </form>
+            <div style="text-align: center">
+                <a href="project_pending.html.html">
+                    <button type="button" class="btn btn-primary">SUBMIT</button>
+                </a>
+
             </div>
         </div>
+        <!--            <textarea rows="6" class="form-control1 control2" placeholder="reject reason :"></textarea>-->
+        <!--            <div>-->
+        <!--                <button type="button" style="float: right" class="btn btn-primary">submit</button>-->
+        <!--            </div>-->
+        <br>
+    </div>
+</div>
 
 <%- include('footer') %>

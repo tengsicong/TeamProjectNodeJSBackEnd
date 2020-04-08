@@ -1,0 +1,36 @@
+<%- include('header') %>
+<!-- main content start-->
+<div id="page-wrapper">
+    <h2 class="title1">Student Detail </h2>
+    <div class="blank-page widget-shadow scroll">
+        <div class="panel panel-info" style="height:190px">
+            <div class="panel-heading">
+                <h3 class="panel-title">Student Information</h3>
+            </div>
+            <div class="panel-body" style="white-space:pre-line">
+                <%= 'Name: ' + student.Name %>
+                <%= 'Group: ' + student.GroupID.TeamName %>
+                <%= 'Proposal: ' + proposal.Topic %>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Student Marks</h3>
+            </div>
+            <div class="panel-body" style="white-space:pre-line"><b>Marks from Staff [50%]:</b>
+                Team Perfomance [35%]: Management[xx]/[15]
+                &emsp                       Testing [x]/[10]
+                QA [x]/[5]
+                Poster Session [x]/[5]
+                Individual Perfomance [15%]: Personal Evaluation [x]/[10]
+                Time Sheets [x]/[5]
+                <b>Marks from Client [50%]:</b> Documentation [xx]/[15]
+                Team Performance [x]/[10]
+                System Delivered [xx]/[20]
+                Happiness [x]/[5]
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
