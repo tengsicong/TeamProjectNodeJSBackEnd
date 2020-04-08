@@ -41,6 +41,15 @@ module.exports = {
             .findOne({_id: id})
             .populate('ClientID')
             .populate({path:'GroupID',populate:{path: "StaffID"}})
+            /* wang */
+            .populate('StudentID')
+            .populate('Topic')
+            .populate('Status')
+            .populate('Date')
+            .populate('Content')
+            .populate('Reply')
+            .populate('ClientID')
+            .populate('GroupID')
             .exec();
     },
 

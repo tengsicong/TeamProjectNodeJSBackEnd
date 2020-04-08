@@ -8,9 +8,11 @@ const mongoose = require('mongoose');
 module.exports = {
     getClientMeetingByClientID: function getClientMeetingByClientID(id) {
         return clientmeetings
-            .find({ClientID:id})
-            .populate('ClientID')
+            .find({ClientID: id})
             .populate('GroupID')
+            .populate('ClientID' +
+                '')
             .exec()
     },
+
 };
