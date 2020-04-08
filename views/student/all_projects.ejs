@@ -19,8 +19,8 @@
                     <br>
                     <div>
                         <table width="100%">
-                                <td width="30%"><p><b>Client:</b><%=myProposal.ClientID.Name%></p></td>
-                                <td width="30%"><p><b>Supervisor:</b><%=myProposal.GroupID[0].StaffID.Name%></p></td>
+                                <td width="30%"><p><b>Client:</b><%= ' ' + myProposal.ClientID.Name %></p></td>
+                                <td width="30%"><p><b>Supervisor:</b><%= ' ' + myProposal.GroupID[0].StaffID.Name %></p></td>
                                 <td width="30%"><p><b>Team:</b> SSIT Team <%=myProposal.GroupID[0].TeamName%></p></td>
                                 <td><i class="fa fa-angle-right"
                                        style="float:right;font-size:20px"></i></td>
