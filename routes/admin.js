@@ -13,10 +13,10 @@ const Temp = '5e7b6f794f4ed29e60233aa2';
 // teamModel.getAllTeam().then(function(result) {
 //     console.log(result[0]);
 // });
-studentModel.getAllStudent().then(function (result) {
-    console.log('111'+result[1])
+// studentModel.getAllStudent().then(function (result) {
+//     console.log('111'+result[1])
+// });
 
-});
 /* GET edit team page. */
 router.get('/edit_team', function(req, res) {
 
