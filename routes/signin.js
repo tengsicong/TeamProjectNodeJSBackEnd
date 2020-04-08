@@ -10,22 +10,25 @@ const adminModel = require('../models/admin');
 
 router.post('/', function(req, res) {
     const role = req.query.role;
-    console.log('post' + role);
     const email = req.body.email;
     const pw = req.body.password;
-    console.log('u : ' + email);
-    console.log('p : ' + pw);
+    //console.log('post: ' + role);
+    //console.log('u: ' + email);
+    //console.log('p: ' + pw);
+    
     let method;
-    if (role == 'student') {
+    if (role === 'student') {
         method = studentModel.getStudentByUserName(email)
-    } else if (role == 'staff') {
+    } else if (role === 'staff') {
         method = staffModel.getStaffByUserName(email)
-    } else if (role == 'admin') {
+    } else if (role === 'admin') {
         method = adminModel.getAdminByUserName(email)
-    } else if (role == 'client') {
+    } else if (role === 'client') {
         method = clientModel.getClientByUserName(email)
-    } else (console.log('role error'))
-    //console.log('Login(username pw):' + email + ' ' + pw);
+    } else {
+        res.redirect('/role_select');
+        console.log('role error');
+    }
 
     Promise.all([method])
         .then(function(result) {
@@ -33,22 +36,23 @@ router.post('/', function(req, res) {
             /*if (staff !== null) {
                 console.log(staff);
             }*/
+
             if (person !== null && pw === person.Password) {
                 req.session.userinfo = person._id;
                 req.session.username = person.UserName;
                 req.session.role = role;
-                if (req.session.role == 'student') {
+                if (req.session.role === 'student') {
                     res.redirect('/student/homepage');
-                } else if (req.session.role == 'staff') {
+                } else if (req.session.role === 'staff') {
                     res.redirect('/staff/my_project');
-                } else if (req.session.role == 'admin') {
+                } else if (req.session.role === 'admin') {
                     res.redirect('/admin/project_list')
-                } else if (req.session.role == 'client') {
-                    res.redirect('/ClientPart/client_myproposals');
+                } else if (req.session.role === 'client') {
+                    res.redirect('/client/myproject');
                 }
             }
             else {
-                res.redirect('/signin');
+                res.redirect('/signin?role=' + role);
                 console.log('Invalid username or password');
             }
         });
@@ -56,25 +60,41 @@ router.post('/', function(req, res) {
 
 router.get('/', function(req, res) {
     const role = req.query.role;
-    // console.log(role)
-    // if (req.session.role == 'student') {
-    //     res.redirect('/student/homepage');
-    // } else if (req.session.role == 'staff') {
-    //     res.redirect('/staff/my_project');
-    // } else if (req.session.role == 'admin') {
-    //     res.redirect('/admin/project_list')
-    // } else if (req.session.role == 'client') {
-    //     res.redirect('/ClientPart/client_myproposals')
-    // } else
-        if (role != null) {
+    //console.log(role);
+
+    if(req.session.role !== undefined && req.session.role === role) {
+        if (req.session.role === 'student') {
+            res.redirect('/student/homepage');
+        } else if (req.session.role === 'staff') {
+            res.redirect('/staff/my_project');
+        } else if (req.session.role === 'admin') {
+            res.redirect('/admin/project_list')
+        } else if (req.session.role === 'client') {
+            res.redirect('/client/myproject')
+        } else {
+            res.redirect('/role_select');
+            console.log('role error');
+        }
+    }
+    else {
+        if(req.session !== undefined) {
+            req.session.cookie.maxAge = 0;
+            req.session.destroy(function(err) {
+                if(err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        if (role !== undefined) {
             res.render('portal/signin', {
-                pageTitle: role + 'Signin',
+                pageTitle: 'Team Project - Signin (' + role + ')',
                 role: role,
             });
-            // } else {
-            //     res.redirect('portal/role_select')
-            // }
+        } else {
+            res.redirect('/role_select');
         }
+    }
 });
 
 module.exports = router;

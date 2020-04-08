@@ -9,7 +9,8 @@ const mongoose = require('mongoose')
 const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
 
 router.get('/my_project', function(req, res) {
-    if (req.session.role == 'staff') {
+    console.log(req.session.role);
+    if (req.session.role === 'staff') {
         Promise.all([
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
@@ -43,7 +44,7 @@ router.get('/my_project', function(req, res) {
             });
     }
     else {
-        res.redirect('/signin');
+        res.redirect('/role_select');
     }
 });
 
