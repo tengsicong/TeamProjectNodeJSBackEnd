@@ -62,7 +62,7 @@ router.get('/timetable', function(req, res) {
 router.get('/student_qa', function(req, res) {
     Promise.all([
         studentModel.getStudentByStudentID(studentID),
-        studentStaffQAModel.getQAByGroupID(studentID),
+        studentStaffQAModel.getQAByStudentID(studentID),
     ])
         .then(function(result) {
             const student = result[0];
@@ -79,7 +79,7 @@ router.get('/student_qa_detail', function(req, res) {
     const questionID = parseInt(req.query.id);
     Promise.all([
         studentModel.getStudentByStudentID(studentID),
-        studentStaffQAModel.getQAByGroupID(studentID),
+        studentStaffQAModel.getQAByStudentID(studentID),
     ])
         .then(function(result) {
             const student = result[0];
@@ -197,9 +197,10 @@ router.get('/my_mark', function(req, res) {
 })
 
 router.post('/set_new_representer', function(req, res) {
-    console.log('enter')
-    const t = req.body.temp.representerID;
-    console.log(t);
+    const representerID = mongoose.Types.ObjectId(req.body.representerID);
+    Promise.all([
+
+    ])
 })
 
 
