@@ -76,5 +76,30 @@
 </script>
 <!-- //calendar -->
 
+<!-- set new representer -->
+<!--<script>-->
+<!--    function setNewRepresenter(){-->
+<!--        const representerID = document.getElementById(representerID).value;-->
+<!--        window.alert('representerID');-->
+<!--    }-->
+<!--</script>-->
+<script>
+    function setNewRepresenter() {
+        const representerID = document.getElementById('representerID').value;
+        // alert(representerID);
+        let temp = document.createElement("form");
+        temp.action = '/student/set_new_representer';
+        temp.method = 'post';
+        temp.style.display = "none";
+        temp.appendChild(representerID);
+        document.body.appendChild(temp);
+        temp.submit();
+        alert('send')
+        return temp;
+    }
+</script>
+<!-- set new representer -->
+
+
 </body>
 </html>
