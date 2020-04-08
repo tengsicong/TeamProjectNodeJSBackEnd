@@ -201,6 +201,7 @@ router.get('/project_list/project_pending', function(req, res, next) {
             res.render('admin/project_pending', {
                 proposal: result[1],
                 pageTitle: result[1].Topic,
+                Replies: result[1].Replies,
                 admin: admin,
             });
         })
@@ -218,9 +219,29 @@ router.get('/project_list/project_rejected', function(req, res, next) {
             res.render('admin/project_rejected', {
                 proposal: result[1],
                 pageTitle: result[1].Topic,
+                Replies: result[1].Replies,
                 admin: admin,
             });
         })
         .catch(next);
+});
+
+router.get('/student_list/student_detail', function(req, res, next) {
+    const studentID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        studentModel.getStudentByStudentID(studentID),
+        proposalModel.getProposalByStudentID(studentID),
+    ])
+        .then(function(result) {
+            const admin = result[0];
+
+            res.render('admin/student_detail', {
+                student: result[1],
+                proposal: result[2],
+                pageTitle: 'Student Detail',
+                admin: admin,
+            });
+        });
 });
 module.exports = router;
