@@ -36,6 +36,10 @@
             </div>
             <br>
             <!-- Staff Mark -->
+            <% if (team.StaffMark.length == 0) { %>
+                <div class="alert alert-warning" role="alert" style="text-align: center">Supervisor haven't mark
+                </div>
+            <% } else { %>
             <div class="panel panel-info">
                 <!-- Default panel contents -->
                 <div class="panel-heading"><b>Supervisor Mark</b></div>
@@ -108,7 +112,12 @@
                 </table>
             </div>
             <br>
+                <% } %>
 
+            <% if (team.ClientMark.length == 0) { %>
+                <div class="alert alert-warning" role="alert" style="text-align: center">Client haven't mark
+                </div>
+            <% } else { %>
             <div class="panel panel-info">
                 <!-- Default panel contents -->
                 <div class="panel-heading"><b>Client Mark</b></div>
@@ -167,6 +176,7 @@
                 </tr>
                 </table>
             </div>
+            <% } %>
         </div>
     <% } %>
 </div>
