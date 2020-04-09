@@ -1,6 +1,6 @@
 <%- include('header') %>
 
-   <<!-- main content start-->
+<!-- main content start-->
 <div id="page-wrapper">
     <h2 class="title1">Project </h2>
     <div class="blank-page widget-shadow scroll">
@@ -54,32 +54,33 @@
 
     <div class="blank-page widget-shadow scroll">
         <h2><b>Allocated Team</b></h2>
-        <div class="grid_3 grid_5 widget-shadow">
-            <% for(let i =0; i < team.length; i++) { %>
-            <%if((team[i].ProposalID) == (proposal._id)) {%>
-            <a href="#">
-                <div>
-                    <h3><b>SSIT <%=team[i].TeamName%>  Team</b></h3>
-                </div>
-                <div>
-                    <table width="100%">
-                        <tr>
-                            <td width="40%"><p><b>Supervisor:</b><%=team[i].StaffID.Name%></p></td>
-                            <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td>
-                        </tr>
-                        <td width="20em"><p><b>Student:</b>
-                                <%=team[i].StudentID[0].Name%>
-                                <% for(let j =1; j < team[i].StudentID.length; j++) { %>
-                                <%='/'+ team[i].StudentID[j].Name%>
-                                <%}%>
-                            </p></td>
-                        </tr>
-                    </table>
-                </div>
-                <%} else { %>
-                <%}%>
-            </a></div>
-        <% }%>
+        <% if(teams.length>0){%>
+            <% teams.forEach(function (team) { %>
+            <div class="grid_3 grid_5 widget-shadow">
+                <a href="#">
+                    <div>
+                        <h3><b>SSIT <%=team.TeamName%>  Team</b></h3>
+                    </div>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <td width="40%"><p><b>Supervisor:</b><%=team.StaffID.Name%></p></td>
+                                <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td>
+                            </tr>
+                            <td width="20em"><p><b>Student:</b>
+                                    <%=team.StudentID[0].Name%>
+                                    <% for(let i =1; i < team.StudentID.length; i++) { %>
+                                    <%='/'+ team.StudentID[i].Name%>
+                                    <% } %>
+                                </p></td>
+                            </tr>
+                        </table>
+                    </div>
+                </a></div>
+            <% })%>
+        <%}else {%>
+            <div class="alert alert-danger" role="alert">Not allocated yet!</div>
+        <%}%>
     </div>
 </div>
 
