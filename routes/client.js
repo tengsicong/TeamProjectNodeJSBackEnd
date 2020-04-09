@@ -44,6 +44,31 @@ router.get('/myproject/create_project', function(req, res,next) {
         .catch(next);
 });
 
+
+/*Create new proposals*/
+router.post('/myproject/create_project',function(req,res,next){
+    const client = clientID;
+    const topic = req.body.topic;
+    const content = req.body.content;
+    nowDate = new Date();
+    let proposal = {
+        _id:mongoose.Types.ObjectId(),
+        ClientID: client,
+        Topic: topic,
+        Content: content,
+        Date:nowDate,
+        Status:'pending'
+    }
+    proposalModel.createProposal(proposal,client)
+    clientModel.addProposalsByProposalID(client,proposal._id)
+        .then(function () {
+            res.redirect('/client/myproject')
+        })
+        .catch(next)
+})
+
+
+
 router.get('/myproject/project_approved', function(req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
@@ -69,12 +94,11 @@ router.get('/myproject/project_pending', function(req, res, next) {
         proposalModel.getProposalByProposalID(proposalID),
         clientModel.getClientByProposalID(proposalID),
     ])
-        .then(function(proposal) {
-            console.log(proposal);
+        .then(function(result) {
             res.render('client/project_pending', {
-                proposal: proposal[0],
-                pageTitle: proposal[0].Topic,
-                username: proposal[1].Name,
+                proposal: result[0],
+                pageTitle: result[0].Topic,
+                username: result[1].Name,
                 Replies: result[0].Reply,
             });
         })
@@ -119,11 +143,10 @@ router.get('/edit_project', function(req, res,next) {
 router.get('/myteam', function(req, res,next) {
     Promise.all([
         clientModel.getClientByClientID(clientID),
-        proposalModel.getProposalByClientID(clientID),
     ])
         .then(function(result) {
             res.render('client/my_teams', {
-                proposals: result[1],
+                teams: result[0].GroupID,
                 pageTitle: 'My Teams',
                 username: result[0].Name,
             });
@@ -138,7 +161,7 @@ router.get('/myteam/teampage', function(req, res,next) {
         teamModel.getTeamByTeamID(teamID),
     ])
         .then(function(result) {
-            console.log(result[1].ClientMeetingID[0].Date)
+            //console.log(result[1].ClientMeetingID[0].Date)
             res.render('client/team_page', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM'+result[1].TeamName,
@@ -157,7 +180,7 @@ router.get('/myteam/teammark', function(req, res, next) {
         teamModel.getTeamByTeamID(teamID),
     ])
         .then(function(result) {
-            console.log(result[1].ClientMeetingID[0].Date)
+            //console.log(result[1].ClientMeetingID[0].Date)
             res.render('client/team_mark', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM '+result[1].TeamName+' Mark',

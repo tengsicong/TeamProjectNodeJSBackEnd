@@ -41,29 +41,23 @@
 
 
         <% if(Replies.length!=0){%>
-        <div class="bs-example widget-shadow" data-example-id="contextual-table" style="height:300px;overflow-y:auto;">
-            <table class="table">
+        <div class="bs-example widget-shadow" data-example-id="contextual-table" style="overflow-y:auto; ">
+            <table class="table" style="margin-bottom:0px">
                 <tbody>
-                <%if(Replies.length==1){%>
-                <tr class="active">
-                    <th scope="row"><b><%=Replies[0].Author%></b></th>
-                    <td width="85%"><b><%=Replies[0].Comment%></b></td>
-                    <td width="10%"><%=Replies[0].ReplyDate%></td>
-                </tr>
-                <%}else{%>
-                <%for(let i=0,j=1;i<Replies.length,j<Replies.length;i++){%>
-                <tr class="active">
-                    <th scope="row"><b><%=Replies[i].Author%></b></th>
-                    <td width="85%"><b><%=Replies[i].Comment%></b></td>
-                    <td width="10%"><%=Replies[i].ReplyDate%></td>
-                    <%i++%>
-                </tr>
-                <tr>
-                    <td><b><%=Replies[j].Author%></b></td>
-                    <td><%=Replies[j].Comment%></td>
-                    <td width="10%"><%=Replies[j].ReplyDate%></td>
-                    <%j++%>
-                </tr>
+                <%for(let i = 0; i < Replies.length; i++) {%>
+                    <% if ((i%2) == 1) { %>
+                    <tr>
+                        <td width="15%"><b><%=Replies[i].Author%></b></td>
+                        <td width="75%"><%=Replies[i].Comment%></td>
+                        <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                    </tr>
+
+                    <% } else{ %>
+                    <tr class="active">
+                        <th width="15%" scope="row"><b><%=Replies[i].Author%></b></th>
+                        <td width="75%"><b><%=Replies[i].Comment%></b></td>
+                        <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                    </tr>
                 <%}}%>
                 </tbody>
             </table>

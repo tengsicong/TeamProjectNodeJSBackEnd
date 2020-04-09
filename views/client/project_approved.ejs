@@ -40,11 +40,11 @@
                                 </p></td>
                         </tr>
                         <td width="20em"><p><b>Student:</b>
-                                <%let students = team.StudentID;%>
-                                <% if (students.length>0){%>
-                                    <% students.forEach(function (student){ %>
-                                    <%=student.Name%>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                <% })} %>
+                                <%let students = teams[i].StudentID;%>
+                                <%= students[0].Name %>
+                                <% for (let j = 1; j < students.length; j++) { %>
+                                    <%= ' / ' + students[j].Name %>
+                                <% } %>
                             </p></td>
 
                         </tr>
