@@ -3,14 +3,24 @@
 <div id="page-wrapper">
     <h2 class="title1">Student Detail </h2>
     <div class="blank-page widget-shadow scroll">
-        <div class="panel panel-info" style="height:190px">
+        <div class="panel panel-info" style="overflow-y:auto;">
             <div class="panel-heading">
                 <h3 class="panel-title">Student Information</h3>
             </div>
             <div class="panel-body" style="white-space:pre-line">
-                <%= 'Name: ' + student.Name %>
-                <%= 'Group: ' + student.GroupID.TeamName %>
-                <%= 'Proposal: ' + proposal.Topic %>
+                <table class="table" style="margin-bottom: 0px">
+                    <tbody>
+                    <tr><%= 'Name: ' + student.Name %></tr><br>
+                    <tr><%= 'E-mail: '+student.UserName %></tr><br>
+                    <%if(student.GroupID==undefined){%>
+                    <tr><%= 'Group: None' %></tr><br>
+                    <tr><%= 'Proposal: None' %></tr>
+                    <%}else{%>
+                        <tr><%= 'Group: ' + student.GroupID.TeamName %></tr><br>
+                        <tr><%= 'Proposal: ' + proposal.Topic %></tr>
+                    <%}%>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -18,18 +28,175 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Student Marks</h3>
             </div>
-            <div class="panel-body" style="white-space:pre-line"><b>Marks from Staff [50%]:</b>
-                Team Perfomance [35%]: Management[xx]/[15]
-                &emsp                       Testing [x]/[10]
-                QA [x]/[5]
-                Poster Session [x]/[5]
-                Individual Perfomance [15%]: Personal Evaluation [x]/[10]
-                Time Sheets [x]/[5]
-                <b>Marks from Client [50%]:</b> Documentation [xx]/[15]
-                Team Performance [x]/[10]
-                System Delivered [xx]/[20]
-                Happiness [x]/[5]
+            <div class="panel panel-info">
+                <!-- Teammate Mark -->
+                <div class="panel-heading"><b>Teammate Mark</b></div>
+                <table class="table" width="100%">
+                    <tr>
+                        <th width="90%">Description</th>
+                        <th width="10%">Mark</th>
+                    </tr>
+                    <tr>
+                        <td>Teammate mark for your contribution</td>
+                        <td>
+                            <% if (student.Mark.length == 0) { %>
+                                None
+                            <% } else { %>
+                                <% let m = 0; %>
+                                <% for (let i = 0; i < student.Mark.length; i++) { %>
+                                    <% m = m + student.Mark[i]; %>
+                                <% } %>
+                                <%= (m / student.Mark.length).toFixed(2) %>
+                            <% } %>
+                        </td>
+                    </tr>
+
+                </table>
             </div>
+            <br>
+            <!-- Staff Mark -->
+            <% if (team.StaffMark.length == 0) { %>
+                <div class="alert alert-warning" role="alert" style="text-align: center">Supervisor haven't mark
+                </div>
+            <% } else { %>
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading"><b>Supervisor Mark</b></div>
+
+                    <!-- Table -->
+                    <table class="table">
+                        <tr>
+                            <th width="20%">Description</th>
+                            <th width="20%">Detail</th>
+                            <th width="50">Reason</th>
+                            <th width="10%">Mark</th>
+                        </tr>
+                        <tr>
+                            <th>Team performance (35%)</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">Management (15)</td>
+                            <td>Team Organisation</td>
+                            <td><%= team.StaffMarkReason[0] %></td>
+                            <td><%= team.StaffMark[0] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Progress with implementation</td>
+                            <td><%= team.StaffMarkReason[1] %></td>
+                            <td><%= team.StaffMark[1] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Key documents</td>
+                            <td><%= team.StaffMarkReason[2] %></td>
+                            <td><%= team.StaffMark[2] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">Testing (10)</td>
+                            <td>Unit tests</td>
+                            <td><%= team.StaffMarkReason[3] %></td>
+                            <td><%= team.StaffMark[3] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>System tests</td>
+                            <td><%= team.StaffMarkReason[4] %></td>
+                            <td><%= team.StaffMark[4] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>QA (5)</td>
+                            <td>u spot problems with the code of another team</td>
+                            <td><%= team.StaffMarkReason[5] %></td>
+                            <td><%= team.StaffMark[5] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Poster Session (5)</td>
+                            <td>Final presentation</td>
+                            <td><%= team.StaffMarkReason[6] %></td>
+                            <td><%= team.StaffMark[6] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <th>Individual Performance (15%)</th>
+                        </tr>
+                        <tr>
+                            <td>Personal Evaluation</td>
+                            <td>Submitted via MOLE (5)</td>
+                            <td><%= team.StaffMarkReason[7] %></td>
+                            <td><%= team.StaffMark[7] + " / 10" %></td>
+                        </tr>
+                        <tr>
+                            <td>Time Sheets</td>
+                            <td>entered on time into epiManage every week (5)</td>
+                            <td><%= team.StaffMarkReason[8] %></td>
+                            <td><%= team.StaffMark[8] + " / 5" %></td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+            <% } %>
+
+            <% if (team.ClientMark.length == 0) { %>
+                <div class="alert alert-warning" role="alert" style="text-align: center">Client haven't mark
+                </div>
+            <% } else { %>
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading"><b>Client Mark</b></div>
+
+                    <!-- Table -->
+                    <table class="table">
+                        <tr>
+                            <th width="20%">Description</th>
+                            <th width="20%">Detail</th>
+                            <th width="50%">Reason</th>
+                            <th width="10%">Mark</th>
+                        </tr>
+                        <tr>
+                            <td rowspan=>Documentation (15)</td>
+                            <td>Appropriate form of documentation</td>
+                            <td><%= team.ClientMarkReason[0] %></td>
+                            <td><%= team.ClientMark[0] + " / 15" %></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">Team performance (10)</td>
+                            <td>Final demonstration</td>
+                            <td><%= team.ClientMarkReason[1] %></td>
+                            <td><%= team.ClientMark[1] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Communication</td>
+                            <td><%= team.ClientMarkReason[2] %></td>
+                            <td><%= team.ClientMark[2] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">System delivered (20)</td>
+                            <td>Ease of use</td>
+                            <td><%= team.ClientMarkReason[3] %></td>
+                            <td><%= team.ClientMark[3] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Completeness</td>
+                            <td><%= team.ClientMarkReason[4] %></td>
+                            <td><%= team.ClientMark[4] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Innovation</td>
+                            <td><%= team.ClientMarkReason[5] %></td>
+                            <td><%= team.ClientMark[5] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Robustness</td>
+                            <td><%= team.StaffMarkReason[6] %></td>
+                            <td><%= team.StaffMark[6] + " / 5" %></td>
+                        </tr>
+                        <tr>
+                            <td>Happiness (5)</td>
+                            <td>Overall impression of the system</td>
+                            <td><%= team.StaffMarkReason[7] %></td>
+                            <td><%= team.StaffMark[7] + " / 5" %></td>
+                        </tr>
+                    </table>
+                </div>
+            <% } %>
+        </div>
         </div>
     </div>
 </div>
