@@ -21,7 +21,7 @@
         <table width="100%">
             <tr>
                 <td width="95%">
-                    <a href="/admin/project_list/edit_project?id=<%=proposal._id%>">
+                    <a href="/admin/edit_project?id=<%=proposal._id%>">
                         <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
                     </a>                    </td>
                 <td>
@@ -44,11 +44,11 @@
                     <tbody>
                     <% for (let i = 0; i < proposal.ClientID.AllProposalID.length; i++) { %>
                         <% if (!proposal._id.equals(proposal.ClientID.AllProposalID[i]._id)) { %>
-                            <tr class="active" onclick="window.location.href='/student/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
-                                <th scope="row"><%= j %></th>
-                                <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
-                                <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
-                                <% if (proposal.ClientID.AllProposalID[i].Status == 'approved') { %>
+                            <% if (proposal.ClientID.AllProposalID[i].Status == 'approved') { %>
+                                <tr class="active" onclick="window.location.href='/admin/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                    <th scope="row"><%= j %></th>
+                                    <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
+                                    <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
                                     <% if (proposal.ClientID.AllProposalID[i].GroupID.length > 0) { %>
                                         <td width="5%"><span class="label label-success" style="float:right;font-size:15px"><%= proposal.ClientID.AllProposalID[i].GroupID.length + ' Team '%>Allocated</span>
                                         </td>
@@ -58,19 +58,27 @@
                                         <td width="5%"><span class="label label-success" style="float:right;font-size:15px"></span>
                                         </td>
                                         <td width="5%"><span class="label label-success"
-                                                             style="float:right;font-size:15px">Approved</span></td>
-                                    <% } %>
-                                <% } else if (proposal.ClientID.AllProposalID[i].Status == 'pending') { %>
+                                                             style="float:right;font-size:15px">Approved</span></td></tr>
+                                <% } %>
+                            <% } else if (proposal.ClientID.AllProposalID[i].Status == 'pending') { %>
+                                <tr class="active" onclick="window.location.href='/admin/project_pending?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                    <th scope="row"><%= j %></th>
+                                    <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
+                                    <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
                                     <td width="5%"><span class="label label-warning" style="float:right;font-size:15px"></span>
                                     </td>
                                     <td width="5%"><span class="label label-warning"
-                                                         style="float:right;font-size:15px">Pending</span></td>
-                                <% } else if (proposal.ClientID.AllProposalID[i].Status == 'rejected') { %>
+                                                         style="float:right;font-size:15px">Pending</span></td></tr>
+                            <% } else if (proposal.ClientID.AllProposalID[i].Status == 'rejected') { %>
+                                <tr class="active" onclick="window.location.href='/admin/project_rejected?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                    <th scope="row"><%= j %></th>
+                                    <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
+                                    <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
                                     <td width="5%"><span class="label label-danger" style="float:right;font-size:15px"></span>
                                     </td>
                                     <td width="5%"><span class="label label-danger"
-                                                         style="float:right;font-size:15px">Rejected</span></td>
-                                <% } %>
+                                                         style="float:right;font-size:15px">Rejected</span></td></tr>
+                            <% } %>
                             </tr>
                             <% j++; %>
                         <% } %>

@@ -188,7 +188,7 @@ router.get('/project_list', function (req, res, next) {
         });
 });
 
-router.get('/project_list/edit_project', function (req, res, next) {
+router.get('/edit_project', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
@@ -205,7 +205,7 @@ router.get('/project_list/edit_project', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_list/project_approved', function (req, res, next) {
+router.get('/project_approved', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
@@ -230,7 +230,7 @@ router.get('/project_list/project_approved', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_list/project_pending', function (req, res, next) {
+router.get('/project_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
@@ -249,7 +249,7 @@ router.get('/project_list/project_pending', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_list/project_rejected', function (req, res, next) {
+router.get('/project_rejected', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
@@ -281,6 +281,7 @@ router.get('/student_detail', function(req, res, next) {
             const student = result[1];
             const team = result[2];
             const proposal = result[3];
+            //console.log(team.StaffMark);
             res.render('admin/student_detail', {
                 pageTitle: 'Student Detail',
                 admin: admin,

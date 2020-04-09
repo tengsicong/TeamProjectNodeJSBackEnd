@@ -59,7 +59,7 @@
             </div>
             <br>
             <!-- Staff Mark -->
-            <% if (team.StaffMark.length == 0) { %>
+            <% if (student.GroupID==undefined || team.StaffMark.length == 0) { %>
                 <div class="alert alert-warning" role="alert" style="text-align: center">Supervisor haven't mark
                 </div>
             <% } else { %>
@@ -137,7 +137,7 @@
                 <br>
             <% } %>
 
-            <% if (team.ClientMark.length == 0) { %>
+            <% if (student.GroupID==undefined ||team.ClientMark.length == 0) { %>
                 <div class="alert alert-warning" role="alert" style="text-align: center">Client haven't mark
                 </div>
             <% } else { %>

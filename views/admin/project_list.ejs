@@ -28,7 +28,7 @@
                 <%let j=1;%>
                 <% for(let i =0; i < proposal.length; i++) { %>
                     <% if (proposal[i].Status == "approved") { %>
-                    <tr class="active" onclick="window.location.href='/admin/project_list/project_approved?id=<%=proposal[i]._id%>'">
+                    <tr class="active" onclick="window.location.href='/admin/project_approved?id=<%=proposal[i]._id%>'">
                         <a href="/admin/project_list/project_approved?id=<%=proposal[i]._id%>">
                             <th scope="row"><%=j%></th>
                             <%j++;%>
@@ -59,7 +59,7 @@
                 <%let k=1;%>
                 <% for(let i =0 ; i < proposal.length; i++) { %>
                     <% if(proposal[i].Status == "pending"){ %>
-                    <tr class="active" onclick="window.location.href='/admin/project_list/project_pending?id=<%=proposal[i]._id%>'">
+                    <tr class="active" onclick="window.location.href='/admin/project_pending?id=<%=proposal[i]._id%>'">
                         <a href="/admin/project_list/project_pending?id=<%=proposal[i]._id%>">
                             <th scope="row"><%=k%></th>
                             <%k++;%>
@@ -85,7 +85,7 @@
                 <%let l=1;%>
                 <% for(let i =0 ; i < proposal.length; i++) { %>
                     <% if(proposal[i].Status == "rejected"){ %>
-                    <tr class="active" onclick="window.location.href='/admin/project_list/project_rejected?id=<%=proposal[i]._id%>'">
+                    <tr class="active" onclick="window.location.href='/admin/project_rejected?id=<%=proposal[i]._id%>'">
                         <a href="/admin/project_list/project_rejected?id=<%=proposal[i]._id%>">
                             <th scope="row"><%=l%></th>
                             <%l++;%>
