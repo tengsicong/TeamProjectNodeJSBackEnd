@@ -86,19 +86,22 @@
         <h2 class="title1"><b>Comments</b></h2>
         <% if(proposal.Reply.length!=0){%>
         <div class="bs-example widget-shadow" data-example-id="contextual-table" style="height:300px;overflow-y:auto;">
-            <table class="table">
+            <table class="table" style="margin-bottom: 0px">
                 <tbody>
                 <%for(let i = 0; i < proposal.Reply.length; i++) {%>
-                    <tr
-                        <% if ((i%2) == 1) { %>
-                            <%= "class=\"active\""%>
-                        <% } %>
-                    >
-                        <td scope="row"><b><%= proposal.Reply[i].Author+':'%></b></td>
-                        <td width="60%"><%= proposal.Reply[i].Comment%></td>
-                        <td width="20%"><%= proposal.Reply[i].ReplyDate.toISOString().replace(/T.*/,' ')+proposal.Reply[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                    </tr>
-                <%}%>
+                    <% if ((i%2) == 1) { %>
+                <tr>
+                    <td width="15%"><b><%=proposal.Reply[i].Author+':'%></b></td>
+                    <td width="75%"><%=proposal.Reply[i].Comment%></td>
+                    <td width="15%"><%=proposal.Reply[i].ReplyDate.toISOString().replace(/T.*/,' ')+proposal.Reply[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                </tr>
+                <% } else {%>
+                <tr class="active">
+                    <td width="15%" scope="row"><b><%=proposal.Reply[i].Author+':'%></b></td>
+                    <td width="75%"><b><%=proposal.Reply[i].Comment%></b></td>
+                    <td width="15%"><%=proposal.Reply[i].ReplyDate.toISOString().replace(/T.*/,' ')+proposal.Reply[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                </tr>
+                <%}}%>
                 </tbody>
             </table>
         </div>
