@@ -61,4 +61,8 @@ module.exports = {
             .find()
             .exec();
     },
+
+    resetPasswordByStaffId: function resetPasswordByStaffId(id, password) {
+        return staff.findByIdAndUpdate(id, { Password: password });
+    }
 };

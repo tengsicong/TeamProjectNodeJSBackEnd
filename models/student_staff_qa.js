@@ -1,7 +1,6 @@
 const mongo = require('../lib/mongo');
 const studentStaffQa = mongo.student_staff_qas;
 
-
 module.exports= {
 
     /**
