@@ -11,6 +11,10 @@ module.exports = {
         return admin
             .findOne({UserName: email})
             .exec();
+    },
+    getAllAdmin: function getAllAdmin() {
+        return admin
+            .find()
+            .exec();
     }
-
 }
