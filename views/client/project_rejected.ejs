@@ -40,20 +40,24 @@
         <h2 class="title1"><b>Comments</b></h2>
 
         <% if(Replies.length!=0){%>
-        <div class="bs-example widget-shadow" data-example-id="contextual-table" style="height:300px;overflow-y:auto;">
-            <table class="table">
+        <div class="bs-example widget-shadow" data-example-id="contextual-table" style="overflow-y:auto; ">
+            <table class="table" style="margin-bottom:0px">
                 <tbody>
                 <%for(let i = 0; i < Replies.length; i++) {%>
-                    <tr
                     <% if ((i%2) == 1) { %>
-                        <%= "class=\"active\""%>
-                            <% } %>
-                    >
-                        <td><b><%= Replies[i].Author+':'%></b></td>
-                        <td><%= Replies[i].Comment%></td>
-                        <td width="10%"><%= Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+ Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                    <tr>
+                        <td width="15%"><b><%=Replies[i].Author%></b></td>
+                        <td width="75%"><%=Replies[i].Comment%></td>
+                        <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     </tr>
-                <%}%>
+
+                            <% } else{ %>
+                    <tr class="active">
+                        <th width="15%" scope="row"><b><%=Replies[i].Author%></b></th>
+                        <td width="75%"><b><%=Replies[i].Comment%></b></td>
+                        <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                    </tr>
+                <%}}%>
                 </tbody>
             </table>
         </div>

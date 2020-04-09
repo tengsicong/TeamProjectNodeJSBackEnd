@@ -4,39 +4,33 @@
 <div id="page-wrapper">
     <div class="blank-page widget-shadow scroll">
         <h2><b>My Teams</b></h2>
-
-        <%proposals.forEach(function (proposal) { %>
-        <%if(proposal.GroupID.length!=0){%>
-        <%for(let i = 0; i< proposal.GroupID.length; i++){%>
-        <div class="blank-page widget-shadow scroll">
-            <h2><b>Teams for Proposal <%%></b></h2>
+        <%if(teams.length!=0){%>
+        <%for(let i = 0; i< teams.length; i++){%>
         <div class="grid_3 grid_5 widget-shadow">
-            <a href="/client/myteam/teampage?id=<%=proposal.GroupID[i]._id%>">
+            <a href="/client/myteam/teampage?id=<%=teams[i]._id%>">
                 <div>
-                    <h3><b>SSIT Team <%=proposal.GroupID[i].TeamName%></b></h3>
+                    <h3><b>SSIT Team <%=teams[i].TeamName%></b></h3>
                 </div>
                 <div>
                     <table width="100%">
                         <tr>
-                            <td width="40%"><p><b>Supervisor:</b> <%=proposal.GroupID[i].StaffID.Name%><span><i class="fa fa-angle-right" style="float:right;font-size: 35px"/></span></p></td>
+                            <td width="40%"><p><b>Supervisor:</b> <%=teams[i].StaffID.Name%><span><i class="fa fa-angle-right" style="float:right;font-size: 35px"/></span></p></td>
                         </tr>
                         <td width="20em"><p><b>Student:</b>
-                                <%let students = proposal.GroupID[i].StudentID;%>
-                                <%console.log(proposal.GroupID[i])%>
-                                <% if (students.length>0){%>
-                                    <% students.forEach(function (student){ %>
-                                    <%=student.Name%>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                <% })} %>
+                                <%let students = teams[i].StudentID;%>
+                                <%= students[0].Name %>
+                                <% for (let j = 1; j < students.length; j++) { %>
+                                    <%= ' / ' + students[j].Name %>
+                                <% } %>
                             </p></td>
                         </tr>
                     </table>
                 </div>
-            </a></div>
+            </a>
+        </div>
         <%}} else{%>
             <div class="alert alert-danger" role="alert">You do not have a team currently!</div>
-        </div>
         <%}%>
-        <% })%>
     </div>
 </div>
 
