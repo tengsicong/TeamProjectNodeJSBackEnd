@@ -8,7 +8,7 @@
                                      style="float:right;font-size:15px">pending</span>
         </h2>
         <br>
-        <p><b>Client:</b> <%=proposal.ClientID.Name%></p>
+        <p><b>Client:</b> <%=' ' + proposal.ClientID.Name%></p>
         <br>
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -96,12 +96,12 @@
                 <%for(let i = 0; i < proposal.Reply.length; i++) {%>
                 <tr
                     <% if ((i%2) == 1) { %>
-                    <%= "class=\"Active\""%>
+                    <%= "class=\"active\""%>
                     <% } %>
                 >
-                    <td><b><%=proposal.Reply[i].Author+':'%></b></td>
-                    <td><%=proposal.Reply[i].Comment%></td>
-                    <td width="10%"><%=proposal.Reply[i].ReplyDate%></td>
+                    <td scope="row"><b><%=proposal.Reply[i].Author+':'%></b></td>
+                    <td width="60%"><%=proposal.Reply[i].Comment%></td>
+                    <td width="20%"><%=proposal.Reply[i].ReplyDate.toISOString().replace(/T.*/,' ')+proposal.Reply[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                 </tr>
                 <%}%>
                 </tbody>
@@ -110,7 +110,7 @@
         <% } else{%>
             <div class="alert alert-danger" role="alert">No comment yet!</div>
         <%}%>
-        <br>
+
 
         <div class="row">
             <br>
