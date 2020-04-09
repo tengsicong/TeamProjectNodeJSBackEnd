@@ -39,17 +39,8 @@ module.exports = {
     getProposalByProposalID: function getProposalByProposalID(id) {
         return proposal
             .findOne({_id: id})
-            .populate('ClientID')
+            .populate({path: 'ClientID', populate: {path: 'AllProposalID'}})
             .populate({path:'GroupID',populate:{path: "StaffID"}})
-            /* wang */
-            .populate('StudentID')
-            .populate('Topic')
-            .populate('Status')
-            .populate('Date')
-            .populate('Content')
-            .populate('Reply')
-            .populate('ClientID')
-            .populate('GroupID')
             .exec();
     },
 
@@ -78,14 +69,16 @@ module.exports = {
 
     getProposalByClientID: function getProposalByClientID(id) {
         return proposal
-            .find({ClientID:id})
+            .find({ClientID: id})
             .populate('ClientID')
-            .populate({path:'GroupID',populate:{path:'StaffID'}})
-            .populate({path:'GroupID',populate:{path:'StudentID'}})
+            .populate({path:'GroupID', populate: {path:'StaffID'}})
+            .populate({path:'GroupID', populate: {path:'StudentID'}})
             .exec()
 
     },
+
 };
+
 
 // const id = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');
 

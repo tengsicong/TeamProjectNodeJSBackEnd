@@ -176,7 +176,6 @@ router.get('/project_list', function (req, res, next) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getAllProposals(),
-
     ])
         .then(function (result) {
             const admin = result[0];
@@ -212,14 +211,20 @@ router.get('/project_list/project_approved', function (req, res, next) {
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
         teamModel.getGroupByProposalID(proposalID),
+        teamModel.getAllTeam(),
     ])
         .then(function (result) {
             const admin = result[0];
+            const proposal = result[1];
+            const teams = result[2];
+            const allTeam = result[3];
+            console.log(proposal.ClientID);
             res.render('admin/project_approved', {
-                proposal: result[1],
-                teams: result[2],
-                pageTitle: result[1].Topic,
+                proposal: proposal,
+                teams: teams,
+                pageTitle: proposal.Topic,
                 admin: admin,
+                allTeam: allTeam,
             });
         })
         .catch(next);
@@ -233,10 +238,11 @@ router.get('/project_list/project_pending', function (req, res, next) {
     ])
         .then(function (result) {
             const admin = result[0];
+            const proposal = result[1];
+            console.log(proposal.ClientID);
             res.render('admin/project_pending', {
-                proposal: result[1],
-                pageTitle: result[1].Topic,
-                Replies: result[1].Replies,
+                proposal: proposal,
+                pageTitle: proposal.Topic,
                 admin: admin,
             });
         })
@@ -251,10 +257,11 @@ router.get('/project_list/project_rejected', function (req, res, next) {
     ])
         .then(function (result) {
             const admin = result[0];
+            const proposal = result[1];
+            console.log(proposal.Reply)
             res.render('admin/project_rejected', {
-                proposal: result[1],
-                pageTitle: result[1].Topic,
-                Replies: result[1].Replies,
+                proposal: proposal,
+                pageTitle: proposal.Topic,
                 admin: admin,
             });
         })
@@ -279,4 +286,5 @@ router.get('/student_list/student_detail', function(req, res, next) {
             });
         });
 });
+
 module.exports = router;

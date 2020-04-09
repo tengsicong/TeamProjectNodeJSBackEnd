@@ -8,7 +8,7 @@
                                      style="float:right;font-size:15px">approved</span>
         </h2>
         <br>
-        <p><b>Client:</b><%=proposal.ClientID.Name%></p>
+        <p><b>Client:</b><%=' ' + proposal.ClientID.Name%></p>
         <br>
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -33,13 +33,69 @@
     </div>
     <br>
     <div class="blank-page widget-shadow scroll">
+        <h3 style="color: #629aa9"><b>Client related projects</b></h3>
+        <% let j = 1; %>
+        <% if (proposal.ClientID.AllProposalID.length <= 1) { %>
+            <br>
+            <div class="alert alert-danger" role="alert">This client has no related project.</div>
+        <% } else { %>
+            <div class="bs-example widget-shadow" data-example-id="contextual-table">
+                <table class="table">
+                    <tbody>
+                    <% for (let i = 0; i < proposal.ClientID.AllProposalID.length; i++) { %>
+                        <% if (!proposal._id.equals(proposal.ClientID.AllProposalID[i]._id)) { %>
+                            <tr class="active" onclick="window.location.href='/student/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <th scope="row"><%= j %></th>
+                                <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
+                                <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
+                                <% if (proposal.ClientID.AllProposalID[i].Status == 'approved') { %>
+                                    <% if (proposal.ClientID.AllProposalID[i].GroupID.length > 0) { %>
+                                        <td width="5%"><span class="label label-success" style="float:right;font-size:15px"><%= proposal.ClientID.AllProposalID[i].GroupID.length + ' Team '%>Allocated</span>
+                                        </td>
+                                        <td width="5%"><span class="label label-success"
+                                                             style="float:right;font-size:15px">Approved</span></td>
+                                    <% } else { %>
+                                        <td width="5%"><span class="label label-success" style="float:right;font-size:15px"></span>
+                                        </td>
+                                        <td width="5%"><span class="label label-success"
+                                                             style="float:right;font-size:15px">Approved</span></td>
+                                    <% } %>
+                                <% } else if (proposal.ClientID.AllProposalID[i].Status == 'pending') { %>
+                                    <td width="5%"><span class="label label-warning" style="float:right;font-size:15px"></span>
+                                    </td>
+                                    <td width="5%"><span class="label label-warning"
+                                                         style="float:right;font-size:15px">Pending</span></td>
+                                <% } else if (proposal.ClientID.AllProposalID[i].Status == 'rejected') { %>
+                                    <td width="5%"><span class="label label-danger" style="float:right;font-size:15px"></span>
+                                    </td>
+                                    <td width="5%"><span class="label label-danger"
+                                                         style="float:right;font-size:15px">Rejected</span></td>
+                                <% } %>
+                            </tr>
+                            <% j++; %>
+                        <% } %>
+                    <% } %>
+
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+    <br>
+    <div class="blank-page widget-shadow scroll">
         <h2 class="title1">Allocate team</h2>
         <table width="100%">
             </tr>
             <tr>
                 <td style="width:90%">
                     <select name="selector1" id="selector1" class="form-control" style="width: 50%">
-                        <option>Team 1</option>
+                        <% for (let i = 0; i < allTeam.length; i++) { %>
+                            <% if (allTeam[i].ProposalID == undefined) { %>
+                                <option value="<%= allTeam[i]._id %>"><%= 'SSIT Team ' + allTeam[i].TeamName %></option>
+                            <% } else { %>
+                                <optgroup label="<%= 'SSIT Team ' + allTeam[i].TeamName + ' (' + allTeam[i].ProposalID.Topic + ')'%>"></optgroup>
+                            <% } %>
+                        <% } %>
                     </select>
                 </td>
                 <td>
@@ -47,11 +103,8 @@
                 </td>
             </tr>
         </table>
-
-
     </div>
     <br>
-
     <div class="blank-page widget-shadow scroll">
         <h2><b>Allocated Team</b></h2>
         <% if(teams.length>0){%>
@@ -59,18 +112,18 @@
             <div class="grid_3 grid_5 widget-shadow">
                 <a href="#">
                     <div>
-                        <h3><b>SSIT <%=team.TeamName%>  Team</b></h3>
+                        <h3><b><%= 'SSIT Team ' + team.TeamName%></b></h3>
                     </div>
                     <div>
                         <table width="100%">
                             <tr>
-                                <td width="40%"><p><b>Supervisor:</b><%=team.StaffID.Name%></p></td>
+                                <td width="40%"><p><b>Supervisor:</b><%= ' ' + team.StaffID.Name %></p></td>
                                 <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td>
                             </tr>
                             <td width="20em"><p><b>Student:</b>
-                                    <%=team.StudentID[0].Name%>
+                                    <%= team.StudentID[0].Name %>
                                     <% for(let i =1; i < team.StudentID.length; i++) { %>
-                                    <%='/'+ team.StudentID[i].Name%>
+                                    <%='/ '+ team.StudentID[i].Name%>
                                     <% } %>
                                 </p></td>
                             </tr>

@@ -39,83 +39,75 @@
     <br>
     <div class="blank-page widget-shadow scroll">
         <h3 style="color: #629aa9"><b>Client related projects</b></h3>
-
+        <% let j = 1; %>
+        <% if (proposal.ClientID.AllProposalID.length <= 1) { %>
+            <br>
+            <div class="alert alert-danger" role="alert">This client has no related project.</div>
+        <% } else { %>
         <div class="bs-example widget-shadow" data-example-id="contextual-table">
-
             <table class="table">
                 <tbody>
-
-                <tr class="active" onclick="window.location.href='project_approved.html'">
-                    <a href="project_approved.html">
-                        <th scope="row">1</th>
-                        <td style="cursor:pointer" width="40%"><b>"Help me to write my paper": Developping A Tool to
-                                Support Scientific Writing</b></td>
-                        <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
-                        <td width="5%"><span class="label label-success" style="float:right;font-size:15px">Allocated</span>
-                        </td>
-                        <td width="5%"><span class="label label-success"
-                                             style="float:right;font-size:15px">Approved</span></td>
-                    </a>
-                </tr>
-                <tr onclick="window.location.href='project_approved.html'">
-                    <a href="project_approved.html">
-                        <th scope="row">2</th>
-                        <td style="cursor:pointer" width="40%"><b>"Help me to write my paper": Developping A Tool to
-                                Support Scientific Writing</b></td>
-                        <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
-                        <td width="5%"><span class="label label-success" style="float:right;font-size:15px">Allocated</span>
-                        </td>
-                        <td width="5%"><span class="label label-success"
-                                             style="float:right;font-size:15px">Approved</span></td>
-                    </a>
-                </tr>
-                <tr class="active" onclick="window.location.href='project_approved.html'">
-                    <a href="project_approved.html">
-                        <th scope="row">3</th>
-                        <td style="cursor:pointer" width="40%"><b>"Help me to write my paper": Developping A Tool to
-                                Support Scientific Writing</b></td>
-                        <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
-                        <td width="5%"><span class="label label-success" style="float:right;font-size:15px">Allocated</span>
-                        </td>
-                        <td width="5%"><span class="label label-success"
-                                             style="float:right;font-size:15px">Approved</span></td>
-                    </a>
-                </tr>
+                    <% for (let i = 0; i < proposal.ClientID.AllProposalID.length; i++) { %>
+                        <% if (!proposal._id.equals(proposal.ClientID.AllProposalID[i]._id)) { %>
+                            <tr class="active" onclick="window.location.href='/student/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <th scope="row"><%= j %></th>
+                                <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
+                                <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
+                                <% if (proposal.ClientID.AllProposalID[i].Status == 'approved') { %>
+                                    <% if (proposal.ClientID.AllProposalID[i].GroupID.length > 0) { %>
+                                        <td width="5%"><span class="label label-success" style="float:right;font-size:15px"><%= proposal.ClientID.AllProposalID[i].GroupID.length + ' Team '%>Allocated</span>
+                                        </td>
+                                        <td width="5%"><span class="label label-success"
+                                                             style="float:right;font-size:15px">Approved</span></td>
+                                    <% } else { %>
+                                            <td width="5%"><span class="label label-success" style="float:right;font-size:15px"></span>
+                                            </td>
+                                            <td width="5%"><span class="label label-success"
+                                                                 style="float:right;font-size:15px">Approved</span></td>
+                                    <% } %>
+                                <% } else if (proposal.ClientID.AllProposalID[i].Status == 'pending') { %>
+                                    <td width="5%"><span class="label label-warning" style="float:right;font-size:15px"></span>
+                                    </td>
+                                    <td width="5%"><span class="label label-warning"
+                                                         style="float:right;font-size:15px">Pending</span></td>
+                                <% } else if (proposal.ClientID.AllProposalID[i].Status == 'rejected') { %>
+                                    <td width="5%"><span class="label label-danger" style="float:right;font-size:15px"></span>
+                                    </td>
+                                    <td width="5%"><span class="label label-danger"
+                                                         style="float:right;font-size:15px">Rejected</span></td>
+                                <% } %>
+                            </tr>
+                            <% j++; %>
+                        <% } %>
+                    <% } %>
 
                 </tbody>
             </table>
         </div>
+        <% } %>
     </div>
     <br>
     <div class="blank-page widget-shadow scroll">
         <h2 class="title1"><b>Comments</b></h2>
-        <% if(Replies.length!=0){%>
+        <% if(proposal.Reply.length!=0){%>
         <div class="bs-example widget-shadow" data-example-id="contextual-table" style="height:300px;overflow-y:auto;">
             <table class="table">
                 <tbody>
-                <%if(Replies.length==1){%>
-                <tr class="active">
-                    <th scope="row"><b><%=Replies[0].Author+':'%></b></th>
-                    <td width="85%"><b><%=Replies[0].Comment%></b></td>
-                    <td width="10%"><%=Replies[0].ReplyDate%></td>
+                <%for(let i = 0; i < proposal.Reply.length; i++) {%>
+                <tr
+                    <% if ((i%2) == 1) { %>
+                    <%= "class=\"Active\""%>
+                    <% } %>
+                >
+                    <td><b><%=proposal.Reply[i].Author+':'%></b></td>
+                    <td><%=proposal.Reply[i].Comment%></td>
+                    <td width="10%"><%=proposal.Reply[i].ReplyDate%></td>
                 </tr>
-                <%}else{%>
-                <%for(let i=0;i<Replies.length;i+2){%>
-                <tr>
-                    <td><b><%=Replies[i].Author+':'%></b></td>
-                    <td><%=Replies[i].Comment%></td>
-                    <td width="10%"><%=Replies[i+1].ReplyDate%></td>
-                </tr>
-                <tr class="active">
-                    <th scope="row"><b><%=Replies[i+1].Author+':'%></b></th>
-                    <td width="85%"><b><%=Replies[i+1].Comment%></b></td>
-                    <td width="10%"><%=Replies[i+1].ReplyDate%></td>
-                </tr>
-                <%}}%>
+                <%}%>
                 </tbody>
             </table>
         </div>
-        <%} else{%>
+        <% } else{%>
             <div class="alert alert-danger" role="alert">No comment yet!</div>
         <%}%>
         <br>
