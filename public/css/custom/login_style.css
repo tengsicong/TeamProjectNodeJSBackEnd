@@ -57,6 +57,13 @@ text-decoration:underline;
 }
 /*--//role-select-page--*/
 
+/*--forgot-password-page--*/
+.forgot-password-page {
+    width: 50%;
+    margin: 1em auto 0;
+}
+/*--//forgot-password-page--*/
+
 /*--login-page--*/
 .login-page {
     width: 40%;
@@ -327,7 +334,7 @@ p.creating {
 /*--//signup-page--*/
 
 
-.role-select-page h2.title1,.login-page h2.title1,.signup-page h2.title1{
+.role-select-page h2.title1,.forgot-password-page h2.title1,.login-page h2.title1,.signup-page h2.title1{
     text-align: center;
     padding: 1em;
     background: #629aa9;
