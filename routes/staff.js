@@ -147,9 +147,54 @@ router.get('/discussion_details', function(req, res) {
                 //console.log(qa);
 
                 res.render('staff/discussion_details', {
-                    pageTitle: 'Discussion details',
+                    pageTitle: result[questionID].Topic + ' - Discussion Details',
                     username: staff.Name,
                     qa: result[questionID],
+                    id: questionID,
+                });
+            });
+        });
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
+
+router.post('/discussion_details', function(req, res) {
+    if (req.session.role === 'staff') {
+        const questionID = req.query.id;
+        const reply = req.body.reply;
+
+        const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
+        routePromise.then(function(result) {
+            const staff = result;
+            let qa = [];
+
+            const completedQAPromise = new Promise(function(resolve) {
+                let loaded = 0;
+
+                for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
+                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
+                    qaPromise.then(function(result) {
+                        qa.push(...result);
+                        loaded++;
+                        if(loaded == staff.AllocatedTeamID.length) {
+                            resolve(qa);
+                        }
+                    });
+                }
+            });
+            completedQAPromise.then(function(result){
+                let replies = result[questionID].Replies;
+                replies.push({
+                    Author: staff.Name,
+                    Comment: reply,
+                    ReplyDate: new Date().getTime(),
+                });
+                //console.log(replies);
+                const updatePromise = qaModel.updateReplyByQaId(result[questionID]._id, replies);
+                updatePromise.then(function(result) {
+                    res.redirect('discussion_details?id=' + questionID);
                 });
             });
         });

@@ -30,6 +30,10 @@ module.exports= {
             .find({GroupID: id})
             .exec();
     },
+
+    updateReplyByQaId: function updateReplyByQaId(id, replies) {
+        return studentStaffQa.findByIdAndUpdate(id, { Replies: replies });
+    }
 }
 
 // const mongoose = require('mongoose');
