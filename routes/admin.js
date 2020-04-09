@@ -268,21 +268,25 @@ router.get('/project_list/project_rejected', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/student_list/student_detail', function(req, res, next) {
+router.get('/student_detail', function(req, res, next) {
     const studentID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
         studentModel.getStudentByStudentID(studentID),
+        teamModel.getTeamByStudentID(studentID),
         proposalModel.getProposalByStudentID(studentID),
     ])
         .then(function(result) {
             const admin = result[0];
-
+            const student = result[1];
+            const team = result[2];
+            const proposal = result[3];
             res.render('admin/student_detail', {
-                student: result[1],
-                proposal: result[2],
                 pageTitle: 'Student Detail',
                 admin: admin,
+                student: student,
+                team: team,
+                proposal: proposal,
             });
         });
 });
