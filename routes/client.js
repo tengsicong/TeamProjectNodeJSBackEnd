@@ -59,8 +59,8 @@ router.post('/myproject/create_project',function(req,res,next){
         Date:nowDate,
         Status:'pending'
     }
-    proposalModel.createProposal(proposal,client)
-    clientModel.addProposalsByProposalID(client,proposal._id)
+    proposalModel.createProposal(proposal)
+    clientModel.updateClientProposalListByProposalID(client,proposal._id)
         .then(function () {
             res.redirect('/client/myproject')
         })

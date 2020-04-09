@@ -40,13 +40,12 @@
                                 </p></td>
                         </tr>
                         <td width="20em"><p><b>Student:</b>
-                                <%let students = teams[i].StudentID;%>
+                                <%let students = team.StudentID;%>
                                 <%= students[0].Name %>
                                 <% for (let j = 1; j < students.length; j++) { %>
                                     <%= ' / ' + students[j].Name %>
                                 <% } %>
                             </p></td>
-
                         </tr>
                     </table>
                 </div>

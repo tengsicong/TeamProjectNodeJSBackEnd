@@ -50,7 +50,7 @@ module.exports = {
      * @param {ObjectId} id, proposalID  id:clientID
      * @return {client} a client object
      */
-    addProposalsByProposalID: function addProposalsByProposalID(id,proposalID) {
+    updateClientProposalListByProposalID: function updateClientProposalListByProposalID(id,proposalID) {
         return client.update({_id:id},{$addToSet:{AllProposalID: proposalID}})
 
     }
