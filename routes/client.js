@@ -19,14 +19,14 @@ router.get('/myproject', function(req, res, next) {
         .then(function(proposals) {
             const client = proposals[0];
 
-            res.render('ClientPart/client_myproposals', {
+            res.render('client/my_proposals', {
                 proposals: proposals[1],
                 pageTitle: 'My Projects',
                 username: client.Name,
             });
         })
         .catch(next);
-    // res.render('ClientPart/client_myproposals');
+    // res.render('client/client_myproposals');
 });
 
 router.get('/myproject/create_project', function(req, res,next) {
@@ -36,7 +36,7 @@ router.get('/myproject/create_project', function(req, res,next) {
         .then(function(result) {
             const client = result[0];
 
-            res.render('ClientPart/client_create_project', {
+            res.render('client/create_project', {
                 pageTitle: 'Create Project',
                 username: client.Name,
             });
@@ -52,7 +52,7 @@ router.get('/myproject/project_approved', function(req, res, next) {
         teamModel.getGroupByProposalID(proposalID),
     ])
         .then(function(result) {
-            res.render('ClientPart/client_project_approved', {
+            res.render('client/project_approved', {
                 proposal: result[0],
                 pageTitle: result[0].Topic,
                 username: result[1].Name,
@@ -71,11 +71,11 @@ router.get('/myproject/project_pending', function(req, res, next) {
     ])
         .then(function(proposal) {
             console.log(proposal);
-            res.render('ClientPart/client_project_pending', {
+            res.render('client/project_pending', {
                 proposal: proposal[0],
                 pageTitle: proposal[0].Topic,
                 username: proposal[1].Name,
-                Replies: result[0].Replies,
+                Replies: result[0].Reply,
             });
         })
         .catch(next);
@@ -89,11 +89,11 @@ router.get('/myproject/project_rejected', function(req, res, next) {
         clientModel.getClientByProposalID(proposalID),
     ])
         .then(function(result) {
-            res.render('ClientPart/client_project_rejected', {
+            res.render('client/project_rejected', {
                 proposal: result[0],
                 pageTitle: result[0].Topic,
                 username: result[1].Name,
-                Replies: result[0].Replies,
+                Replies: result[0].Reply,
             });
         })
         .catch(next);
@@ -107,7 +107,7 @@ router.get('/edit_project', function(req, res,next) {
         clientModel.getClientByProposalID(proposalID),
     ])
         .then(function(result) {
-            res.render('ClientPart/client_edit_project', {
+            res.render('client/edit_project', {
                 proposal: result[0],
                 pageTitle: 'Edit Project',
                 username: result[1].Name,
@@ -122,7 +122,7 @@ router.get('/myteam', function(req, res,next) {
         proposalModel.getProposalByClientID(clientID),
     ])
         .then(function(result) {
-            res.render('ClientPart/client_myteams', {
+            res.render('client/my_teams', {
                 proposals: result[1],
                 pageTitle: 'My Teams',
                 username: result[0].Name,
@@ -139,7 +139,7 @@ router.get('/myteam/teampage', function(req, res,next) {
     ])
         .then(function(result) {
             console.log(result[1].ClientMeetingID[0].Date)
-            res.render('ClientPart/client_teampage', {
+            res.render('client/team_page', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM'+result[1].TeamName,
                 username: result[0].Name,
@@ -158,7 +158,7 @@ router.get('/myteam/teammark', function(req, res, next) {
     ])
         .then(function(result) {
             console.log(result[1].ClientMeetingID[0].Date)
-            res.render('ClientPart/client_teammark', {
+            res.render('client/team_mark', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM '+result[1].TeamName+' Mark',
                 username: result[0].Name,
@@ -176,7 +176,7 @@ router.get('/mytimetable', function(req, res,next) {
         clientMeetingModel.getClientMeetingByClientID(clientID),
     ])
         .then(function(result) {
-            res.render('ClientPart/client_mytimetable', {
+            res.render('client/my_timetable', {
                 meetings: result[1],
                 pageTitle: 'My TimeTable',
                 username: result[0].Name,

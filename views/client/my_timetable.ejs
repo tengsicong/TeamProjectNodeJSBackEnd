@@ -43,7 +43,7 @@
                                 <thead>
                                 <tr>
                                     <th>Meeting Number</th>
-                                    <th>Team Number</th>
+                                    <th>Team</th>
                                     <th>Meeting Time</th>
                                     <th>Meeting Status</th>
                                 </tr>
@@ -52,8 +52,8 @@
                                 <%for(let i=0;i<meetings.length;i++){%>
                                 <tr>
                                     <th scope="row"><%=i+1%></th>
-                                    <td><%=meetings[i].GroupID.TeamName%></td>
-                                    <td><%=meetings[i].Date%></td>
+                                    <td><%="SSIT TEAM "+meetings[i].GroupID.TeamName%></td>
+                                    <td><%=meetings[i].Date.toISOString().replace(/T.*/,' ')+meetings[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                     <td><%=meetings[i].Place%></td>
                                 </tr>
                                 <%}%>

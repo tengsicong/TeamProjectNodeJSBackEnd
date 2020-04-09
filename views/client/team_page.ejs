@@ -43,7 +43,7 @@
                 <%for(let i=0;i<meetings.length;i++){%>
                 <tr>
                     <th>Client Meeting <%=i+1%></th>
-                    <td><%=meetings[i].Date%></td>
+                    <td><%=meetings[i].Date.toISOString().replace(/T.*/,' ')+meetings[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     <td><%=meetings[i].Place%></td>
                 </tr>
                 <%}%>
