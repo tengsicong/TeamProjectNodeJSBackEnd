@@ -211,13 +211,13 @@ router.get('/project_list/project_approved', function (req, res, next) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
-        teamModel.getAllTeam(),
+        teamModel.getGroupByProposalID(proposalID),
     ])
         .then(function (result) {
             const admin = result[0];
             res.render('admin/project_approved', {
                 proposal: result[1],
-                team: result[2],
+                teams: result[2],
                 pageTitle: result[1].Topic,
                 admin: admin,
             });
