@@ -18,13 +18,13 @@ router.post('/', function(req, res) {
     
     let method;
     if (role === 'student') {
-        method = studentModel.getStudentByUserName(email)
+        method = studentModel.getStudentByUserName(email);
     } else if (role === 'staff') {
-        method = staffModel.getStaffByUserName(email)
+        method = staffModel.getStaffByUserName(email);
     } else if (role === 'admin') {
-        method = adminModel.getAdminByUserName(email)
+        method = adminModel.getAdminByUserName(email);
     } else if (role === 'client') {
-        method = clientModel.getClientByUserName(email)
+        method = clientModel.getClientByUserName(email);
     } else {
         res.redirect('/role_select');
         console.log('role error');
