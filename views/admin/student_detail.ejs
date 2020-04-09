@@ -15,19 +15,23 @@
                     <%if(student.GroupID==undefined){%>
                     <tr><%= 'Group: None' %></tr><br>
                     <tr><%= 'Proposal: None' %></tr>
-                    <%}else{%>
+                    <%}else {%>
+                        <%if(student.GroupID.ProposalID==undefined){%>
                         <tr><%= 'Group: ' + student.GroupID.TeamName %></tr><br>
-                        <tr><%= 'Proposal: ' + proposal.Topic %></tr>
+                        <tr><%= 'Proposal: None' %></tr>
+                        <%}else{%>
+                        <tr><%= 'Group: ' + student.GroupID.TeamName %></tr><br>
+                        <tr><%= 'Proposal: '+proposal.Topic %></tr>
+                        <%}%>
                     <%}%>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">Student Marks</h3>
-            </div>
+        <div class="blank-page widget-shadow scroll">
+            <h2 class="title1"><b>Student Mark</b></h2>
+            <br>
             <div class="panel panel-info">
                 <!-- Teammate Mark -->
                 <div class="panel-heading"><b>Teammate Mark</b></div>
@@ -197,7 +201,8 @@
                 </div>
             <% } %>
         </div>
-        </div>
+
+
     </div>
 </div>
 <%- include('footer') %>
