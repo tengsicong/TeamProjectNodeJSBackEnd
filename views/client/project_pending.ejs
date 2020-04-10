@@ -44,6 +44,13 @@
         <% if(Replies.length!=0){%>
         <div class="bs-example widget-shadow" data-example-id="contextual-table" style="overflow-y:auto; ">
             <table class="table" style="margin-bottom:0px">
+                <thead>
+                <tr>
+                    <th style="width: 15%;font-size: 20px"><b>Name</b></th>
+                    <th style="width: 75%;font-size: 20px"><b>Comment</b></th>
+                    <th style="width: 15%;font-size: 20px"><b>Comment Date</b></th>
+                </tr>
+                </thead>
                 <tbody>
                 <%for(let i = 0; i < Replies.length; i++) {%>
                     <% if ((i%2) == 1) { %>
@@ -56,7 +63,7 @@
                     <% } else{ %>
                     <tr class="active">
                         <th width="15%" scope="row"><b><%=Replies[i].Author%></b></th>
-                        <td width="75%"><b><%=Replies[i].Comment%></b></td>
+                        <td width="75%"><%=Replies[i].Comment%></td>
                         <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     </tr>
                 <%}}%>

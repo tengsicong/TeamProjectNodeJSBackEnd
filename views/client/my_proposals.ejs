@@ -16,7 +16,7 @@
                 <% if (proposal.Status == "approved") { %>
             <a href="/client/myproject/project_approved?id=<%=proposal._id%>">
                 <div>
-                    <h3 class="hdg"><%=proposal.Topic%><span class="label label-success" style="float:right;font-size:15px">approved</span>
+                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-success" style="float:right;font-size:15px">approved</span>
                     </h3>
                 </div>
                 <div>
@@ -27,7 +27,7 @@
                 <% } else if(proposal.Status == "pending"){ %>
             <a href="/client/myproject/project_pending?id=<%=proposal._id%>">
                 <div>
-                <h3 class="hdg"><%=proposal.Topic%><span class="label label-warning"
+                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-warning"
                                            style="float:right;font-size:15px">Pending</span>
                 </h3>
                 </div>
@@ -39,7 +39,7 @@
                 <% } else if(proposal.Status == "rejected"){ %>
             <a href="/client/myproject/project_rejected?id=<%=proposal._id%>">
                 <div>
-                    <h3 class="hdg"><%=proposal.Topic%><span class="label label-danger" style="float:right;font-size:15px">Rejected</span>
+                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-danger" style="float:right;font-size:15px">Rejected</span>
                     </h3>
                 </div>
                 <div>
