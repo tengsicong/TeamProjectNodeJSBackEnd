@@ -86,33 +86,35 @@
                 </div>
             <% } %>
             <div class="form-group row1 blank-page widget-shadow scroll" >
-                <table style="width: 90%; margin: auto;">
-                    <tr>
-                        <th style = "width: 15%;">Change Date</th>
-                        <td style="padding: 0.5em;"><input type="datetime-local" style="width: 30%" value=nowtime></td>
-                    </tr>
-                    <tr>
-                        <th style = "width: 15%;">Change Supervisor</th>
-                        <td style="padding: 0.5em;">
-                            <select class="form-control" style="width: 30%">
-                                <% for(var i=0;i<stafflist.length;i++) { %>
-                                    <%if(stafflist[i].StaffID != meeting.TemporaryStaffID){%>
-                                        <option><%= stafflist[i].Name%></option>
-                                    <% } else {%>
-                                        <option selected><%= stafflist[i].Name%></option>
+                <form method="post">
+                    <table style="width: 90%; margin: auto;">
+                        <tr>
+                            <th style = "width: 15%;">Change Date</th>
+                            <td style="padding: 0.5em;"><input name="timechange" type="datetime-local" style="width: 30%" value=nowtime></td>
+                        </tr>
+                        <tr>
+                            <th style = "width: 15%;">Change Supervisor</th>
+                            <td style="padding: 0.5em;">
+                                <select name="staffchange" class="form-control" style="width: 30%">
+                                    <% for(var i=0;i<stafflist.length;i++) { %>
+                                        <%if(stafflist[i].StaffID == nowstaff ) {%>
+                                            <option selected><%= stafflist[i].Name%></option>
+                                        <% } else {%>
+                                            <option><%= stafflist[i].Name%></option>
+                                        <% } %>
                                     <% } %>
-                                <% } %>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style = "width: 15%;">Reason</th>
-                        <td style="padding: 0.5em;">
-                            <textarea class= "input-reply-area" placeholder="Change timetable reason" wrap="virtual" style="width: 80%; height: 6.0em; resize: none;"></textarea>
-                        </td>
-                    </tr>
-                </table>
-                <button type="submit" class="btn btn-primary" style="margin-left: 90%">Submit</button>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style = "width: 15%;">Reason</th>
+                            <td style="padding: 0.5em;">
+                                <textarea name="changereason" class= "input-reply-area" placeholder="Change timetable reason" wrap="virtual" style="width: 80%; height: 6.0em; resize: none;"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="btn btn-primary" style="margin-left: 90%" value=" SUBMIT">Submit</button>
+                </form>
             </div>
         </div>
     </div>

@@ -33,6 +33,7 @@ module.exports = {
             .populate('Representer','Name')
             .populate({path: 'ProposalID', populate: {path: 'ClientID',select: 'Name'}})
             .populate({path: 'StaffMeetingID',populate: {path:'StaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'TemporaryStaffID'}})
             .exec();
     },
 
@@ -60,6 +61,17 @@ module.exports = {
             .findOne({MeetingID: id})
             .exec();
     },
+
+    /**
+     * @param {ObjectId} id
+     * @return {team} a team
+     */
+    getTeamByTeamID: function getTeamByTeamID (id) {
+        return request
+            .findById(id)
+            .exec();
+    },
+
     /**
      * @param {ObjectId} id
      * @return {staffs} a project
@@ -77,6 +89,17 @@ module.exports = {
     getStaffByUserName: function getStaffByUserName(name) {
         return staff
             .findOne({UserName: name})
+            .exec();
+    },
+
+    /**
+     * @param {String} name
+     * @return {staffs} a staff object
+     */
+
+    getStaffByName: function getStaffByName(name) {
+        return staff
+            .findOne({Name: name})
             .exec();
     },
 
@@ -103,5 +126,17 @@ module.exports = {
 
     resetPasswordByStaffId: function resetPasswordByStaffId(id, password) {
         return staff.findByIdAndUpdate(id, { Password: password });
+    },
+
+    updateTeamMark: function updateTeamMark(id,reason,score){
+        return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
+    },
+
+    updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){
+        return request.update({_id:newRequest._id},{$set:{NewStaffID:newRequest.NewStaffID, NewMeetingTime:newRequest.NewMeetingTime, RequestComment: newRequest.RequestComment}});
+    },
+
+    createMeetingChangeRequest: function createMeetingChangeRequest(newRequest) {
+        return request.create(newRequest);
     }
 };
