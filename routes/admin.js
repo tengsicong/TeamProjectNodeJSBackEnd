@@ -149,13 +149,13 @@ router.post('/submit_newteam', function (req, res) {
 
             });
     // } else {
-        Promise.all([
-        ])
-            .then(function () {
-                res.redirect('/team_list')
-            });
+    //     Promise.all([
+    //     //     ])
+    //     //         .then(function () {
+    //     //             res.redirect('/team_list')
+    //     //         });
     // }
-    console.log('then')
+    // console.log('then')
     // res.redirect('/team_list')
 })
 
