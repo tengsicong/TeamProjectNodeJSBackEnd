@@ -41,10 +41,16 @@ module.exports = {
             .exec();
     },
 
-
-    postTeamNewRepresenter: function postTeamNewRepresenter(ID) {
+    postPeopleLikeByStudentID: function postPeopleLikeByStudentID(thisStudentID, peopoleID) {
         student
-            .findOneAndUpdate('')
+            .findOneAndUpdate({_id: thisStudentID}, {$set: {PeopleLike: peopoleID}})
+            .exec();
+    },
 
-}
+    deletePeopleLikeByStudentID: function deletePeopleLikeByStudentID(studentID) {
+        student
+            .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}})
+    }
+
+
 };

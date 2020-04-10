@@ -70,5 +70,49 @@
 </script>
 <!-- //calendar -->
 
+<!-- simulate a set -->
+<script>
+    function mySet() {
+        this.dataStore = [];
+        this.add = add;
+        this.remove = remove;
+        this.size = size;
+        this.contains = contains;
+        this.show = show;
+    }
+    function add(data) {
+        if (this.dataStore.indexOf(data) < 0) {
+            this.dataStore.push(data);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    function remove(data) {
+        var pos = this.dataStore.indexOf(data);
+        if (pos > -1) {
+            this.dataStore.splice(pos,1);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    function size() {
+        return this.dataStore.length;
+    }
+    function show() {
+        return "[" + this.dataStore + "]";
+    }
+    function contains(data) {
+        if (this.dataStore.indexOf(data) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+<!-- simulate a set -->
 </body>
 </html>

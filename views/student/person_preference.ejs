@@ -18,10 +18,11 @@
 <!--        <div class="blank-page widget-shadow scroll">-->
             <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
                 <h3>Person you like to work with</h3>
-                <select class="form-control" style="width: 100%">
+                <select class="form-control" id="person1" style="width: 100%">
+                    <option value="None1">None</option>
                     <% for (let i = 0; i < allStudent.length; i++) { %>
                         <% if (!allStudent[i]._id.equals(student._id)) { %>
-                            <option><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
+                            <option value="<%= allStudent[i]._id %>"><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
                         <% } %>
                     <% } %>
                 </select>
@@ -32,10 +33,11 @@
 <!--        <div class="blank-page widget-shadow scroll">-->
             <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
                 <h3>Person you do not like to work with (1)</h3>
-                <select class="form-control" style="width: 100%">
+                <select class="form-control" id="person2" style="width: 100%">
+                    <option value="None2">None</option>
                     <% for (let i = 0; i < allStudent.length; i++) { %>
                         <% if (!allStudent[i]._id.equals(student._id)) { %>
-                            <option><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
+                            <option value="<%= allStudent[i]._id %>"><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
                         <% } %>
                     <% } %>
                 </select>
@@ -46,10 +48,11 @@
 <!--        <div class="blank-page widget-shadow scroll">-->
             <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
                 <h3>Person you do not like to work with (2)</h3>
-                <select class="form-control" style="width: 100%">
+                <select class="form-control" id="person3" style="width: 100%">
+                    <option value="None3">None</option>
                     <% for (let i = 0; i < allStudent.length; i++) { %>
                         <% if (!allStudent[i]._id.equals(student._id)) { %>
-                            <option><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
+                            <option value="<%= allStudent[i]._id %>"><%= allStudent[i].Name + ' (' + allStudent[i].UserName + ')'%></option>
                         <% } %>
                     <% } %>
                 </select>
@@ -58,12 +61,51 @@
 
         <br>
         <div style="text-align: center">
-            <a href="student/homepage">
-                <button type="button" class="btn btn-primary">SUBMIT</button>
-            </a>
+                <button type="button" class="btn btn-primary" onclick="setPersonPreference()">SUBMIT</button>
         </div>
         </div>
     </div>
 
 <%- include('component/footer') %>
+<!-- check and submit people perference -->
+<script>
+    function setPersonPreference() {
+        const person1 = document.getElementById('person1').value;
+        const person2 = document.getElementById('person2').value;
+        const person3 = document.getElementById('person3').value;
+        const myset = new mySet();
+        myset.add(person1);
+        myset.add(person2);
+        myset.add(person3);
+        if (myset.size() < 3) {
+            alert('Please choose different people for each selector!');
+        } else {
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'person1';
+            inputElement1.value = person1;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'person2';
+            inputElement2.value = person2;
+            const inputElement3 = document.createElement("input");
+            inputElement3.type = 'hidden';
+            inputElement3.name = 'person3';
+            inputElement3.value = person3;
+
+            const form = document.createElement("form");
+            form.action = '/student/set_people_preference';
+            form.method = 'post';
+            form.style.display = "none";
+
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            form.appendChild(inputElement3);
+            document.body.appendChild(form);
+            form.submit();
+            return form;
+        }
+    }
+</script>
+<!-- check and submit people perference -->
 <%- include('component/footer_script') %>

@@ -69,7 +69,12 @@ module.exports = {
             .exec();
     },
 
+    postTeamNewRepresenter: function postTeamNewRepresenter(studentID, newStudentID) {
+        team
+            .findOneAndUpdate({ Representer: studentID }, { $set: { Representer: newStudentID}})
+            .exec()
 
+    },
     // /**
     //  * @param { ObjectID } client id
     //  * @return {Object: Team}
