@@ -109,16 +109,12 @@ router.post('/meeting_detail_pre',function (req,res) {
 
     const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
     changerequest.then(function (result) {
-        console.log('=========');
         requestID = result
-        console.log(requestID);
     })
 
     primary_meeting.then(function (result) {
         //console.log(result);
         primaryMeetingResult = result;
-        console.log('------------');
-        console.log(requestID);
         if(staffchange === primaryMeetingResult.StaffID.Name)
             staffchangeID = null;
         if(requestID === null)
@@ -176,6 +172,7 @@ router.get('/meeting_detail_pre', function(req, res) {
                     nowStaff = meeting.TemporaryStaffID;
                 //console.log(meeting);
                 let nowtime = new Date();
+                console.log(timestring);
                 res.render('staff/meeting_detail_pre',{
                     meeting : meeting,
                     pageTitle : 'Meeting Detail',

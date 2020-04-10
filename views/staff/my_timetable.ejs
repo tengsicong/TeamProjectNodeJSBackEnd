@@ -75,13 +75,13 @@
                 <div class="blank-page widget-shadow scroll" style="margin-left: 2%;">
                     <h2><b>Change Timetable</b></h2>
                     <div class="form-body">
-                        <form style="padding-left: 30%">
+                        <form style="padding-left: 30%" method = 'post'>
                             <div>Meeting Number:</div>
                             <div class="form-group" style="align-items: center">
-                                <select class="form-control" style="width: 60%">
+                                <select name="meetingID" class="form-control" style="width: 60%">
                                     <option>-</option>
                                     <%for(var i=0;i<meetingList.length;i++) {%>
-                                        <option>Team <%=meetingList[i].GroupID.TeamName%> Meeting <%=meetingList[i].MeetingNumber%></option>
+                                        <option value="<%meetingList[i]._id%>">Team <%=meetingList[i].GroupID.TeamName%> Meeting <%=meetingList[i].MeetingNumber%></option>
                                     <% } %>
                                 </select>
                             </div>
