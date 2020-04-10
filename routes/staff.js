@@ -5,9 +5,12 @@ const proposalModel = require('../models/proposal');
 const staffModel = require('../models/staff');
 const teamModel = require('../models/team');
 const qaModel = require('../models/student_staff_qa');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+//const meetingID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97e');
+const stageMoudel = require('../models/stage')
 
-const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
+
+const staffID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97f');
 
 router.get('/my_project', function(req, res) {
     //console.log(req.session.role);
@@ -50,36 +53,157 @@ router.get('/my_project', function(req, res) {
 });
 
 router.get('/project_detail', function(req, res) {
-    const teamID = parseInt(req.query.seq);
-    Promise.all([
-        staffModel.getStaffByStaffID(staffID),
-        staffModel.getAllocatedTeamByStaffID(staffID),
-    ])
-        .then(function(result) {
-            const staff = result[0];
-            const allTeams = result[1];
-            let groupMember;
-            groupMember = '';
-            const max =allTeams[teamID].StudentID.length;
-            for (let j = 0; j < max; j++) {
-                groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
-                if (j < max - 1) {
-                    groupMember = groupMember + ', ';
+    if (req.session.role === 'staff') {
+        const teamID = parseInt(req.query.seq);
+        Promise.all([
+            staffModel.getStaffByStaffID(req.session.userinfo),
+            staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
+            stageMoudel.getStage(),
+        ])
+            .then(function (result) {
+                const staff = result[0];
+                const allTeams = result[1];
+                let groupMember;
+                groupMember = '';
+                let stage=result[2];
+                const max = allTeams[teamID].StudentID.length;
+                for (let j = 0; j < max; j++) {
+                    groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
+                    if (j < max - 1) {
+                        groupMember = groupMember + ', ';
+                    }
                 }
-            }
-            let meetingList = [];
-            meetingList = allTeams[teamID].StaffMeetingID;
-            console.log(allTeams[teamID]);
-            let nowtime = new Date();
-            res.render('staff/project_detail', {
-                pageTitle: 'Project Detail',
-                username: staff.Name,
-                team: allTeams[teamID],
-                teamMemberList: groupMember,
-                allmeeting: meetingList,
-                nowtime: nowtime,
+                let meetingList = [];
+                //console.log(stage[0].Stage);
+                meetingList = allTeams[teamID].StaffMeetingID;
+                let nowtime = new Date();
+                res.render('staff/project_detail', {
+                    pageTitle: 'Project Detail',
+                    username: staff.Name,
+                    team: allTeams[teamID],
+                    teamMemberList: groupMember,
+                    allmeeting: meetingList,
+                    nowtime: nowtime,
+                    teamseq: teamID,
+                    stage:stage[0],
+                });
             });
-        });
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
+
+
+router.get('/meeting_detail_pre', function(req, res) {
+    if (req.session.role === 'staff') {
+        const meetingID = req.query.seq;
+        Promise.all([
+            staffModel.getStaffMeetingByMeetingID(meetingID),
+            staffModel.getStaffMeetingChangeRequestByMeetingID(meetingID),
+            staffModel.getAllStaff(),
+            staffModel.getStaffByStaffID(req.session.userinfo),
+            ]
+        )
+            .then(function (result) {
+                const staffs = result[2];
+                const meeting = result[0];
+                const meetingModify = result[1];
+                const staff = result[3];
+                //console.log(meeting);
+                let nowtime = new Date();
+                res.render('staff/meeting_detail_pre',{
+                    meeting : meeting,
+                    pageTitle : 'Meeting Detail',
+                    username: staff.Name,
+                    meetingModify: meetingModify,
+                    stafflist: staffs,
+                    nowtime : nowtime,
+                })
+            })
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
+
+router.get('/meeting_detail_post', function(req, res) {
+    const meetingID = req.query.seq;
+    if (req.session.role === 'staff') {
+        //const meetingID = req.query.seq;
+        Promise.all([
+                staffModel.getStaffMeetingByMeetingID(meetingID),
+                staffModel.getStaffByStaffID(req.session.userinfo),
+                staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
+            ]
+        )
+            .then(function (result) {
+                console.log(meetingID);
+                const staff = result[1];
+                const meeting = result[0];
+                let nowtime = new Date();
+                //console.log(meeting.RecordID);
+                //console.log(meeting.GroupID.StudentID);
+                res.render('staff/meeting_detail_post',{
+                    meeting : meeting,
+                    pageTitle : 'Meeting Detail',
+                    username: staff.Name,
+                    record: meeting.RecordID,
+                    nowtime : nowtime,
+                })
+            })
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
+
+router.get('/my_timetable', function(req, res) {
+    if (req.session.role === 'staff') {
+        Promise.all([
+            staffModel.getStaffByStaffID(req.session.userinfo),
+            staffModel.getAllStaff(),
+            staffModel.getAllMeetingByStaffID(req.session.userinfo),
+        ])
+            .then(function (result) {
+                const staff = result[0];
+                const meetingList = result[2];
+                const staffList = result[1];
+                let nowtime = new Date();
+                res.render('staff/my_timetable', {
+                    pageTitle: 'My Timetable',
+                    username: staff.Name,
+                    meetingList: meetingList,
+                    staffList: staffList,
+                    nowtime: nowtime,
+                });
+            });
+    }
+    else {
+        res.redirect('/role_select');
+    }
+});
+
+router.get('/marking', function(req, res) {
+    if (req.session.role === 'staff') {
+        const teamID = parseInt(req.query.seq);
+        Promise.all([
+            staffModel.getStaffByStaffID(req.session.userinfo),
+            staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
+        ])
+            .then(function (result) {
+                const staff = result[0];
+                const allTeams = result[1];
+                res.render('staff/marking', {
+                    pageTitle: 'Marking',
+                    username: staff.Name,
+                    team: allTeams[teamID],
+                });
+            });
+    }
+    else {
+        res.redirect('/role_select');
+    }
 });
 
 router.get('/discussion', function(req, res) {

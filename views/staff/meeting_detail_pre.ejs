@@ -5,7 +5,7 @@
     <div class="main-page">
         <h2 class="title1">Meeting Details</h2>
         <div class="blank-page widget-shadow scroll">
-            <h3><b><%= meeting.number%></b></h3>
+            <h3><b>Meeting <%= meeting.MeetingNumber%></b></h3>
             <br>
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -13,8 +13,8 @@
                 </div>
                 <div class="panel-body">
                     <table>
-                        <tr width="500px"><p><b>Client : </b> <%= meeting.ClientID.name %> </p></tr>
-                        <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.name %> </tr>
+                        <tr width="500px"><p><b>Client : </b> <%= meeting.GroupID.ProposalID.ClientID.Name %> </p></tr>
+                        <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.Name %> </tr>
                         <tr width="500px"><p><b>Team : </b> <%= meeting.GroupID.TeamName %> </tr>
                         <tr width="500px"><p><b>Date : </b> <%= meeting.Date %> </tr>
                         <tr width="500px"><p><b>Venue : </b> <%= meeting.Place %> </tr>
@@ -26,14 +26,13 @@
         <div class="blank-page widget-shadow scroll">
             <h3><b>Change Meeting Details</b></h3>
             <br>
-            <% if (meeting.TemporaryStaffID == meeting.StaffID) {%>
+            <% if (meeting.TemporaryStaffID == undefined) {%>
                 <div class="panel panel-success request-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">This meeting will be held on schedule.</h3>
                     </div>
                 </div>
-            <% } %>
-            <%else if (meetingModify.Status == "Approve"){%>
+            <% } else if (meetingModify.Status == "approved"){%>
                 <div class="panel panel-success request-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your last request has been approved</h3>
@@ -46,7 +45,7 @@
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Supervisor</th>
-                                <td style="padding: 0.5em;"><p><%= meeting.StaffID.name%> → <%= meetingModify.TemporaryStaffID.name%></p></td>
+                                <td style="padding: 0.5em;"><p><%= meeting.StaffID.Name%> → <%= meeting.TemporaryStaffID.Name%></p></td>
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Reason</th>
@@ -59,8 +58,7 @@
                         </table>
                     </div>
                 </div>
-            <% } %>
-            <%else {%>
+            <% } else {%>
                 <div class="panel panel-danger request-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your last request not been approved</h3>
@@ -73,7 +71,7 @@
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Supervisor</th>
-                                <td style="padding: 0.5em;"><p><%= meeting.StaffID.name%> → <%= meetingModify.TemporaryStaffID.name%></p></td>
+                                <td style="padding: 0.5em;"><p><%= meeting.StaffID.Name%> → <%= meeting.TemporaryStaffID.Name%></p></td>
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Reason</th>
@@ -91,18 +89,17 @@
                 <table style="width: 90%; margin: auto;">
                     <tr>
                         <th style = "width: 15%;">Change Date</th>
-                        <td style="padding: 0.5em;"><input type="datetime-local" style="width: 30%" value="2020-03-29T14:00"></td>
+                        <td style="padding: 0.5em;"><input type="datetime-local" style="width: 30%" value=nowtime></td>
                     </tr>
                     <tr>
                         <th style = "width: 15%;">Change Supervisor</th>
                         <td style="padding: 0.5em;">
                             <select class="form-control" style="width: 30%">
-                                <% for(var i=0;i<stafflist.size;i++) { %>
+                                <% for(var i=0;i<stafflist.length;i++) { %>
                                     <%if(stafflist[i].StaffID != meeting.TemporaryStaffID){%>
-                                        <option><%= stafflist[i].StaffID.name%></option>
-                                    <% } %>
-                                    <%else {%>
-                                        <option selected><%= stafflist[i].StaffID.name%></option>
+                                        <option><%= stafflist[i].Name%></option>
+                                    <% } else {%>
+                                        <option selected><%= stafflist[i].Name%></option>
                                     <% } %>
                                 <% } %>
                             </select>
