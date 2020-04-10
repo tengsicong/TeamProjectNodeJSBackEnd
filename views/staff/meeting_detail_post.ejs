@@ -33,9 +33,9 @@
                         <div class="col-sm-8">
                             <%for(var j=0;j<3;j++) { %>
                                 <% if(record.Present[i] == j) {%>
-                                    <div class="radio-inline" style="width: 25%"><label><input type="radio" checked=""> <%=j%></label></div>
+                                    <div class="radio-inline" style="width: 25%"><label><input type="radio" checked=""> <%=presents[j]%></label></div>
                                 <% } else {%>
-                                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> <%=j%></label></div>
+                                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> <%=presents[j]%></label></div>
                                 <% } %>
                             <% } %>
                         </div>
@@ -66,9 +66,9 @@
                 <div>
                     <%for(var j=0;j<7;j++) { %>
                         <% if(record.Change[j] == true) {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=j%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=changes[j]%></label></div>
                         <% } else {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=j%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=changes[j]%></label></div>
                         <% } %>
                         <% if(j == 6) {%>
                             <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.ChangeOther%> </textarea>
@@ -95,9 +95,9 @@
                 <div>
                     <%for(var j=0;j<4;j++) { %>
                         <% if(record.TeamProgress == j) {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=j%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=teamProgress[j]%></label></div>
                         <% } else {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=j%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=teamProgress[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -112,9 +112,9 @@
                 <div>
                     <%for(var j=0;j<3;j++) { %>
                         <% if(record.TimeSheets == j) {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=j%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=timeSheets[j]%></label></div>
                         <% } else {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=j%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=timeSheets[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -130,9 +130,9 @@
                 <div>
                     <%for(var j=0;j<3;j++) { %>
                         <% if(record.ClearPlan == j) {%>
-                            <div class="radio-inline" style="width: 100%"><label ><input type="radio" checked=""> <%=j%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label ><input type="radio" checked=""> <%=clearPlan[j]%></label></div>
                         <% } else {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=j%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=clearPlan[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -148,9 +148,9 @@
                 <div>
                     <%for(var j=0;j<3;j++) { %>
                         <% if(record.Dynamics == j) {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=j%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=dynamics[j]%></label></div>
                         <% } else {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=j%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=dynamics[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>

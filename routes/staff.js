@@ -142,14 +142,49 @@ router.get('/meeting_detail_post', function(req, res) {
                 const staff = result[1];
                 const meeting = result[0];
                 let nowtime = new Date();
-                //console.log(meeting.RecordID);
-                //console.log(meeting.GroupID.StudentID);
+                let presents = ['Presents','Absent','Late'];
+                let changes = [
+                    'Significant number of story cards added (most likely in early weeks)',
+                    'Significant changes to existing story cards (most likely in early weeks)',
+                    'Story cards merged or deleted',
+                    'Small number of story cards added',
+                    'Minor changes to existing story cards',
+                    'No changes to story cards',
+                    'Other',
+                ];
+                let teamProgress = [
+                    'Yes',
+                    'Exceeds expectations',
+                    'Slightly behind',
+                    'Significantly behind',
+                ]
+                let timeSheets = [
+                    'Yes',
+                    'Yes, except those who have not engaged (noted in records here AND recorded in minutes)',
+                    'No',
+                ]
+                let clearPlan = [
+                    'Yes',
+                    'Some plan, but not detailed enough',
+                    'No',
+                ]
+                let dynamics = [
+                    'Seem fine',
+                    'I have minor concerns',
+                    'I have major concerns (please email Emma too)',
+                ]
                 res.render('staff/meeting_detail_post',{
                     meeting : meeting,
                     pageTitle : 'Meeting Detail',
                     username: staff.Name,
                     record: meeting.RecordID,
                     nowtime : nowtime,
+                    presents: presents,
+                    changes: changes,
+                    teamProgress: teamProgress,
+                    timeSheets: timeSheets,
+                    clearPlan: clearPlan,
+                    dynamics: dynamics,
                 })
             })
     }
@@ -183,6 +218,32 @@ router.get('/my_timetable', function(req, res) {
         res.redirect('/role_select');
     }
 });
+
+router.post('/myproject/create_project',function(req,res,next){
+    const client = clientID;
+    const topic = req.body.topic;
+    const content = req.body.content;
+    nowDate = new Date();
+    let proposal = {
+        _id:mongoose.Types.ObjectId(),
+        ClientID: client,
+        Topic: topic,
+        Content: content,
+        Date:nowDate,
+        Status:'pending'
+    }
+    proposalModel.createProposal(proposal)
+    clientModel.updateClientProposalListByProposalID(client,proposal._id)
+        .then(function () {
+            res.redirect('/client/myproject')
+        })
+        .catch(next)
+})
+
+router.post('/marking', function (req,res,next) {
+    const staff=req.session.userinfo;
+
+})
 
 router.get('/marking', function(req, res) {
     if (req.session.role === 'staff') {
