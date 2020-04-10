@@ -125,7 +125,7 @@ router.get('/new_team', function (req, res) {
 
 /*submit*/
 router.post('/submit_newteam', function (req, res) {
-//     const selector1 = req.body.selector1;
+    // const selector1 = req.body.selector1;
 // let team = {
 //     _id:mongoose.Types.ObjectId(),
 //     selector1: selector1,
@@ -134,13 +134,13 @@ router.post('/submit_newteam', function (req, res) {
 //         .then(function () {
 //             res.redirect('/team_list')
 //         })
-    let selector1 = req.body.selector1;
-    let selector2 = req.body.selector2;
-    let selector3 = req.body.selector3;
+//     let selector1 = req.body.selector1;
+//     let selector2 = req.body.selector2;
+//     let selector3 = req.body.selector3;
+//
 
-
-    if (selector1 != 'None') {
-        selector1 = mongoose.Types.ObjectId(selector1);
+    // if (selector1 != 'None') {
+        const selector1 = mongoose.Types.ObjectId(selector1);
         Promise.all([
             teamModel.postTeam(TeamName, selector1),
         ])
@@ -148,13 +148,13 @@ router.post('/submit_newteam', function (req, res) {
                 res.redirect('/team_list')
 
             });
-    } else {
+    // } else {
         Promise.all([
         ])
             .then(function () {
                 res.redirect('/team_list')
             });
-    }
+    // }
     console.log('then')
     // res.redirect('/team_list')
 })
