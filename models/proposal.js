@@ -93,6 +93,10 @@ module.exports = {
         return proposal.update({_id:newproposal._id},{$set:{Topic:newproposal.Topic, Content:newproposal.Content, Date:newproposal.Date,Status:newproposal.Status}})
     },
 
+    adminEditProposal: function adminEditProposal (newproposal) {
+        return proposal.update({_id:newproposal._id},{$set:{Topic:newproposal.Topic, Content:newproposal.Content, Date:newproposal.Date}})
+    },
+
     /**
      * @param {objectID} proposalID
      * @return {[proposal]} proposal

@@ -292,4 +292,23 @@ router.get('/student_detail', function(req, res, next) {
         });
 });
 
+//edit project
+router.post('/edit_project',function (req,res,next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const topic = req.body.topic;
+    const content = req.body.content;
+    newDate = new Date();
+    let proposal = {
+        _id:proposalID,
+        Topic: topic,
+        Content: content,
+        Date:newDate,
+    }
+
+    proposalModel.adminEditProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_list')
+        })
+        .catch(next)
+})
 module.exports = router;
