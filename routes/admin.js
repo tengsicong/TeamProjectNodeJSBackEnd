@@ -226,29 +226,24 @@ router.get('/timetable', function (req, res) {
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
-        staffMeetingModel.getStaffMeetingByStaffID(staffID),
-        clientMeetingModel.getClientMeetingByClientID(clientID),
-        staffModel.getStaffByStaffID((staffID)),
-        clientModel.getClientByClientID(clientID),
+        staffModel.getAllStaff((staffID)),
         changeStaffMeetingRequestModel.getChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getChangeClientMeetingRequest(),
+        teamModel.getAllTeam(),
     ])
         .then(function (result) {
             const admin = result[0];
-            const staffMeetings = result[1];
-            const clientMeetings = result[2];
-            const staff = result[3];
-            const client = result[4];
-            const changeStaffMeetingRequest = result[5];
-            const changeClientMeetingRequest = result[6];
+            const allStaff = result[1];
+            const changeStaffMeetingRequest = result[2];
+            const changeClientMeetingRequest = result[3];
+            const allTeam = result[4];
+
 
             res.render('admin/timetable_change', {
                 pageTitle: 'Change Timetable',
                 admin: admin,
-                staffMeetings: staffMeetings,
-                clientMeetings: clientMeetings,
-                staff: staff,
-                client: client,
+                allStaff: allStaff,
+                allTeam: allTeam,
                 changeStaffMeetingRequest: changeStaffMeetingRequest,
                 changeClientMeetingRequest: changeClientMeetingRequest,
             });

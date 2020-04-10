@@ -54,6 +54,7 @@ module.exports = {
 
 };
 
+// client.findOneAndUpdate({_id:id},{$pull:{AllProposalID: {$in: proposalID}}})
 
 // //const mongoose = require('mongoose');
 // const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');

@@ -219,8 +219,10 @@ router.post('/edit_project',function(req,res,next){
 router.get('/delete_project',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     newDate = new Date();
-    proposalModel.deleteProposal(proposalID)
-    //clientModel.deleteProposalFromClientListByProposalID(clientID,proposalID)
+    Promise.all([
+        clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
+        proposalModel.deleteProposal(proposalID),
+    ])
     .then(function (result) {
             res.redirect('/client/myproject')
         })
