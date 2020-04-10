@@ -2,10 +2,7 @@ const mongo = require('../lib/mongo');
 const client = mongo.clients;
 const proposal = mongo.proposals;
 const mongoose = require('mongoose');
-
-
-
-
+const team = mongo.teams;
 
 
 module.exports = {
@@ -50,7 +47,12 @@ module.exports = {
      */
     deleteProposalFromClientListByProposalID: function deleteProposalFromClientListByProposalID(id,proposalID) {
         return client.update({_id:id},{$pull:{AllProposalID: {$in:proposalID}}})
-    }
+    },
+
+
+    updateClientGroupMark: function updateClientGroupMar(id,marks,reasons){
+        return team.update({_id:id},{$set:{ClientMark:marks, ClientMarkReason:reasons}});
+    },
 
 };
 

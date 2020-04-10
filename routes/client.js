@@ -8,7 +8,6 @@ const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
 const stageModel = require('../models/stage')
-
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
 const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
 
@@ -281,32 +280,19 @@ router.get('/myteam/teammark', function(req, res, next) {
         .catch(next);
 });
 
-router.post('myteam/teammark',function(req,res,next) {
-    const mark1 = req.body.mark1;
-    const mark1_reason = req.body.mark1_reason;
-    const mark2 = req.body.mark2;
-    const mark2_reason = req.body.mark2_reason;
-    const mark3 = req.body.mark1;
-    const mark3_reason = req.body.mark3_reason;
-    const mark4 = req.body.mark1;
-    const mark4_reason = req.body.mark4_reason;
-    const mark5 = req.body.mark1;
-    const mark5_reason = req.body.mark5_reason;
-    const mark6 = req.body.mark1;
-    const mark6_reason = req.body.mark6_reason;
-    const mark7 = req.body.mark7;
-    const mark7_reason = req.body.mark7_reason;
-    const mark8 = req.body.mark8;
-    const mark8_reason = req.body.mark8_reason;
-    // console.log('mark1: '+mark1+' reason1: '+mark1_reason);
-    // console.log('mark2: '+mark2+' reason2: '+mark2_reason);
-    // console.log('mark3: '+mark3+' reason3: '+mark3_reason);
-    // console.log('mark4: '+mark4+' reason4: '+mark4_reason);
-    // console.log('mark5: '+mark5+' reason5: '+mark5_reason);
-    // console.log('mark6: '+mark6+' reason6: '+mark6_reason);
-    // console.log('mark7: '+mark7+' reason7: '+mark7_reason);
-    // console.log('mark8: '+mark8+' reason8: '+mark8_reason);
-    res.redirect('client/myteam/teampage');
+router.post('/myteam/teammark',function(req,res,next) {
+    const teamid = mongoose.Types.ObjectId(req.query.id);
+    let marks = [];
+    let reasons = [];
+    for (let i=1;i<9;i++){
+        marks.push(eval('req.body.mark'+i))
+    }
+    for (let i=1;i<9;i++){
+        reasons.push(eval('req.body.mark'+i+'_reason'))
+    }
+    clientModel.updateClientGroupMark(teamid,marks,reasons).then(function () {
+        res.redirect('/client/myteam/teampage?id='+req.query.id);
+    })
 });
 
 

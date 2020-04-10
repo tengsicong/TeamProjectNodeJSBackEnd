@@ -18,7 +18,7 @@
         <br>
         <div class="panel panel-info">
             <!-- Default panel contents -->
-            <div class="panel-heading"><b>Project Overview</b></div>
+            <div class="panel-heading"><b style="margin-left: -0.8%">Project Overview</b></div>
             <div class="panel-body"><b>Topic: </b><%= team.ProposalID.Topic %>
                 <br>
             <b>Content: </b><%= team.ProposalID.Content.substring(0, 800) + '...' %></div>
@@ -27,11 +27,11 @@
     <br>
 
     <div class="blank-page widget-shadow scroll" id="client_team1_meeting_div">
-        <h2><b>Meeting List</b></h2>
+        <h2><b>Meeting</b></h2>
         <br>
         <div class="panel panel-info">
             <!-- Default panel contents -->
-            <div class="panel-heading"><b>Client Meeting</b></div>
+            <div class="panel-heading"><b style="margin-left: -0.8%">Meeting List</b></div>
             <!-- Table -->
             <table class="table">
                 <tr>
@@ -51,6 +51,7 @@
         </div>
     </div>
     <br>
+    <% if (team.ClientMark.length == 0) { %>
         <div class="blank-page widget-shadow scroll">
             <h3><b>Mark For This Team</b>
                 <a href="/client/myteam/teammark?id=<%= team._id %>">
@@ -60,6 +61,74 @@
                 </a>
             </h3>
         </div>
+    <% } else { %>
+    <div class="blank-page widget-shadow scroll" id="client_team1_meeting_div">
+            <h2><b>Team Mark</b><a href="/client/myteam/teammark?id=<%= team._id %>">
+                    <button class="btn btn-primary" style="float:right" type="button">Edit
+                    </button>
+                </a></h2>
+        <br>
+        <div class="panel panel-info">
+            <!-- Default panel contents -->
+            <div class="panel-heading" ><b style="margin-left: -0.8%">Marks</b></div>
+
+            <!-- Table -->
+            <table class="table">
+                <tr>
+                    <th width="20%">Description</th>
+                    <th width="20%">Detail</th>
+                    <th width="50%">Reason</th>
+                    <th width="10%">Mark</th>
+                </tr>
+                <tr>
+                    <td rowspan=>Documentation (15)</td>
+                    <td>Appropriate form of documentation</td>
+                    <td><%= team.ClientMarkReason[0] %></td>
+                    <td><%= team.ClientMark[0] + " / 15" %></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Team performance (10)</td>
+                    <td>Final demonstration</td>
+                    <td><%= team.ClientMarkReason[1] %></td>
+                    <td><%= team.ClientMark[1] + " / 5" %></td>
+                </tr>
+                <tr>
+                    <td>Communication</td>
+                    <td><%= team.ClientMarkReason[2] %></td>
+                    <td><%= team.ClientMark[2] + " / 5" %></td>
+                </tr>
+                <tr>
+                    <td rowspan="4">System delivered (20)</td>
+                    <td>Ease of use</td>
+                    <td><%= team.ClientMarkReason[3] %></td>
+                    <td><%= team.ClientMark[3] + " / 5" %></td>
+                </tr>
+                <tr>
+                    <td>Completeness</td>
+                    <td><%= team.ClientMarkReason[4] %></td>
+                    <td><%= team.ClientMark[4] + " / 5" %></td>
+                </tr>
+                <tr>
+                    <td>Innovation</td>
+                    <td><%= team.ClientMarkReason[5] %></td>
+                    <td><%= team.ClientMark[5] + " / 5" %></td>
+                </tr>
+                <tr>
+                    <td>Robustness</td>
+                    <td><%= team.ClientMarkReason[6] %></td>
+                    <td><%= team.ClientMark[6] + " / 5" %></td>
+                </tr>
+                <tr>
+                    <td>Happiness (5)</td>
+                    <td>Overall impression of the system</td>
+                    <td><%= team.ClientMarkReason[7] %></td>
+                    <td><%= team.ClientMark[7] + " / 5" %></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <% } %>
+
 </div>
 
 <%- include('footer') %>
