@@ -375,6 +375,54 @@ router.get('/approved_pending',function (req,res,next) {
         })
         .catch(next)
 })
+
+router.post('/project_pending',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const comment = req.body.comment;
+    replyDate = new Date();
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            console.log(result[1])
+            let reply = result[1].Reply;
+            reply.push({
+                Author:result[0].Name,
+                Comment:comment,
+                ReplyDate:replyDate,
+            });
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/admin/project_pending?id='+req.query.id)
+            })
+        })
+        .catch(next)
+})
+
+router.post('/project_rejected',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const comment = req.body.comment;
+    replyDate = new Date();
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            console.log(result[1])
+            let reply = result[1].Reply;
+            reply.push({
+                Author:result[0].Name,
+                Comment:comment,
+                ReplyDate:replyDate,
+            });
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/admin/project_rejected?id='+req.query.id)
+            })
+        })
+        .catch(next)
+})
 //delete team
 router.get('/delete_team',function(req,res,next){
     const groupID = mongoose.Types.ObjectId(req.query.id);
