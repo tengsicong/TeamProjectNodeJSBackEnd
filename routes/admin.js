@@ -311,4 +311,84 @@ router.post('/edit_project',function (req,res,next) {
         })
         .catch(next)
 })
+
+router.get('/pending_approved',function (req,res,next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id:proposalID,
+        Date:newDate,
+        Status:'approved'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_approved?id='+req.query.id)
+        })
+        .catch(next)
+})
+
+router.get('/pending_rejected',function (req,res,next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id:proposalID,
+        Date:newDate,
+        Status:'rejected'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_rejected?id='+req.query.id)
+        })
+        .catch(next)
+})
+
+router.get('/rejected_pending',function (req,res,next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id:proposalID,
+        Date:newDate,
+        Status:'pending'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_pending?id='+req.query.id)
+        })
+        .catch(next)
+})
+
+router.get('/approved_pending',function (req,res,next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id:proposalID,
+        Date:newDate,
+        Status:'pending'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_pending?id='+req.query.id)
+        })
+        .catch(next)
+})
+//delete team
+router.get('/delete_team',function(req,res,next){
+    const groupID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        proposalModel.getProposalBygroupID(groupID),
+        ])
+
+    newDate = new Date();
+    proposalModel.deleteTeam(groupID)
+    teamModel.deleteProposalIDByProposalID(groupID,proposalID)
+        .then(function (result) {
+            res.redirect('/admin/project_list')
+        })
+        .catch(next)
+})
+
 module.exports = router;

@@ -25,8 +25,10 @@
                         <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
                     </a>                    </td>
                 <td>
+                    <a href="/admin/approved_pending?id=<%=proposal._id%>">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
                     </button>
+                    </a>
                 </td>
             </tr>
         </table>
@@ -126,7 +128,8 @@
                         <table width="100%">
                             <tr>
                                 <td width="40%"><p><b>Supervisor:</b><%= ' ' + team.StaffID.Name %></p></td>
-                                <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td>
+                                <a href="/admin/delete_team?id=<%=team._id%>">
+                                    <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td></a>
                             </tr>
                             <td width="20em"><p><b>Student:</b>
                                     <%= team.StudentID[0].Name %>

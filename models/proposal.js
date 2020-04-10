@@ -77,6 +77,14 @@ module.exports = {
 
     },
 
+    getProposalByGroupID: function getProposalByGroupID(id) {
+        return proposal
+            .find({GroupID: id})
+            .populate('StudentID')
+            .exec()
+
+    },
+
     /**
      * @param {object} proposal : proposal object.
      * @return {[proposal]} proposal
@@ -95,6 +103,10 @@ module.exports = {
 
     adminEditProposal: function adminEditProposal (newproposal) {
         return proposal.update({_id:newproposal._id},{$set:{Topic:newproposal.Topic, Content:newproposal.Content, Date:newproposal.Date}})
+    },
+
+    adminEditPendingStatusProposal: function adminEditPendingStatusProposal (newproposal) {
+        return proposal.update({_id:newproposal._id},{$set:{Date:newproposal.Date,Status:newproposal.Status}})
     },
 
     /**
