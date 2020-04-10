@@ -1,6 +1,6 @@
 const mongo = require('../lib/mongo');
 const student = mongo.students;
-const team = mongo.teams;
+const mongoose = require('mongoose');
 
 module.exports = {
 
@@ -54,3 +54,8 @@ module.exports = {
 
 
 };
+
+const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
+student
+    .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}}).then(console.log)
+

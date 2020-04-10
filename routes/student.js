@@ -8,6 +8,8 @@ const stageModel = require('../models/stage');
 const mongoose = require('mongoose');
 const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
 
+
+
 router.get('/homepage', function(req, res) {
     Promise.all([
         studentModel.getStudentByStudentID(studentID),
@@ -201,24 +203,23 @@ router.get('/my_mark', function(req, res) {
 });
 
 router.post('/set_people_preference', function (req, res) {
-    // console.log('enter');
     let person1 = req.body.person1;
     let person2 = req.body.person2;
     let person3 = req.body.person3;
-    // console.log(('mid'))
-    // console.log(person1);
-    // console.log(person2);
-    // console.log(person3);
-    // console.log('end')
     if (person1 != 'None1') {
         person1 = mongoose.Types.ObjectId(person1);
         Promise.all([
             studentModel.postPeopleLikeByStudentID(studentID, person1),
         ]).then();
-    } else {
+    }
+    else {
+        console.log('enter')
         Promise.all([
             studentModel.deletePeopleLikeByStudentID((studentID)),
         ]).then();
+    }
+    if (person2 != 'None2' | person3 != 'None3') {
+        console.log('enter')
     }
     console.log('then')
 });
