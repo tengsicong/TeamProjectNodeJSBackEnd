@@ -298,6 +298,8 @@ router.get('/mytimetable', function(req, res,next) {
         .catch(next);
 });
 
+
+/*发送更改会议请求*/
 router.post('/mytimetable', function(req, res,next) {
     const select =req.body.selection;
     const number = select.substr(select.length-1,1);
