@@ -5,7 +5,7 @@
     <div class="main-page">
         <h2 class="title1">Meeting Details</h2>
         <div class="blank-page widget-shadow scroll">
-            <h3><b><%= meeting.number%></b></h3>
+            <h3><b>Meeting <%= meeting.MeetingNumber%></b></h3>
             <br>
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -13,8 +13,8 @@
                 </div>
                 <div class="panel-body">
                     <table>
-                        <tr width="500px"><p><b>Client : </b> <%= meeting.ClientID.name %> </p></tr>
-                        <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.name %> </tr>
+                        <tr width="500px"><p><b>Client : </b> <%= meeting.GroupID.ProposalID.ClientID.Name %> </p></tr>
+                        <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.Name %> </tr>
                         <tr width="500px"><p><b>Team : </b> <%= meeting.GroupID.TeamName %> </tr>
                         <tr width="500px"><p><b>Date : </b> <%= meeting.Date %> </tr>
                         <tr width="500px"><p><b>Venue : </b> <%= meeting.Place %> </tr>
@@ -26,66 +26,35 @@
         <h2 class="title1">Meeting Record</h2>
         <div class="blank-page widget-shadow scroll">
             <h3>Presents of Students</h3><br>
-            <div class="form-group">
-                <label for="radio" class="col-sm-2 control-label">Member 1</label>
-                <div class="col-sm-8">
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Presents</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Absence</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Late</label></div>
-                </div>
-            </div><br>
-            <div class="form-group">
-                <label for="radio" class="col-sm-2 control-label">Member 2</label>
-                <div class="col-sm-8">
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Presents</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Absence</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Late</label></div>
-                </div>
-            </div><br>
-            <div class="form-group">
-                <label for="radio" class="col-sm-2 control-label">Member 3</label>
-                <div class="col-sm-8">
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Presents</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Absence</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Late</label></div>
-                </div>
-            </div><br>
-            <div class="form-group">
-                <label for="radio" class="col-sm-2 control-label">Member 4</label>
-                <div class="col-sm-8">
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Presents</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Absence</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Late</label></div>
-                </div>
-            </div><br>
-            <div class="form-group">
-                <label for="radio" class="col-sm-2 control-label">Member 5</label>
-                <div class="col-sm-8">
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Presents</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Absence</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Late</label></div>
-                </div>
-            </div><br>
-            <div class="form-group">
-                <label for="radio" class="col-sm-2 control-label">Member 6</label>
-                <div class="col-sm-8">
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Presents</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Absence</label></div>
-                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> Late</label></div>
-                </div>
-            </div><br>
+            <div>
+                <% for(var i=0;i<meeting.GroupID.StudentID.length;i++) {%>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><%= meeting.GroupID.StudentID[i].Name%></label>
+                        <div class="col-sm-8">
+                            <%for(var j=0;j<3;j++) { %>
+                                <% if(record.Present[i] == j) {%>
+                                    <div class="radio-inline" style="width: 25%"><label><input type="radio" checked=""> <%=presents[j]%></label></div>
+                                <% } else {%>
+                                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> <%=presents[j]%></label></div>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                <div class="clearfix"></div>
+                <% } %>
+            </div>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
             <h3>Briefly note what team activities (other than scheduled classes) have taken place since the last facilitator's meeting.
                 If anyone was absent from those activities, note it (and the reason for absence, if known).</h3><br>
-            <input type="text" class="form-control"  placeholder="Notes" style="width: 100%"><br>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your answer"> <%=record.LastMeetingNote%> </textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
             <h3>Did the team achieve their plans for the week? If not, why not? </h3>
             <p>(e.g. Illness, unexpected technical difficulties, team member(s) not engaging, client's requirements changed, ...)</p><br>
-            <input type="text" class="form-control" placeholder="Notes" style="width: 100%"><br>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.AchievePlan%> </textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
@@ -95,15 +64,17 @@
             <div class="clearfix"></div>
             <div>
                 <div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> Significant number of story cards added (most likely in early weeks)</label></div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> Significant changes to existing story cards (most likely in early weeks)</label></div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> Story cards merged or deleted</label></div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> Small number of story cards added</label></div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> Minor changes to existing story cards</label></div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> No changes to story cards</label></div>
-                    <div class="checkbox-inline1"><label><input type="checkbox"> Other: </label>
-                        <input type="text" class="form-control" placeholder="Notes" style="width: 90%;margin-left: 2%"><br>
-                    </div>
+                    <%for(var j=0;j<7;j++) { %>
+                        <% if(record.Change[j] == true) {%>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=changes[j]%></label></div>
+                        <% } else {%>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=changes[j]%></label></div>
+                        <% } %>
+                        <% if(j == 6) {%>
+                            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.ChangeOther%> </textarea>
+                        <% } %>
+                        <div class="clearfix"></div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -114,7 +85,7 @@
                 They may well think that they are at 70% in week 2 but 60% in week 3 despite having captured more requirements.
                 Expect this to be a very rough estimate in the first meeting, unless you are seeing them before they see their client,
                 in which case they can legitimately answer "0".</p><br>
-            <input type="text" class="form-control" placeholder="Notes" style="width: 100%"><br>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.RequirementCapture%> </textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
@@ -122,10 +93,14 @@
             <p>You will be advised each week what progress is expected. Note any concerns in the "Any other notes" section below</p><br>
             <div class="form-group">
                 <div>
-                    <div class="radio block"><label><input type="radio"> Yes</label></div>
-                    <div class="radio block"><label><input type="radio"> Exceeds expectations</label></div>
-                    <div class="radio block"><label><input type="radio"> Slightly behind</label></div>
-                    <div class="radio block"><label><input type="radio"> Significantly behind</label></div>
+                    <%for(var j=0;j<4;j++) { %>
+                        <% if(record.TeamProgress == j) {%>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=teamProgress[j]%></label></div>
+                        <% } else {%>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=teamProgress[j]%></label></div>
+                        <% } %>
+                        <div class="clearfix"></div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -135,9 +110,14 @@
             <p>All team members should be completing time sheets on epiManage.</p><br>
             <div class="form-group">
                 <div>
-                    <div class="radio block"><label><input type="radio"> Yes</label></div>
-                    <div class="radio block"><label><input type="radio"> Yes, except those who have not engaged (noted in records here AND recorded in minutes)</label></div>
-                    <div class="radio block"><label><input type="radio"> No</label></div>
+                    <%for(var j=0;j<3;j++) { %>
+                        <% if(record.TimeSheets == j) {%>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=timeSheets[j]%></label></div>
+                        <% } else {%>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=timeSheets[j]%></label></div>
+                        <% } %>
+                        <div class="clearfix"></div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -148,9 +128,14 @@
                 If not, remind the team that they are expected to have at least one formal meeting, which should be minuted, every week.</p><br>
             <div class="form-group">
                 <div>
-                    <div class="radio block"><label><input type="radio"> Yes</label></div>
-                    <div class="radio block"><label><input type="radio"> Some plan, but not detailed enough</label></div>
-                    <div class="radio block"><label><input type="radio"> No</label></div>
+                    <%for(var j=0;j<3;j++) { %>
+                        <% if(record.ClearPlan == j) {%>
+                            <div class="radio-inline" style="width: 100%"><label ><input type="radio" checked=""> <%=clearPlan[j]%></label></div>
+                        <% } else {%>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=clearPlan[j]%></label></div>
+                        <% } %>
+                        <div class="clearfix"></div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -161,16 +146,21 @@
                 If not, remind the team that they are expected to have at least one formal meeting, which should be minuted, every week.</p><br>
             <div class="form-group">
                 <div>
-                    <div class="radio block"><label><input type="radio"> Seem fine</label></div>
-                    <div class="radio block"><label><input type="radio"> I have minor concerns</label></div>
-                    <div class="radio block"><label><input type="radio"> I have major concerns (please email Emma too)</label></div>
+                    <%for(var j=0;j<3;j++) { %>
+                        <% if(record.Dynamics == j) {%>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=dynamics[j]%></label></div>
+                        <% } else {%>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=dynamics[j]%></label></div>
+                        <% } %>
+                        <div class="clearfix"></div>
+                    <% } %>
                 </div>
             </div>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
             <h3>Any other notes</h3><br>
-            <input type="text" class="form-control"  placeholder="Notes" style="width: 100%"><br>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.AnyOtherNotes%> </textarea>
             <button type="submit" class="btn btn-default" style="margin-left: 90%">Submit</button>
         </div>
     </div>

@@ -2,6 +2,9 @@ const mongo = require('../lib/mongo');
 const staff = mongo.staffs;
 const proposal = mongo.proposals;
 const team = mongo.teams;
+const meeting = mongo.staff_meetings
+const request = mongo.change_staff_meeting_requests
+const meetingrecord = mongo.staff_meeting_records
 
 // console.log('start')
 // staff
@@ -35,7 +38,31 @@ module.exports = {
 
     /**
      * @param {ObjectId} id
-     * @return {project} a project
+     * @return {meeting} a meeting
+     */
+    getStaffMeetingByMeetingID: function getStaffMeetingByMeetingID (id) {
+        return meeting
+            .findById(id)
+            .populate('TemporaryStaffID')
+            .populate('StaffID')
+            .populate({path:'GroupID', populate:{path: 'StudentID'}})
+            .populate({path:'GroupID', populate:{path: 'ProposalID', populate: {path:'ClientID'}}})
+            .populate('RecordID')
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
+     * @return {meetingmodify} a meeting changing request
+     */
+    getStaffMeetingChangeRequestByMeetingID: function getStaffMeetingChangeRequestByMeetingID (id) {
+        return request
+            .findOne({MeetingID: id})
+            .exec();
+    },
+    /**
+     * @param {ObjectId} id
+     * @return {staffs} a project
      */
     getStaffByStaffID: function getProjectByStaffID(id) {
         return staff
@@ -59,6 +86,18 @@ module.exports = {
     getAllStaff: function getAllStaff() {
         return staff
             .find()
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
+     * @return {[meeting]} staff object
+     */
+
+    getAllMeetingByStaffID: function getAllMeetingByStaffIDf(id) {
+        return meeting
+            .find({StaffID: id})
+            .populate('GroupID')
             .exec();
     },
 

@@ -48,96 +48,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_post.html" style="cursor: pointer">
-                                    <td>1</td>
-                                    <td>xx/xx/xxxx</td>
-                                    <td>Done</td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td>1</td>
-                                    <td>xx/xx/xxxx</td>
-                                    <td>Coming</td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td>2</td>
-                                    <td>xx/xx/xxxx</td>
-                                    <td>Coming</td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td>3</td>
-                                    <td>xx/xx/xxxx</td>
-                                    <td>Coming</td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                <tr class="clickable-row" data-href="meeting_detail_pre.html" style="cursor: pointer">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                    <% for(var i=0;i<meetingList.length;i++) { %>
+                                        <%if(meetingList[i].Date<nowtime) { %>
+                                            <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
+                                                <th><%= meetingList[i].MeetingNumber%></th>
+                                                <td><%= meetingList[i].GroupID.TeamName%></td>
+                                                <td><%= meetingList[i].Date%></td>
+                                                <td>Done</td>
+                                            </tr>
+                                        <%} else { %>
+                                            <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
+                                                <th><%= meetingList[i].MeetingNumber%></th>
+                                                <td><%= meetingList[i].GroupID.TeamName%></td>
+                                                <td><%= meetingList[i].Date%></td>
+                                                <td>Upcoming</td>
+                                            </tr>
+                                        <% } %>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>
@@ -152,12 +79,9 @@
                             <div class="form-group" style="align-items: center">
                                 <select class="form-control" style="width: 60%">
                                     <option>-</option>
-                                    <option>Staff Meeting 1</option>
-                                    <option>Staff Meeting 2</option>
-                                    <option>Staff Meeting 3</option>
-                                    <option>Staff Meeting 4</option>
-                                    <option>Staff Meeting 5</option>
-                                    <option>Staff Meeting 6</option>
+                                    <%for(var i=0;i<meetingList.length;i++) {%>
+                                        <option>Team <%=meetingList[i].GroupID.TeamName%> Meeting <%=meetingList[i].MeetingNumber%></option>
+                                    <% } %>
                                 </select>
                             </div>
                             <div>Change time to:</div>
@@ -167,13 +91,10 @@
                             <div>Change Supervisor:</div>
                             <div class="form-group" style="align-items: center">
                                 <select class="form-control" style="width: 60%">
-                                    <option>-</option>
-                                    <option>Supervisor 1</option>
-                                    <option>Supervisor 2</option>
-                                    <option>Supervisor 3</option>
-                                    <option>Supervisor 4</option>
-                                    <option>Supervisor 5</option>
-                                    <option>Supervisor 6</option>
+                                    <option selected>-</option>
+                                    <%for(var i=0;i<staffList.length;i++) {%>
+                                        <option><%=staffList[i].Name%></option>
+                                    <% } %>
                                 </select>
                             </div>
                             <textarea name="t1" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
