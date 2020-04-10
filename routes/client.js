@@ -108,7 +108,7 @@ router.get('/myproject/project_pending', function(req, res, next) {
 });
 
 
-/*添加评论，未实现，不能写入*/
+/*添加评论*/
 router.post('/myproject/project_pending',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const comment = req.body.comment;
@@ -118,20 +118,22 @@ router.post('/myproject/project_pending',function(req,res,next){
     proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
+            console.log(result[1])
             let reply = result[1].Reply;
             reply.push({
                 Author:result[0].Name,
                 Comment:comment,
                 ReplyDate:replyDate,
             });
-            console.log(reply)
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                res.redirect('/client/project_pending?id='+req.query.id)
+                res.redirect('/client/myproject/project_pending?id='+req.query.id)
             })
         })
         .catch(next)
 })
+
+
 
 router.get('/myproject/project_rejected', function(req, res, next) {
     //console.log(req.query.id);
@@ -150,6 +152,31 @@ router.get('/myproject/project_rejected', function(req, res, next) {
         })
         .catch(next);
 });
+
+/*添加评论*/
+router.post('/myproject/project_rejected',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const comment = req.body.comment;
+    replyDate = new Date();
+    Promise.all([
+        clientModel.getClientByProposalID(proposalID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            console.log(result[1])
+            let reply = result[1].Reply;
+            reply.push({
+                Author:result[0].Name,
+                Comment:comment,
+                ReplyDate:replyDate,
+            });
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/client/myproject/project_rejected?id='+req.query.id)
+            })
+        })
+        .catch(next)
+})
 
 
 router.get('/edit_project', function(req, res,next) {
@@ -260,7 +287,6 @@ router.get('/mytimetable', function(req, res,next) {
         changeClientMeetingRequestModel.getChangeClientMeetingRequestByClientID(clientID),
     ])
         .then(function(result) {
-            console.log(result[2])
             const changeClientMeetingRequest = result[2];
             res.render('client/my_timetable', {
                 meetings: result[1],
@@ -271,6 +297,34 @@ router.get('/mytimetable', function(req, res,next) {
         })
         .catch(next);
 });
+
+router.post('/mytimetable', function(req, res,next) {
+    const select =req.body.selection;
+    const number = select.substr(select.length-1,1);
+    const meetingnumber = number-1;
+    const reason =req.body.reason;
+    const time = req.body.time;
+    nowDate = new Date();
+    Promise.all([
+        clientModel.getClientByClientID(clientID),
+        clientMeetingModel.getClientMeetingByClientID(clientID),
+    ])
+        .then(function (result) {
+            const meetings = result[1];
+            let request = {
+                MeetingID: meetings[meetingnumber]._id,
+                ClientID: clientID,
+                Status:'pending',
+                NewMeetingTime:time,
+                RequestComment:{
+                    RequestName:result[0].Name,
+                    Date:nowDate,
+                    Content:reason
+                }}
+            changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
+            res.redirect('/client/mytimetable')
+            });
+        });
 
 
 

@@ -23,4 +23,10 @@ module.exports = {
             .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
             .exec()
     },
+
+
+    createChangeClientMeetingRequest :function createChangeClientMeetingRequest(request) {
+        return changeclientmeetingrequest.create(request)
+
+    }
 };

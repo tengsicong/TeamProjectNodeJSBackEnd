@@ -66,21 +66,21 @@
                 <div class="blank-page widget-shadow scroll" style="margin-left: 2%;">
                     <h2><b>Change Timetable</b></h2>
                     <div class="form-body">
-                        <form style="padding-left: 30%">
+                        <form style="padding-left: 30%" method="post">
                             <div>Meeting Number:</div>
                             <div class="form-group" style="align-items: center">
-                                <select class="form-control" style="width: 60%">
+                                <select class="form-control" style="width: 60%" name="selection">
                                     <option>-</option>
                                     <%for(let i=0;i<meetings.length;i++){%>
-                                    <option id="<%meetings[i]._id%>">Client Meeting <%=i+1%></option>
+                                    <option name="option" id="<%meetings[i]._id%>">Client Meeting <%=i+1%></option>
                                     <%}%>
                                 </select>
                             </div>
                             <div>Change time to:</div>
                             <div class="form-group" style="align-items: center">
-                                <input type="datetime-local" name="client_changetime" style="width: 60%">
+                                <input type="datetime-local" name="time" style="width: 60%">
                             </div>
-                            <textarea name="t1" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                            <textarea name="reason" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                             <div>
                                 <button class="btn btn-primary" style="margin-left: 20%">Submit</button>
                             </div>
@@ -114,7 +114,7 @@
                                                         <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name%></td>
                                                         <td>client meeting <%= i + 1 %></td>
                                                         <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                                        <td>change time to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                        <td>change time to <%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                         <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
                                                         <td><%=changeClientMeetingRequest[i].Status%></td>
                                                     </tr>
