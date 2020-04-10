@@ -7,13 +7,13 @@
         <h2 style="text-align: center"><b>Marking - SSIT Team <%=team.TeamName%></b></h2>
         <div class="row">
             <br>
-            <form class="form-horizontal">
+            <form class="form-horizontal" method="post">
                 <div class="form-group">
                     <label for="selector1" class="col-sm-2 control-label">Documentation</label>
                     <div class="col-sm-8">
                         <p>Must determine the apprioprite form of documentation with client.This could be a seprate user manual. or online help system, or multiple different forms.</p>
                         <br>
-                        <select name="selector1" id="selector1" class="form-control-project">
+                        <select name="mark1" id="selector1" class="form-control-project">
                             <option> - </option>
                             <option>3 - very poor documentation</option>
                             <option>6 - few documentation</option>
@@ -22,7 +22,7 @@
                             <option>15 - very good documentation</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark1_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
@@ -31,7 +31,7 @@
                     <div class="col-sm-8">
                         <p>Please mark based on the final demonstration.</p>
                         <br>
-                        <select name="selector1" id="selector2" class="form-control-project">
+                        <select name="mark2" id="selector2" class="form-control-project">
                             <option> - </option>
                             <option>1 - very poor demonstration</option>
                             <option>2 - incomplete demonstration</option>
@@ -40,7 +40,7 @@
                             <option>5 - very good demonstration</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark2_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
@@ -49,7 +49,7 @@
                     <div class="col-sm-8">
                         <p>Please mark based on the communication of you and your team throughout semester.</p>
                         <br>
-                        <select name="selector1" id="selector3" class="form-control-project">
+                        <select name="mark3" id="selector3" class="form-control-project">
                             <option> - </option>
                             <option>1 - poor communication</option>
                             <option>2 - few communication</option>
@@ -58,7 +58,7 @@
                             <option>5 - frequent and effective communication</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark3_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
@@ -67,7 +67,7 @@
                     <div class="col-sm-8">
                         <p>Please mark based on the system delivered of understandability.</p>
                         <br>
-                        <select name="selector1" id="selector4" class="form-control-project">
+                        <select name="mark4" id="selector4" class="form-control-project">
                             <option> - </option>
                             <option>1 - can not understand</option>
                             <option>2 - can not understand completely</option>
@@ -76,7 +76,7 @@
                             <option>5 - easy and clear to understand</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark4_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
@@ -85,7 +85,7 @@
                     <div class="col-sm-8">
                         <p>Please mark based on the system delivered of completeness.</p>
                         <br>
-                        <select name="selector1" id="selector5" class="form-control-project">
+                        <select name="mark5" id="selector5" class="form-control-project">
                             <option> - </option>
                             <option>1 - nearly not complete</option>
                             <option>2 - half complete</option>
@@ -94,7 +94,7 @@
                             <option>5 - good complete</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark5_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
@@ -103,7 +103,7 @@
                     <div class="col-sm-8">
                         <p>Please mark based on the system delivered of innovation.</p>
                         <br>
-                        <select name="selector1" id="selector6" class="form-control-project">
+                        <select name="mark6" id="selector6" class="form-control-project">
                             <option> - </option>
                             <option>1 - no innovation</option>
                             <option>2 - few innovation</option>
@@ -112,7 +112,7 @@
                             <option>5 - very innovative</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark6_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
@@ -121,7 +121,7 @@
                 <div class="col-sm-8">
                     <p>Please mark based on the system delivered of robustness.</p>
                     <br>
-                    <select name="selector1" id="selector6" class="form-control-project">
+                    <select name="mark7" id="selector6" class="form-control-project">
                         <option> - </option>
                         <option>1 - no robustness</option>
                         <option>2 - a little robustness</option>
@@ -130,7 +130,7 @@
                         <option>5 - very robust</option>
                     </select>
                     <p>&nbsp</p>
-                    <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                    <textarea name="mark7_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                 </div>
                 </div>
                 <br>
@@ -139,7 +139,7 @@
                     <div class="col-sm-8">
                         <p>Please mark based on the overall impression of the system.</p>
                         <br>
-                        <select name="selector1" id="selector6" class="form-control-project">
+                        <select name="mark8" id="selector6" class="form-control-project">
                             <option> - </option>
                             <option>1 - dissatisfied</option>
                             <option>2 - few satisfied</option>
@@ -148,14 +148,15 @@
                             <option>5 - very satisfied</option>
                         </select>
                         <p>&nbsp</p>
-                        <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea name="mark8_reason" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
                     </div>
                 </div>
                 <br>
+                <div style="text-align: center">
+                    <input type="submit" class="btn btn-primary" value=" SUBMIT">
+                </div>
             </form>
-            <div style="text-align: center">
-                <button onclick="window.location='/client/myteam/team_1'" type="button" class="btn btn-primary">SUBMIT</button>
-            </div>
+
         </div>
     </div>
 </div>

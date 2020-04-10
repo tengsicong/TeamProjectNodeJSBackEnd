@@ -14,28 +14,24 @@ const changeClientMeetingRequestModel = require('../models/changeclientmeetingre
 
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
-const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
+// const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
+const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-
 const Temp = '5e7b6f794f4ed29e60233aa2';
-// clientMeetingModel.getClientMeetingByClientID(clientID).then(function(result) {
-//     console.log(result[0]);
-// });
-// studentModel.getAllStudent().then(function (result) {
-//     console.log('----\n'+result[0])
-//
-// });
+// teamModel.getAllTeam().then(function (result) {
+//     console.log(result[0])
+// })
 // changeStaffMeetingRequestModel.getChangeStaffMeetingRequest().then(function (result) {
-//     console.log(result)
+//     console.log(result[0])
+// });
+// changeClientMeetingRequestModel.getChangeClientMeetingRequest().then(function (result) {
+//     console.log(result[0])
 // })
 //
 
-
-
 /* GET edit team page. */
 router.get('/edit_team', function (req, res) {
-
+    const Tid = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
         teamModel.getTeamByTeamID(Tid),
@@ -48,7 +44,6 @@ router.get('/edit_team', function (req, res) {
             const team = result[1];
             const allProposal = result[2];
             const allStaff = result[3];
-            // console.log(allStaff);
             const allStudent = result [4];
             res.render('admin/edit_team', {
                 pageTitle: 'Edit Team',
@@ -60,10 +55,24 @@ router.get('/edit_team', function (req, res) {
             });
         });
 });
+// router.post('/editTeam',function (req,res,next) {
+//     const groupID = mongoose.Types.ObjectId(req.query.id);
+//
+//     let team = {
+//         _id:groupID,
+//
+//     }
+//
+//     teamModel.editTeam(team)
+//         .then(function () {
+//             res.redirect('/admin/team_list')
+//         })
+//         .catch(next)
+// });
 /* GET new team page. */
 router.get('/new_team', function (req, res) {
-    // const teamID = req.params.TeamId;
-    // console.log(teamID);
+    const Tid = mongoose.Types.ObjectId(req.query.id);
+
     Promise.all([
         adminModel.getAdminByID(adminID),
         teamModel.getTeamByTeamID(Tid),
@@ -84,6 +93,7 @@ router.get('/new_team', function (req, res) {
                 pageTitle: 'New Team',
                 admin: admin,
                 team: team,
+
                 allTeam: allTeam,
                 allProposal: allProposal,
                 allStaff: allStaff,
@@ -91,6 +101,65 @@ router.get('/new_team', function (req, res) {
             });
         });
 });
+/*Create a new team*/
+//
+// router.post('/new_team', function (req, res, next) {
+//     const teamName = req.body.TeamName;
+//     const staffName = req.body.Name;
+//     const student = req.body.StudentID;
+//     // const studentUserName = req.body.UserName;
+//     let team = {
+//         _id: mongoose.Types.ObjectId(),
+//         TeamName: teamName,
+//         StaffName: staffName,
+//         StudentID: student,
+//     }
+//     adminModel.getAdminByID(adminID),
+//     teamModel.createTeam(),
+//     proposalModel.getAllProposals(),
+//     staffModel.getAllStaff(),
+//     studentModel.getAllStudent(),
+//     teamModel.getAllTeam(),
+//     teamModel.createTeam()
+// })
+
+/*submit*/
+router.post('/submit_newteam', function (req, res) {
+    // const selector1 = req.body.selector1;
+// let team = {
+//     _id:mongoose.Types.ObjectId(),
+//     selector1: selector1,
+// }
+//     teamModel.createTeam(team)
+//         .then(function () {
+//             res.redirect('/team_list')
+//         })
+//     let selector1 = req.body.selector1;
+//     let selector2 = req.body.selector2;
+//     let selector3 = req.body.selector3;
+//
+
+    // if (selector1 != 'None') {
+        const selector1 = mongoose.Types.ObjectId(selector1);
+        Promise.all([
+            teamModel.postTeam(TeamName, selector1),
+        ])
+            .then(function () {
+                res.redirect('/team_list')
+
+            });
+    // } else {
+    //     Promise.all([
+    //     //     ])
+    //     //         .then(function () {
+    //     //             res.redirect('/team_list')
+    //     //         });
+    // }
+    // console.log('then')
+    // res.redirect('/team_list')
+})
+
+
 router.get('/team_list', function (req, res) {
 
     Promise.all([
@@ -130,12 +199,26 @@ router.get('/student_list', function (req, res) {
 router.get('/timetable', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
+        staffMeetingModel.getAllStaffMeetings(),
+        staffModel.getStaffByStaffID((staffID)),
+        clientModel.getClientByClientID(clientID),
+        clientMeetingModel.getAllClientMeetings(),
+
     ])
         .then(function (result) {
             const admin = result[0];
+            const allStaffMeetings = result[1];
+            const staff = result[2];
+            const client = result[3];
+            const allClientMeetings = result[4];
+
             res.render('admin/timetable', {
                 pageTitle: 'Timetable',
                 admin: admin,
+                allStaffMeetings: allStaffMeetings,
+                staff: staff,
+                client: client,
+                allClientMeetings: allClientMeetings,
             });
         });
 });
@@ -268,7 +351,7 @@ router.get('/project_rejected', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/student_detail', function(req, res, next) {
+router.get('/student_detail', function (req, res, next) {
     const studentID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(adminID),
@@ -276,7 +359,7 @@ router.get('/student_detail', function(req, res, next) {
         teamModel.getTeamByStudentID(studentID),
         proposalModel.getProposalByStudentID(studentID),
     ])
-        .then(function(result) {
+        .then(function (result) {
             const admin = result[0];
             const student = result[1];
             const team = result[2];

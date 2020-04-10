@@ -11,8 +11,10 @@ module.exports = {
     getChangeStaffMeetingRequest: function getChangeStaffMeetingRequest() {
         return changestaffmeetingrequest
             .find()
-            .populate( 'MeetingID')
+            // .populate( 'MeetingID')
+            .populate({path: 'MeetingID',populate:{ path: 'GroupID' }})
             .populate('StaffID')
+            .populate('NewStaffID')
             .exec()
     }
 };

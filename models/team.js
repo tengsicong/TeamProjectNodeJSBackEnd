@@ -68,13 +68,31 @@ module.exports = {
             .populate({path: 'StaffMeetingID', populate: {path: 'TemporaryStaffID'}})
             .exec();
     },
-
-    postTeamNewRepresenter: function postTeamNewRepresenter(studentID, newStudentID) {
-        team
-            .findOneAndUpdate({ Representer: studentID }, { $set: { Representer: newStudentID}})
+    /**
+     * @author : wang
+     * @param {object} team : team object.
+     * @return {[team]} team
+     */
+    postTeam: function postTeam (TeamName) {
+         team
+            .create({TeamName:TeamName})
+             .populate('GroupID')
             .exec()
-
     },
+    createTeam: function createTeam (teams) {
+        return team
+            .create(teams)
+    },
+    //
+    // editTeam: function editTeam (newteam) {
+    //     return team
+    //     .update({_id:newteam._id})
+    //         .exec()
+    // },
+
+
+    // deleteTeam: function deleteTeam (teamID) {
+    // },
 
     postProjectPreferenceByStudentID: function postProjectPreferenceByStudentID(studentID, projectID) {
         return team
@@ -86,28 +104,20 @@ module.exports = {
         return team
             .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$unset: {Preference: ''}}, {new: true})
             .exec()
-    }
+    },
     // /**
     //  * @param { ObjectID } client id
     //  * @return {Object: Team}
     //  */
     // getTeamByClientID: function getTeamByClientID(id) {
     //     return team
-    //         .find({StudentID: {$elemMatch: {$eq: id}}})
-    //         .populate('Proposal')
-    //         .populate('StudentID')
-    //         .populate('StaffID')
-    //         .populate('Preference')
-    //         .populate('Representer')
-    //         .populate('client_meetings')
-    //         .populate('staff_meetings')
-    //         .exec();
+    //     .deleteOne({_id:teamID})
+    //         .exec()
     // },
-};
+    postTeamNewRepresenter: function postTeamNewRepresenter(studentID, newStudentID) {
+        team
+            .findOneAndUpdate({ Representer: studentID }, { $set: { Representer: newStudentID}})
+            .exec()
 
-// const mongoose = require('mongoose');
-// const studentID = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');
-// team
-//     .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$unset: {Preference: ''}}, {new: true})
-//     .exec()
-//     .then(console.log)
+    },
+};

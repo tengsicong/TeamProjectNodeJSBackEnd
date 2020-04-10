@@ -13,8 +13,9 @@
                                 <th width="5%">role</th>
                                 <th width="5%">name</th>
                                 <th width="10%">meeting number</th>
-                                <th width="15%">orgianl time</th>
-                                <th width="25%">request</th>
+                                <th width="6%">meeting team</th>
+                                <th width="16%">orgianl time</th>
+                                <th width="20%">request</th>
                                 <th width="30%">comment</th>
                             </tr>
                             <% for (let i = 0; i < changeStaffMeetingRequest.length; i++){ %>
@@ -22,9 +23,18 @@
                                     <tr class="role2">
                                         <td>Staff</td>
                                         <td><%= changeStaffMeetingRequest[i].StaffID.Name %></td>
-                                        <td>meeting <%= i + 1 %></td>
-                                        <td><%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                        <td>change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                        <td>staff meeting <%= i + 1 %></td>
+                                        <td><%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName%></td>
+                                        <td><%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                        <td>
+                                            <% if ((changeStaffMeetingRequest[i] != undefined) | (changeStaffMeetingRequest[i].NewMeetingTime != undefined )&& (changeStaffMeetingRequest[i].NewStaffID != undefined)) { %>
+                                                change staff to <%= changeStaffMeetingRequest[i].NewStaffID.Name %><br>
+                                                change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
+                                            <% }else if((changeStaffMeetingRequest[i] != undefined) | (changeStaffMeetingRequest[i].NewMeetingTime != undefined )&& (changeStaffMeetingRequest[i].NewStaffID == undefined)){ %>
+                                                    change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
+                                                <% } %>
+                                        </td>
+
                                         <td><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
                                         <td width="5%">
                                             <button type="button" class="btn btn-primary"
@@ -72,11 +82,13 @@
                                 <% if ( changeClientMeetingRequest[i].Status == 'pending' ){ %>
                                     <tr class="role2">
                                         <td>Client</td>
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name%></td>
+                                        <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name %></td>
                                         <td>client meeting <%= i + 1 %>
                                         </td>
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                        <td>change time to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                        <td><%= changeClientMeetingRequest[i].MeetingID.GroupID.TeamName%></td>
+                                        <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                        <td>change time
+                                            to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
                                         <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
                                         <td>
                                             <button type="button" class="btn btn-primary"
@@ -175,7 +187,7 @@
                             <option>-</option>
                             <% for(let i = 0;i < clientMeetings.length;i++){ %>
                                 <option id="<% clientMeetings[i]._id %>">
-                                    <%= clientMeetings[i].ClientID.Name%>
+                                    <%= clientMeetings[i].ClientID.Name %>
                                 </option>
                             <% } %>
                         </select>
@@ -196,4 +208,5 @@
     </div>
 
 </div>
+
 <% include ./footer.ejs %>

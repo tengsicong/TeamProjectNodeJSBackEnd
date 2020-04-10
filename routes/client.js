@@ -278,6 +278,34 @@ router.get('/myteam/teammark', function(req, res, next) {
         .catch(next);
 });
 
+router.post('myteam/teammark',function(req,res,next) {
+    const mark1 = req.body.mark1;
+    const mark1_reason = req.body.mark1_reason;
+    const mark2 = req.body.mark2;
+    const mark2_reason = req.body.mark2_reason;
+    const mark3 = req.body.mark1;
+    const mark3_reason = req.body.mark3_reason;
+    const mark4 = req.body.mark1;
+    const mark4_reason = req.body.mark4_reason;
+    const mark5 = req.body.mark1;
+    const mark5_reason = req.body.mark5_reason;
+    const mark6 = req.body.mark1;
+    const mark6_reason = req.body.mark6_reason;
+    const mark7 = req.body.mark7;
+    const mark7_reason = req.body.mark7_reason;
+    const mark8 = req.body.mark8;
+    const mark8_reason = req.body.mark8_reason;
+    // console.log('mark1: '+mark1+' reason1: '+mark1_reason);
+    // console.log('mark2: '+mark2+' reason2: '+mark2_reason);
+    // console.log('mark3: '+mark3+' reason3: '+mark3_reason);
+    // console.log('mark4: '+mark4+' reason4: '+mark4_reason);
+    // console.log('mark5: '+mark5+' reason5: '+mark5_reason);
+    // console.log('mark6: '+mark6+' reason6: '+mark6_reason);
+    // console.log('mark7: '+mark7+' reason7: '+mark7_reason);
+    // console.log('mark8: '+mark8+' reason8: '+mark8_reason);
+    res.redirect('client/myteam/teampage');
+});
+
 
 
 router.get('/mytimetable', function(req, res,next) {
@@ -326,7 +354,7 @@ router.post('/mytimetable', function(req, res,next) {
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
             res.redirect('/client/mytimetable')
             });
-        });
+});
 
 
 

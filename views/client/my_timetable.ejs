@@ -69,10 +69,10 @@
                         <form style="padding-left: 30%" method="post">
                             <div>Meeting Number:</div>
                             <div class="form-group" style="align-items: center">
-                                <select class="form-control" name="chooseMeeting" style="width: 60%" name="selection">
+                                <select class="form-control" style="width: 60%" name="selection">
                                     <option>-</option>
                                     <%for(let i=0;i<meetings.length;i++){%>
-                                    <option name="option" value="<%meetings[i]._id%>">Client Meeting <%=i+1%></option>
+                                    <option name="option" id="<%meetings[i]._id%>">Client Meeting <%=i+1%></option>
                                     <%}%>
                                 </select>
                             </div>
