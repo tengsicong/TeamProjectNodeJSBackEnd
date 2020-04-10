@@ -34,27 +34,28 @@
                 </div>
             </td>
             <td width="50%">
-                <!-- calendar -->
-                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 300px" >
-                    <div  class="tables  scroll scrollbar1" style="height: 100%">
+                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 600px" >
+                    <h2><b>Meeting Table</b></h2>
+                    <table class="table" style="margin-bottom: 0px">
+                        <thead>
+                        <tr>
+                            <th style="width: 20%;padding-left:1%">Meeting Number</th>
+                            <th style="width: 20%;padding-left:1%">Team</th>
+                            <th style="width: 30%;padding-left:1%">Meeting Time</th>
+                            <th style="width: 30%;padding-left:1%">Meeting Status</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div  class="tables  scroll scrollbar1" style="height: 90%">
                         <div class="widget-shadow">
-                            <h2><b>Meeting Table</b></h2>
                             <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Meeting Number</th>
-                                    <th>Team</th>
-                                    <th>Meeting Time</th>
-                                    <th>Meeting Status</th>
-                                </tr>
-                                </thead>
                                 <tbody>
                                 <%for(let i=0;i<meetings.length;i++){%>
                                 <tr>
-                                    <th scope="row"><%=i+1%></th>
-                                    <td><%="SSIT TEAM "+meetings[i].GroupID.TeamName%></td>
-                                    <td><%=meetings[i].Date.toISOString().replace(/T.*/,' ')+meetings[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                    <td><%=meetings[i].Place%></td>
+                                    <th style="width: 20%" scope="row"><%=i+1%></th>
+                                    <td style="width: 20%"><%="SSIT TEAM "+meetings[i].GroupID.TeamName%></td>
+                                    <td style="width: 30%"><%=meetings[i].Date.toISOString().replace(/T.*/,' ')+meetings[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                    <td style="width: 30%"><%=meetings[i].Place%></td>
                                 </tr>
                                 <%}%>
                                 </tbody>
@@ -102,10 +103,11 @@
                                                     <tr>
                                                         <th width="10%"><b>Name</b></th>
                                                         <th width="10%"><b>Meeting Number</b></th>
-                                                        <th width="25%"><b>Original Time</b></th>
-                                                        <th width="30%"><b>New Meeting Time</b></th>
-                                                        <th width="30%"><b>Comment</b></th>
-                                                        <th width="10%"><b>Status</b></th>
+                                                        <th width="15%"><b>Original Time</b></th>
+                                                        <th width="15%"><b>New Meeting Time</b></th>
+                                                        <th width="25%"><b>Comment</b></th>
+                                                        <th width="20%"><b>Admin Reply</b></th>
+                                                        <th width="5%"><b>Status</b></th>
                                                     </tr>
                                                     <br>
 
@@ -116,6 +118,11 @@
                                                         <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                         <td>change time to <%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                         <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
+                                                        <% if(changeClientMeetingRequest[i].AdminReply.Content!= undefined){%>
+                                                        <td><%= changeClientMeetingRequest[i].AdminReply.Content %></td>
+                                                            <%}else{%>
+                                                            <td>No reply.</td>
+                                                        <%}%>
                                                         <td><%=changeClientMeetingRequest[i].Status%></td>
                                                     </tr>
                                                     <% } %>
