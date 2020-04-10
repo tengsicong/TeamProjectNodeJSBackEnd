@@ -125,38 +125,38 @@ router.get('/new_team', function (req, res) {
 
 /*submit*/
 router.post('/submit_newteam', function (req, res) {
-    const selector1 = req.body.selector1;
-let team = {
-    _id:mongoose.Types.ObjectId(),
-    selector1: selector1,
-}
-    teamModel.createTeam(team)
-        .then(function () {
-            res.redirect('/team_list')
-        })
-    // let selector1 = req.body.selector1;
-    // let selector2 = req.body.selector2;
-    // let selector3 = req.body.selector3;
+    // const selector1 = req.body.selector1;
+// let team = {
+//     _id:mongoose.Types.ObjectId(),
+//     selector1: selector1,
+// }
+//     teamModel.createTeam(team)
+//         .then(function () {
+//             res.redirect('/team_list')
+//         })
+//     let selector1 = req.body.selector1;
+//     let selector2 = req.body.selector2;
+//     let selector3 = req.body.selector3;
+//
 
-    //
     // if (selector1 != 'None') {
-    //     selector1 = mongoose.Types.ObjectId(selector1);
-    //     Promise.all([
-    //         teamModel.postTeam(selector1),
-    //     ])
-    //         .then(function () {
-    //             res.redirect('/team_list')
-    //
-    //         });
+        const selector1 = mongoose.Types.ObjectId(selector1);
+        Promise.all([
+            teamModel.postTeam(TeamName, selector1),
+        ])
+            .then(function () {
+                res.redirect('/team_list')
+
+            });
     // } else {
     //     Promise.all([
-    //     ])
-    //         .then(function () {
-    //             res.redirect('/team_list')
-    //         });
+    //     //     ])
+    //     //         .then(function () {
+    //     //             res.redirect('/team_list')
+    //     //         });
     // }
     // console.log('then')
-
+    // res.redirect('/team_list')
 })
 
 

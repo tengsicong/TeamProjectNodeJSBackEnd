@@ -41,11 +41,19 @@
                         <table style="width: 90%; margin: auto;">
                             <tr>
                                 <th style = "width: 10%;">Date</th>
-                                <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
+                                <% if(meetingModify.NewMeetingTime == null) { %>
+                                    <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
+                                <%} else {%>
+                                    <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
+                                <% } %>
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Supervisor</th>
-                                <td style="padding: 0.5em;"><p><%= meeting.StaffID.Name%> → <%= meeting.TemporaryStaffID.Name%></p></td>
+                                <% if(meetingModify.NewStaffID == null) { %>
+                                    <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
+                                <%} else {%>
+                                    <td style="padding: 0.5em;"><p><%= meetingModify.StaffID.Name%> → <%= meetingModify.NewStaffID.Name%></p></td>
+                                <% } %>
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Reason</th>
@@ -59,7 +67,7 @@
                     </div>
                 </div>
             <% } else {%>
-                <div class="panel panel-danger request-info">
+                <div class="panel panel-warning request-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your last request not been approved</h3>
                     </div>
@@ -67,11 +75,19 @@
                         <table style="width: 90%; margin: auto;">
                             <tr>
                                 <th style = "width: 10%;">Date</th>
-                                <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
+                                <% if(meetingModify.NewMeetingTime == null) { %>
+                                    <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
+                                <%} else {%>
+                                    <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
+                                <% } %>
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Supervisor</th>
-                                <td style="padding: 0.5em;"><p><%= meeting.StaffID.Name%> → <%= meeting.TemporaryStaffID.Name%></p></td>
+                                <% if(meetingModify.NewStaffID == null) { %>
+                                    <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
+                                <%} else {%>
+                                    <td style="padding: 0.5em;"><p><%= meetingModify.StaffID.Name%> → <%= meetingModify.NewStaffID.Name%></p></td>
+                                <% } %>
                             </tr>
                             <tr>
                                 <th style = "width: 10%;">Reason</th>

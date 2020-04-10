@@ -59,6 +59,8 @@ module.exports = {
     getStaffMeetingChangeRequestByMeetingID: function getStaffMeetingChangeRequestByMeetingID (id) {
         return request
             .findOne({MeetingID: id})
+            .populate('StaffID')
+            .populate('NewStaffID')
             .exec();
     },
 

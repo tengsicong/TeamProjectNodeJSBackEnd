@@ -59,8 +59,8 @@
 
             </form>
             <div style="text-align: center">
-                <!--                <button onclick="newTeam()" type="button" class="btn btn-primary">SUBMIT</button>-->
-                <input type="submit" class="btn btn-primary" value=" SUBMIT">
+                                <button onclick="newTeam()" type="button" class="btn btn-primary">SUBMIT</button>
+<!--                <input type="submit" class="btn btn-primary" value=" SUBMIT">-->
             </div>
         </div>
     </div>
@@ -76,17 +76,17 @@
             // selector.add(selector3);
 
             let temp = document.createElement("form");
-            temp.action = '/submit_newteam';
+            temp.action = 'admin/submit_newteam';
             temp.method = 'post';
             temp.style.display = "none";
             const inputElement1 = document.createElement("input")
-            inputElement.type = 'hidden';
-            inputElement.name = 'selector1';
-            inputElement.value = selector1;
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'selector1';
+            inputElement1.value = selector1;
             const inputElement2 = document.createElement("input")
-            inputElement.type = 'hidden';
-            inputElement.name = 'selector2';
-            inputElement.value = selector2;
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'selector2';
+            inputElement2.value = selector2;
             // const inputElement3 = document.createElement("input")
             // inputElement.type = 'hidden';
             // inputElement.name = 'selector3';
