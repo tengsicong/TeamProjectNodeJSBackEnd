@@ -1,9 +1,9 @@
+</div>
 <!--footer-->
 <div class="footer">
     <p>&copy; 2020 Software System and Internet Technology (Msc) Group 3</p>
 </div>
 <!--//footer-->
-</div>
 
 <!-- side nav js -->
 <script src='../../js/SidebarNav.min.js' type='text/javascript'></script>
@@ -11,6 +11,7 @@
     $('.sidebar-menu').SidebarNav()
 </script>
 <!-- //side nav js -->
+
 <!-- Classie --><!-- for toggle left push menu script -->
 <script src="../../js/classie.js"></script>
 <script>
@@ -38,9 +39,6 @@
 <script src="../../js/scripts.js"></script>
 <!--//scrolling js-->
 
-<!-- Bootstrap Core JavaScript -->
-<script src="../../js/bootstrap.js"> </script>
-
 <!-- calendar -->
 <script type="text/javascript" src="../../js/monthly.js"></script>
 <script type="text/javascript">
@@ -62,26 +60,20 @@
         });
 
         switch(window.location.protocol) {
-        case 'http:':
-        case 'https:':
-            // running on a server, should be good.
-            break;
-        case 'file:':
-            alert('Just a heads-up, events will not work when run locally.');
+            case 'http:':
+            case 'https:':
+                // running on a server, should be good.
+                break;
+            case 'file:':
+                alert('Just a heads-up, events will not work when run locally.');
         }
 
     });
 </script>
 <!-- //calendar -->
 
-<script type="text/javascript">
-    $(function($) {
-        $(".clickable-row").click(function () {
-            window.location = $(this).data("href");
-        })
-    })
-</script>
-
+<!-- Bootstrap Core JavaScript -->
+<script src="../../js/bootstrap.js"> </script>
 
 </body>
 </html>

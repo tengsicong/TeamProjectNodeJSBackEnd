@@ -94,6 +94,67 @@ router.get('/project_detail', function(req, res) {
     }
 });
 
+router.post('/meeting_detail_pre',function (req,res) {
+    let timechange = req.body.timechange;
+    let staffchange = req.body.staffchange;
+    let changereason = req.body.changereason;
+    let staffchangeID ;
+    let requestID ;
+    const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
+
+    const staffID = staffModel.getStaffByName(staffchange)
+        staffID.then(function (result) {
+            staffchangeID = result._id;
+        })
+
+    const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
+    changerequest.then(function (result) {
+        console.log('=========');
+        requestID = result
+        console.log(requestID);
+    })
+
+    primary_meeting.then(function (result) {
+        //console.log(result);
+        primaryMeetingResult = result;
+        console.log('------------');
+        console.log(requestID);
+        if(staffchange === primaryMeetingResult.StaffID.Name)
+            staffchangeID = null;
+        if(requestID === null)
+        {
+            console.log('create');
+            let newRequest = {
+                _id:mongoose.Types.ObjectId(),
+                MeetingID:primaryMeetingResult._id,
+                StaffID:primaryMeetingResult.StaffID,
+                NewMeetingTime: timechange,
+                NewStaffID: staffchangeID,
+                RequestComment:{
+                    RequestName: primaryMeetingResult.StaffID.Name,
+                    Date: new Date(),
+                    Content: changereason,
+                }
+            }
+            staffModel.createMeetingChangeRequest(newRequest)
+                .then(function () {
+                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
+                })
+        }
+        else
+        {
+            requestID.NewStaffID = (staffchange===null)?requestID.NewStaffID:staffchangeID;
+            requestID.NewMeetingTime = (timechange===null)?requestID.NewMeetingTime:timechange;
+            requestID.RequestComment.Content = changereason;
+            requestID.RequestComment.Date = new Date();
+            staffModel.updateMeetingChangeRequest(requestID)
+                .then(function () {
+                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
+                })
+        }
+    })
+
+})
 
 router.get('/meeting_detail_pre', function(req, res) {
     if (req.session.role === 'staff') {
@@ -110,6 +171,9 @@ router.get('/meeting_detail_pre', function(req, res) {
                 const meeting = result[0];
                 const meetingModify = result[1];
                 const staff = result[3];
+                let nowStaff = meeting.StaffID;
+                if(meeting.TemporaryStaffID != null)
+                    nowStaff = meeting.TemporaryStaffID;
                 //console.log(meeting);
                 let nowtime = new Date();
                 res.render('staff/meeting_detail_pre',{
@@ -119,6 +183,7 @@ router.get('/meeting_detail_pre', function(req, res) {
                     meetingModify: meetingModify,
                     stafflist: staffs,
                     nowtime : nowtime,
+                    nowstaff : nowStaff,
                 })
             })
     }
@@ -219,35 +284,23 @@ router.get('/my_timetable', function(req, res) {
     }
 });
 
-router.post('/myproject/create_project',function(req,res,next){
-    const client = clientID;
-    const topic = req.body.topic;
-    const content = req.body.content;
-    nowDate = new Date();
-    let proposal = {
-        _id:mongoose.Types.ObjectId(),
-        ClientID: client,
-        Topic: topic,
-        Content: content,
-        Date:nowDate,
-        Status:'pending'
-    }
-    proposalModel.createProposal(proposal)
-    clientModel.updateClientProposalListByProposalID(client,proposal._id)
-        .then(function () {
-            res.redirect('/client/myproject')
-        })
-        .catch(next)
-})
-
 router.post('/marking', function (req,res,next) {
     const staff=req.session.userinfo;
-
+    const content=req.body.t1;
+    const select = req.body.selector1;
+    const teamid = mongoose.Types.ObjectId(req.query.id);
+    //console.log(select);
+    staffModel.updateTeamMark(teamid,content,select)
+        .then(function () {
+            res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
+        })
+    //.catch(next);
 })
 
 router.get('/marking', function(req, res) {
     if (req.session.role === 'staff') {
         const teamID = parseInt(req.query.seq);
+        const teamsqr = req.query.id;
         Promise.all([
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
@@ -255,12 +308,13 @@ router.get('/marking', function(req, res) {
             .then(function (result) {
                 const staff = result[0];
                 const allTeams = result[1];
+                //console.log(teamID);
                 res.render('staff/marking', {
                     pageTitle: 'Marking',
                     username: staff.Name,
                     team: allTeams[teamID],
                 });
-            });
+            })
     }
     else {
         res.redirect('/role_select');

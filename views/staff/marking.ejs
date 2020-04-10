@@ -3,23 +3,23 @@
 <!-- main content start-->
 <div id="page-wrapper">
 
-    <div class="blank-page widget-shadow scroll">
+    <div class="blank-page widget-shadow scroll" >
         <h2 style="text-align: center"><b>Marking - SSIT Team <%= team.TeamName%></b></h2>
-        <div class="row">
+        <div class="row" >
+            <form class="form-horizontal" method="post">
             <% for(var i=0;i<8;i++) {%>
             <br>
-            <form class="form-horizontal">
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="selector<%=i%>" class="col-sm-2 control-label">Mark Item <%=i+1%></label>
                     <div class="col-sm-8">
                         <p>Description of Mark Item <%=i+1%></p>
                         <br>
                         <select name="selector1" id="selector1" class="form-control-project" style="width: 100%">
                             <% for(var j=0;j<5;j++) { %>
-                                <%if(team.StaffMark[i] != j){%>
-                                    <option><%= j%></option>
+                                <%if(team.StaffMark[i] != j+1){%>
+                                    <option value="<%=j+1%>"><%= j+1%></option>
                                 <% } else {%>
-                                    <option selected><%= j%></option>
+                                    <option value="<%=j+1%>"selected><%= j+1%></option>
                                 <% } %>
                             <% } %>
                         </select>
@@ -31,7 +31,7 @@
                 <% } %>
 
             <div style="text-align: center">
-                <button onclick="window.location='team_list.html'" type="button" class="btn btn-primary">SUBMIT</button>
+                <input type="submit" class="btn btn-primary" value=" SUBMIT">
             </div>
         </div>
     </div>

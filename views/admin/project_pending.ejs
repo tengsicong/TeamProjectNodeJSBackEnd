@@ -26,12 +26,16 @@
                     </a>
                 </td>
                 <td>
+                    <a href="/admin/pending_approved?id=<%=proposal._id%>">
                     <button type="button" class="btn btn-success" data-dismiss="modal" style="margin-right:3.5%;float: right">Approved
                     </button>
+                    </a>
                 </td>
                 <td>
+                    <a href="/admin/pending_rejected?id=<%=proposal._id%>">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">rejected
                     </button>
+                    </a>
                 </td>
             </tr>
         </table>
@@ -126,20 +130,18 @@
 
         <div class="row">
             <br>
-            <form class="form-horizontal">
+            <form class="form-horizontal" method="post">
                 <div class="form-group">
                     <label for="project_name" class="col-sm-2 control-label">Make a comment</label>
                     <div class="col-sm-8">
-                        <textarea id="project_name" rows="6" class="form-control form-control"></textarea>
+                        <textarea id="project_name" rows="6" class="form-control form-control" name="comment"></textarea>
                     </div>
                 </div>
-            </form>
-            <div style="text-align: center">
-                <a href="project_pending.html.html">
-                    <button type="button" class="btn btn-primary">SUBMIT</button>
-                </a>
 
+            <div style="text-align: center">
+                    <button type="submit" class="btn btn-primary">SUBMIT</button>
             </div>
+            </form>
         </div>
     </div>
 </div>

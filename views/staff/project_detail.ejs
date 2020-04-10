@@ -48,18 +48,26 @@
                 </tr>
                 <% for(var i=0;i<allmeeting.length;i++) { %>
                     <%if(allmeeting[i].Date>nowtime) { %>
-                        <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=team.StaffMeetingID[i]._id%>" style="cursor: pointer">
+                        <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=team.StaffMeetingID[i]._id%>" style="cursor: pointer">
                             <th>Meeting <%=i+1%></th>
                             <td><%= team.StaffMeetingID[i].Date%></td>
                             <td><%= team.StaffMeetingID[i].Place%></td>
-                            <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
+                            <% if(team.StaffMeetingID[i].TemporaryStaffID == null) { %>
+                                <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
+                            <% } else { %>
+                                <td><%= team.StaffMeetingID[i].TemporaryStaffID.Name%></td>
+                            <% } %>
                         </tr>
-                    <%} else { %>
+                    <% } else { %>
                         <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=team.StaffMeetingID[i]._id%>" style="cursor: pointer">
                             <th>Meeting <%=i+1%></th>
                             <td><%= team.StaffMeetingID[i].Date%></td>
                             <td><%= team.StaffMeetingID[i].Place%></td>
-                            <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
+                            <% if(team.StaffMeetingID[i].TemporaryStaffID == null) { %>
+                                <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
+                            <% } else  {%>
+                                <td><%= team.StaffMeetingID[i].TemporaryStaffID.Name%></td>
+                            <% } %>
                         </tr>
                     <% } %>
                 <% } %>
@@ -69,7 +77,7 @@
     <br>
     <%if(stage.Stage == 2) {%>
         <div class="blank-page widget-shadow scroll">
-            <h3><b>Mark For This Team</b><button type="submit" class="btn btn-primary clickable-row" data-href="marking?seq=<%=teamseq%>" style="float: right">Mark</button></h3>
+            <h3><b>Mark For This Team</b><button type="submit" class="btn btn-primary clickable-row" data-href="marking?seq=<%=teamseq%>&id=<%=team._id%>" style="float: right">Mark</button></h3>
     <% } %>
     </div>
 </div>
