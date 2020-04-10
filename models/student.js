@@ -47,15 +47,29 @@ module.exports = {
             .exec();
     },
 
-    deletePeopleLikeByStudentID: function deletePeopleLikeByStudentID(studentID) {
+    postPeopleDontLikeByStudentID: function postPeopleDontLikeByStudentID(thisStudentID, peopoleID) {
         student
-            .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}})
-    }
+            .findOneAndUpdate({_id: thisStudentID}, {$push: {PeopleDontLike: peopoleID}})
+            .exec();
+    },
 
+    deletePeopleLikeByStudentID: function deletePeopleLikeByStudentID(studentID) {
+        return student
+            .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}}, {new: true})
+            .exec()
+    },
 
+    deletePeopleDontLikeByStudentID: function deletePeopleDontLikeByStudentID(studentID) {
+        return student
+            .findOneAndUpdate({_id: studentID}, {$unset: {PeopleDontLike: ''}}, {new: true})
+            .exec()
+    },
 };
 
-const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
-student
-    .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}}).then(console.log)
-
+// const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
+// // student
+// //     .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}}).then(console.log)
+//
+// student
+//     .findOneAndUpdate({_id: studentID}, {$push: {PeopleDontLike: studentID}})
+//     .exec();

@@ -6,7 +6,7 @@ const studentStaffQAModel = require('../models/student_staff_qa')
 const teamModel = require('../models/team');
 const stageModel = require('../models/stage');
 const mongoose = require('mongoose');
-const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
+const studentID = mongoose.Types.ObjectId('5e8bb8c22366cc3ae6242fc0');
 
 
 
@@ -206,22 +206,37 @@ router.post('/set_people_preference', function (req, res) {
     let person1 = req.body.person1;
     let person2 = req.body.person2;
     let person3 = req.body.person3;
+    const array = []
+    if (person2 != 'None2') {
+        person2 = mongoose.Types.ObjectId(person2);
+        array.push(person2)
+    }
+    if (person3 != 'None3') {
+        person3 = mongoose.Types.ObjectId(person3);
+        array.push(person3)
+    }
+
+    //edit database
     if (person1 != 'None1') {
         person1 = mongoose.Types.ObjectId(person1);
         Promise.all([
             studentModel.postPeopleLikeByStudentID(studentID, person1),
         ]).then();
-    }
-    else {
-        console.log('enter')
+    } else {
         Promise.all([
             studentModel.deletePeopleLikeByStudentID((studentID)),
         ]).then();
     }
-    if (person2 != 'None2' | person3 != 'None3') {
-        console.log('enter')
+    if(array.length != 0) {
+        studentModel.deletePeopleDontLikeByStudentID(studentID).then();
+        array.forEach(function (element) {
+            studentModel.postPeopleDontLikeByStudentID(studentID, element);
+        })
+    } else {
+        studentModel.deletePeopleDontLikeByStudentID(studentID).then();
     }
-    console.log('then')
+
+    res.redirect('/student/homepage');
 });
 
 router.post('/set_new_representer', function(req, res) {
@@ -230,9 +245,31 @@ router.post('/set_new_representer', function(req, res) {
         teamModel.postTeamNewRepresenter(studentID, representerID),
     ])
         .then(function() {
-            res.redirect('/student/homepage')
+            res.redirect('/student/homepage');
         })
 });
 
+router.post('/set_project_preference', function(req, res) {
+    const projectList = req.body.projectList;
+    teamModel.deleteProjectPreferenceByStudentID(studentID).then();
+    if (projectList != '') {
+        let array = projectList.split(',');
+        array.pop();
+        array.forEach(function(element) {
+            teamModel.postProjectPreferenceByStudentID(studentID, mongoose.Types.ObjectId(element));
+        })
+    }
+    res.redirect('/student/homepage');
+});
+
+router.post('/post_qa', function(req, res) {
+    console.log('enter')
+    const topic = req.body.topic;
+    const content = req.body.content;
+    studentModel.getStudentByStudentID(studentID).then(function (result) {
+        studentStaffQAModel.createNewQA(result, topic, content);
+    })
+    res.redirect('/student/student_qa');
+});
 
 module.exports = router;

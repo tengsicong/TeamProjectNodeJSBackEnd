@@ -31,7 +31,13 @@ module.exports= {
     },
 
     updateReplyByQaId: function updateReplyByQaId(id, replies) {
-        return studentStaffQa.findByIdAndUpdate(id, { Replies: replies });
+        return studentStaffQa
+            .findByIdAndUpdate(id, { Replies: replies });
+    },
+
+    createNewQA: function postNewQA(student, topic, content) {
+        studentStaffQa
+            .create({GroupID: student.GroupID, Topic: topic, Replies: [{Author: student.Name, Comment: content, ReplyDate: new Date()}]})
     }
 }
 

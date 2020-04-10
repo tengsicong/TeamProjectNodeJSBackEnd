@@ -19,9 +19,10 @@
             <% for (let i = 0; i < 10; i++) {%>
             <div class="form-group" style="align-items: center; padding-left: 30%; padding-right: 30%">
                 <h3><%= 'Rank No. ' + (i+1) %></h3>
-                <select class="form-control" style="width: 100%">
+                <select class="form-control" id="<%=i%>" style="width: 100%">
+                    <option value="None">None</option>
                     <% for (let j = 0; j < allApprovedProposal.length; j++) { %>
-                        <option><%= allApprovedProposal[j].Topic + ' (' + allApprovedProposal[j].ClientID.Name + ')'%></option>
+                        <option value="<%= allApprovedProposal[j]._id %>"><%= allApprovedProposal[j].Topic + ' (' + allApprovedProposal[j].ClientID.Name + ')' %></option>
                     <% } %>
                 </select>
             </div>
@@ -30,12 +31,51 @@
 
         <br>
         <div style="text-align: center">
-            <a href="/student/homepage">
-                <button type="button" class="btn btn-primary">SUBMIT</button>
-            </a>
+<!--            <a href="/student/homepage">-->
+                <button type="button" class="btn btn-primary" onclick="setProjectPreference()">SUBMIT</button>
+<!--            </a>-->
         </div>
     </div>
     </div>
 
-<%- include('component/header') %>
+<%- include('component/footer') %>
+<!-- check and project people perference -->
+<script>
+    function setProjectPreference() {
+        const array = [];
+        for(let i = 0; i < 10; i++) {
+            if (document.getElementById(i).value != 'None'){
+                array.push(document.getElementById(i).value);
+            }
+        }
+        const myset = new mySet();
+        array.forEach(function (element) {
+            myset.add(element);
+        });
+        if (array.length != myset.size()) {
+            alert('Please choose different project for each!')
+        } else {
+            let s = '';
+            array.forEach(function(element) {
+                s = s + element +',';
+            })
+
+            const inputElement = document.createElement("input");
+            inputElement.type = 'hidden';
+            inputElement.name = 'projectList';
+            inputElement.value = s;
+
+            const form = document.createElement("form");
+            form.action = '/student/set_project_preference';
+            form.method = 'post';
+            form.style.display = "none";
+
+            form.appendChild(inputElement);
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
+    }
+</script>
+<!-- check and submit project perference -->
 <%- include('component/footer_script') %>

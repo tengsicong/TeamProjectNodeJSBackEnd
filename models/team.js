@@ -75,6 +75,18 @@ module.exports = {
             .exec()
 
     },
+
+    postProjectPreferenceByStudentID: function postProjectPreferenceByStudentID(studentID, projectID) {
+        return team
+            .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$push: {Preference: projectID}}, {new: true})
+            .exec()
+    },
+
+    deleteProjectPreferenceByStudentID: function deleteProjectPreferenceByStudentID(studentID) {
+        return team
+            .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$unset: {Preference: ''}}, {new: true})
+            .exec()
+    }
     // /**
     //  * @param { ObjectID } client id
     //  * @return {Object: Team}
@@ -92,3 +104,10 @@ module.exports = {
     //         .exec();
     // },
 };
+
+// const mongoose = require('mongoose');
+// const studentID = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');
+// team
+//     .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$unset: {Preference: ''}}, {new: true})
+//     .exec()
+//     .then(console.log)
