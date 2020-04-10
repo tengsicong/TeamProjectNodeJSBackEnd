@@ -73,9 +73,9 @@ module.exports = {
      * @param {object} team : team object.
      * @return {[team]} team
      */
-    postTeam: function postTeam () {
+    postTeam: function postTeam (GroupID) {
          team
-            .findOneAndUpdate({_id:thisGroupID},{$set:{TeamName:TeamName }})
+            .create({_id:GroupID})
             .exec()
     },
     createTeam: function createTeam (teams) {
