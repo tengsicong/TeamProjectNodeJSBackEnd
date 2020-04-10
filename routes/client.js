@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
+const stageModel = require('../models/stage')
 
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
 const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
@@ -220,8 +221,8 @@ router.get('/delete_project',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     newDate = new Date();
     Promise.all([
-        clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
-        proposalModel.deleteProposal(proposalID),
+        clientModel.deleteProposalFromClientListByProposalID(clientID,proposalID),
+        proposalModel.deleteProposal(proposalID)
     ])
     .then(function (result) {
             res.redirect('/client/myproject')
