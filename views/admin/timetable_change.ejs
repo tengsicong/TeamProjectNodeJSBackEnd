@@ -27,26 +27,28 @@
                                         <td><%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName%></td>
                                         <td><%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
                                         <td>
-                                            <% if ((changeStaffMeetingRequest[i] != undefined) | (changeStaffMeetingRequest[i].NewMeetingTime != undefined )&& (changeStaffMeetingRequest[i].NewStaffID != undefined)) { %>
-                                                change staff to <%= changeStaffMeetingRequest[i].NewStaffID.Name %><br>
-                                                change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
-                                            <% }else if((changeStaffMeetingRequest[i] != undefined) | (changeStaffMeetingRequest[i].NewMeetingTime != undefined )&& (changeStaffMeetingRequest[i].NewStaffID == undefined)){ %>
+                                            <%if (changeStaffMeetingRequest[i] != undefined) { %>
+                                                <% if (changeStaffMeetingRequest[i].NewMeetingTime != undefined ) { %>
                                                     change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
                                                 <% } %>
+                                                <% if (changeStaffMeetingRequest[i].NewStaffID != undefined) { %>
+                                                        <br> change staff to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
+                                                <% } %>
+                                            <% } %>
                                         </td>
 
                                         <td><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
                                         <td width="5%">
                                             <button type="button" class="btn btn-primary"
                                                     style="width: 100%; float: right">
-                                                Approved
+                                                Approve
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
                                                     data-target="#rejectereason" data-whatever="@Rejectereason"
                                                     style="width: 100%; float: right">
-                                                Rejected
+                                                Reject
                                             </button>
                                             <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
@@ -162,15 +164,24 @@
 
                 </div>
                 <div class="form-group">
+                    <label for="selector2" class="col-sm-2 control-label">Select Group</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" style="width: 60%">
+                            <% for (let i = 0; i < allTeam.length; i++) { %>
+                                <option value="allTeam[i]._id"><%= 'SSIT Team ' + allTeam[i].TeamName %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="selector2" class="col-sm-2 control-label">Select Meeting</label>
                     <div class="col-sm-8">
                         <select class="form-control" style="width: 60%">
-                            <option>-</option>
-                            <% for(let i = 0;i < clientMeetings.length;i++){ %>
-                                <option id="<% clientMeetings[i]._id %>">
-                                    Meeting <%= i + 1 %>
-                                </option>
-                            <% } %>
+                            <option>Meeting 1</option>
+                            <option>Meeting 2</option>
+                            <option>Meeting 3</option>
+                            <option>Meeting 4</option>
+                            <option>Meeting 5</option>
                         </select>
                     </div>
                 </div>
@@ -184,11 +195,9 @@
                     <label for="selector4" class="col-sm-2 control-label">Supervisor</label>
                     <div class="col-sm-8">
                         <select class="form-control" style="width: 60%">
-                            <option>-</option>
-                            <% for(let i = 0;i < clientMeetings.length;i++){ %>
-                                <option id="<% clientMeetings[i]._id %>">
-                                    <%= clientMeetings[i].ClientID.Name %>
-                                </option>
+                        <option>-</option>
+                            <% for (let i = 0; i < allStaff.length; i++) { %>
+                                <option value="<%= allStaff[i]._id %>"><%= allStaff[i].Name %></option>
                             <% } %>
                         </select>
                     </div>
@@ -209,4 +218,5 @@
 
 </div>
 
-<% include ./footer.ejs %>
+<% include ./component/footer_script.ejs%>
+<% include ./component/footer.ejs %>
