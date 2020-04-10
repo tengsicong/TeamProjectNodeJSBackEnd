@@ -79,15 +79,55 @@ module.exports = {
 
     /**
      * @param {object} proposal : proposal object.
-     * @return {[proposal]} proposal of student
+     * @return {[proposal]} proposal
      */
     createProposal: function createProposal (proposals) {
         return proposal.create(proposals)
+    },
+
+    /**
+     * @param {object} proposal : proposal object.
+     * @return {[proposal]} proposal
+     */
+    editProposal: function editProposal (newproposal) {
+        return proposal.update({_id:newproposal._id},{$set:{Topic:newproposal.Topic, Content:newproposal.Content, Date:newproposal.Date,Status:newproposal.Status}})
+    },
+
+    adminEditProposal: function adminEditProposal (newproposal) {
+        return proposal.update({_id:newproposal._id},{$set:{Topic:newproposal.Topic, Content:newproposal.Content, Date:newproposal.Date}})
+    },
+
+    /**
+     * @param {objectID} proposalID
+     * @return {[proposal]} proposal
+     */
+    deleteProposal: function deleteProposal (proposalID) {
+        return proposal.deleteOne({_id:proposalID}).exec()
+    },
+
+    /**
+     * @param {ObjectId} id: proposalID {array} comment
+     * @return {[proposal]} proposal of student
+     */
+    addProposalComment: function addProposalComment (id,reply) {
+        return proposal.findByIdAndUpdate(id,{Reply:reply})
     }
 
 
 
 };
+
+// const id = mongoose.Types.ObjectId('5e8f2d6d3f95afd52382516f');
+// date = new Date();
+// let reply = proposal({_id:id}).Reply;
+// reply.push({Author: 'test1', Comment: 'thisis test1',ReplyDate:date})
+// //proposal.update({_id:id},{proposal:{$push:{Reply:reply}}})
+// proposal.find({_id:id})
+// .then (function (result) {
+//     console.log(result)
+// })
+
+
 
 
 // const id = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');

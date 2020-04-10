@@ -6,6 +6,7 @@ const teamModel = require('../models/team');
 const mongoose = require('mongoose');
 const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
+const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
 
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
 const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
@@ -59,10 +60,11 @@ router.post('/myproject/create_project',function(req,res,next){
         Date:nowDate,
         Status:'pending'
     }
-    proposalModel.createProposal(proposal,client)
-    clientModel.addProposalsByProposalID(client,proposal._id)
+    proposalModel.createProposal(proposal)
+    clientModel.updateClientProposalListByProposalID(client,proposal._id)
         .then(function () {
-            res.redirect('/client/myproject')
+            res.redirect('/client/myproject/project_pending?id='+proposal._id)
+            //res.redirect('/client/myproject')
         })
         .catch(next)
 })
@@ -105,6 +107,32 @@ router.get('/myproject/project_pending', function(req, res, next) {
         .catch(next);
 });
 
+
+/*添加评论，未实现，不能写入*/
+router.post('/myproject/project_pending',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const comment = req.body.comment;
+    replyDate = new Date();
+    Promise.all([
+        clientModel.getClientByProposalID(proposalID),
+    proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            let reply = result[1].Reply;
+            reply.push({
+                Author:result[0].Name,
+                Comment:comment,
+                ReplyDate:replyDate,
+            });
+            console.log(reply)
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/client/project_pending?id='+req.query.id)
+            })
+        })
+        .catch(next)
+})
+
 router.get('/myproject/project_rejected', function(req, res, next) {
     //console.log(req.query.id);
     const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -139,6 +167,38 @@ router.get('/edit_project', function(req, res,next) {
         })
         .catch(next);
 });
+
+/*Edit proposal*/
+router.post('/edit_project',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const topic = req.body.topic;
+    const content = req.body.content;
+    newDate = new Date();
+    let proposal = {
+        _id:proposalID,
+        Topic: topic,
+        Content: content,
+        Date:newDate,
+        Status:'pending'
+    }
+    proposalModel.editProposal(proposal)
+        .then(function () {
+            res.redirect('/client/myproject/project_pending?id='+req.query.id)
+        })
+        .catch(next)
+})
+
+/*Delete proposal*/
+router.get('/delete_project',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    proposalModel.deleteProposal(proposalID)
+    //clientModel.deleteProposalFromClientListByProposalID(clientID,proposalID)
+    .then(function (result) {
+            res.redirect('/client/myproject')
+        })
+        .catch(next)
+})
 
 router.get('/myteam', function(req, res,next) {
     Promise.all([
@@ -197,12 +257,16 @@ router.get('/mytimetable', function(req, res,next) {
     Promise.all([
         clientModel.getClientByClientID(clientID),
         clientMeetingModel.getClientMeetingByClientID(clientID),
+        changeClientMeetingRequestModel.getChangeClientMeetingRequestByClientID(clientID),
     ])
         .then(function(result) {
+            console.log(result[2])
+            const changeClientMeetingRequest = result[2];
             res.render('client/my_timetable', {
                 meetings: result[1],
                 pageTitle: 'My TimeTable',
                 username: result[0].Name,
+                changeClientMeetingRequest: changeClientMeetingRequest,
             });
         })
         .catch(next);

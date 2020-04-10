@@ -1,7 +1,6 @@
 const mongo = require('../lib/mongo');
 const studentStaffQa = mongo.student_staff_qas;
 
-
 module.exports= {
 
     /**
@@ -30,6 +29,10 @@ module.exports= {
             .find({GroupID: id})
             .exec();
     },
+
+    updateReplyByQaId: function updateReplyByQaId(id, replies) {
+        return studentStaffQa.findByIdAndUpdate(id, { Replies: replies });
+    }
 }
 
 // const mongoose = require('mongoose');

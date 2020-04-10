@@ -23,17 +23,23 @@
                                         | Post Time: <span style="color: black"><%= qa[i].Replies[0].ReplyDate.toISOString().replace(/T.*/,' ')+qa[i].Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></span>
                                         | Replies: <span style="color: black"><%= qa[i].Replies.length %></span>
                                         <%  let ms = new Date() - qa[i].Replies[(qa[i].Replies.length-1)].ReplyDate;
+                                            let year = Math.floor(ms / (1000 * 60 * 60 * 24 * 30 * 12));
+                                            let month = Math.floor(ms / (1000 * 60 * 60 * 24 * 30));
                                             let day = Math.floor(ms / (1000 * 60 * 60 * 24));
-                                            let hour = Math.floor((ms / (1000 * 60 * 60)) - (day * 24));
-                                            let min = Math.ceil((ms / (1000 * 60)) - (day * 24 * 60) - (hour * 60));
+                                            let hour = Math.floor(ms / (1000 * 60 * 60));
+                                            let min = Math.ceil(ms / (1000 * 60));
                                             let s = '';
-                                            if (day != 0) {
-                                                s = s + day + ' days ';
-                                            }
-                                            if (hour != 0) {
-                                                s = s + hour + ' hours ';
-                                            }
-                                            s = s + min + ' mins ago' %>
+                                            if (year > 0) {
+                                                s = year + ' year' + ((year > 1) ? 's ago' : ' ago');
+                                            } else if (month > 0) {
+                                                s = month + ' month' + ((month > 1) ? 's ago' : ' ago');
+                                            } else if (day > 0) {
+                                                s = day + ' day' + ((day > 1) ? 's ago' : ' ago');
+                                            } else if (hour > 0) {
+                                                s = hour + ' hour' + ((hour > 1) ? 's ago' : ' ago');
+                                            } else {
+                                                s = min + ' min' + ((min > 1) ? 's ago' : ' ago');
+                                            } %>
                                         | Latest update: <span style="color: black"><%= s %></span></p>
                                 </div>
                             </div>

@@ -12,14 +12,16 @@
 						    <br>
 						    <p class="reply-content"><%= qa.Replies[i].Comment %></p>
 						    <br>
-						    <p style="color:gray; font-weight:bold"> Post Time:<%= qa.Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+qa.Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"") %></p>
+						    <p style="color:gray; font-weight:bold"> Post Time:<%= qa.Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+qa.Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"") %></p>
                         </div>
                     <% } %>
 					<br><br>
-					<textarea class= "reply-area" placeholder="Your Reply" wrap="virtual"></textarea>
-					<br><br>
-					<button type="submit" class="btn btn-primary sub-reply">Submit</button>
-					<div class="clearfix"> </div>
+					<form action="discussion_details?id=<%= id %>" method="post">
+						<textarea class= "reply-area" name="reply" placeholder="Your Reply" wrap="virtual"></textarea>
+						<br><br>
+						<button type="submit" class="btn btn-primary sub-reply">Submit</button>
+						<div class="clearfix"> </div>
+					</form>
                 </div>
 			</div>
 		</div>

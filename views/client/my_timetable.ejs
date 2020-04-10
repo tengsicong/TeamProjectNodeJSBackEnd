@@ -84,7 +84,53 @@
                             <div>
                                 <button class="btn btn-primary" style="margin-left: 20%">Submit</button>
                             </div>
+
                         </form>
+                        <div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal" style="margin-left: 280%">Check History</button>
+                                <div class="modal fade" id="gridSystemModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                                    <div class="modal-dialog" role="document" style="width:60%">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="gridSystemModalLabel">Request History</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <%if(changeClientMeetingRequest.length>0){%>
+                                                <table>
+                                                    <tr>
+                                                        <th width="10%"><b>Name</b></th>
+                                                        <th width="10%"><b>Meeting Number</b></th>
+                                                        <th width="25%"><b>Original Time</b></th>
+                                                        <th width="30%"><b>New Meeting Time</b></th>
+                                                        <th width="30%"><b>Comment</b></th>
+                                                        <th width="10%"><b>Status</b></th>
+                                                    </tr>
+                                                    <br>
+
+                                                    <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
+                                                    <tr class="role2">
+                                                        <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name%></td>
+                                                        <td>client meeting <%= i + 1 %></td>
+                                                        <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                        <td>change time to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                        <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
+                                                        <td><%=changeClientMeetingRequest[i].Status%></td>
+                                                    </tr>
+                                                    <% } %>
+                                                </table>
+                                                    <% } else{%>
+                                                        <div class="alert alert-danger" role="alert">You do not have a change request!</div>
+                                                    <%}%>
+                                                <br>
+                                                <button type="button" class="btn btn-default btn-sm" style="margin-left: 45%" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </td>

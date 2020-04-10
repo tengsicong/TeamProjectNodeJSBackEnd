@@ -38,20 +38,27 @@ router.post('/reset_password', function(req, res) {
                 let isMatch = (newPW === confirmedNewPW);
 
                 if (person !== null && !isError && !isSame && isMatch) {
-
-
-                    /* TO-DO： Update password method */
-
-
-                    if (req.session.role === 'student') {
-                        res.redirect('/student/homepage');
-                    } else if (req.session.role === 'staff') {
-                        res.redirect('/staff/my_project');
-                    } else if (req.session.role === 'admin') {
-                        res.redirect('/admin/project_list')
-                    } else if (req.session.role === 'client') {
-                        res.redirect('/client/myproject');
+                    /* TO-DO： reset password method */
+                    let resetMethod;
+                    if (req.session.role === 'staff') {
+                        resetMethod = staffModel.resetPasswordByStaffId(req.session.userinfo, newPW);
+                    } else {
+                        res.redirect('/role_select');
+                        console.log('role error');
                     }
+
+                    const promise = resetMethod;
+                    promise.then(function(result) {
+                        if (req.session.role === 'student') {
+                            res.redirect('/student/homepage');
+                        } else if (req.session.role === 'staff') {
+                            res.redirect('/staff/my_project');
+                        } else if (req.session.role === 'admin') {
+                            res.redirect('/admin/project_list')
+                        } else if (req.session.role === 'client') {
+                            res.redirect('/client/myproject');
+                        }
+                    });
                 }
                 else {
                     res.redirect('/account/reset_password');

@@ -37,6 +37,9 @@ router.get('/all_projects', function(req, res) {
             const student = result[0];
             const allProposals = result[1];
             const myProposal = result[2];
+            // console.log('1' + student);
+            console.log('2' + allProposals);
+            // console.log('3' + myProposal.GroupID)
             res.render('student/all_projects', {
                 pageTitle: 'All Projects',
                 student: student,
@@ -102,6 +105,7 @@ router.get('/my_project', function(req, res) {
             const student = result[0];
             const proposal = result[1];
             const team = result[2];
+            console.log(team)
             res.render('student/my_project', {
                 pageTitle: 'My Project',
                 student: student,

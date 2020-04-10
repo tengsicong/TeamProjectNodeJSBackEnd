@@ -13,5 +13,14 @@ module.exports = {
             // .populate('ClientID')
             .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
             .exec()
-    }
+    },
+
+
+    getChangeClientMeetingRequestByClientID: function getChangeClientMeetingRequestByClientID(id) {
+        return changeclientmeetingrequest
+            .find({ClientID:id})
+            //.populate('ClientID')
+            .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
+            .exec()
+    },
 };
