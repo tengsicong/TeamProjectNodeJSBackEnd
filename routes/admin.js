@@ -139,24 +139,24 @@ router.post('/submit_newteam', function (req, res) {
     let selector3 = req.body.selector3;
 
 
-    // if (selector1 != 'None') {
+    if (selector1 != 'None') {
         selector1 = mongoose.Types.ObjectId(selector1);
         Promise.all([
-            teamModel.postTeam(GroupID, selector1),
+            teamModel.postTeam(TeamName, selector1),
         ])
             .then(function () {
                 res.redirect('/team_list')
 
             });
-    // } else {
-    //     Promise.all([
-    //     ])
-    //         .then(function () {
-    //             res.redirect('/team_list')
-    //         });
-    // }
+    } else {
+        Promise.all([
+        ])
+            .then(function () {
+                res.redirect('/team_list')
+            });
+    }
     console.log('then')
-
+    // res.redirect('/team_list')
 })
 
 

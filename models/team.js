@@ -73,9 +73,10 @@ module.exports = {
      * @param {object} team : team object.
      * @return {[team]} team
      */
-    postTeam: function postTeam (GroupID) {
+    postTeam: function postTeam (TeamName) {
          team
-            .create({_id:GroupID})
+            .create({TeamName:TeamName})
+             .populate('GroupID')
             .exec()
     },
     createTeam: function createTeam (teams) {
