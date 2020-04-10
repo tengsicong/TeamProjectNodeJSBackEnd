@@ -142,7 +142,7 @@ router.post('/submit_newteam', function (req, res) {
     // if (selector1 != 'None') {
         selector1 = mongoose.Types.ObjectId(selector1);
         Promise.all([
-            teamModel.postTeam(selector1),
+            teamModel.postTeam(GroupID, selector1),
         ])
             .then(function () {
                 res.redirect('/team_list')
