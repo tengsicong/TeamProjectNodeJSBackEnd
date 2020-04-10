@@ -4,18 +4,7 @@ const proposal = mongo.proposals;
 const mongoose = require('mongoose');
 
 
-// const mongoose = require('mongoose');
-// const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-//
-//
-// client
-//     .findOne({_id:clientID})
-//     //.updateOne({_id:clientID},{$unset:{Name:'remove'}})
-//     .exec()
-//     .then(function(result){
-//     console.log(result)
-//         console.log(client.Name)
-// })
+
 
 
 
@@ -64,3 +53,18 @@ module.exports = {
     }
 
 };
+
+
+// //const mongoose = require('mongoose');
+// const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
+// //
+// //
+// client
+//     .findOne({_id:clientID})
+//     .populate('AllProposalID')
+//     //     //.updateOne({_id:clientID},{$unset:{Name:'remove'}})
+//     .exec()
+//     .then(function(result){
+//         console.log(result)
+// //         console.log(client.Name)
+// })

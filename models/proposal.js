@@ -97,8 +97,8 @@ module.exports = {
      * @param {objectID} proposalID
      * @return {[proposal]} proposal
      */
-    deleteProposal: function deleteProposal (id,proposalID) {
-        return proposal.deleteOne({_id:proposalID})
+    deleteProposal: function deleteProposal (proposalID) {
+        return proposal.deleteOne({_id:proposalID}).exec()
     },
 
     /**
@@ -106,7 +106,7 @@ module.exports = {
      * @return {[proposal]} proposal of student
      */
     addProposalComment: function addProposalComment (id,reply) {
-        return proposal.Reply.update({_id:id},{$push:{Reply:reply}})
+        return proposal.findByIdAndUpdate(id,{Reply:reply})
     }
 
 
@@ -115,8 +115,9 @@ module.exports = {
 
 // const id = mongoose.Types.ObjectId('5e8f2d6d3f95afd52382516f');
 // date = new Date();
-// let reply = {Author: 'test1', Comment: 'thisis test1',ReplyDate:date}
-// proposal.update({_id:id},{proposal:{$push:{Reply:reply}}})
+// let reply = proposal({_id:id}).Reply;
+// reply.push({Author: 'test1', Comment: 'thisis test1',ReplyDate:date})
+// //proposal.update({_id:id},{proposal:{$push:{Reply:reply}}})
 // proposal.find({_id:id})
 // .then (function (result) {
 //     console.log(result)

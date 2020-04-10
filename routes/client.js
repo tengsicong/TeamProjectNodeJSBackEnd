@@ -111,18 +111,24 @@ router.get('/myproject/project_pending', function(req, res, next) {
 /*添加评论，未实现，不能写入*/
 router.post('/myproject/project_pending',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.query.id);
-    const client = clientModel.getClientByProposalID(proposalID);
     const comment = req.body.comment;
     replyDate = new Date();
-    let reply = {
-        Author: client.Name,
-        Comment: comment,
-        ReplyDate:replyDate,
-    }
-    console.log(reply)
-    proposalModel.addProposalComment(proposalID,reply)
-        .then(function () {
-            res.redirect('/client/project_pending?id='+req.query.id)
+    Promise.all([
+        clientModel.getClientByProposalID(proposalID),
+    proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            let reply = result[1].Reply;
+            reply.push({
+                Author:result[0].Name,
+                Comment:comment,
+                ReplyDate:replyDate,
+            });
+            console.log(reply)
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/client/project_pending?id='+req.query.id)
+            })
         })
         .catch(next)
 })
@@ -186,9 +192,9 @@ router.post('/edit_project',function(req,res,next){
 router.get('/delete_project',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     newDate = new Date();
-    clientModel.deleteProposalFromClientListByProposalID(clientID,proposalID)
-    proposalModel.deleteProposal(clientID,proposalID)
-        .then(function () {
+    proposalModel.deleteProposal(proposalID)
+    //clientModel.deleteProposalFromClientListByProposalID(clientID,proposalID)
+    .then(function (result) {
             res.redirect('/client/myproject')
         })
         .catch(next)
