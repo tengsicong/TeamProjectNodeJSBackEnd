@@ -53,6 +53,14 @@ module.exports = {
     updateClientProposalListByProposalID: function updateClientProposalListByProposalID(id,proposalID) {
         return client.update({_id:id},{$addToSet:{AllProposalID: proposalID}})
 
+    },
+
+    /**
+     * @param {ObjectId} id, proposalID  id:clientID
+     * @return {client} a client object
+     */
+    deleteProposalFromClientListByProposalID: function deleteProposalFromClientListByProposalID(id,proposalID) {
+        return client.update({_id:id},{$pull:{AllProposalID: {$in:proposalID}}})
     }
 
 };
