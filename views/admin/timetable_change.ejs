@@ -41,14 +41,14 @@
                                         <td width="5%">
                                             <button type="button" class="btn btn-primary"
                                                     style="width: 100%; float: right">
-                                                Approved
+                                                Approve
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
                                                     data-target="#rejectereason" data-whatever="@Rejectereason"
                                                     style="width: 100%; float: right">
-                                                Rejected
+                                                Reject
                                             </button>
                                             <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
@@ -218,4 +218,5 @@
 
 </div>
 
-<% include ./footer.ejs %>
+<% include ./component/footer_script.ejs%>
+<% include ./component/footer.ejs %>
