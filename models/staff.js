@@ -128,6 +128,17 @@ module.exports = {
         return staff.findByIdAndUpdate(id, { Password: password });
     },
 
+
+    /**
+     * @param {ObjectId} id, GroupID  id:staffID
+     * @return {staff} a staff object
+     */
+    updateStaffAllocatedTeamByTeamID: function updateStaffAllocatedTeamByTeamID(id,GroupID) {
+        return staff.update({_id:id},{$addToSet:{AllocatedTeamID: GroupID}})
+
+    },
+
+
     updateTeamMark: function updateTeamMark(id,reason,score){
         return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
     },
@@ -138,5 +149,5 @@ module.exports = {
 
     createMeetingChangeRequest: function createMeetingChangeRequest(newRequest) {
         return request.create(newRequest);
-    }
+    },
 };

@@ -66,9 +66,45 @@
 
             </form>
             <div style="text-align: center">
-                <button onclick="window.location='team_list.html'" type="button" class="btn btn-primary">SUBMIT</button>
+                <button onclick="editTeam()" type="button" class="btn btn-primary">SUBMIT</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function editTeam() {
+        const selector1 = document.getElementById('selector1').value;
+        const selector2 = document.getElementById('selector2').value;
+        <!--const selector3 = document.getElementById('selector<% i + 3 %>').value;-->
+        const selector = new selector();
+        selector.add(selector1);
+        selector.add(selector2);
+        // selector.add(selector3);
+
+        let temp = document.createElement("form");
+        temp.action = 'admin/editTeam';
+        temp.method = 'post';
+        temp.style.display = "none";
+        const inputElement1 = document.createElement("input")
+        inputElement.type = 'hidden';
+        inputElement.name = 'selector1';
+        inputElement.value = selector1;
+        const inputElement2 = document.createElement("input")
+        inputElement.type = 'hidden';
+        inputElement.name = 'selector2';
+        inputElement.value = selector2;
+        // const inputElement3 = document.createElement("input")
+        // inputElement.type = 'hidden';
+        // inputElement.name = 'selector3';
+        // inputElement.value = selector3;
+        temp.appendChild(inputElement1);
+        temp.appendChild(inputElement2);
+        // temp.appendChild(inputElement3);
+
+        document.body.appendChild(temp);
+        temp.submit();
+        // console.log(document)
+        return temp;
+    }
+</script>
 <%- include('footer') %>

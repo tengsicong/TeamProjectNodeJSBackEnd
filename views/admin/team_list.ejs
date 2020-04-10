@@ -35,7 +35,7 @@
 
         <% for (var i = 0; i < allTeam.length ; i++) { %>
         <div class="grid_3 grid_5 widget-shadow">
-            <a href="./edit_team?_id=<%= allTeam[i]._id %>">
+            <a href="./edit_team?id=<%= allTeam[i]._id %>">
                 <div>
                     <h3><b><%= 'SSIT Team' + allTeam[i].TeamName %></b>
                         <% if (allTeam[i].ProposalID == undefined) { %>

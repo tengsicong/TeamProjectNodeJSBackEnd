@@ -13,5 +13,11 @@ module.exports = {
             .populate('GroupID')
             .exec()
     },
-
+    getAllStaffMeetings: function getAllStaffMeetings() {
+        return staffmeetings
+            .find()
+            .populate('GroupID')
+            .populate('StaffID')
+            .exec()
+    }
 };

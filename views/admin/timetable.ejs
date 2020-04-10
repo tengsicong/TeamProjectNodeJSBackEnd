@@ -1,8 +1,8 @@
-<%- include('header') %>
+<% include ./header.ejs %>
 <!-- main content start-->
 <div id="page-wrapper">
     <div class="typography">
-        <div class="main-page" >
+        <div class="main-page">
 
             <div>
                 <table width="100%">
@@ -13,7 +13,8 @@
                 <table width="100%">
                     <tr>
                         <td width="90%" align="center">You have 2 change time requests !</td>
-                        <td width="10%" align="right"><input onclick="{location.href='./timetable_change'}" type="button" value="Check" class="btn btn-primary"></td>
+                        <td width="10%" align="right"><input onclick="{location.href='./timetable_change'}"
+                                                             type="button" value="Check" class="btn btn-primary"></td>
                     </tr>
                 </table>
             </div>
@@ -36,120 +37,70 @@
                                     <div class="monthly" id="mycalendar"></div>
                                 </div>
 
-                                <div class="clearfix"> </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- calendar -->
-                <div  class="col-md-6 tables  scroll scrollbar1" style="height:584px">
-                    <div class="widget-shadow"style="width:645px;height:884px">
+                <div class="col-md-6 tables  scroll scrollbar1" style="height:584px">
+                    <div class="widget-shadow" style="width:645px;height:884px">
                         <h4 style="padding-top:10px;padding-left:10px">Meeting Table</h4>
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Meeting Number</th>
-                                <th>Team Number</th>
+                                <th>Team Name</th>
+                                <th>Meeting</th>
                                 <th>Meeting Time</th>
                                 <th>Meeting Status</th>
-                                <th>Meeting Client</th>
+                                <th>Person</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>1</td>
-                                <td>xx/xx/xxxx</td>
-                                <td>Done</td>
-                                <td>John</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>1</td>
-                                <td>xx/xx/xxxx</td>
-                                <td>Coming</td>
-                                <td>Lydia</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>2</td>
-                                <td>xx/xx/xxxx</td>
-                                <td>Coming</td>
-                                <td>Charlie</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>3</td>
-                                <td>xx/xx/xxxx</td>
-                                <td>Coming</td>
-                                <td>Vivian</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">5</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">6</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">7</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">8</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">9</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">10</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">11</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">12</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">13</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">14</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">15</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            <% for (let i = 0; i < allStaffMeetings.length; i++){ %>
+                                <tr>
+                                    <th scope="row"><%= allStaffMeetings[i].GroupID.TeamName %></th>
+                                    <td>staff meeting <%= i + 1 %></td>
+                                    <td><%= allStaffMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allStaffMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+
+                                    <% var thetime = allStaffMeetings[i].Date.toISOString(); %>
+                                    <% var d = new Date(Date.parse(thetime.replace(/T.*/, ' '))); %>
+                                    <% var curDate = new Date(); %>
+                                    <% if (d >= curDate) { %>
+                                        <td>
+                                            Coming
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            Done
+                                        </td>
+                                    <% } %>
+
+                                    <td><%= allStaffMeetings[i].StaffID.Name %></td>
+                                </tr>
+                            <% } %>
+                            <% for (let i = 0; i < allClientMeetings.length; i++){ %>
+                                <tr>
+                                    <th scope="row"><%= allClientMeetings[i].GroupID.TeamName %></th>
+                                    <td>client meeting <%= i + 1 %></td>
+                                    <td><%= allClientMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allClientMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+
+                                    <% var thetime = allClientMeetings[i].Date.toISOString(); %>
+                                    <% var d = new Date(Date.parse(thetime.replace(/T.*/, ' '))); %>
+                                    <% var curDate = new Date(); %>
+                                    <% if (d >= curDate) { %>
+                                        <td>
+                                            Coming
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            Done
+                                        </td>
+                                    <% } %>
+
+                                    <td><%= allClientMeetings[i].ClientID.Name %></td>
+                                </tr>
+                            <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -158,4 +109,23 @@
         </div>
     </div>
 </div>
-<%- include('footer') %>
+<script>
+    getCurrentDate()
+    {
+        var timeStr = '-';
+        var curDate = new Date();
+        var curYear = curDate.getFullYear();  //获取完整的年份(4位,1970-????)
+        var curMonth = curDate.getMonth() + 1;  //获取当前月份(0-11,0代表1月)
+        var curDay = curDate.getDate();       //获取当前日(1-31)
+        var curWeekDay = curDate.getDay();    //获取当前星期X(0-6,0代表星期天)
+        var curHour = curDate.getHours();      //获取当前小时数(0-23)
+        var curMinute = curDate.getMinutes();   // 获取当前分钟数(0-59)
+        var curSec = curDate.getSeconds();      //获取当前秒数(0-59)
+        var Current = curYear + timeStr + curMonth + timeStr + curDay + ' ' + curHour + ':' + curMinute + ':' + curSec;
+        console.log(Current);
+        this.datetime = Current;
+
+        // return Current;
+    }
+</script>
+<% include ./footer.ejs %>

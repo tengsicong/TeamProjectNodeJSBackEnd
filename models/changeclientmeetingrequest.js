@@ -12,6 +12,7 @@ module.exports = {
             .find()
             // .populate('ClientID')
             .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
+            .populate({path: 'MeetingID',populate:{ path: 'GroupID' }})
             .exec()
     },
 

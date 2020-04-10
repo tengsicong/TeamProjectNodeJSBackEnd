@@ -53,12 +53,21 @@ module.exports = {
             .exec();
     },
 
+
     deletePeopleLikeByStudentID: function deletePeopleLikeByStudentID(studentID) {
         return student
             .findOneAndUpdate({_id: studentID}, {$unset: {PeopleLike: ''}}, {new: true})
             .exec()
     },
 
+    /**
+     * @param {ObjectId} id, GroupID  id:studentID
+     * @return {client} a client object
+     */
+    updateStudentTeamByTeamID: function updateStudentTeamByTeamID(id,GroupID) {
+        return student.update({_id:id},{$addToSet:{GroupID: GroupID}})
+
+    },
     deletePeopleDontLikeByStudentID: function deletePeopleDontLikeByStudentID(studentID) {
         return student
             .findOneAndUpdate({_id: studentID}, {$unset: {PeopleDontLike: ''}}, {new: true})
