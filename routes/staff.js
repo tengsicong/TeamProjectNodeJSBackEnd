@@ -98,26 +98,27 @@ router.post('/meeting_detail_pre',function (req,res) {
     let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
-    console.log(req.body);
     let staffchangeID ;
+    let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
+
     const staffID = staffModel.getStaffByName(staffchange)
         staffID.then(function (result) {
             staffchangeID = result._id;
         })
 
+    const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
+    changerequest.then(function (result) {
+        console.log('=========');
+        requestID = result
+        console.log(requestID);
+    })
+
     primary_meeting.then(function (result) {
         //console.log(result);
-        let requestID ;
-        const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
-        changerequest.then(function (result) {
-            console.log(result)
-            if(result === null)
-                requestID = null;
-            else
-                requestID = result
-        })
         primaryMeetingResult = result;
+        console.log('------------');
+        console.log(requestID);
         if(staffchange === primaryMeetingResult.StaffID.Name)
             staffchangeID = null;
         if(requestID === null)
