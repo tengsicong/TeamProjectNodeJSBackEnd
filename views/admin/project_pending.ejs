@@ -33,8 +33,14 @@
                 </td>
                 <td>
                     <a href="/admin/pending_rejected?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">rejected
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right:2%;float: right">rejected
                     </button>
+                    </a>
+                </td>
+                <td>
+                    <a href="/admin/delete_project?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">delete
+                        </button>
                     </a>
                 </td>
             </tr>
@@ -54,7 +60,11 @@
                     <% for (let i = 0; i < proposal.ClientID.AllProposalID.length; i++) { %>
                         <% if (!proposal._id.equals(proposal.ClientID.AllProposalID[i]._id)) { %>
                             <% if (proposal.ClientID.AllProposalID[i].Status == 'approved') { %>
-                                <tr class="active" onclick="window.location.href='/admin/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <%if((j%2) == 1){%>
+                            <tr class="active" onclick="window.location.href='/admin/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                    <%}else {%>
+                            <tr onclick="window.location.href='/admin/project_approved?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                        <%}%>
                                     <th scope="row"><%= j %></th>
                                     <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
                                     <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
@@ -70,7 +80,11 @@
                                                              style="float:right;font-size:15px">Approved</span></td></tr>
                                 <% } %>
                             <% } else if (proposal.ClientID.AllProposalID[i].Status == 'pending') { %>
-                                <tr class="active" onclick="window.location.href='/admin/project_pending?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                            <%if((j%2) == 1){%>
+                            <tr class="active" onclick="window.location.href='/admin/project_pending?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <%}else {%>
+                            <tr onclick="window.location.href='/admin/project_pending?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <%}%>
                                     <th scope="row"><%= j %></th>
                                     <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
                                     <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
@@ -79,7 +93,11 @@
                                     <td width="5%"><span class="label label-warning"
                                                          style="float:right;font-size:15px">Pending</span></td></tr>
                             <% } else if (proposal.ClientID.AllProposalID[i].Status == 'rejected') { %>
-                                <tr class="active" onclick="window.location.href='/admin/project_rejected?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                            <%if((j%2) == 1){%>
+                            <tr class="active" onclick="window.location.href='/admin/project_rejected?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <%}else {%>
+                            <tr onclick="window.location.href='/admin/project_rejected?id=<%= proposal.ClientID.AllProposalID[i]._id %>'">
+                                <%}%>
                                     <th scope="row"><%= j %></th>
                                     <td style="cursor:pointer" width="40%"><b><%= proposal.ClientID.AllProposalID[i].Topic %></b></td>
                                     <td style="cursor: pointer" width="50%"><%= 'Client name: ' + proposal.ClientID.Name %></td>
@@ -104,17 +122,24 @@
         <% if(proposal.Reply.length!=0){%>
         <div class="bs-example widget-shadow" data-example-id="contextual-table" style="overflow-y:auto;">
             <table class="table" style="margin-bottom: 0px">
+                <thead>
+                <tr>
+                    <th style="width: 15%;font-size: 20px"><b>Name</b></th>
+                    <th style="width: 75%;font-size: 20px"><b>Comment</b></th>
+                    <th style="width: 15%;font-size: 20px"><b>Date</b></th>
+                </tr>
+                </thead>
                 <tbody>
                 <%for(let i = 0; i < proposal.Reply.length; i++) {%>
                     <% if ((i%2) == 1) { %>
                     <tr>
-                        <td width="15%"><b><%=proposal.Reply[i].Author+':'%></b></td>
+                        <td width="15%"><b><%=proposal.Reply[i].Author%></b></td>
                         <td width="75%"><%=proposal.Reply[i].Comment%></td>
                         <td width="15%"><%=proposal.Reply[i].ReplyDate.toISOString().replace(/T.*/,' ')+proposal.Reply[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     </tr>
                     <% } else {%>
                     <tr class="active">
-                        <td width="15%" scope="row"><b><%=proposal.Reply[i].Author+':'%></b></td>
+                        <td width="15%" scope="row"><b><%=proposal.Reply[i].Author%></b></td>
                         <td width="75%"><b><%=proposal.Reply[i].Comment%></b></td>
                         <td width="15%"><%=proposal.Reply[i].ReplyDate.toISOString().replace(/T.*/,' ')+proposal.Reply[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     </tr>

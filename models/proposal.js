@@ -77,14 +77,6 @@ module.exports = {
 
     },
 
-    getProposalByGroupID: function getProposalByGroupID(id) {
-        return proposal
-            .find({GroupID: id})
-            .populate('StudentID')
-            .exec()
-
-    },
-
     /**
      * @param {object} proposal : proposal object.
      * @return {[proposal]} proposal

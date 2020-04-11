@@ -516,5 +516,18 @@ router.get('/delete_team',function(req,res,next){
         })
         .catch(next)
 })
+//delete project
+router.get('/delete_project',function(req,res,next){
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    Promise.all([
+        clientModel.deleteProposalFromClientListByProposalID(clientID,proposalID),
+        proposalModel.deleteProposal(proposalID)
+    ])
+        .then(function (result) {
+            res.redirect('/admin/project_list')
+        })
+        .catch(next)
+})
 
 module.exports = router;
