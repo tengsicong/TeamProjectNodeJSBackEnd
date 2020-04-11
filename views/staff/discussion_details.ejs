@@ -16,8 +16,8 @@
                         </div>
                     <% } %>
 					<br><br>
-					<form action="discussion_details?id=<%= id %>" method="post">
-						<textarea class= "reply-area" name="reply" placeholder="Your Reply" wrap="virtual"></textarea>
+					<form action="discussion_details?id=<%= qa._id %>" method="post">
+						<textarea class= "reply-area" name="reply" placeholder="Your Reply" wrap="virtual" required=""></textarea>
 						<br><br>
 						<button type="submit" class="btn btn-primary sub-reply">Submit</button>
 						<div class="clearfix"> </div>

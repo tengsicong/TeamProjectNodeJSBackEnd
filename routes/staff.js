@@ -20,22 +20,17 @@ router.get('/my_project', function(req, res) {
             staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
         ])
             .then(function(result) {
-                const maxDisplay = 4;
                 const staff = result[0];
                 const allTeams = result[1];
                 let groupMember = [];
-
+                //console.log(allTeams);
                 for (let i = 0; i < allTeams.length; i++) {
                     //console.log(allTeams[i]);
                     groupMember[i] = '';
-                    const max = (maxDisplay < allTeams[i].StudentID.length)? maxDisplay : allTeams[i].StudentID.length;
-                    for (let j = 0; j < max; j++) {
+                    for (let j = 0; j < allTeams[i].StudentID.length; j++) {
                         groupMember[i] = groupMember[i] + allTeams[i].StudentID[j].Name;
-                        if (j < max - 1) {
-                            groupMember[i] = groupMember[i] + ', ';
-                        }
-                        else {
-                            if(allTeams[i].StudentID.length > maxDisplay) groupMember[i] = groupMember[i] + '...';
+                        if (j < allTeams[i].StudentID.length - 1) {
+                            groupMember[i] = groupMember[i] + ' / ';
                         }
                     }
                 }
@@ -66,17 +61,22 @@ router.get('/project_detail', function(req, res) {
                 let groupMember;
                 groupMember = '';
                 let stage=result[2];
+                console.log(allTeams[teamID]);
                 const max = allTeams[teamID].StudentID.length;
                 for (let j = 0; j < max; j++) {
                     groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
                     if (j < max - 1) {
-                        groupMember = groupMember + ', ';
+                        groupMember = groupMember + ' / ';
                     }
                 }
                 let meetingList = [];
                 //console.log(stage[0].Stage);
                 meetingList = allTeams[teamID].StaffMeetingID;
                 let nowtime = new Date();
+                // console.log(nowtime.toUTCString());
+                // console.log(nowtime);
+                // console.log(nowtime.toISOString().replace(/T.*/,' ') + nowtime.toLocaleTimeString().replace(/ G.*/,""));
+                // let solvednowtime = nowtime.toISOString().replace(/T.*/,' ') + nowtime.toLocaleTimeString().replace(/ G.*/,"");
                 res.render('staff/project_detail', {
                     pageTitle: 'Project Detail',
                     username: staff.Name,
@@ -98,6 +98,7 @@ router.post('/meeting_detail_pre',function (req,res) {
     let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
+    console.log(timechange);
     let staffchangeID ;
     let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
@@ -378,32 +379,33 @@ router.get('/marking', function(req, res) {
 router.get('/discussion', function(req, res) {
     if (req.session.role === 'staff') {
         const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
-        routePromise.then(function(result) {
-            const staff = result;
-            let qa = [];
-
+        routePromise.then(function(staff) {
             const completedQAPromise = new Promise(function(resolve) {
+                let qaList = [];
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
                     let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
                     qaPromise.then(function(result) {
-                        qa.push(...result);
+                        qaList.push(...result);
                         loaded++;
                         if(loaded == staff.AllocatedTeamID.length) {
-                            resolve(qa);
+                            resolve(qaList);
                         }
                     });
                 }
+
+                if(staff.AllocatedTeamID.length == 0) {
+                    resolve(qaList);
+                }
             });
  
-            completedQAPromise.then(function(result){
+            completedQAPromise.then(function(qaList){
                 //console.log(qa);
-
                 res.render('staff/discussion', {
                     pageTitle: 'Discussion',
                     username: staff.Name,
-                    qa: result,
+                    qa: qaList,
                 });
             });
         });
@@ -418,32 +420,15 @@ router.get('/discussion_details', function(req, res) {
         const questionID = req.query.id;
 
         const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
-        routePromise.then(function(result) {
-            const staff = result;
-            let qa = [];
+        routePromise.then(function(staff) {
 
-            const completedQAPromise = new Promise(function(resolve) {
-                let loaded = 0;
-
-                for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
-                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
-                    qaPromise.then(function(result) {
-                        qa.push(...result);
-                        loaded++;
-                        if(loaded == staff.AllocatedTeamID.length) {
-                            resolve(qa);
-                        }
-                    });
-                }
-            });
-            completedQAPromise.then(function(result){
+            const detailPromise = qaModel.getQAByQAID(questionID);
+            detailPromise.then(function(qa){
                 //console.log(qa);
-
                 res.render('staff/discussion_details', {
-                    pageTitle: result[questionID].Topic + ' - Discussion Details',
+                    pageTitle: qa.Topic + ' - Discussion Details',
                     username: staff.Name,
-                    qa: result[questionID],
-                    id: questionID,
+                    qa: qa,
                 });
             });
         });
@@ -459,35 +444,23 @@ router.post('/discussion_details', function(req, res) {
         const reply = req.body.reply;
 
         const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
-        routePromise.then(function(result) {
-            const staff = result;
-            let qa = [];
-
-            const completedQAPromise = new Promise(function(resolve) {
-                let loaded = 0;
-
-                for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
-                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
-                    qaPromise.then(function(result) {
-                        qa.push(...result);
-                        loaded++;
-                        if(loaded == staff.AllocatedTeamID.length) {
-                            resolve(qa);
-                        }
-                    });
-                }
-            });
-            completedQAPromise.then(function(result){
-                let replies = result[questionID].Replies;
+        routePromise.then(function(staff) {
+            const detailPromise = qaModel.getQAByQAID(questionID);
+            detailPromise.then(function(qa){
+                let replies = qa.Replies;
                 replies.push({
                     Author: staff.Name,
                     Comment: reply,
                     ReplyDate: new Date().getTime(),
                 });
                 //console.log(replies);
-                const updatePromise = qaModel.updateReplyByQaId(result[questionID]._id, replies);
+                const updatePromise = qaModel.updateReplyByQAID(qa._id, replies);
                 updatePromise.then(function(result) {
-                    res.redirect('discussion_details?id=' + questionID);
+                    res.render('staff/discussion_details', {
+                        pageTitle: qa.Topic + ' - Discussion Details',
+                        username: staff.Name,
+                        qa: qa,
+                    });
                 });
             });
         });

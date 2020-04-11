@@ -15,7 +15,7 @@
                     <table>
                         <tr width="500px"><p><b>Client : </b> <%= meeting.GroupID.ProposalID.ClientID.Name %> </p></tr>
                         <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.Name %> </tr>
-                        <tr width="500px"><p><b>Team : </b> <%= meeting.GroupID.TeamName %> </tr>
+                        <tr width="500px"><p><b>SSIT Team : </b> <%= meeting.GroupID.TeamName %> </tr>
                         <tr width="500px"><p><b>Date : </b> <%= meeting.Date %> </tr>
                         <tr width="500px"><p><b>Venue : </b> <%= meeting.Place %> </tr>
                     </table>
@@ -102,16 +102,17 @@
                 </div>
             <% } %>
             <div class="form-group row1 blank-page widget-shadow scroll" >
-                <form method="post">
+                <form onsubmit="return my_check()" method="post">
+                    <script>console.log(my_check())</script>
                     <table style="width: 90%; margin: auto;">
                         <tr>
                             <th style = "width: 15%;">Change Date</th>
-                            <td style="padding: 0.5em;"><input name="timechange" type="datetime-local" style="width: 30%" value=nowtime></td>
+                            <td style="padding: 0.5em;"><input id = "timechange" name="timechange" type="datetime-local" style="width: 30%" value=nowtime></td>
                         </tr>
                         <tr>
                             <th style = "width: 15%;">Change Supervisor</th>
                             <td style="padding: 0.5em;">
-                                <select name="staffchange" class="form-control" style="width: 30%">
+                                <select id ="staffchange" name="staffchange" class="form-control" style="width: 30%">
                                     <% for(var i=0;i<stafflist.length;i++) { %>
                                         <%if(stafflist[i].StaffID == nowstaff ) {%>
                                             <option selected><%= stafflist[i].Name%></option>
@@ -129,11 +130,13 @@
                             </td>
                         </tr>
                     </table>
-                    <button type="submit" class="btn btn-primary" style="margin-left: 90%" value=" SUBMIT">Submit</button>
+                    <button type="submit" class="btn btn-primary" style="margin-left: 90%" value=" SUBMIT" >Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <%- include('footer') %>

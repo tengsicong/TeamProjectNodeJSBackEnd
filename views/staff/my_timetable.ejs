@@ -42,8 +42,8 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>Meeting Number</th>
                                     <th>Team Number</th>
+                                    <th>Meeting Number</th>
                                     <th>Meeting Time</th>
                                     <th>Meeting Status</th>
                                 </tr>
@@ -52,15 +52,15 @@
                                     <% for(var i=0;i<meetingList.length;i++) { %>
                                         <%if(meetingList[i].Date<nowtime) { %>
                                             <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
-                                                <th><%= meetingList[i].MeetingNumber%></th>
-                                                <td><%= meetingList[i].GroupID.TeamName%></td>
+                                                <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
+                                                <td><%= meetingList[i].MeetingNumber%></td>
                                                 <td><%= meetingList[i].Date%></td>
                                                 <td>Done</td>
                                             </tr>
                                         <%} else { %>
                                             <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
-                                                <th><%= meetingList[i].MeetingNumber%></th>
-                                                <td><%= meetingList[i].GroupID.TeamName%></td>
+                                                <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
+                                                <td><%= meetingList[i].MeetingNumber%></td>
                                                 <td><%= meetingList[i].Date%></td>
                                                 <td>Upcoming</td>
                                             </tr>

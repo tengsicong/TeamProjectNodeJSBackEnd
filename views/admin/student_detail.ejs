@@ -24,6 +24,22 @@
                         <tr><%= 'Proposal: '+proposal.Topic %></tr>
                         <%}%>
                     <%}%>
+                    <br>
+                    <%if(student.PeopleLike==undefined){%>
+                        <tr><%= 'Preferred parter: None'%></tr>
+                    <%}else{%>
+                        <tr><%= 'Preferred parter: '+ student.PeopleLike.Name%></tr>
+                    <%}%>
+                    <br>
+                    <%if(student.PeopleDontLike==undefined || student.PeopleDontLike.length==0){%>
+                        <tr><%= 'Preferred Not to work with: None'%></tr>
+                    <%}else{%>
+                    <%if(student.PeopleDontLike.length == 1){%>
+                        <tr><%= 'Preferred Not to work with: '+ student.PeopleDontLike[0].Name%></tr>
+                    <%}else{%>
+                        <tr><%= 'Preferred Not to work with: '+ student.PeopleDontLike[0].Name + ' / '+ student.PeopleDontLike[1].Name%></tr>
+                    <%}%>
+                    <%}%>
                     </tbody>
                 </table>
             </div>
@@ -41,7 +57,7 @@
                         <th width="10%">Mark</th>
                     </tr>
                     <tr>
-                        <td>Teammate mark for your contribution</td>
+                        <td>Teammate mark for contribution</td>
                         <td>
                             <% if (student.Mark.length == 0) { %>
                                 None
