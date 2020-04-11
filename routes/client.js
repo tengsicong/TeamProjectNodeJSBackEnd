@@ -289,7 +289,7 @@ router.get('/myteam/edit_teammark', function(req, res, next) {
     ])
         .then(function(result) {
             //console.log(result[1].ClientMeetingID[0].Date)
-            res.render('client/team_mark', {
+            res.render('client/edit_teammark', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM '+result[1].TeamName+' Mark',
                 username: result[0].Name,
