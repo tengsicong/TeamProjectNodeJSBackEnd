@@ -19,6 +19,13 @@ module.exports = {
             .populate('GroupID')
             .populate('ClientID')
             .exec()
+    },
+
+    getClientMeetingByMeetingID: function getClientMeetingByMeetingID(id) {
+      return clientmeetings
+          .findOne({_id:id})
+          .populate('GroupID')
+          .populate('ClientID')
     }
 
 

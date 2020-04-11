@@ -16,7 +16,8 @@
                     <div class="col-sm-8">
                         <p>Must determine the apprioprite form of documentation with client.This could be a seprate user manual. or online help system, or multiple different forms.</p>
                         <br>
-                        <select id="mark1"  class="form-control-project">
+                        <% const mark = team.ClientMark[0]%>
+                        <select id="mark1"  class="form-control-project "  onclick="set_select_checked(this.id,mark)">
                             <option value="none"> - </option>
                             <option value="3">3 - very poor documentation</option>
                             <option value="6">6 - few documentation</option>
@@ -38,7 +39,7 @@
                         <br>
                         <select id="mark2" class="form-control-project">
                             <option value="none"> - </option>
-                            <option value="1">1 - very poor demonstration</option>
+                            <option value="1" selected="selected">1 - very poor demonstration</option>
                             <option value="2">2 - incomplete demonstration</option>
                             <option value="3">3 - regular demonstration</option>
                             <option value="4">4 - good demonstration</option>
@@ -124,21 +125,21 @@
                 </div>
                 <br>
                 <div class="form-group">
-                <label for="selector6" class="col-sm-2 control-label" style="padding-top: 0px">Robustness (5)</label>
-                <div class="col-sm-8">
-                    <p>Please mark based on the system delivered of robustness.</p>
-                    <br>
-                    <select id="mark7" class="form-control-project">
-                        <option value="none"> - </option>
-                        <option value="1">1 - no robustness</option>
-                        <option value="2">2 - a little robustness</option>
-                        <option value="3">3 - critical robustness</option>
-                        <option value="4">4 - robust</option>
-                        <option value="5">5 - very robust</option>
-                    </select>
-                    <p>&nbsp</p>
-                    <textarea id="mark7_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
-                </div>
+                    <label for="selector6" class="col-sm-2 control-label" style="padding-top: 0px">Robustness (5)</label>
+                    <div class="col-sm-8">
+                        <p>Please mark based on the system delivered of robustness.</p>
+                        <br>
+                        <select id="mark7" class="form-control-project">
+                            <option value="none"> - </option>
+                            <option value="1">1 - no robustness</option>
+                            <option value="2">2 - a little robustness</option>
+                            <option value="3">3 - critical robustness</option>
+                            <option value="4">4 - robust</option>
+                            <option value="5">5 - very robust</option>
+                        </select>
+                        <p>&nbsp</p>
+                        <textarea id="mark7_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                    </div>
                 </div>
                 <br>
                 <div class="form-group">
@@ -193,9 +194,9 @@
         link = link.substring(1,link.length);
         let GroupID = link.split("&")[0].split("=")[1];
         if (mark1 === 'none'||mark2 === 'none'||mark3 === 'none'||mark4 === 'none'||mark5 === 'none'||mark6 === 'none'||mark7 === 'none'||mark8 === 'none') {
-        alert('Please fill all the mark');
+            alert('Please fill all the mark');
         } else if (mark1_reason === ''||mark2_reason === ''||mark3_reason === ''||mark4_reason === ''||mark5_reason === ''||mark6_reason === ''||mark7_reason === ''||mark8_reason === '') {
-        alert('Please enter all the reason');
+            alert('Please enter all the reason');
         }
         else {
             const inputElement1 = document.createElement("input");
@@ -292,6 +293,17 @@
             document.body.appendChild(form);
             form.submit();
             return form
+        }
+    }
+
+    function set_select_checked(selectId, checkValue){
+        const select = document.getElementById(selectId);
+
+        for (let i = 0; i < select.options.length; i++){
+            if (select.options[i].value === checkValue){
+                select.options[i].selected = true;
+                break;
+            }
         }
     }
 </script>

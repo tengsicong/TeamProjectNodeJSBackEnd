@@ -63,7 +63,7 @@
         </div>
     <% } else { %>
     <div class="blank-page widget-shadow scroll" id="client_team1_meeting_div">
-            <h2><b>Team Mark</b><a href="/client/myteam/teammark?id=<%= team._id %>">
+            <h2><b>Team Mark</b><a href="/client/myteam/edit_teammark?id=<%= team._id %>">
                     <button class="btn btn-primary" style="float:right" type="button">Edit
                     </button>
                 </a></h2>
@@ -132,3 +132,5 @@
 </div>
 
 <%- include('footer') %>
+
+<%- include('script')%>

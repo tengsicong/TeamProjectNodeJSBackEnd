@@ -52,7 +52,7 @@
                                 <tbody>
                                 <%for(let i=0;i<meetings.length;i++){%>
                                 <tr>
-                                    <th style="width: 20%" scope="row"><%=i+1%></th>
+                                    <th style="width: 20%" scope="row"><%=meetings[i].MeetingNumber%></th>
                                     <td style="width: 20%"><%="SSIT TEAM "+meetings[i].GroupID.TeamName%></td>
                                     <td style="width: 30%"><%=meetings[i].Date.toISOString().replace(/T.*/,' ')+meetings[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                     <td style="width: 30%"><%=meetings[i].Place%></td>
@@ -73,7 +73,7 @@
                                 <select class="form-control" style="width: 60%" name="selection">
                                     <option>-</option>
                                     <%for(let i=0;i<meetings.length;i++){%>
-                                    <option name="option" id="<%meetings[i]._id%>">Client Meeting <%=i+1%></option>
+                                    <option value="<%=meetings[i]._id%>">Client meeting <%=meetings[i].MeetingNumber%></option>
                                     <%}%>
                                 </select>
                             </div>
@@ -91,7 +91,7 @@
                             <div class="col-md-4">
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal" style="margin-left: 280%">Check History</button>
                                 <div class="modal fade" id="gridSystemModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
-                                    <div class="modal-dialog" role="document" style="width:60%">
+                                    <div class="modal-dialog" role="document" style="width:70%">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -101,22 +101,21 @@
                                                 <%if(changeClientMeetingRequest.length>0){%>
                                                 <table>
                                                     <tr>
-                                                        <th width="10%"><b>Name</b></th>
                                                         <th width="10%"><b>Meeting Number</b></th>
                                                         <th width="15%"><b>Original Time</b></th>
                                                         <th width="15%"><b>New Meeting Time</b></th>
-                                                        <th width="25%"><b>Comment</b></th>
-                                                        <th width="20%"><b>Admin Reply</b></th>
+                                                        <th width="15%"><b>Comment</b></th>
+                                                        <th width="10%"><b>Admin Reply</b></th>
                                                         <th width="5%"><b>Status</b></th>
+                                                        <th width="15%"><b>Request Date</b></th>
                                                     </tr>
                                                     <br>
 
                                                     <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
                                                     <tr class="role2">
-                                                        <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name%></td>
-                                                        <td>client meeting <%= i + 1 %></td>
+                                                        <td style="text-align: center"><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber%></td>
                                                         <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                                        <td>change time to <%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                        <td><%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                         <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
                                                         <% if(changeClientMeetingRequest[i].AdminReply.Content!= undefined){%>
                                                         <td><%= changeClientMeetingRequest[i].AdminReply.Content %></td>
@@ -124,6 +123,7 @@
                                                             <td>No reply.</td>
                                                         <%}%>
                                                         <td><%=changeClientMeetingRequest[i].Status%></td>
+                                                        <td><%=changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                     </tr>
                                                     <% } %>
                                                 </table>
@@ -147,3 +147,5 @@
 </div>
 
 <%- include('footer') %>
+
+<%- include('script')%>

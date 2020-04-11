@@ -110,7 +110,7 @@ router.get('/myproject/project_pending', function(req, res, next) {
 
 /*添加评论*/
 router.post('/myproject/project_pending',function(req,res,next){
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     replyDate = new Date();
     Promise.all([
@@ -127,7 +127,7 @@ router.post('/myproject/project_pending',function(req,res,next){
             });
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                res.redirect('/client/myproject/project_pending?id='+req.query.id)
+                res.redirect('/client/myproject/project_pending?id='+proposalID)
             })
         })
         .catch(next)
@@ -197,7 +197,8 @@ router.get('/edit_project', function(req, res,next) {
 
 /*Edit proposal*/
 router.post('/edit_project',function(req,res,next){
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
+    console.log('id= '+ proposalID)
     const topic = req.body.topic;
     const content = req.body.content;
     newDate = new Date();
@@ -210,7 +211,7 @@ router.post('/edit_project',function(req,res,next){
     }
     proposalModel.editProposal(proposal)
         .then(function () {
-            res.redirect('/client/myproject/project_pending?id='+req.query.id)
+            res.redirect('/client/myproject/project_pending?id='+proposalID)
         })
         .catch(next)
 })
@@ -280,8 +281,26 @@ router.get('/myteam/teammark', function(req, res, next) {
         .catch(next);
 });
 
+router.get('/myteam/edit_teammark', function(req, res, next) {
+    const teamID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        clientModel.getClientByClientID(clientID),
+        teamModel.getTeamByTeamID(teamID),
+    ])
+        .then(function(result) {
+            //console.log(result[1].ClientMeetingID[0].Date)
+            res.render('client/team_mark', {
+                team: result[1],
+                pageTitle: 'SSIT TEAM '+result[1].TeamName+' Mark',
+                username: result[0].Name,
+                meetings: result[1].ClientMeetingID,
+            });
+        })
+        .catch(next);
+});
+
 router.post('/myteam/teammark',function(req,res,next) {
-    const teamid = mongoose.Types.ObjectId(req.query.id);
+    const teamid = mongoose.Types.ObjectId(req.body.GroupID);
     let marks = [];
     let reasons = [];
     for (let i=1;i<9;i++){
@@ -291,7 +310,7 @@ router.post('/myteam/teammark',function(req,res,next) {
         reasons.push(eval('req.body.mark'+i+'_reason'))
     }
     clientModel.updateClientGroupMark(teamid,marks,reasons).then(function () {
-        res.redirect('/client/myteam/teampage?id='+req.query.id);
+        res.redirect('/client/myteam/teampage?id='+teamid);
     })
 });
 
@@ -318,31 +337,28 @@ router.get('/mytimetable', function(req, res,next) {
 
 /*发送更改会议请求*/
 router.post('/mytimetable', function(req, res,next) {
-    const select =req.body.selection;
-    const number = select.substr(select.length-1,1);
-    const meetingnumber = number-1;
+    const selectMeetingid =mongoose.Types.ObjectId(req.body.selection);
     const reason =req.body.reason;
     const time = req.body.time;
     nowDate = new Date();
     Promise.all([
-        clientModel.getClientByClientID(clientID),
-        clientMeetingModel.getClientMeetingByClientID(clientID),
+        clientMeetingModel.getClientMeetingByMeetingID(selectMeetingid)
     ])
         .then(function (result) {
             const meetings = result[1];
             let request = {
-                MeetingID: meetings[meetingnumber]._id,
+                MeetingID: result[0]._id,
                 ClientID: clientID,
                 Status:'pending',
                 NewMeetingTime:time,
                 RequestComment:{
-                    RequestName:result[0].Name,
+                    RequestName:result[0].ClientID.Name,
                     Date:nowDate,
                     Content:reason
                 }}
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
             res.redirect('/client/mytimetable')
-            });
+           });
 });
 
 
