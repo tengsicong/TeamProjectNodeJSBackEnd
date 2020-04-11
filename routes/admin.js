@@ -372,7 +372,8 @@ router.get('/student_detail', function (req, res, next) {
 
 //edit project
 router.post('/edit_project',function (req,res,next) {
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
+    console.log('id= '+ proposalID)
     const topic = req.body.topic;
     const content = req.body.content;
     newDate = new Date();
@@ -455,7 +456,7 @@ router.get('/approved_pending',function (req,res,next) {
 })
 
 router.post('/project_pending',function(req,res,next){
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     replyDate = new Date();
     Promise.all([
@@ -472,14 +473,14 @@ router.post('/project_pending',function(req,res,next){
             });
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                res.redirect('/admin/project_pending?id='+req.query.id)
+                res.redirect('/admin/project_pending?id='+proposalID)
             })
         })
         .catch(next)
 })
 
 router.post('/project_rejected',function(req,res,next){
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     replyDate = new Date();
     Promise.all([
@@ -496,7 +497,7 @@ router.post('/project_rejected',function(req,res,next){
             });
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                res.redirect('/admin/project_rejected?id='+req.query.id)
+                res.redirect('/admin/project_rejected?id='+proposalID)
             })
         })
         .catch(next)
@@ -506,15 +507,15 @@ router.get('/delete_team',function(req,res,next){
     const groupID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         proposalModel.getProposalBygroupID(groupID),
+        studentModel.getStudentByGroupID(groupID),
+        proposalModel.deleteProposalTeamByGroupID(groupID),
+        teamModel.deleteTeamProposalByProposalID(groupID,proposalID),
+        studentModel.deleteStudentProposalByProposalID(studentID,proposalID),
         ])
-
-    newDate = new Date();
-    proposalModel.deleteTeam(groupID)
-    teamModel.deleteProposalIDByProposalID(groupID,proposalID)
         .then(function (result) {
             res.redirect('/admin/project_list')
         })
-        .catch(next)
+        .catch(next);
 })
 //delete project
 router.get('/delete_project',function(req,res,next){

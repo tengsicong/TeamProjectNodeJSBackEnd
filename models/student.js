@@ -41,6 +41,12 @@ module.exports = {
             .exec();
     },
 
+    getStudentByGroupID: function getStudentByGroupID(id) {
+        return student
+            .findOne({_id: id})
+            .exec();
+    },
+
     postPeopleLikeByStudentID: function postPeopleLikeByStudentID(thisStudentID, peopoleID) {
         student
             .findOneAndUpdate({_id: thisStudentID}, {$set: {PeopleLike: peopoleID}})
@@ -73,6 +79,11 @@ module.exports = {
             .findOneAndUpdate({_id: studentID}, {$unset: {PeopleDontLike: ''}}, {new: true})
             .exec()
     },
+
+    deleteStudentProposalByProposalID: function deleteStudentProposalByProposalID(proposalID){
+        return student.deleteOne({_id:proposalID}).exec()
+    },
+
 };
 
 // const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
