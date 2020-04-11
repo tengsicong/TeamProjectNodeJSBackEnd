@@ -5,10 +5,10 @@
     <div class="main-page">
         <h2 class="title1">My Project</h2>
         <div class="blank-page widget-shadow scroll">
-            <h3>Project Name</h3>
+            <h3><%= team.ProposalID.Topic%></h3>
             <table width="100%">
                 <tr>
-                    <td width="30%"><P><b>Client : </b><%= team.ProposalID.ClientID.Name%></P></td>
+                    <td width="30%"><P><b>Client : </b><%= team.ProposalID.ClientID%></P></td>
                     <td width="30%"><p><b>Supervisor : </b><%= team.StaffID.Name%></p></td>
                     <td width="30%"><p><b>SSIT Team </b> <%= team.TeamName%></p></td>
                 </tr>
@@ -50,7 +50,7 @@
                     <%if(allmeeting[i].Date>nowtime) { %>
                         <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=team.StaffMeetingID[i]._id%>" style="cursor: pointer">
                             <th>Meeting <%=i+1%></th>
-                            <td><%= team.StaffMeetingID[i].Date%></td>
+                            <td><%= team.StaffMeetingID[i].Date.toISOString().replace(/T.*/,' ') + team.StaffMeetingID[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                             <td><%= team.StaffMeetingID[i].Place%></td>
                             <% if(team.StaffMeetingID[i].TemporaryStaffID == null) { %>
                                 <td><%= team.StaffMeetingID[i].StaffID.Name%></td>
@@ -61,7 +61,7 @@
                     <% } else { %>
                         <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=team.StaffMeetingID[i]._id%>" style="cursor: pointer">
                             <th>Meeting <%=i+1%></th>
-                            <td><%= team.StaffMeetingID[i].Date%></td>
+                            <td><%= team.StaffMeetingID[i].Date.toISOString().replace(/T.*/,' ') + team.StaffMeetingID[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                             <td><%= team.StaffMeetingID[i].Place%></td>
                             <% if(team.StaffMeetingID[i].TemporaryStaffID == null) { %>
                                 <td><%= team.StaffMeetingID[i].StaffID.Name%></td>

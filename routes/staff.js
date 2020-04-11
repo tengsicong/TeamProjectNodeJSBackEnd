@@ -65,13 +65,17 @@ router.get('/project_detail', function(req, res) {
                 for (let j = 0; j < max; j++) {
                     groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
                     if (j < max - 1) {
-                        groupMember = groupMember + ', ';
+                        groupMember = groupMember + ' / ';
                     }
                 }
                 let meetingList = [];
                 //console.log(stage[0].Stage);
                 meetingList = allTeams[teamID].StaffMeetingID;
                 let nowtime = new Date();
+                // console.log(nowtime.toUTCString());
+                // console.log(nowtime);
+                // console.log(nowtime.toISOString().replace(/T.*/,' ') + nowtime.toLocaleTimeString().replace(/ G.*/,""));
+                // let solvednowtime = nowtime.toISOString().replace(/T.*/,' ') + nowtime.toLocaleTimeString().replace(/ G.*/,"");
                 res.render('staff/project_detail', {
                     pageTitle: 'Project Detail',
                     username: staff.Name,
@@ -93,6 +97,7 @@ router.post('/meeting_detail_pre',function (req,res) {
     let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
+    console.log(timechange);
     let staffchangeID ;
     let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);

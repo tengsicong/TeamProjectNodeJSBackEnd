@@ -32,7 +32,7 @@ module.exports = {
             .populate('StudentID','Name')
             .populate('Representer','Name')
             .populate('ProposalID','Content')
-            .populate({path: 'ProposalID', populate: {path: 'ClientID',select: 'Name'}})
+            .populate({path: 'ProposalID', populate: {path: 'ClientID'}})
             .populate({path: 'StaffMeetingID',populate: {path:'StaffID'}})
             .populate({path: 'StaffMeetingID',populate: {path:'TemporaryStaffID'}})
             .exec();
