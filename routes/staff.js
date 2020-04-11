@@ -20,7 +20,6 @@ router.get('/my_project', function(req, res) {
             staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
         ])
             .then(function(result) {
-                const maxDisplay = 4;
                 const staff = result[0];
                 const allTeams = result[1];
                 let groupMember = [];
@@ -28,14 +27,10 @@ router.get('/my_project', function(req, res) {
                 for (let i = 0; i < allTeams.length; i++) {
                     //console.log(allTeams[i]);
                     groupMember[i] = '';
-                    const max = (maxDisplay < allTeams[i].StudentID.length)? maxDisplay : allTeams[i].StudentID.length;
-                    for (let j = 0; j < max; j++) {
+                    for (let j = 0; j < allTeams[i].StudentID.length; j++) {
                         groupMember[i] = groupMember[i] + allTeams[i].StudentID[j].Name;
-                        if (j < max - 1) {
-                            groupMember[i] = groupMember[i] + ', ';
-                        }
-                        else {
-                            if(allTeams[i].StudentID.length > maxDisplay) groupMember[i] = groupMember[i] + '...';
+                        if (j < allTeams[i].StudentID.length - 1) {
+                            groupMember[i] = groupMember[i] + ' / ';
                         }
                     }
                 }
@@ -382,7 +377,7 @@ router.get('/discussion', function(req, res) {
             const staff = result;
             let qa = [];
 
-            const completedQAPromise = new Promise(function(resolve) {
+            const completedQAPromise = new Promise(function(resolve, reject) {
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
@@ -394,6 +389,10 @@ router.get('/discussion', function(req, res) {
                             resolve(qa);
                         }
                     });
+                }
+
+                if(staff.AllocatedTeamID.length == 0) {
+                    resolve(qa);
                 }
             });
  

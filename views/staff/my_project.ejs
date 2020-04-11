@@ -5,9 +5,9 @@
         <div class="main-page">
             <div class="blank-page widget-shadow scroll">
                 <h2><b>My Projects</b></h2>
-
                 <% if (allTeams.length == Number(0)) { %>
-                    <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
+                    <br>
+                    <div class="alert alert-danger" role="alert">You do not have project currently!</div>
                 <% } else { %>
                     <% for(let i = 0; i < allTeams.length; i++) {%>
                         <div class="grid_3 grid_5 widget-shadow" style="cursor:pointer" onclick="window.location.href = 'project_detail?seq=<%=i%>'">
@@ -21,23 +21,33 @@
                                 </b>
                                 <span class="label label-success" style="float:right;font-size:15px">Ongoing</span>
                             </h3>
+                            <table style="width: 100%; margin-top:1.5em; margin-bottom: 1.5em;">
+                                <tr>
+                                    <td style="width: 25%;">
+                                        <b>Client:</b>
+                                         <%= allTeams[i].ProposalID.ClientID.Name %>
+                                    </td>
+                                    <td style="width: 75%;">
+                                        <b>Member:</b> 
+                                        <%= groupMember[i] %>                         
+                                    </td>
+                                </tr>
+                            </table>
                             <p>
-                                <b>Representative:</b>
-                                <% if (allTeams[i].Representer === undefined) { %>
-                                    Have not appointed yet
-                                <% } else { %>
-                                    <%= allTeams[i].Representer.Name %>
-                                <% } %>
-                            </p>
-                            <p>
-                                <b>Group Member:</b> 
-                                <%= groupMember[i] %>
+                                <b>Background:</b>
+                                <% 
+                                    const textLimit = 180;
+                                    let background =  allTeams[i].ProposalID.Content;
+                                    if(background.length >= textLimit) {
+                                        background = background.substring(0,textLimit) + '...';
+                                    }
+                                %>
+                                <%= background %>
                                 <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
                             </p>
                         </div>
                      <% } %>
                 <% } %>
-
             </div>
         </div>
     </div>

@@ -6,8 +6,8 @@
                 <div class="blank-page widget-shadow scroll">
                     <h2><b>Discussion Board</b></h2>
                     <br>
-                    <% if (qa.length == 0) {%>
-                        <div class="alert alert-danger" role="alert">No question yet</div>
+                    <% if (qa.length === 0) {%>
+                        <div class="alert alert-danger" role="alert">No discussion yet</div>
                     <% } else { %>
                         <% for (let i = 0; i < qa.length; i++) { %>
                             <div class="panel panel-info discussion-item" style="cursor:pointer" onclick="window.location.href = 'discussion_details?id=<%=i%>'">
