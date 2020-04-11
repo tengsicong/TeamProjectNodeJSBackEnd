@@ -469,11 +469,7 @@ router.post('/discussion_details', function(req, res) {
                 //console.log(replies);
                 const updatePromise = qaModel.updateReplyByQAID(qa._id, replies);
                 updatePromise.then(function(result) {
-                    res.render('staff/discussion_details', {
-                        pageTitle: qa.Topic + ' - Discussion Details',
-                        username: staff.Name,
-                        qa: qa,
-                    });
+                    res.redirect('discussion_details?id=' + qa._id);
                 });
             });
         });
