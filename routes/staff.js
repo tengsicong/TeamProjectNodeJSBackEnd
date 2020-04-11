@@ -355,7 +355,6 @@ router.post('/marking', function (req,res,next) {
 router.get('/marking', function(req, res) {
     if (req.session.role === 'staff') {
         const teamID = parseInt(req.query.seq);
-        const teamsqr = req.query.id;
         Promise.all([
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
@@ -363,11 +362,22 @@ router.get('/marking', function(req, res) {
             .then(function (result) {
                 const staff = result[0];
                 const allTeams = result[1];
+                const items = ['Management','','','Testing','','QA','Poster session'];
+                const description = ['Team organisation (regular meetings, good quality minutes of meetings appearing on time in the team google drive, work allocation).',
+                                    'Progress with implementation (problems solved, completing agreed tasks in a timely manner, maintaining risk register).',
+                                    'Key documents (story cards, design documents).',
+                                    'Unit tests (these should run automatically).',
+                                    'System tests (either running automatically, or well-documented manual test).',
+                                    'You are assessed on how well you spot problems with the code of another team. Any problems detected in your own code do not affect your grade for this part (but if a client detects them, they may mark you down).',
+                                    'How well your final presentations sells your work, and how well you did a demo of your system and answered questions.'];
+
                 //console.log(teamID);
                 res.render('staff/marking', {
                     pageTitle: 'Marking',
                     username: staff.Name,
                     team: allTeams[teamID],
+                    items: items,
+                    description: description,
                 });
             })
     }
