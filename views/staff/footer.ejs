@@ -74,21 +74,6 @@
 </script>
 <!-- //calendar -->
 
-<script>
-    function my_check() {
-        var time = $("#timechange".val());
-        var staff = $("#staffchange".val());
-        alert("123123123");
-        console.log(this);
-        if(time == null && staff == <%=nowstaff%>)
-        {
-            alert("time and staff can't both be empty");
-            return false;
-        }
-        return true;
-    }
-</script>
-
 <script type="text/javascript">
     $(function($) {
         $(".clickable-row").click(function () {
