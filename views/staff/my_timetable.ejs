@@ -54,14 +54,14 @@
                                             <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
                                                 <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
                                                 <td><%= meetingList[i].MeetingNumber%></td>
-                                                <td><%= meetingList[i].Date%></td>
+                                                <td><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                 <td>Done</td>
                                             </tr>
                                         <%} else { %>
                                             <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
                                                 <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
                                                 <td><%= meetingList[i].MeetingNumber%></td>
-                                                <td><%= meetingList[i].Date%></td>
+                                                <td><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                 <td>Upcoming</td>
                                             </tr>
                                         <% } %>
