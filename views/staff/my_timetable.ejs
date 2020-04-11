@@ -50,21 +50,28 @@
                                 </thead>
                                 <tbody>
                                     <% for(var i=0;i<meetingList.length;i++) { %>
-                                        <%if(meetingList[i].Date<nowtime) { %>
-                                            <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
-                                                <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
-                                                <td><%= meetingList[i].MeetingNumber%></td>
-                                                <td><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                        <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
+                                            <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
+                                            <td><%= meetingList[i].MeetingNumber%></td>
+                                            <td><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                            <%if(meetingList[i].Date<nowtime) { %>
                                                 <td>Done</td>
-                                            </tr>
-                                        <%} else { %>
-                                            <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
-                                                <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
-                                                <td><%= meetingList[i].MeetingNumber%></td>
-                                                <td><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                            <% } else { %>
                                                 <td>Upcoming</td>
-                                            </tr>
-                                        <% } %>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                    <% for(var i=0;i<tempMeetingList.length;i++) { %>
+                                        <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=tempMeetingList[i]._id%>" style="cursor: pointer">
+                                            <th>SSIT TEAM <%= tempMeetingList[i].GroupID.TeamName%></th>
+                                            <td><%= tempMeetingList[i].MeetingNumber%> (Temporary Meeting)</td>
+                                            <td><%= tempMeetingList[i].Date.toISOString().replace(/T.*/,' ') + tempMeetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                            <%if(tempMeetingList[i].Date<nowtime) { %>
+                                                <td>Done</td>
+                                            <% } else { %>
+                                                <td>Upcoming</td>
+                                            <% } %>
+                                        </tr>
                                     <% } %>
                                 </tbody>
                             </table>

@@ -319,16 +319,19 @@ router.get('/my_timetable', function(req, res) {
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllStaff(),
             staffModel.getAllMeetingByStaffID(req.session.userinfo),
+            staffModel.getAllMeetingByTempStaffID(req.session.userinfo),
         ])
             .then(function (result) {
                 const staff = result[0];
                 const meetingList = result[2];
                 const staffList = result[1];
+                const TempmeetingList = result[3];
                 let nowtime = new Date();
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
                     meetingList: meetingList,
+                    tempMeetingList: TempmeetingList,
                     staffList: staffList,
                     nowtime: nowtime,
                 });

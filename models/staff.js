@@ -117,12 +117,24 @@ module.exports = {
 
     /**
      * @param {ObjectId} id
-     * @return {[meeting]} staff object
+     * @return {[meeting]} meeting List
      */
 
-    getAllMeetingByStaffID: function getAllMeetingByStaffIDf(id) {
+    getAllMeetingByStaffID: function getAllMeetingByStaffID(id) {
         return meeting
             .find({StaffID: id})
+            .populate('GroupID')
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
+     * @return {[meeting]} meeting List
+     */
+
+    getAllMeetingByTempStaffID: function getAllMeetingByTempStaffID(id) {
+        return meeting
+            .find({TemporaryStaffID: id})
             .populate('GroupID')
             .exec();
     },
