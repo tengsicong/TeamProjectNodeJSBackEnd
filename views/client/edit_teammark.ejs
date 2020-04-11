@@ -8,7 +8,6 @@
         <div class="row">
             <br>
             <form class="form-horizontal" method="post">
-
                 <div class="form-group">
                     <h3><b style="margin-left:3%" >Documentation (15):</b></h3>
                     <br>
@@ -16,17 +15,54 @@
                     <div class="col-sm-8">
                         <p>Must determine the apprioprite form of documentation with client.This could be a seprate user manual. or online help system, or multiple different forms.</p>
                         <br>
-                        <% const mark = team.ClientMark[0]%>
-                        <select id="mark1"  class="form-control-project "  onclick="set_select_checked(this.id,mark)">
+
+                        <select id="mark1"  class="form-control-project ">
+                            <% switch (team.ClientMark[0]) {
+                            case 3: %>
+                            <option value="none"> - </option>
+                            <option value="3" selected="selected">3 - very poor documentation</option>
+                            <option value="6">6 - few documentation</option>
+                            <option value="9">9 - regular documentation</option>
+                            <option value="12">12 - good documentation</option>
+                            <option value="15">15 - very good documentation</option>
+                            <% break; %>
+                            <% case 6: %>
+                            <option value="none"> - </option>
+                            <option value="3">3 - very poor documentation</option>
+                            <option value="6" selected="selected">6 - few documentation</option>
+                            <option value="9">9 - regular documentation</option>
+                            <option value="12">12 - good documentation</option>
+                            <option value="15">15 - very good documentation</option>
+                            <% break; %>
+                            <% case 9: %>
+                            <option value="none"> - </option>
+                            <option value="3">3 - very poor documentation</option>
+                            <option value="6">6 - few documentation</option>
+                            <option value="9" selected="selected">9 - regular documentation</option>
+                            <option value="12">12 - good documentation</option>
+                            <option value="15">15 - very good documentation</option>
+                            <% break; %>
+                            <% case 12: %>
+                            <option value="none"> - </option>
+                            <option value="3">3 - very poor documentation</option>
+                            <option value="6">6 - few documentation</option>
+                            <option value="9">9 - regular documentation</option>
+                            <option value="12" selected="selected">12 - good documentation</option>
+                            <option value="15">15 - very good documentation</option>
+                            <% break; %>
+                            <% case 15: %>
                             <option value="none"> - </option>
                             <option value="3">3 - very poor documentation</option>
                             <option value="6">6 - few documentation</option>
                             <option value="9">9 - regular documentation</option>
                             <option value="12">12 - good documentation</option>
-                            <option value="15">15 - very good documentation</option>
+                            <option value="15" selected="selected">15 - very good documentation</option>
+                            <% break; %>
+                            <%}%>
                         </select>
+
                         <p>&nbsp</p>
-                        <textarea id="mark1_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark1_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[0]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -38,15 +74,51 @@
                         <p>Please mark based on the final demonstration.</p>
                         <br>
                         <select id="mark2" class="form-control-project">
+                            <% switch (team.ClientMark[1]) {
+                            case 1: %>
                             <option value="none"> - </option>
                             <option value="1" selected="selected">1 - very poor demonstration</option>
                             <option value="2">2 - incomplete demonstration</option>
                             <option value="3">3 - regular demonstration</option>
                             <option value="4">4 - good demonstration</option>
                             <option value="5">5 - very good demonstration</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - very poor demonstration</option>
+                            <option value="2" selected="selected">2 - incomplete demonstration</option>
+                            <option value="3">3 - regular demonstration</option>
+                            <option value="4">4 - good demonstration</option>
+                            <option value="5">5 - very good demonstration</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - very poor demonstration</option>
+                            <option value="2">2 - incomplete demonstration</option>
+                            <option value="3" selected="selected">3 - regular demonstration</option>
+                            <option value="4">4 - good demonstration</option>
+                            <option value="5">5 - very good demonstration</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - very poor demonstration</option>
+                            <option value="2">2 - incomplete demonstration</option>
+                            <option value="3">3 - regular demonstration</option>
+                            <option value="4" selected="selected">4 - good demonstration</option>
+                            <option value="5">5 - very good demonstration</option>
+                            <% break; %>
+                            <% case 5: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - very poor demonstration</option>
+                            <option value="2">2 - incomplete demonstration</option>
+                            <option value="3">3 - regular demonstration</option>
+                            <option value="4">4 - good demonstration</option>
+                            <option value="5" selected="selected">5 - very good demonstration</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark2_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark2_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[1]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -56,15 +128,51 @@
                         <p>Please mark based on the communication of you and your team throughout semester.</p>
                         <br>
                         <select id="mark3" class="form-control-project">
+                            <% switch (team.ClientMark[2]) {
+                            case 1: %>
+                            <option value="none"> - </option>
+                            <option value="1" selected="selected">1 - poor communication</option>
+                            <option value="2">2 - few communication</option>
+                            <option value="3">3 - regular communication</option>
+                            <option value="4">4 - frequent communication</option>
+                            <option value="5">5 - frequent and effective communication</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - poor communication</option>
+                            <option value="2" selected="selected">2 - few communication</option>
+                            <option value="3">3 - regular communication</option>
+                            <option value="4">4 - frequent communication</option>
+                            <option value="5">5 - frequent and effective communication</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - poor communication</option>
+                            <option value="2">2 - few communication</option>
+                            <option value="3" selected="selected">3 - regular communication</option>
+                            <option value="4">4 - frequent communication</option>
+                            <option value="5">5 - frequent and effective communication</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - poor communication</option>
+                            <option value="2">2 - few communication</option>
+                            <option value="3">3 - regular communication</option>
+                            <option value="4" selected="selected">4 - frequent communication</option>
+                            <option value="5">5 - frequent and effective communication</option>
+                            <% break; %>
+                            <% case 5: %>
                             <option value="none"> - </option>
                             <option value="1">1 - poor communication</option>
                             <option value="2">2 - few communication</option>
                             <option value="3">3 - regular communication</option>
                             <option value="4">4 - frequent communication</option>
-                            <option value="5">5 - frequent and effective communication</option>
+                            <option value="5" selected="selected">5 - frequent and effective communication</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark3_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark3_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[2]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -76,15 +184,51 @@
                         <p>Please mark based on the system delivered of understandability.</p>
                         <br>
                         <select id="mark4" class="form-control-project">
+                            <% switch (team.ClientMark[3]) {
+                            case 1: %>
+                            <option value="none"> - </option>
+                            <option value="1" selected>1 - can not understand</option>
+                            <option value="2">2 - can not understand completely</option>
+                            <option value="3">3 - hard to understand</option>
+                            <option value="4">4 - easy to understand</option>
+                            <option value="5">5 - easy and clear to understand</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - can not understand</option>
+                            <option value="2" selected="selected">2 - can not understand completely</option>
+                            <option value="3">3 - hard to understand</option>
+                            <option value="4">4 - easy to understand</option>
+                            <option value="5">5 - easy and clear to understand</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - can not understand</option>
+                            <option value="2">2 - can not understand completely</option>
+                            <option value="3" selected="selected">3 - hard to understand</option>
+                            <option value="4">4 - easy to understand</option>
+                            <option value="5">5 - easy and clear to understand</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - can not understand</option>
+                            <option value="2">2 - can not understand completely</option>
+                            <option value="3">3 - hard to understand</option>
+                            <option value="4" selected="selected">4 - easy to understand</option>
+                            <option value="5">5 - easy and clear to understand</option>
+                            <% break; %>
+                            <% case 5: %>
                             <option value="none"> - </option>
                             <option value="1">1 - can not understand</option>
                             <option value="2">2 - can not understand completely</option>
                             <option value="3">3 - hard to understand</option>
                             <option value="4">4 - easy to understand</option>
-                            <option value="5">5 - easy and clear to understand</option>
+                            <option value="5" selected="selected">5 - easy and clear to understand</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark4_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark4_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[3]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -94,15 +238,51 @@
                         <p>Please mark based on the system delivered of completeness.</p>
                         <br>
                         <select id="mark5"  class="form-control-project">
+                            <% switch (team.ClientMark[4]) {
+                            case 1: %>
+                            <option value="none"> - </option>
+                            <option value="1" selected="selected">1 - nearly not complete</option>
+                            <option value="2">2 - half complete</option>
+                            <option value="3">3 - almost complete</option>
+                            <option value="4">4 - complete</option>
+                            <option value="5">5 - good complete</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - nearly not complete</option>
+                            <option value="2" selected="selected">2 - half complete</option>
+                            <option value="3">3 - almost complete</option>
+                            <option value="4">4 - complete</option>
+                            <option value="5">5 - good complete</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - nearly not complete</option>
+                            <option value="2">2 - half complete</option>
+                            <option value="3" selected="selected">3 - almost complete</option>
+                            <option value="4">4 - complete</option>
+                            <option value="5">5 - good complete</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - nearly not complete</option>
+                            <option value="2">2 - half complete</option>
+                            <option value="3">3 - almost complete</option>
+                            <option value="4" selected="selected">4 - complete</option>
+                            <option value="5">5 - good complete</option>
+                            <% break; %>
+                            <% case 5: %>
                             <option value="none"> - </option>
                             <option value="1">1 - nearly not complete</option>
                             <option value="2">2 - half complete</option>
                             <option value="3">3 - almost complete</option>
                             <option value="4">4 - complete</option>
-                            <option value="5">5 - good complete</option>
+                            <option value="5" selected>5 - good complete</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark5_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark5_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[4]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -112,15 +292,51 @@
                         <p>Please mark based on the system delivered of innovation.</p>
                         <br>
                         <select id="mark6" class="form-control-project">
+                            <% switch (team.ClientMark[5]) {
+                            case 1: %>
+                            <option value="none"> - </option>
+                            <option value="1" selected="selected">1 - no innovation</option>
+                            <option value="2">2 - few innovation</option>
+                            <option value="3">3 - critical innovation</option>
+                            <option value="4">4 - innovative</option>
+                            <option value="5">5 - very innovative</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - no innovation</option>
+                            <option value="2" selected="selected">2 - few innovation</option>
+                            <option value="3">3 - critical innovation</option>
+                            <option value="4">4 - innovative</option>
+                            <option value="5">5 - very innovative</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - no innovation</option>
+                            <option value="2">2 - few innovation</option>
+                            <option value="3" selected="selected">3 - critical innovation</option>
+                            <option value="4">4 - innovative</option>
+                            <option value="5">5 - very innovative</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - no innovation</option>
+                            <option value="2">2 - few innovation</option>
+                            <option value="3">3 - critical innovation</option>
+                            <option value="4" selected="selected">4 - innovative</option>
+                            <option value="5">5 - very innovative</option>
+                            <% break; %>
+                            <% case 5: %>
                             <option value="none"> - </option>
                             <option value="1">1 - no innovation</option>
                             <option value="2">2 - few innovation</option>
                             <option value="3">3 - critical innovation</option>
                             <option value="4">4 - innovative</option>
-                            <option value="5">5 - very innovative</option>
+                            <option value="5" selected="selected">5 - very innovative</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark6_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark6_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[5]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -130,15 +346,51 @@
                         <p>Please mark based on the system delivered of robustness.</p>
                         <br>
                         <select id="mark7" class="form-control-project">
+                            <% switch (team.ClientMark[6]) {
+                            case 1: %>
+                            <option value="none"> - </option>
+                            <option value="1" selected="selected">1 - no robustness</option>
+                            <option value="2">2 - a little robustness</option>
+                            <option value="3">3 - critical robustness</option>
+                            <option value="4">4 - robust</option>
+                            <option value="5">5 - very robust</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - no robustness</option>
+                            <option value="2" selected="selected">2 - a little robustness</option>
+                            <option value="3">3 - critical robustness</option>
+                            <option value="4">4 - robust</option>
+                            <option value="5">5 - very robust</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - no robustness</option>
+                            <option value="2">2 - a little robustness</option>
+                            <option value="3" selected="selected">3 - critical robustness</option>
+                            <option value="4">4 - robust</option>
+                            <option value="5">5 - very robust</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - no robustness</option>
+                            <option value="2">2 - a little robustness</option>
+                            <option value="3">3 - critical robustness</option>
+                            <option value="4" selected="selected">4 - robust</option>
+                            <option value="5">5 - very robust</option>
+                            <% break; %>
+                            <% case 5: %>
                             <option value="none"> - </option>
                             <option value="1">1 - no robustness</option>
                             <option value="2">2 - a little robustness</option>
                             <option value="3">3 - critical robustness</option>
                             <option value="4">4 - robust</option>
-                            <option value="5">5 - very robust</option>
+                            <option value="5" selected="selected">5 - very robust</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark7_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark7_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[6]%></textarea>
                     </div>
                 </div>
                 <br>
@@ -150,15 +402,51 @@
                         <p>Please mark based on the overall impression of the system.</p>
                         <br>
                         <select id="mark8"  class="form-control-project">
+                            <% switch (team.ClientMark[7]) {
+                            case 1: %>
+                            <option value="none"> - </option>
+                            <option value="1" selected="selected">1 - dissatisfied</option>
+                            <option value="2">2 - few satisfied</option>
+                            <option value="3">3 - critical satisfied</option>
+                            <option value="4">4 - satisfied</option>
+                            <option value="5">5 - very satisfied</option>
+                            <% break; %>
+                            <% case 2: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - dissatisfied</option>
+                            <option value="2" selected="selected">2 - few satisfied</option>
+                            <option value="3">3 - critical satisfied</option>
+                            <option value="4">4 - satisfied</option>
+                            <option value="5">5 - very satisfied</option>
+                            <% break; %>
+                            <% case 3: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - dissatisfied</option>
+                            <option value="2">2 - few satisfied</option>
+                            <option value="3" selected="selected">3 - critical satisfied</option>
+                            <option value="4">4 - satisfied</option>
+                            <option value="5">5 - very satisfied</option>
+                            <% break; %>
+                            <% case 4: %>
+                            <option value="none"> - </option>
+                            <option value="1">1 - dissatisfied</option>
+                            <option value="2">2 - few satisfied</option>
+                            <option value="3">3 - critical satisfied</option>
+                            <option value="4" selected="selected">4 - satisfied</option>
+                            <option value="5">5 - very satisfied</option>
+                            <% break; %>
+                            <% case 5: %>
                             <option value="none"> - </option>
                             <option value="1">1 - dissatisfied</option>
                             <option value="2">2 - few satisfied</option>
                             <option value="3">3 - critical satisfied</option>
                             <option value="4">4 - satisfied</option>
-                            <option value="5">5 - very satisfied</option>
+                            <option value="5" selected="selected">5 - very satisfied</option>
+                            <% break; %>
+                            <%}%>
                         </select>
                         <p>&nbsp</p>
-                        <textarea id="mark8_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                        <textarea id="mark8_reason" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.ClientMarkReason[7]%></textarea>
                     </div>
                 </div>
                 <br>
