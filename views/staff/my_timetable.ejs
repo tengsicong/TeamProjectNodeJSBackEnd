@@ -75,7 +75,7 @@
                 <div class="blank-page widget-shadow scroll" style="margin-left: 2%;">
                     <h2><b>Change Timetable</b></h2>
                     <div class="form-body">
-                        <form style="padding-left: 30%" method = 'post'>
+                        <form style="padding-left: 30%" onsubmit="return my_check()" method = 'post'>
                             <div>Meeting Number:</div>
                             <div class="form-group" style="align-items: center">
                                 <select name="meetingID" class="form-control" style="width: 60%">
@@ -111,5 +111,25 @@
 
 </div>
 </div>
+
+
+<script type="text/javascript">
+    function my_check() {
+        var time = document.getElementById("timechange").value;
+        var staff = document.getElementById("staffchange").value;
+        if(staff == 0 && time == ''){
+            alert("time and staff can't both be empty");
+            return false;
+        }
+        var nowtime1 = new Date();
+        var nowtime2 = new Date(time);
+        if(nowtime1 > nowtime2)
+        {
+            alert('Invalid meeting time');
+            return false;
+        }
+        return true;
+    }
+</script>
 
 <%- include('footer') %>

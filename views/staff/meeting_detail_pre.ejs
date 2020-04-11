@@ -16,7 +16,7 @@
                         <tr width="500px"><p><b>Client : </b> <%= meeting.GroupID.ProposalID.ClientID.Name %> </p></tr>
                         <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.Name %> </tr>
                         <tr width="500px"><p><b>SSIT Team : </b> <%= meeting.GroupID.TeamName %> </tr>
-                        <tr width="500px"><p><b>Date : </b> <%= meeting.Date %> </tr>
+                        <tr width="500px"><p><b>Date : </b> <%= meeting.Date.toISOString().replace(/T.*/,' ') + meeting.Date.toLocaleTimeString().replace(/ G.*/,"")%> </tr>
                         <tr width="500px"><p><b>Venue : </b> <%= meeting.Place %> </tr>
                     </table>
                 </div>
@@ -40,15 +40,15 @@
                     <div class="panel-body">
                         <table style="width: 90%; margin: auto;">
                             <tr>
-                                <th style = "width: 10%;">Date</th>
+                                <th style = "width: 20%;">Date</th>
                                 <% if(meetingModify.NewMeetingTime == null) { %>
                                     <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
                                 <%} else {%>
-                                    <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
+                                    <td style="padding: 0.5em;"><p><%= meeting.Date.toISOString().replace(/T.*/,' ') + meeting.Date.toLocaleTimeString().replace(/ G.*/,"")%> → <%= meetingModify.NewMeetingTime.toISOString().replace(/T.*/,' ') + meetingModify.NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></p></td>
                                 <% } %>
                             </tr>
                             <tr>
-                                <th style = "width: 10%;">Supervisor</th>
+                                <th style = "width: 20%;">Supervisor</th>
                                 <% if(meetingModify.NewStaffID == null) { %>
                                     <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
                                 <%} else {%>
@@ -56,11 +56,15 @@
                                 <% } %>
                             </tr>
                             <tr>
-                                <th style = "width: 10%;">Reason</th>
+                                <th style = "width: 20%;">Reason</th>
                                 <td style="padding: 0.5em;"><p><%= meetingModify.RequestComment.Content%>
                             </tr>
                             <tr>
-                                <th style = "width: 10%;">Status</th>
+                                <th style = "width: 20%;">Reply from admin</th>
+                                <td style="padding: 0.5em;"><p><%= meetingModify.AdminReply.Content%>
+                            </tr>
+                            <tr>
+                                <th style = "width: 20%;">Status</th>
                                 <td style="padding: 0.5em;"><p><%= meetingModify.Status%></p></td>
                             </tr>
                         </table>
@@ -74,15 +78,15 @@
                     <div class="panel-body">
                         <table style="width: 90%; margin: auto;">
                             <tr>
-                                <th style = "width: 10%;">Date</th>
+                                <th style = "width: 20%;">Date</th>
                                 <% if(meetingModify.NewMeetingTime == null) { %>
                                     <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
                                 <%} else {%>
-                                    <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
+                                    <td style="padding: 0.5em;"><p><%= meeting.Date.toISOString().replace(/T.*/,' ') + meeting.Date.toLocaleTimeString().replace(/ G.*/,"")%> → <%= meetingModify.NewMeetingTime.toISOString().replace(/T.*/,' ') + meetingModify.NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></p></td>
                                 <% } %>
                             </tr>
                             <tr>
-                                <th style = "width: 10%;">Supervisor</th>
+                                <th style = "width: 20%;">Supervisor</th>
                                 <% if(meetingModify.NewStaffID == null) { %>
                                     <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
                                 <%} else {%>
@@ -90,20 +94,24 @@
                                 <% } %>
                             </tr>
                             <tr>
-                                <th style = "width: 10%;">Reason</th>
+                                <th style = "width: 20%;">Reason</th>
                                 <td style="padding: 0.5em;"><p><%= meetingModify.RequestComment.Content%>
                             </tr>
                             <tr>
-                                <th style = "width: 10%;">Status</th>
+                                <th style = "width: 20%;">Reply from admin</th>
+                                <td style="padding: 0.5em;"><p><%= meetingModify.AdminReply.Content%>
+                            </tr>
+                            <tr>
+                                <th style = "width: 20%;">Status</th>
                                 <td style="padding: 0.5em;"><p><%= meetingModify.Status%></p></td>
                             </tr>
                         </table>
                     </div>
                 </div>
             <% } %>
+
             <div class="form-group row1 blank-page widget-shadow scroll" >
                 <form onsubmit="return my_check()" method="post">
-                    <script>console.log(my_check())</script>
                     <table style="width: 90%; margin: auto;">
                         <tr>
                             <th style = "width: 15%;">Change Date</th>
@@ -113,9 +121,10 @@
                             <th style = "width: 15%;">Change Supervisor</th>
                             <td style="padding: 0.5em;">
                                 <select id ="staffchange" name="staffchange" class="form-control" style="width: 30%">
+                                    <option value = '0' selected> - </option>
                                     <% for(var i=0;i<stafflist.length;i++) { %>
-                                        <%if(stafflist[i].StaffID == nowstaff ) {%>
-                                            <option selected><%= stafflist[i].Name%></option>
+                                        <%if(stafflist[i].id == nowstaff.id ) {%>
+
                                         <% } else {%>
                                             <option><%= stafflist[i].Name%></option>
                                         <% } %>
@@ -137,6 +146,23 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+    function my_check() {
+        var time = document.getElementById("timechange").value;
+        var staff = document.getElementById("staffchange").value;
+        if(staff == 0 && time == ''){
+            alert("time and staff can't both be empty");
+            return false;
+        }
+        var nowtime1 = new Date();
+        var nowtime2 = new Date(time);
+        if(nowtime1 > nowtime2)
+        {
+            alert('Invalid meeting time');
+            return false;
+        }
+        return true;
+    }
+</script>
 
 <%- include('footer') %>
