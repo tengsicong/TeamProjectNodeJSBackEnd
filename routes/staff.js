@@ -23,7 +23,7 @@ router.get('/my_project', function(req, res) {
                 const staff = result[0];
                 const allTeams = result[1];
                 let groupMember = [];
-
+                //console.log(allTeams);
                 for (let i = 0; i < allTeams.length; i++) {
                     //console.log(allTeams[i]);
                     groupMember[i] = '';
@@ -61,6 +61,7 @@ router.get('/project_detail', function(req, res) {
                 let groupMember;
                 groupMember = '';
                 let stage=result[2];
+                console.log(allTeams[teamID]);
                 const max = allTeams[teamID].StudentID.length;
                 for (let j = 0; j < max; j++) {
                     groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
