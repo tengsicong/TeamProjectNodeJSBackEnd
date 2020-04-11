@@ -30,7 +30,13 @@ module.exports= {
             .exec();
     },
 
-    updateReplyByQaId: function updateReplyByQaId(id, replies) {
+    getQAByQAID: function getQAByQAID(id) {
+        return studentStaffQa
+            .findById(id)
+            .exec();
+    },
+
+    updateReplyByQAID: function updateReplyByQAID(id, replies) {
         return studentStaffQa
             .findByIdAndUpdate(id, { Replies: replies });
     },
@@ -39,7 +45,7 @@ module.exports= {
         studentStaffQa
             .create({GroupID: student.GroupID, Topic: topic, Replies: [{Author: student.Name, Comment: content, ReplyDate: new Date()}]})
     }
-}
+};
 
 // const mongoose = require('mongoose');
 // const studentID = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');
