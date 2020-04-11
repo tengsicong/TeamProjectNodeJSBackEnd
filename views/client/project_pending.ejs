@@ -46,25 +46,25 @@
             <table class="table" style="margin-bottom:0px">
                 <thead>
                 <tr>
-                    <th style="width: 15%;font-size: 20px"><b>Name</b></th>
-                    <th style="width: 75%;font-size: 20px"><b>Comment</b></th>
-                    <th style="width: 15%;font-size: 20px"><b>Comment Date</b></th>
+                    <th style="width: 20%;font-size: 20px"><b>Name</b></th>
+                    <th style="width: 65%;font-size: 20px"><b>Comment</b></th>
+                    <th style="width: 20%;font-size: 20px"><b>Comment Date</b></th>
                 </tr>
                 </thead>
                 <tbody>
                 <%for(let i = 0; i < Replies.length; i++) {%>
                     <% if ((i%2) == 1) { %>
                     <tr>
-                        <td width="15%"><b><%=Replies[i].Author%></b></td>
-                        <td width="75%"><%=Replies[i].Comment%></td>
-                        <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                        <td><b><%=Replies[i].Author%></b></td>
+                        <td><%=Replies[i].Comment%></td>
+                        <td><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     </tr>
 
                     <% } else{ %>
                     <tr class="active">
-                        <th width="15%" scope="row"><b><%=Replies[i].Author%></b></th>
-                        <td width="75%"><%=Replies[i].Comment%></td>
-                        <td width="15%"><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                        <th scope="row"><b><%=Replies[i].Author%></b></th>
+                        <td><%=Replies[i].Comment%></td>
+                        <td><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
                     </tr>
                 <%}}%>
                 </tbody>
@@ -81,18 +81,48 @@
                 <div class="form-group">
                     <label for="project_name" class="col-sm-2 control-label">Make a comment</label>
                     <div class="col-sm-8">
-                        <textarea id="project_name" rows="6" class="form-control form-control" name="comment"></textarea>
+                        <textarea id="comment" rows="6" class="form-control form-control"></textarea>
                     </div>
                 </div>
-
-            <div style="text-align: center">
-                <button type="submit" class="btn btn-primary sub-reply">Submit</button>
-            </div>
-            <div class="clearfix"> </div>
             </form>
+            <div style="text-align: center">
+                <button type="button" class="btn btn-primary" onclick="checkComment()">SUBMIT</button>
+            </div>
         </div>
     </div>
 
 </div>
 
 <%- include('footer') %>
+<script>
+    function checkComment() {
+        const comment = document.getElementById('comment').value;
+        let link = window.location.search;
+        link = link.substring(1,link.length);
+        let ProposalID = link.split("&")[0].split("=")[1];
+        if (comment == '') {
+            alert('Please enter the comment');
+        } else {
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'comment';
+            inputElement1.value = comment;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'proposalID';
+            inputElement2.value = ProposalID;
+
+            const form = document.createElement("form");
+            form.action = '/client/myproject/project_pending';
+            form.method = 'post';
+            form.style.display = "none";
+
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
+    }
+</script>
+<%- include('script')%>

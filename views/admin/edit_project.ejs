@@ -10,23 +10,63 @@
                 <br>
                 <form class="form-horizontal" method="post">
                     <div class="form-group">
-                        <label for="project_name" class="col-sm-2 control-label">Project Topic</label>
+                        <%const ID = proposal._id%>
+                        <label for="project_name" class="col-sm-2 control-label" id="ProjectID" value="<%ID%>">Project Topic</label>
                         <div class="col-sm-8">
-                            <textarea name="topic" rows="1" class="form-control form-control"><%=proposal.Topic%></textarea>
+                            <textarea id="topic" rows="1" class="form-control form-control"><%=proposal.Topic%></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="project_content" class="col-sm-2 control-label">Content</label>
                         <div class="col-sm-8">
-                                <textarea name="content" class="form-control" rows="6" placeholder="Enter Your Question Detail"><%=proposal.Content%></textarea>
+                                <textarea id="content" class="form-control" rows="6" placeholder="Enter Your Question Detail"><%=proposal.Content%></textarea>
                         </div>
                     </div>
-                <div style="text-align: center">
-                    <input type="submit" class="btn btn-primary" value=" SUBMIT">
-                </div>
                 </form>
+                <div style="text-align: center">
+                    <button type="button" class="btn btn-primary" onclick="checkProposal()">SUBMIT</button>
+                </div>
             </div>
         </div>
     </div>
 <%- include('component/footer_script')%>
+<script>
+    function checkProposal() {
+        const topic = document.getElementById('topic').value;
+        const content = document.getElementById('content').value;
+        let link = window.location.search;
+        link = link.substring(1,link.length);
+        let ProposalID = link.split("&")[0].split("=")[1];
+        if (topic == '') {
+            alert('Please enter a topic');
+        } else if (content == '') {
+            alert('Please enter content');
+        } else {
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'topic';
+            inputElement1.value = topic;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'content';
+            inputElement2.value = content;
+            const inputElement3 = document.createElement("input");
+            inputElement3.type = 'hidden';
+            inputElement3.name = 'proposalID';
+            inputElement3.value = ProposalID;
+
+            const form = document.createElement("form");
+            form.action = '/admin/edit_project';
+            form.method = 'post';
+            form.style.display = "none";
+
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            form.appendChild(inputElement3);
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
+    }
+</script>
 <%- include('component/footer') %>

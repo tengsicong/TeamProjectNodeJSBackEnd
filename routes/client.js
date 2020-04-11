@@ -8,7 +8,6 @@ const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
 const stageModel = require('../models/stage')
-
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
 const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
 
@@ -111,7 +110,7 @@ router.get('/myproject/project_pending', function(req, res, next) {
 
 /*添加评论*/
 router.post('/myproject/project_pending',function(req,res,next){
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     replyDate = new Date();
     Promise.all([
@@ -128,7 +127,7 @@ router.post('/myproject/project_pending',function(req,res,next){
             });
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                res.redirect('/client/myproject/project_pending?id='+req.query.id)
+                res.redirect('/client/myproject/project_pending?id='+proposalID)
             })
         })
         .catch(next)
@@ -198,7 +197,8 @@ router.get('/edit_project', function(req, res,next) {
 
 /*Edit proposal*/
 router.post('/edit_project',function(req,res,next){
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
+    console.log('id= '+ proposalID)
     const topic = req.body.topic;
     const content = req.body.content;
     newDate = new Date();
@@ -211,7 +211,7 @@ router.post('/edit_project',function(req,res,next){
     }
     proposalModel.editProposal(proposal)
         .then(function () {
-            res.redirect('/client/myproject/project_pending?id='+req.query.id)
+            res.redirect('/client/myproject/project_pending?id='+proposalID)
         })
         .catch(next)
 })
@@ -281,32 +281,37 @@ router.get('/myteam/teammark', function(req, res, next) {
         .catch(next);
 });
 
-router.post('myteam/teammark',function(req,res,next) {
-    const mark1 = req.body.mark1;
-    const mark1_reason = req.body.mark1_reason;
-    const mark2 = req.body.mark2;
-    const mark2_reason = req.body.mark2_reason;
-    const mark3 = req.body.mark1;
-    const mark3_reason = req.body.mark3_reason;
-    const mark4 = req.body.mark1;
-    const mark4_reason = req.body.mark4_reason;
-    const mark5 = req.body.mark1;
-    const mark5_reason = req.body.mark5_reason;
-    const mark6 = req.body.mark1;
-    const mark6_reason = req.body.mark6_reason;
-    const mark7 = req.body.mark7;
-    const mark7_reason = req.body.mark7_reason;
-    const mark8 = req.body.mark8;
-    const mark8_reason = req.body.mark8_reason;
-    // console.log('mark1: '+mark1+' reason1: '+mark1_reason);
-    // console.log('mark2: '+mark2+' reason2: '+mark2_reason);
-    // console.log('mark3: '+mark3+' reason3: '+mark3_reason);
-    // console.log('mark4: '+mark4+' reason4: '+mark4_reason);
-    // console.log('mark5: '+mark5+' reason5: '+mark5_reason);
-    // console.log('mark6: '+mark6+' reason6: '+mark6_reason);
-    // console.log('mark7: '+mark7+' reason7: '+mark7_reason);
-    // console.log('mark8: '+mark8+' reason8: '+mark8_reason);
-    res.redirect('client/myteam/teampage');
+router.get('/myteam/edit_teammark', function(req, res, next) {
+    const teamID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([
+        clientModel.getClientByClientID(clientID),
+        teamModel.getTeamByTeamID(teamID),
+    ])
+        .then(function(result) {
+            //console.log(result[1].ClientMeetingID[0].Date)
+            res.render('client/edit_teammark', {
+                team: result[1],
+                pageTitle: 'SSIT TEAM '+result[1].TeamName+' Mark',
+                username: result[0].Name,
+                meetings: result[1].ClientMeetingID,
+            });
+        })
+        .catch(next);
+});
+
+router.post('/myteam/teammark',function(req,res,next) {
+    const teamid = mongoose.Types.ObjectId(req.body.GroupID);
+    let marks = [];
+    let reasons = [];
+    for (let i=1;i<9;i++){
+        marks.push(eval('req.body.mark'+i))
+    }
+    for (let i=1;i<9;i++){
+        reasons.push(eval('req.body.mark'+i+'_reason'))
+    }
+    clientModel.updateClientGroupMark(teamid,marks,reasons).then(function () {
+        res.redirect('/client/myteam/teampage?id='+teamid);
+    })
 });
 
 
@@ -332,31 +337,28 @@ router.get('/mytimetable', function(req, res,next) {
 
 /*发送更改会议请求*/
 router.post('/mytimetable', function(req, res,next) {
-    const select =req.body.selection;
-    const number = select.substr(select.length-1,1);
-    const meetingnumber = number-1;
+    const selectMeetingid =mongoose.Types.ObjectId(req.body.selection);
     const reason =req.body.reason;
     const time = req.body.time;
     nowDate = new Date();
     Promise.all([
-        clientModel.getClientByClientID(clientID),
-        clientMeetingModel.getClientMeetingByClientID(clientID),
+        clientMeetingModel.getClientMeetingByMeetingID(selectMeetingid)
     ])
         .then(function (result) {
             const meetings = result[1];
             let request = {
-                MeetingID: meetings[meetingnumber]._id,
+                MeetingID: result[0]._id,
                 ClientID: clientID,
                 Status:'pending',
                 NewMeetingTime:time,
                 RequestComment:{
-                    RequestName:result[0].Name,
+                    RequestName:result[0].ClientID.Name,
                     Date:nowDate,
                     Content:reason
                 }}
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
             res.redirect('/client/mytimetable')
-            });
+           });
 });
 
 

@@ -77,6 +77,12 @@ module.exports = {
 
     },
 
+    getProposalByGroupID: function getProposalByGroupID(id) {
+        return proposal
+            .find({_id: id})
+            .exec();
+    },
+
     /**
      * @param {object} proposal : proposal object.
      * @return {[proposal]} proposal
@@ -115,7 +121,11 @@ module.exports = {
      */
     addProposalComment: function addProposalComment (id,reply) {
         return proposal.findByIdAndUpdate(id,{Reply:reply})
-    }
+    },
+
+    deleteProposalTeamByGroupID: function deleteProposalTeamByGroupID (groupID) {
+        return proposal.deleteOne({_id:groupID}).exec()
+    },
 
 
 

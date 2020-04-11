@@ -90,6 +90,11 @@ module.exports = {
     //         .exec()
     // },
 
+    deleteTeamProposalByProposalID: function deleteTeamProposalByProposalID(proposalID){
+        return team.deleteOne({_id:proposalID}).exec()
+    },
+
+
 
     // deleteTeam: function deleteTeam (teamID) {
     // },
