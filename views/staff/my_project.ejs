@@ -14,7 +14,7 @@
                             <h3 class="project-name" >
                                 <b>
                                     <% if (allTeams[i].ProposalID === undefined) { %>
-                                        Untitled Project
+                                        Project has not been allocated
                                     <% } else { %>
                                         <%= allTeams[i].ProposalID.Topic %>
                                     <% } %>
@@ -25,7 +25,11 @@
                                 <tr>
                                     <td style="width: 25%;">
                                         <b>Client:</b>
-                                         <%= allTeams[i].ProposalID.ClientID.Name %>
+                                        <% if (allTeams[i].ProposalID === undefined) { %>
+                                            N/A
+                                        <% } else { %>
+                                            <%= allTeams[i].ProposalID.ClientID.Name %>
+                                        <% } %>    
                                     </td>
                                     <td style="width: 75%;">
                                         <b>Member:</b> 
@@ -35,14 +39,19 @@
                             </table>
                             <p>
                                 <b>Background:</b>
-                                <% 
-                                    const textLimit = 180;
-                                    let background =  allTeams[i].ProposalID.Content;
-                                    if(background.length >= textLimit) {
-                                        background = background.substring(0,textLimit) + '...';
-                                    }
-                                %>
-                                <%= background %>
+                                <% if (allTeams[i].ProposalID === undefined) { %>
+                                    N/A
+                                <% } else { %>
+                                    <% 
+                                        const textLimit = 180;
+                                        let background =  allTeams[i].ProposalID.Content;
+                                        if(background.length >= textLimit) {
+                                            background = background.substring(0,textLimit) + '...';
+                                        }
+                                    %>
+                                    <%= background %>
+                                <% } %>    
+
                                 <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
                             </p>
                         </div>

@@ -100,7 +100,6 @@ router.post('/meeting_detail_pre',function (req,res) {
     let changereason = req.body.changereason;
     console.log(timechange);
     let staffchangeID ;
-    let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
 
     const staffID = staffModel.getStaffByName(staffchange)
@@ -108,47 +107,29 @@ router.post('/meeting_detail_pre',function (req,res) {
             staffchangeID = result._id;
         })
 
-    const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
-    changerequest.then(function (result) {
-        requestID = result
-    })
-
     primary_meeting.then(function (result) {
         //console.log(result);
         primaryMeetingResult = result;
-        if(staffchange === primaryMeetingResult.StaffID.Name)
-            staffchangeID = null;
-        if(requestID === null)
-        {
-            console.log('create');
-            let newRequest = {
-                _id:mongoose.Types.ObjectId(),
-                MeetingID:primaryMeetingResult._id,
-                StaffID:primaryMeetingResult.StaffID,
-                NewMeetingTime: timechange,
-                NewStaffID: staffchangeID,
-                RequestComment:{
-                    RequestName: primaryMeetingResult.StaffID.Name,
-                    Date: new Date(),
-                    Content: changereason,
-                }
+        let nowStaff = primaryMeetingResult.StaffID;
+        if(primaryMeetingResult.TemporaryStaffID != null)
+            nowStaff = primaryMeetingResult.TemporaryStaffID;
+        let newRequest = {
+            _id:mongoose.Types.ObjectId(),
+            MeetingID:primaryMeetingResult._id,
+            StaffID:nowStaff,
+            NewMeetingTime: timechange,
+            NewStaffID: staffchangeID,
+            Status: 'Pending',
+            RequestComment:{
+                RequestName: primaryMeetingResult.StaffID.Name,
+                Date: new Date(),
+                Content: changereason,
             }
-            staffModel.createMeetingChangeRequest(newRequest)
-                .then(function () {
-                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
-                })
         }
-        else
-        {
-            requestID.NewStaffID = (staffchange===null)?requestID.NewStaffID:staffchangeID;
-            requestID.NewMeetingTime = (timechange===null)?requestID.NewMeetingTime:timechange;
-            requestID.RequestComment.Content = changereason;
-            requestID.RequestComment.Date = new Date();
-            staffModel.updateMeetingChangeRequest(requestID)
-                .then(function () {
-                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
-                })
-        }
+        staffModel.createMeetingChangeRequest(newRequest)
+            .then(function () {
+                res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
+            })
     })
 
 })
@@ -256,9 +237,11 @@ router.get('/meeting_detail_post', function(req, res) {
 });
 
 router.post('/my_timetable',function (req,res) {
-    let timechange = req.body.time;
+    let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
+    let meetingselect = req.body.
+    console.log(timechange);
     let staffchangeID ;
     let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
@@ -319,18 +302,29 @@ router.get('/my_timetable', function(req, res) {
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllStaff(),
             staffModel.getAllMeetingByStaffID(req.session.userinfo),
+            staffModel.getAllMeetingByTempStaffID(req.session.userinfo),
+            staffModel.getStaffMeetingChangeRequestByStaffID(req.session.userinfo),
         ])
             .then(function (result) {
                 const staff = result[0];
                 const meetingList = result[2];
                 const staffList = result[1];
+                const TempmeetingList = result[3];
+                const RequestList = result[4];
+                console.log(RequestList);
                 let nowtime = new Date();
+                let meetingStaff = [];
+                for(var i=0;i<meetingList.length;i++)
+                    meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
                     meetingList: meetingList,
+                    tempMeetingList: TempmeetingList,
                     staffList: staffList,
                     nowtime: nowtime,
+                    meetingStaff: meetingStaff,
+                    changeStaffMeetingRequest: RequestList,
                 });
             });
     }
@@ -341,11 +335,23 @@ router.get('/my_timetable', function(req, res) {
 
 router.post('/marking', function (req,res,next) {
     const staff=req.session.userinfo;
-    const content=req.body.t1;
-    const select = req.body.selector1;
+    const teamcontent=req.body.t1;
+    const teamselect = req.body.selector1;
+    const indiselect = req.body.selector2;
+    const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
+    let studentList = [];
     //console.log(select);
-    staffModel.updateTeamMark(teamid,content,select)
+
+    staffModel.getTeamByTeamID(teamid)
+        .then(function(result){
+            studentList = result.StudentID;
+    })
+    for(let i=0;i<studentList.length;i++)
+    {
+        staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2],indiselect[i*2+1]);
+    }
+    staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
         })
@@ -355,7 +361,6 @@ router.post('/marking', function (req,res,next) {
 router.get('/marking', function(req, res) {
     if (req.session.role === 'staff') {
         const teamID = parseInt(req.query.seq);
-        const teamsqr = req.query.id;
         Promise.all([
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
@@ -363,11 +368,27 @@ router.get('/marking', function(req, res) {
             .then(function (result) {
                 const staff = result[0];
                 const allTeams = result[1];
+                const idxIndPerf = 7;
+                const items = ['Management','','','Testing','','QA','Poster session','Pesonal evaluation','Timesheets'];
+                const description = ['Team organisation (regular meetings, good quality minutes of meetings appearing on time in the team google drive, work allocation).',
+                                        'Progress with implementation (problems solved, completing agreed tasks in a timely manner, maintaining risk register).',
+                                        'Key documents (story cards, design documents).',
+                                        'Unit tests (these should run automatically).',
+                                        'System tests (either running automatically, or well-documented manual test).',
+                                        'You are assessed on how well you spot problems with the code of another team. Any problems detected in your own code do not affect your grade for this part (but if a client detects them, they may mark you down).',
+                                        'How well your final presentations sells your work, and how well you did a demo of your system and answered questions.',
+                                        'Submitted via MOLE in the final week of the semester.',
+                                        'Entered on time into epiManage every week (and including all the activities associated with the project).'];
+                const scores = [5,5,5,5,5,5,5,10,5];
                 //console.log(teamID);
                 res.render('staff/marking', {
                     pageTitle: 'Marking',
                     username: staff.Name,
                     team: allTeams[teamID],
+                    items: items,
+                    description: description,
+                    idxIndPerf: idxIndPerf,
+                    scores: scores,
                 });
             })
     }
@@ -456,11 +477,7 @@ router.post('/discussion_details', function(req, res) {
                 //console.log(replies);
                 const updatePromise = qaModel.updateReplyByQAID(qa._id, replies);
                 updatePromise.then(function(result) {
-                    res.render('staff/discussion_details', {
-                        pageTitle: qa.Topic + ' - Discussion Details',
-                        username: staff.Name,
-                        qa: qa,
-                    });
+                    res.redirect('discussion_details?id=' + qa._id);
                 });
             });
         });

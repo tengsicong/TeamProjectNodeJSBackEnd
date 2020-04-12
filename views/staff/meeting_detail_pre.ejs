@@ -14,9 +14,9 @@
                 <div class="panel-body">
                     <table>
                         <tr width="500px"><p><b>Client : </b> <%= meeting.GroupID.ProposalID.ClientID.Name %> </p></tr>
-                        <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.Name %> </tr>
+                        <tr width="500px"><p><b>Supervisor : </b> <%= nowstaff.Name %> </tr>
                         <tr width="500px"><p><b>SSIT Team : </b> <%= meeting.GroupID.TeamName %> </tr>
-                        <tr width="500px"><p><b>Date : </b> <%= meeting.Date %> </tr>
+                        <tr width="500px"><p><b>Date : </b> <%= meeting.Date.toISOString().replace(/T.*/,' ') + meeting.Date.toLocaleTimeString().replace(/ G.*/,"")%> </tr>
                         <tr width="500px"><p><b>Venue : </b> <%= meeting.Place %> </tr>
                     </table>
                 </div>
@@ -26,84 +26,71 @@
         <div class="blank-page widget-shadow scroll">
             <h3><b>Change Meeting Details</b></h3>
             <br>
-            <% if (meeting.TemporaryStaffID == undefined) {%>
+            <% if (meetingModify.length == 0) {%>
                 <div class="panel panel-success request-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">This meeting will be held on schedule.</h3>
                     </div>
                 </div>
-            <% } else if (meetingModify.Status == "approved"){%>
-                <div class="panel panel-success request-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Your last request has been approved</h3>
+            <% } else { %>
+                <%for(var i=0;i<meetingModify.length;i++) {%>
+                    <% if (meetingModify[i].Status == "approved"){%>
+                        <div class="panel panel-success request-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Request <%=i+1%> has been approved</h3>
+                            </div>
+                    <% } else { %>
+                        <div class="panel panel-warning request-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Request <%=i+1%> has not been approved</h3>
+                            </div>
+                    <% } %>
+                        <div class="panel-body">
+                            <table style="width: 90%; margin: auto;">
+                                <tr>
+                                    <th style = "width: 20%;">Request Sending time</th>
+                                    <td style="padding: 0.5em;"><p><%= meetingModify[i].RequestComment.Date.toISOString().replace(/T.*/,' ') + meetingModify[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></p></td>
+                                </tr>
+                                <tr>
+                                    <th style = "width: 20%;">Date</th>
+                                    <% if(meetingModify[i].NewMeetingTime == null) { %>
+                                        <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
+                                    <%} else {%>
+                                        <td style="padding: 0.5em;"><p><%= meeting.Date.toISOString().replace(/T.*/,' ') + meeting.Date.toLocaleTimeString().replace(/ G.*/,"")%> → <%= meetingModify[i].NewMeetingTime.toISOString().replace(/T.*/,' ') + meetingModify[0].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></p></td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <th style = "width: 20%;">Supervisor</th>
+                                    <% if(meetingModify[i].NewStaffID == null) { %>
+                                        <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
+                                    <%} else {%>
+                                        <td style="padding: 0.5em;"><p><%= meetingModify[i].StaffID.Name%> → <%= meetingModify[i].NewStaffID.Name%></p></td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <th style = "width: 20%;">Reason</th>
+                                    <td style="padding: 0.5em;"><p><%= meetingModify[i].RequestComment.Content%></p></td>
+                                </tr>
+                                <tr>
+                                    <th style = "width: 20%;">Reply from admin</th>
+                                    <% if(meetingModify[i].AdminReply.Content == null) {%>
+                                        <td style="padding: 0.5em;"><p>No reply</p></td>
+                                    <% } else { %>
+                                        <td style="padding: 0.5em;"><p> <%= meetingModify[i].AdminReply.Content%></p></td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <th style = "width: 20%;">Status</th>
+                                    <td style="padding: 0.5em;"><p> <%= meetingModify[i].Status%></p></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <table style="width: 90%; margin: auto;">
-                            <tr>
-                                <th style = "width: 10%;">Date</th>
-                                <% if(meetingModify.NewMeetingTime == null) { %>
-                                    <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
-                                <%} else {%>
-                                    <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <th style = "width: 10%;">Supervisor</th>
-                                <% if(meetingModify.NewStaffID == null) { %>
-                                    <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
-                                <%} else {%>
-                                    <td style="padding: 0.5em;"><p><%= meetingModify.StaffID.Name%> → <%= meetingModify.NewStaffID.Name%></p></td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <th style = "width: 10%;">Reason</th>
-                                <td style="padding: 0.5em;"><p><%= meetingModify.RequestComment.Content%>
-                            </tr>
-                            <tr>
-                                <th style = "width: 10%;">Status</th>
-                                <td style="padding: 0.5em;"><p><%= meetingModify.Status%></p></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            <% } else {%>
-                <div class="panel panel-warning request-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Your last request not been approved</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table style="width: 90%; margin: auto;">
-                            <tr>
-                                <th style = "width: 10%;">Date</th>
-                                <% if(meetingModify.NewMeetingTime == null) { %>
-                                    <td style="padding: 0.5em;"><p>Time hasn't been changed</p></td>
-                                <%} else {%>
-                                    <td style="padding: 0.5em;"><p><%= meeting.Date%> → <%= meetingModify.NewMeetingTime%></p></td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <th style = "width: 10%;">Supervisor</th>
-                                <% if(meetingModify.NewStaffID == null) { %>
-                                    <td style="padding: 0.5em;"><p>Staff hasn't been changed</p></td>
-                                <%} else {%>
-                                    <td style="padding: 0.5em;"><p><%= meetingModify.StaffID.Name%> → <%= meetingModify.NewStaffID.Name%></p></td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <th style = "width: 10%;">Reason</th>
-                                <td style="padding: 0.5em;"><p><%= meetingModify.RequestComment.Content%>
-                            </tr>
-                            <tr>
-                                <th style = "width: 10%;">Status</th>
-                                <td style="padding: 0.5em;"><p><%= meetingModify.Status%></p></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+                <% } %>
+                            <br>
             <% } %>
             <div class="form-group row1 blank-page widget-shadow scroll" >
                 <form onsubmit="return my_check()" method="post">
-                    <script>console.log(my_check())</script>
                     <table style="width: 90%; margin: auto;">
                         <tr>
                             <th style = "width: 15%;">Change Date</th>
@@ -113,9 +100,10 @@
                             <th style = "width: 15%;">Change Supervisor</th>
                             <td style="padding: 0.5em;">
                                 <select id ="staffchange" name="staffchange" class="form-control" style="width: 30%">
+                                    <option value = '0' selected> - </option>
                                     <% for(var i=0;i<stafflist.length;i++) { %>
-                                        <%if(stafflist[i].StaffID == nowstaff ) {%>
-                                            <option selected><%= stafflist[i].Name%></option>
+                                        <%if(stafflist[i].id == nowstaff.id ) {%>
+
                                         <% } else {%>
                                             <option><%= stafflist[i].Name%></option>
                                         <% } %>
@@ -137,6 +125,23 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+    function my_check() {
+        var time = document.getElementById("timechange").value;
+        var staff = document.getElementById("staffchange").value;
+        if(staff == 0 && time == ''){
+            alert("time and staff can't both be empty");
+            return false;
+        }
+        var nowtime1 = new Date();
+        var nowtime2 = new Date(time);
+        if(nowtime1 > nowtime2)
+        {
+            alert('Invalid meeting time');
+            return false;
+        }
+        return true;
+    }
+</script>
 
 <%- include('footer') %>
