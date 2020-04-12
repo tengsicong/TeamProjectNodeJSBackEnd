@@ -327,6 +327,9 @@ router.get('/my_timetable', function(req, res) {
                 const staffList = result[1];
                 const TempmeetingList = result[3];
                 let nowtime = new Date();
+                let meetingStaff = [];
+                for(var i=0;i<meetingList.length;i++)
+                    meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
@@ -334,6 +337,7 @@ router.get('/my_timetable', function(req, res) {
                     tempMeetingList: TempmeetingList,
                     staffList: staffList,
                     nowtime: nowtime,
+                    meetingStaff: meetingStaff,
                 });
             });
     }

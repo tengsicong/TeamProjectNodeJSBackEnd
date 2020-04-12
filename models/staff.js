@@ -124,6 +124,8 @@ module.exports = {
         return meeting
             .find({StaffID: id})
             .populate('GroupID')
+            .populate('StaffID')
+            .populate('TemporaryStaffID')
             .exec();
     },
 
