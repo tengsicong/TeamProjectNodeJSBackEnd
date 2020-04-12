@@ -80,7 +80,7 @@
                                                 <%if(changeClientMeetingRequest.length>0){%>
                                                     <table>
                                                         <tr>
-                                                            <th width="10%"><b>Meeting Number</b></th>
+                                                            <th width="15%"><b>Meeting Number</b></th>
                                                             <th width="15%"><b>Original Time</b></th>
                                                             <th width="15%"><b>New Meeting Time</b></th>
                                                             <th width="15%"><b>Comment</b></th>
@@ -92,7 +92,7 @@
 
                                                         <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
                                                             <tr class="role2">
-                                                                <td style="text-align: center"><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber%></td>
+                                                                <td>SSIT Team <%=changeClientMeetingRequest[i].MeetingID.GroupID.TeamName%> Client meeting <%=changeClientMeetingRequest[i].MeetingID.MeetingNumber%></td>
                                                                 <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                                 <td><%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                                                 <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
@@ -126,7 +126,7 @@
                                 <select class="form-control" id="meetingchange" style="width: 60%" name="selection">
                                     <option value="0">-</option>
                                     <%for(let i=0;i<meetings.length;i++){%>
-                                    <option value="<%=meetings[i]._id%>">Client meeting <%=meetings[i].MeetingNumber%></option>
+                                    <option value="<%=meetings[i]._id%>">SSIT Team <%=meetings[i].GroupID.TeamName%> Client meeting <%=meetings[i].MeetingNumber%></option>
                                     <%}%>
                                 </select>
                             </div>
