@@ -130,29 +130,29 @@
     <div class="blank-page widget-shadow scroll">
         <h2><b>Allocated Team</b></h2>
         <% if(teams.length>0){%>
-            <% teams.forEach(function (team) { %>
+        <%for(let i=0;i<teams.length;i++){%>
             <div class="grid_3 grid_5 widget-shadow">
                 <a href="#">
                     <div>
-                        <h3><b><%= 'SSIT Team ' + team.TeamName%></b></h3>
+                        <h3><b><%= 'SSIT Team ' + teams[i].TeamName%></b></h3>
                     </div>
                     <div>
                         <table width="100%">
                             <tr>
-                                <td width="40%"><p><b>Supervisor:</b><%= ' ' + team.StaffID.Name %></p></td>
-                                    <td  rowspan="2"><button id="delete" value="<%=team._id%>" class="btn btn-danger" style="float: right" onclick="Delete()">Delete</button></td>
+                                <td width="40%"><p><b>Supervisor:</b><%= ' ' + teams[i].StaffID.Name %></p></td>
+                                    <td  rowspan="2"><button id="<%=i%>" value="<%=teams[i]._id%>" class="btn btn-danger" style="float: right" onclick="Delete(<%=i%>)">Delete</button></td>
                             </tr>
                             <td width="20em"><p><b>Student:</b>
-                                    <%= team.StudentID[0].Name %>
-                                    <% for(let i =1; i < team.StudentID.length; i++) { %>
-                                    <%='/ '+ team.StudentID[i].Name%>
+                                    <%= teams[i].StudentID[0].Name %>
+                                    <% for(let j =1; j < teams[i].StudentID.length; j++) { %>
+                                    <%='/ '+ teams[i].StudentID[j].Name%>
                                     <% } %>
                                 </p></td>
                             </tr>
                         </table>
                     </div>
                 </a></div>
-            <% })%>
+            <% }%>
         <%}else {%>
             <div class="alert alert-danger" role="alert">Not allocated yet!</div>
         <%}%>
@@ -193,12 +193,12 @@
         }
         }
 
-    function Delete() {
-        const teamID = document.getElementById('delete').value;
+    function Delete(i) {
+        const teamID = document.getElementById(i).value;
         let link = window.location.search;
         link = link.substring(1,link.length);
         let ProposalID = link.split("&")[0].split("=")[1];
-        //alert('teamID:'+teamID+' proposalID: '+ProposalID)
+        //alert('teamID:'+teamID)
         const inputElement1 = document.createElement("input");
         inputElement1.type = 'hidden';
         inputElement1.name = 'teamID';

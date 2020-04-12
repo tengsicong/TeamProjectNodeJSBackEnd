@@ -119,7 +119,7 @@ router.post('/myproject/project_pending',function(req,res,next){
     proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
-            console.log(result[1])
+            //console.log(result[1])
             let reply = result[1].Reply;
             reply.push({
                 Author:result[0].Name,
@@ -164,7 +164,7 @@ router.post('/myproject/project_rejected',function(req,res,next){
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
-            console.log(result[1])
+            //console.log(result[1])
             let reply = result[1].Reply;
             reply.push({
                 Author:result[0].Name,
@@ -199,7 +199,7 @@ router.get('/edit_project', function(req, res,next) {
 /*Edit proposal*/
 router.post('/edit_project',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-    console.log('id= '+ proposalID)
+    //console.log('id= '+ proposalID)
     const topic = req.body.topic;
     const content = req.body.content;
     newDate = new Date();

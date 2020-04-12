@@ -761,23 +761,20 @@ router.post('/allocate_team', function (req, res) {
                     ClientID: result[0]._id,
                     MeetingNumber: meetingnumber + i,
                 };
-                clientMeetingModel.addClientMeeting(clientmeeting);//成功
+                clientMeetingModel.addClientMeeting(clientmeeting).then(function (result) {
+                        teamModel.addClientMeetingByGroupID(teamID, result._id)
+                    }
+                );
             });
     }
     ;
     Promise.all([clientModel.getClientByProposalID(proposalId),])
         .then(function (result) {
             clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
-            Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
-                const meetings = result[0];
-                console.log(meetings)
-                let meetingid = [];
-                for (let i = 0; i < meetings.length; i++) {
-                    meetingid.push(meetings[i]._id);
-                }
-                ;
-                console.log(meetingid)
-                teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
+            Promise.all([
+                clientMeetingModel.getClientMeetingByGroupID(teamID)
+            ]).then(function (result) {
+                teamModel.allocateProposal(teamID, proposalId);
             });
             res.redirect('/admin/project_approved?id=' + proposalId);
         });

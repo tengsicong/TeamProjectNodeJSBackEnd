@@ -126,9 +126,14 @@ module.exports = {
 
     },
 
-    allocateProposal: function allocateProposal(id, proposalID, clientMeetingid) {
+    allocateProposal: function allocateProposal(id, proposalID) {
         team
-            .findOneAndUpdate({_id: id}, {$set: {ProposalID: proposalID, ClientMeetingID: clientMeetingid}}).exec()
+            .findOneAndUpdate({_id: id}, {$set: {ProposalID: proposalID}}).exec()
 
+    },
+
+    addClientMeetingByGroupID : function addClientMeetingByGroupID(id,meetingID) {
+        team
+            .findOneAndUpdate({_id:id},{$addToSet:{ClientMeetingID: meetingID}}).exec()
     }
 };
