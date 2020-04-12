@@ -108,81 +108,111 @@ router.get('/new_team', function (req, res) {
 /*submit*/
 /*Create a new team*/
 router.post('/submit_newteam', function (req, res) {
-    const team = teamModel.getAllTeam();
-    const teamName = team.length + 1;
-    teamModel.createTeam(teamName)
+    // 定义获得的staff的id
+    // 定义获得的student id
+    // 定义teamname
+    //
+    // teams库
+    // students库
+    // staffs库
+    // strecord
+    // staffmeeting库
 
-    let selector2 = req.body.selector2;
-    let selector3 = req.body.selector3;
-    let selector4 = req.body.selector4;
-    let selector5 = req.body.selector5;
-    let selector6 = req.body.selector6;
-    let selector7 = req.body.selector7;
-    let selector8 = req.body.selector8;
 
-    const array = []
-    if (selector3 != 'None3') {
-        selector3 = mongoose.Types.ObjectId(selector3);
-        array.push(selector3)
-    }
-    if (selector4 != 'None4') {
-        selector4 = mongoose.Types.ObjectId(selector4);
-        array.push(selector4)
-    }
-    if (selector5 != 'None5') {
-        selector5 = mongoose.Types.ObjectId(selector5);
+    const staffID = mongoose.Types.ObjectId(req.body.staffID);
+    const studentID = req.body.studentID;
+    const studentArray = studentID.split(',');
+    const studentIDArray = [];
+    studentArray.forEach(function (result) {
+        studentIDArray.push(mongoose.Types.ObjectId(result));
+    })
+    const representer = mongoose.Types.ObjectId(studentArray[0]);
+    teamModel.getAllTeam().then(function (result) {
+        const teamName = result.length + 1;
+        teamModel.createTeam(studentIDArray, staffID, representer, teamName).then(function (result) {
+            for (let i = 0; i < studentIDArray.length; i++) {
+                studentModel.postStudentTeamByStudentID(studentIDArray[i]._id, result._id).then();
+            }
+            staffModel.postGroupIDByStaffID(staffID, result._id).then();
 
-        array.push(selector5)
-    }
-    if (selector6 != 'None6') {
-        selector6 = mongoose.Types.ObjectId(selector6);
+        });
 
-        array.push(selector6)
-    }
-    if (selector7 != 'None7') {
-        selector7 = mongoose.Types.ObjectId(selector7);
-        array.push(selector7)
-    }
-    if (selector8 != 'None8') {
-        selector8 = mongoose.Types.ObjectId(selector8);
-        array.push(selector8)
-    }
-    if (selector2 != 'None2') {
-        selector2 = mongoose.Types.ObjectId(selector2);
-            Promise.all([
-            teamModel.updateTeamStaff(teamName, selector2),
-        ]).then();
-    } else {
-        Promise.all([
-            teamModel.deleteTeamStaff(teamName),
-        ]).then();
-    }
-    if (array.length != 0) {
-        teamModel.deleteTeamStudent(teamName).then();
-        array.forEach(function (element) {
-            teamModel.updateTeamStudent(teamName, element)
-        })
-    } else {
-        teamModel.deleteTeamStudent(teamName).then();
-    }
+    })
 
-    res.redirect('/admin/new_team');
+
+    // const team = teamModel.getAllTeam();
+    // const teamName = team.length + 1;
+    // teamModel.createTeam(teamName)
+    //
+    // let selector2 = req.body.selector2;
+    // let selector3 = req.body.selector3;
+    // let selector4 = req.body.selector4;
+    // let selector5 = req.body.selector5;
+    // let selector6 = req.body.selector6;
+    // let selector7 = req.body.selector7;
+    // let selector8 = req.body.selector8;
+    //
+    // const array = []
+    // if (selector3 != 'None3') {
+    //     selector3 = mongoose.Types.ObjectId(selector3);
+    //     array.push(selector3)
+    // }
+    // if (selector4 != 'None4') {
+    //     selector4 = mongoose.Types.ObjectId(selector4);
+    //     array.push(selector4)
+    // }
+    // if (selector5 != 'None5') {
+    //     selector5 = mongoose.Types.ObjectId(selector5);
+    //
+    //     array.push(selector5)
+    // }
+    // if (selector6 != 'None6') {
+    //     selector6 = mongoose.Types.ObjectId(selector6);
+    //
+    //     array.push(selector6)
+    // }
+    // if (selector7 != 'None7') {
+    //     selector7 = mongoose.Types.ObjectId(selector7);
+    //     array.push(selector7)
+    // }
+    // if (selector8 != 'None8') {
+    //     selector8 = mongoose.Types.ObjectId(selector8);
+    //     array.push(selector8)
+    // }
+    // if (selector2 != 'None2') {
+    //     selector2 = mongoose.Types.ObjectId(selector2);
+    //         Promise.all([
+    //         teamModel.updateTeamStaff(teamName, selector2),
+    //     ]).then();
+    // } else {
+    //     Promise.all([
+    //         teamModel.deleteTeamStaff(teamName),
+    //     ]).then();
+    // }
+    // if (array.length != 0) {
+    //     teamModel.deleteTeamStudent(teamName).then();
+    //     array.forEach(function (element) {
+    //         teamModel.updateTeamStudent(teamName, element)
+    //     })
+    // } else {
+    //     teamModel.deleteTeamStudent(teamName).then();
+    // }
+    //
+    // res.redirect('/admin/new_team');
 
 });
 /*edit_team*/
 router.post('/submit_editteam', function (req, res) {
     const selector2 = mongoose.Types.ObjectId(req.body.selector2);
-    console.log(req.body.selector2);
+    // console.log(req.body.selector2);
     // const selector3 = mongoose.Types.ObjectId(req.body.selector3);
     // const selector4 = mongoose.Types.ObjectId(req.body.selector4);
     // const selector5 = mongoose.Types.ObjectId(req.body.selector5);
     // const selector6 = mongoose.Types.ObjectId(req.body.selector6);
     // const selector7 = mongoose.Types.ObjectId(req.body.selector7);
     // const selector8 = mongoose.Types.ObjectId(req.body.selector8);
-    Promise.all([
-        teamModel.editTeamStaff(staffID, selector2),
-    ])
-        .then(function() {
+    teamModel.editTeamStaff(staffID, selector2)
+        .then(function () {
             res.redirect('/admin/team_list');
         });
 
@@ -338,10 +368,10 @@ router.get('/reject_timetable_change_staff', function (req, res, next) {
     let request = {
         _id: changeStaffMeetingRequestID,
         Status: 'rejected',
-        AdminReply:{
-            AdminName:"Emma Norling",
-            Date:nowDate,
-            Content:rejectreason
+        AdminReply: {
+            AdminName: "Emma Norling",
+            Date: nowDate,
+            Content: rejectreason
         }
     }
     changeStaffMeetingRequestModel.createRequestReason(rejectreason)
@@ -381,32 +411,33 @@ router.get('/client_timetable_pending', function (req, res, next) {
 
 })
 /* edit meeting request*/
-router.post('/mytimetable', function(req, res,next) {
+router.post('/mytimetable', function (req, res, next) {
     const selectMeetingid = mongoose.Types.ObjectId(req.body.selectmeeting);
     const group = mongoose.Types.ObjectId(req.body.group);
     let role = req.body.role;
     role = mongoose.Types.ObjectId(role);
-    const place =req.body.place;
+    const place = req.body.place;
     const supervisor = mongoose.Types.ObjectId(req.body.supervisor);
     const client_changetime = req.body.client_changetime;
 
     nowDate = new Date();
     Promise.all([
         clientMeetingModel.getClientMeetingByMeetingID(selectMeetingid),
-       // staffMeetingModel.getStaffMeetingByMeetingID(selectMeetingid)
+        // staffMeetingModel.getStaffMeetingByMeetingID(selectMeetingid)
     ])
         .then(function (result) {
             const meetings = result[1];
             let request = {
                 MeetingID: result[0]._id,
                 ClientID: clientID,
-                Status:'pending',
-                NewMeetingTime:time,
-                RequestComment:{
-                    RequestName:result[0].ClientID.Name,
-                    Date:nowDate,
-                    Content:reason
-                }}
+                Status: 'pending',
+                NewMeetingTime: time,
+                RequestComment: {
+                    RequestName: result[0].ClientID.Name,
+                    Date: nowDate,
+                    Content: reason
+                }
+            }
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
             res.redirect('/admin/timetable')
         });
@@ -557,199 +588,199 @@ router.post('/edit_project', function (req, res, next) {
     });
 });
 
-    router.get('/pending_approved', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.query.id);
-        newDate = new Date();
-        let proposal = {
-            _id: proposalID,
-            Date: newDate,
-            Status: 'approved'
-        }
+router.get('/pending_approved', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id: proposalID,
+        Date: newDate,
+        Status: 'approved'
+    }
 
-        proposalModel.adminEditPendingStatusProposal(proposal)
-            .then(function () {
-                res.redirect('/admin/project_approved?id=' + req.query.id)
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_approved?id=' + req.query.id)
+        })
+        .catch(next)
+});
+
+router.get('/pending_rejected', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id: proposalID,
+        Date: newDate,
+        Status: 'rejected'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_rejected?id=' + req.query.id)
+        })
+        .catch(next)
+});
+
+router.get('/rejected_pending', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id: proposalID,
+        Date: newDate,
+        Status: 'pending'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_pending?id=' + req.query.id)
+        })
+        .catch(next)
+});
+
+router.get('/approved_pending', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    let proposal = {
+        _id: proposalID,
+        Date: newDate,
+        Status: 'pending'
+    }
+
+    proposalModel.adminEditPendingStatusProposal(proposal)
+        .then(function () {
+            res.redirect('/admin/project_pending?id=' + req.query.id)
+        })
+        .catch(next)
+});
+
+router.post('/project_pending', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
+    const comment = req.body.comment;
+    replyDate = new Date();
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            // console.log(result[1])
+            let reply = result[1].Reply;
+            reply.push({
+                Author: result[0].Name,
+                Comment: comment,
+                ReplyDate: replyDate,
+            });
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/admin/project_pending?id=' + proposalID)
             })
-            .catch(next)
-    });
+        })
+        .catch(next)
+});
 
-    router.get('/pending_rejected', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.query.id);
-        newDate = new Date();
-        let proposal = {
-            _id: proposalID,
-            Date: newDate,
-            Status: 'rejected'
-        }
-
-        proposalModel.adminEditPendingStatusProposal(proposal)
-            .then(function () {
-                res.redirect('/admin/project_rejected?id=' + req.query.id)
+router.post('/project_rejected', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
+    const comment = req.body.comment;
+    replyDate = new Date();
+    Promise.all([
+        adminModel.getAdminByID(adminID),
+        proposalModel.getProposalByProposalID(proposalID),
+    ])
+        .then(function (result) {
+            // console.log(result[1])
+            let reply = result[1].Reply;
+            reply.push({
+                Author: result[0].Name,
+                Comment: comment,
+                ReplyDate: replyDate,
+            });
+            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            addComment.then(function () {
+                res.redirect('/admin/project_rejected?id=' + proposalID)
             })
-            .catch(next)
-    });
-
-    router.get('/rejected_pending', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.query.id);
-        newDate = new Date();
-        let proposal = {
-            _id: proposalID,
-            Date: newDate,
-            Status: 'pending'
-        }
-
-        proposalModel.adminEditPendingStatusProposal(proposal)
-            .then(function () {
-                res.redirect('/admin/project_pending?id=' + req.query.id)
-            })
-            .catch(next)
-    });
-
-    router.get('/approved_pending', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.query.id);
-        newDate = new Date();
-        let proposal = {
-            _id: proposalID,
-            Date: newDate,
-            Status: 'pending'
-        }
-
-        proposalModel.adminEditPendingStatusProposal(proposal)
-            .then(function () {
-                res.redirect('/admin/project_pending?id=' + req.query.id)
-            })
-            .catch(next)
-    });
-
-    router.post('/project_pending', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-        const comment = req.body.comment;
-        replyDate = new Date();
-        Promise.all([
-            adminModel.getAdminByID(adminID),
-            proposalModel.getProposalByProposalID(proposalID),
-        ])
-            .then(function (result) {
-                // console.log(result[1])
-                let reply = result[1].Reply;
-                reply.push({
-                    Author: result[0].Name,
-                    Comment: comment,
-                    ReplyDate: replyDate,
-                });
-                const addComment = proposalModel.addProposalComment(result[1]._id, reply);
-                addComment.then(function () {
-                    res.redirect('/admin/project_pending?id=' + proposalID)
-                })
-            })
-            .catch(next)
-    });
-
-    router.post('/project_rejected', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-        const comment = req.body.comment;
-        replyDate = new Date();
-        Promise.all([
-            adminModel.getAdminByID(adminID),
-            proposalModel.getProposalByProposalID(proposalID),
-        ])
-            .then(function (result) {
-                // console.log(result[1])
-                let reply = result[1].Reply;
-                reply.push({
-                    Author: result[0].Name,
-                    Comment: comment,
-                    ReplyDate: replyDate,
-                });
-                const addComment = proposalModel.addProposalComment(result[1]._id, reply);
-                addComment.then(function () {
-                    res.redirect('/admin/project_rejected?id=' + proposalID)
-                })
-            })
-            .catch(next)
-    });
+        })
+        .catch(next)
+});
 
 //delete team
-    router.post('/delete_team', function (req, res, next) {
-        const teamID = mongoose.Types.ObjectId(req.body.teamID);
-        const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
-        proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);
-        clientMeetingModel.deleteClientMeetingByGroupID(teamID);
-        teamModel.deleteTeamProposalByGroupID(teamID);
-        Promise.all([
-            clientModel.getClientByProposalID(proposalId),
-            clientMeetingModel.getClientMeetingByGroupID(teamID),
-        ])
-            .then(function (result) {
-                const clientID = result[0]._id;
-                clientModel.deleteGroupFromClientListByGroupID(clientID, teamID);
-                const meetings = result[1]
-                let meetingid = [];
-                for (let i = 0; i < meetings.length; i++) {
-                    meetingid.push(meetings[i]._id);
-                    changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid[i]);
-                }
-                ;
-                res.redirect('/admin/project_approved?id=' + proposalId)
-            })
-            .catch(next);
-    });
+router.post('/delete_team', function (req, res, next) {
+    const teamID = mongoose.Types.ObjectId(req.body.teamID);
+    const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
+    proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);
+    clientMeetingModel.deleteClientMeetingByGroupID(teamID);
+    teamModel.deleteTeamProposalByGroupID(teamID);
+    Promise.all([
+        clientModel.getClientByProposalID(proposalId),
+        clientMeetingModel.getClientMeetingByGroupID(teamID),
+    ])
+        .then(function (result) {
+            const clientID = result[0]._id;
+            clientModel.deleteGroupFromClientListByGroupID(clientID, teamID);
+            const meetings = result[1]
+            let meetingid = [];
+            for (let i = 0; i < meetings.length; i++) {
+                meetingid.push(meetings[i]._id);
+                changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid[i]);
+            }
+            ;
+            res.redirect('/admin/project_approved?id=' + proposalId)
+        })
+        .catch(next);
+});
 
 
 //delete project
-    router.get('/delete_project', function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.query.id);
-        newDate = new Date();
+router.get('/delete_project', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    newDate = new Date();
+    Promise.all([
+        clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
+        proposalModel.deleteProposal(proposalID)
+    ])
+        .then(function (result) {
+            res.redirect('/admin/project_list')
+        })
+        .catch(next)
+});
+
+router.post('/allocate_team', function (req, res) {
+    const teamID = mongoose.Types.ObjectId(req.body.teamID);
+    const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
+    proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
+    newDate = new Date();
+    for (let i = 0; i < 5; i++) {
         Promise.all([
-            clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
-            proposalModel.deleteProposal(proposalID)
+            clientModel.getClientByProposalID(proposalId),
+            clientMeetingModel.getAllClientMeetings(),
         ])
             .then(function (result) {
-                res.redirect('/admin/project_list')
-            })
-            .catch(next)
-    });
-
-    router.post('/allocate_team', function (req, res) {
-        const teamID = mongoose.Types.ObjectId(req.body.teamID);
-        const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
-        proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
-        newDate = new Date();
-        for (let i = 0; i < 5; i++) {
-            Promise.all([
-                clientModel.getClientByProposalID(proposalId),
-                clientMeetingModel.getAllClientMeetings(),
-            ])
-                .then(function (result) {
-                    const meetingnumber = result[1].length + 1;
-                    let clientmeeting = {
-                        _id: mongoose.Types.ObjectId(),
-                        GroupID: teamID,
-                        Date: newDate,
-                        Place: 'ClassRoom 2',
-                        ClientID: result[0]._id,
-                        MeetingNumber: meetingnumber + i,
-                    };
-                    clientMeetingModel.addClientMeeting(clientmeeting);//成功
-                });
-        }
-        ;
-        Promise.all([clientModel.getClientByProposalID(proposalId),])
-            .then(function (result) {
-                clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
-                Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
-                    const meetings = result[0];
-                    console.log(meetings)
-                    let meetingid = [];
-                    for (let i = 0; i < meetings.length; i++) {
-                        meetingid.push(meetings[i]._id);
-                    }
-                    ;
-                    console.log(meetingid)
-                    teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
-                });
-                res.redirect('/admin/project_approved?id=' + proposalId);
+                const meetingnumber = result[1].length + 1;
+                let clientmeeting = {
+                    _id: mongoose.Types.ObjectId(),
+                    GroupID: teamID,
+                    Date: newDate,
+                    Place: 'ClassRoom 2',
+                    ClientID: result[0]._id,
+                    MeetingNumber: meetingnumber + i,
+                };
+                clientMeetingModel.addClientMeeting(clientmeeting);//成功
             });
-    });
+    }
+    ;
+    Promise.all([clientModel.getClientByProposalID(proposalId),])
+        .then(function (result) {
+            clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
+            Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
+                const meetings = result[0];
+                console.log(meetings)
+                let meetingid = [];
+                for (let i = 0; i < meetings.length; i++) {
+                    meetingid.push(meetings[i]._id);
+                }
+                ;
+                console.log(meetingid)
+                teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
+            });
+            res.redirect('/admin/project_approved?id=' + proposalId);
+        });
+});
 
 module.exports = router;

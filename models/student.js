@@ -94,6 +94,15 @@ module.exports = {
             .exec()
     },
 
+    /**
+     * @author: wang
+     */
+    postStudentTeamByStudentID: function postStudentTeamByStudentID(studentID, groupID) {
+        student
+            .findOneAndUpdate({_id: student}, {$set: {GroupID: groupID}})
+            .exec()
+    }
+
 };
 
 // const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
