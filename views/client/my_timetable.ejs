@@ -65,31 +65,10 @@
                 </div>
                 <br>
                 <div class="blank-page widget-shadow scroll" style="margin-left: 2%;">
-                    <h2><b>Change Timetable</b></h2>
-                    <div class="form-body">
-                        <form style="padding-left: 30%" method="post">
-                            <div>Meeting Number:</div>
-                            <div class="form-group" style="align-items: center">
-                                <select class="form-control" style="width: 60%" name="selection">
-                                    <option>-</option>
-                                    <%for(let i=0;i<meetings.length;i++){%>
-                                    <option value="<%=meetings[i]._id%>">Client meeting <%=meetings[i].MeetingNumber%></option>
-                                    <%}%>
-                                </select>
-                            </div>
-                            <div>Change time to:</div>
-                            <div class="form-group" style="align-items: center">
-                                <input type="datetime-local" name="time" style="width: 60%">
-                            </div>
-                            <textarea name="reason" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
-                            <div>
-                                <button class="btn btn-primary" style="margin-left: 20%">Submit</button>
-                            </div>
-
-                        </form>
+                    <h2><b>Change Timetable</b><span>
                         <div>
                             <div class="col-md-4">
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal" style="margin-left: 280%">Check History</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal" style="margin-left: 260%;margin-top: -15%;">Check History</button>
                                 <div class="modal fade" id="gridSystemModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
                                     <div class="modal-dialog" role="document" style="width:70%">
                                         <div class="modal-content">
@@ -99,37 +78,37 @@
                                             </div>
                                             <div class="modal-body">
                                                 <%if(changeClientMeetingRequest.length>0){%>
-                                                <table>
-                                                    <tr>
-                                                        <th width="10%"><b>Meeting Number</b></th>
-                                                        <th width="15%"><b>Original Time</b></th>
-                                                        <th width="15%"><b>New Meeting Time</b></th>
-                                                        <th width="15%"><b>Comment</b></th>
-                                                        <th width="10%"><b>Admin Reply</b></th>
-                                                        <th width="5%"><b>Status</b></th>
-                                                        <th width="15%"><b>Request Date</b></th>
-                                                    </tr>
-                                                    <br>
+                                                    <table>
+                                                        <tr>
+                                                            <th width="10%"><b>Meeting Number</b></th>
+                                                            <th width="15%"><b>Original Time</b></th>
+                                                            <th width="15%"><b>New Meeting Time</b></th>
+                                                            <th width="15%"><b>Comment</b></th>
+                                                            <th width="10%"><b>Admin Reply</b></th>
+                                                            <th width="5%"><b>Status</b></th>
+                                                            <th width="15%"><b>Request Date</b></th>
+                                                        </tr>
+                                                        <br>
 
-                                                    <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
-                                                    <tr class="role2">
-                                                        <td style="text-align: center"><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber%></td>
-                                                        <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                                        <td><%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                                        <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
-                                                        <% if(changeClientMeetingRequest[i].AdminReply.Content!= undefined){%>
-                                                        <td><%= changeClientMeetingRequest[i].AdminReply.Content %></td>
-                                                            <%}else{%>
-                                                            <td>No reply.</td>
-                                                        <%}%>
-                                                        <td><%=changeClientMeetingRequest[i].Status%></td>
-                                                        <td><%=changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                                                    </tr>
-                                                    <% } %>
-                                                </table>
-                                                    <% } else{%>
-                                                        <div class="alert alert-danger" role="alert">You do not have a change request!</div>
-                                                    <%}%>
+                                                        <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
+                                                            <tr class="role2">
+                                                                <td style="text-align: center"><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber%></td>
+                                                                <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                                <td><%= changeClientMeetingRequest[i].NewMeetingTime.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].NewMeetingTime.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                                <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
+                                                                <% if(changeClientMeetingRequest[i].AdminReply.Content!= undefined){%>
+                                                                    <td><%= changeClientMeetingRequest[i].AdminReply.Content %></td>
+                                                                <%}else{%>
+                                                                    <td>No reply.</td>
+                                                                <%}%>
+                                                                <td><%=changeClientMeetingRequest[i].Status%></td>
+                                                                <td><%=changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/,' ')+changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                                            </tr>
+                                                        <% } %>
+                                                    </table>
+                                                <% } else{%>
+                                                    <div class="alert alert-danger" role="alert">You do not have a change request!</div>
+                                                <%}%>
                                                 <br>
                                                 <button type="button" class="btn btn-default btn-sm" style="margin-left: 45%" data-dismiss="modal">Close</button>
                                             </div>
@@ -138,6 +117,27 @@
                                 </div><!-- /.modal -->
                             </div>
                         </div>
+                        </span></h2>
+                    <div class="form-body">
+                        <form style="padding-left: 30%" method="post" onsubmit="return my_check()">
+                            <div>Meeting Number:</div>
+                            <div class="form-group" style="align-items: center">
+                                <select class="form-control" id="meetingchange" style="width: 60%" name="selection">
+                                    <option value="0">-</option>
+                                    <%for(let i=0;i<meetings.length;i++){%>
+                                    <option value="<%=meetings[i]._id%>">Client meeting <%=meetings[i].MeetingNumber%></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <div>Change time to:</div>
+                            <div class="form-group" style="align-items: center">
+                                <input type="datetime-local" id="changetime" name="time" style="width: 60%">
+                            </div>
+                            <textarea name="reason" id="reason" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                            <div>
+                                <button class="btn btn-primary" style="margin-left: 20%">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </td>
@@ -147,5 +147,32 @@
 </div>
 
 <%- include('footer') %>
-
+<script>
+    function my_check() {
+        const time = document.getElementById("changetime").value;
+        const reason = document.getElementById("reason").value;
+        const meetingid = document.getElementById("meetingchange").value;
+        if(meetingid == '0'){
+            alert("please select a meeting!");
+            return false;
+        }
+        if(time == ''){
+            alert("Please select a time!");
+            return false;
+        }
+        if(reason == ''){
+            alert("Please enter the reason!");
+            return false;
+        }
+        var nowtime1 = new Date();
+        var nowtime2 = new Date(time);
+        if(nowtime1 > nowtime2)
+        {
+            alert('Invalid meeting time,please check!');
+            return false;
+        }
+        alert('Send request successfully, Click here to continue');
+        return true;
+    }
+</script>
 <%- include('script')%>

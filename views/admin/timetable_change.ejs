@@ -50,18 +50,15 @@
                                         <% }else{ %>
                                             None
                                         <% } %></td>
-                                        <td><% if (changeStaffMeetingRequest[i].NewMeetingID != undefined){ %>
-
+                                        <td>
                                             <% if (changeStaffMeetingRequest[i] != undefined) { %>
                                                 <% if (changeStaffMeetingRequest[i].RequestComment != undefined ) { %>
                                                     change time
                                                     to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
-                                                <% } %>
-                                                <% if (changeStaffMeetingRequest[i].NewStaffID != undefined) { %>
+
                                                     <br> change staff
                                                     to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
                                                 <% } %>
-                                            <% } %>
 
                                         <% }else{ %>
                                             None

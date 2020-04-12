@@ -29,12 +29,17 @@ module.exports = {
         return changestaffmeetingrequest
             .update({_id:newChangeStaffMeetingRequest._id},{$set:{Status:newChangeStaffMeetingRequest.Status}})
     },
-    createRequestReason: function createRequestReason (requestreason) {
+    createRequestReason: function createRequestReason (request) {
         return changestaffmeetingrequest
-            .create(requestreason)
+            .create(request)
     },
 
-
+    // getChangeStaffMeetingRequestByChangeStaffMeetingRequestID: function getChangeStaffMeetingRequestByChangeStaffMeetingRequestID(id) {
+    //     return changestaffmeetingrequest
+    //         .findOne({_id:id})
+    //         .populate('GroupID')
+    //         // .populate('ClientID')
+    // },
     deleteChangeStaffMeetingRequestByMeetingID: function deleteChangeStaffMeetingRequestByMeetingID(MeetingID) {
         return changestaffmeetingrequest
             .deleteOne({MeetingID:MeetingID})
