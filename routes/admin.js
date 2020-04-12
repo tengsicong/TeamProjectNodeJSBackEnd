@@ -766,7 +766,7 @@ router.post('/allocate_team', function (req, res) {
     for (let i = 0; i < 5; i++) {
         Promise.all([
             clientModel.getClientByProposalID(proposalId),
-            clientMeetingModel.getAllClientMeetings(),
+            clientMeetingModel.getClientMeetingByGroupID(teamID),
         ])
             .then(function (result) {
                 const meetingnumber = result[1].length + 1;
