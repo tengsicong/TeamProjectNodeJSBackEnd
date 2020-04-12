@@ -69,7 +69,7 @@ router.post('/myproject/create_project',function(req,res,next){
             //res.redirect('/client/myproject')
         })
         .catch(next)
-})
+});
 
 
 
@@ -251,14 +251,17 @@ router.get('/myteam/teampage', function(req, res,next) {
     Promise.all([
         clientModel.getClientByClientID(clientID),
         teamModel.getTeamByTeamID(teamID),
+        stageModel.getStage()
     ])
         .then(function(result) {
+            const stage = result[2][0];
             //console.log(result[1].ClientMeetingID[0].Date)
             res.render('client/team_page', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM'+result[1].TeamName,
                 username: result[0].Name,
                 meetings: result[1].ClientMeetingID,
+                stage:stage,
             });
         })
         .catch(next);
