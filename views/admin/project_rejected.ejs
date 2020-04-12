@@ -25,17 +25,18 @@
                         <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
                     </a>                    </td>
                 <td>
-                    <a href="/admin/rejected_pending?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" style="margin-right:3%;float: right">Pending
-                    </button>
-                    </a>
-                </td>
-                <td>
                     <a href="/admin/delete_project?id=<%=proposal._id%>">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">delete
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right:6%;float: right">Delete
                         </button>
                     </a>
                 </td>
+                <td>
+                    <a href="/admin/rejected_pending?id=<%=proposal._id%>">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
+                    </button>
+                    </a>
+                </td>
+
             </tr>
         </table>
     </div>
