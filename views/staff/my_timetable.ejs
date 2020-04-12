@@ -35,7 +35,7 @@
             </td>
             <td width="50%">
                 <!-- calendar -->
-                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 300px" >
+                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 600px" >
                     <h2><b>Meeting Table</b></h2>
                     <table class="table">
                         <thead>
@@ -53,7 +53,7 @@
                             <table class="table">
                                 <tbody>
                                     <% for(var i=0;i<meetingList.length;i++) { %>
-                                        <%if(tempMeetingList[i].Date<nowtime) { %>
+                                        <%if(meetingList[i].Date<nowtime) { %>
                                             <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
                                         <% } else { %>
                                             <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
