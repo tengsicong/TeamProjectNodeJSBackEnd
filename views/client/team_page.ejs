@@ -18,7 +18,7 @@
         <br>
         <div class="panel panel-info">
             <!-- Default panel contents -->
-            <div class="panel-heading"><b style="margin-left: -0.8%">Project Overview</b></div>
+            <div class="panel-heading"><b>Project Overview</b></div>
             <div class="panel-body"><b>Topic: </b><%= team.ProposalID.Topic %>
                 <br>
             <b>Content: </b><%= team.ProposalID.Content.substring(0, 800) + '...' %></div>
@@ -31,7 +31,7 @@
         <br>
         <div class="panel panel-info">
             <!-- Default panel contents -->
-            <div class="panel-heading"><b style="margin-left: -0.8%">Meeting List</b></div>
+            <div class="panel-heading"><b>Meeting List</b></div>
             <!-- Table -->
             <table class="table">
                 <tr>
@@ -51,6 +51,7 @@
         </div>
     </div>
     <br>
+    <%if(stage.Stage==2){%>
     <% if (team.ClientMark.length == 0) { %>
         <div class="blank-page widget-shadow scroll">
             <h3><b>Mark For This Team</b>
@@ -70,7 +71,7 @@
         <br>
         <div class="panel panel-info">
             <!-- Default panel contents -->
-            <div class="panel-heading" ><b style="margin-left: -0.8%">Marks</b></div>
+            <div class="panel-heading" ><b>Marks</b></div>
 
             <!-- Table -->
             <table class="table">
@@ -127,7 +128,7 @@
             </table>
         </div>
     </div>
-    <% } %>
+    <% }} %>
 
 </div>
 

@@ -9,7 +9,6 @@ const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
 const stageModel = require('../models/stage')
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-const staffID = mongoose.Types.ObjectId('5e7aa6c6446d0305c8e28c6d');
 
 
 router.get('/myproject', function(req, res, next) {
@@ -69,7 +68,7 @@ router.post('/myproject/create_project',function(req,res,next){
             //res.redirect('/client/myproject')
         })
         .catch(next)
-})
+});
 
 
 
@@ -251,14 +250,17 @@ router.get('/myteam/teampage', function(req, res,next) {
     Promise.all([
         clientModel.getClientByClientID(clientID),
         teamModel.getTeamByTeamID(teamID),
+        stageModel.getStage()
     ])
         .then(function(result) {
+            const stage = result[2][0];
             //console.log(result[1].ClientMeetingID[0].Date)
             res.render('client/team_page', {
                 team: result[1],
                 pageTitle: 'SSIT TEAM'+result[1].TeamName,
                 username: result[0].Name,
                 meetings: result[1].ClientMeetingID,
+                stage:stage,
             });
         })
         .catch(next);

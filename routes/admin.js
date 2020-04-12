@@ -554,7 +554,8 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_list')
             })
             .catch(next)
-    })
+    });
+});
 
     router.get('/pending_approved', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -570,7 +571,7 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_approved?id=' + req.query.id)
             })
             .catch(next)
-    })
+    });
 
     router.get('/pending_rejected', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -586,7 +587,7 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_rejected?id=' + req.query.id)
             })
             .catch(next)
-    })
+    });
 
     router.get('/rejected_pending', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -602,7 +603,7 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_pending?id=' + req.query.id)
             })
             .catch(next)
-    })
+    });
 
     router.get('/approved_pending', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -618,7 +619,7 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_pending?id=' + req.query.id)
             })
             .catch(next)
-    })
+    });
 
     router.post('/project_pending', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
@@ -642,7 +643,7 @@ router.post('/edit_project', function (req, res, next) {
                 })
             })
             .catch(next)
-    })
+    });
 
     router.post('/project_rejected', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
@@ -666,21 +667,22 @@ router.post('/edit_project', function (req, res, next) {
                 })
             })
             .catch(next)
-    })
+    });
+
 //delete team
     router.post('/delete_team', function (req, res, next) {
         const teamID = mongoose.Types.ObjectId(req.body.teamID);
         const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
-        proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);//success
+        proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);
         clientMeetingModel.deleteClientMeetingByGroupID(teamID);
-        teamModel.deleteTeamProposalByGroupID(teamID);//un
+        teamModel.deleteTeamProposalByGroupID(teamID);
         Promise.all([
             clientModel.getClientByProposalID(proposalId),
             clientMeetingModel.getClientMeetingByGroupID(teamID),
         ])
             .then(function (result) {
                 const clientID = result[0]._id;
-                clientModel.deleteGroupFromClientListByGroupID(clientID, teamID);//un
+                clientModel.deleteGroupFromClientListByGroupID(clientID, teamID);
                 const meetings = result[1]
                 let meetingid = [];
                 for (let i = 0; i < meetings.length; i++) {
@@ -691,7 +693,7 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_approved?id=' + proposalId)
             })
             .catch(next);
-    })
+    });
 
 
 //delete project
@@ -706,7 +708,7 @@ router.post('/edit_project', function (req, res, next) {
                 res.redirect('/admin/project_list')
             })
             .catch(next)
-    })
+    });
 
     router.post('/allocate_team', function (req, res) {
         const teamID = mongoose.Types.ObjectId(req.body.teamID);
@@ -727,9 +729,9 @@ router.post('/edit_project', function (req, res, next) {
                         Place: 'ClassRoom 2',
                         ClientID: result[0]._id,
                         MeetingNumber: meetingnumber + i,
-                    }
+                    };
                     clientMeetingModel.addClientMeeting(clientmeeting);//成功
-                })
+                });
         }
         ;
         Promise.all([clientModel.getClientByProposalID(proposalId),])
@@ -745,10 +747,9 @@ router.post('/edit_project', function (req, res, next) {
                     ;
                     console.log(meetingid)
                     teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
-                })
+                });
                 res.redirect('/admin/project_approved?id=' + proposalId);
-            })
-    })
-});
+            });
+    });
 
 module.exports = router;

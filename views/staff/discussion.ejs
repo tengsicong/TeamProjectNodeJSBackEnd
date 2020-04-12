@@ -3,49 +3,57 @@
 		<!-- main content start-->
 		<div id="page-wrapper">
 			<div class="main-page">
-                <div class="blank-page widget-shadow scroll">
-                    <h2><b>Discussion Board</b></h2>
-                    <br>
-                    <% if (qa.length === 0) {%>
-                        <div class="alert alert-danger" role="alert">No discussion yet</div>
-                    <% } else { %>
-                        <% for (let i = 0; i < qa.length; i++) { %>
-                            <div class="panel panel-info discussion-item" style="cursor:pointer" onclick="window.location.href = 'discussion_details?id=<%= qa[i]._id %>'">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><%= qa[i].Topic %></h3>
-                                    <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
-                                </div>
-                                <div class="panel-body">
-                                    <p><%= qa[i].Replies[0].Comment%></p>
-                                    <br>
-                                    <p style="color: gray; font-weight:bold">
-                                        By: <span style="color: black"><%= qa[i].Replies[0].Author%></span>
-                                        | Post Time: <span style="color: black"><%= qa[i].Replies[0].ReplyDate.toISOString().replace(/T.*/,' ')+qa[i].Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></span>
-                                        | Replies: <span style="color: black"><%= qa[i].Replies.length %></span>
-                                        <%  let ms = new Date() - qa[i].Replies[(qa[i].Replies.length-1)].ReplyDate;
-                                            let year = Math.floor(ms / (1000 * 60 * 60 * 24 * 30 * 12));
-                                            let month = Math.floor(ms / (1000 * 60 * 60 * 24 * 30));
-                                            let day = Math.floor(ms / (1000 * 60 * 60 * 24));
-                                            let hour = Math.floor(ms / (1000 * 60 * 60));
-                                            let min = Math.ceil(ms / (1000 * 60));
-                                            let s = '';
-                                            if (year > 0) {
-                                                s = year + ' year' + ((year > 1) ? 's ago' : ' ago');
-                                            } else if (month > 0) {
-                                                s = month + ' month' + ((month > 1) ? 's ago' : ' ago');
-                                            } else if (day > 0) {
-                                                s = day + ' day' + ((day > 1) ? 's ago' : ' ago');
-                                            } else if (hour > 0) {
-                                                s = hour + ' hour' + ((hour > 1) ? 's ago' : ' ago');
-                                            } else {
-                                                s = min + ' min' + ((min > 1) ? 's ago' : ' ago');
-                                            } %>
-                                        | Latest update: <span style="color: black"><%= s %></span></p>
-                                </div>
-                            </div>
-                        <% } %>
+                <h2 class="title1">Discussion</h2>
+                <% if (team.length === 0) {%>
+                    <div class="alert alert-danger" role="alert">No discussion yet</div>
+                <% } else { %>
+                    <% for (let i = 0; i < team.length; i++) { %>
+                        <div class="blank-page widget-shadow scroll">
+                            <h3><b>SSIT Team <%= team[i] %></b></h3>
+                            <br>
+                            <% if (qa[i].length === 0) {%>
+                                <div class="alert alert-danger" role="alert">No discussion yet</div>
+                            <% } else { %>
+                                <% for (let j = 0; j < qa[i].length; j++) { %>
+                                    <div class="panel panel-info discussion-item" style="cursor:pointer" onclick="window.location.href = 'discussion_details?id=<%= qa[i][j]._id %>'">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title"><%= qa[i][j].Topic %></h3>
+                                            <i class="fa fa-angle-right" style="float:right;font-size:20px"></i>
+                                        </div>
+                                        <div class="panel-body">
+                                            <p><%= qa[i][j].Replies[0].Comment%></p>
+                                            <br>
+                                            <p style="color: gray; font-weight:bold">
+                                                By: <span style="color: black"><%= qa[i][j].Replies[0].Author%></span>
+                                                | Post Time: <span style="color: black"><%= qa[i][j].Replies[0].ReplyDate.toISOString().replace(/T.*/,' ')+qa[i][j].Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></span>
+                                                | Replies: <span style="color: black"><%= qa[i][j].Replies.length %></span>
+                                                <%  let ms = new Date() - qa[i][j].Replies[(qa[i][j].Replies.length-1)].ReplyDate;
+                                                    let year = Math.floor(ms / (1000 * 60 * 60 * 24 * 30 * 12));
+                                                    let month = Math.floor(ms / (1000 * 60 * 60 * 24 * 30));
+                                                    let day = Math.floor(ms / (1000 * 60 * 60 * 24));
+                                                    let hour = Math.floor(ms / (1000 * 60 * 60));
+                                                    let min = Math.ceil(ms / (1000 * 60));
+                                                    let s = '';
+                                                    if (year > 0) {
+                                                        s = year + ' year' + ((year > 1) ? 's ago' : ' ago');
+                                                    } else if (month > 0) {
+                                                        s = month + ' month' + ((month > 1) ? 's ago' : ' ago');
+                                                    } else if (day > 0) {
+                                                        s = day + ' day' + ((day > 1) ? 's ago' : ' ago');
+                                                    } else if (hour > 0) {
+                                                        s = hour + ' hour' + ((hour > 1) ? 's ago' : ' ago');
+                                                    } else {
+                                                        s = min + ' min' + ((min > 1) ? 's ago' : ' ago');
+                                                    } %>
+                                                | Latest update: <span style="color: black"><%= s %></span></p>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <br>
                     <% } %>
-                </div>
+                <% } %>
 			</div>
 		</div>
 

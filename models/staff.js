@@ -42,6 +42,23 @@ module.exports = {
 
     /**
      * @param {ObjectId} id
+     * @return {teams} allocated team
+     */
+    getAllocatedTeamByTeamID: function getAllocatedTeamByTeamID(id) {
+        return team
+            .findById(id)
+            .populate('StaffID','Name')
+            .populate('StudentID','Name StaffMark StaffFeedback')
+            .populate('Representer','Name')
+            .populate('ProposalID','Content')
+            .populate({path: 'ProposalID', populate: {path: 'ClientID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'StaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'TemporaryStaffID'}})
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
      * @return {meeting} a meeting
      */
     getStaffMeetingByMeetingID: function getStaffMeetingByMeetingID (id) {
@@ -169,14 +186,13 @@ module.exports = {
 
     },
 
-
     updateTeamMark: function updateTeamMark(id,reason,score){
         return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
     },
 
-    // updateIndeMark: function updateIndeMark(id,score1,reason1,score2,reason2){
-    //     return students.update({_id:id},{$set:{StaffMark$[0].Score:score1}});
-    // },
+    updateIndeMark: function updateIndeMark(id,score,reason){
+        return students.update({_id:id},{$set:{StaffMark:score,StaffMarkReason: reason}});
+    },
 
     updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){
         return request.update({_id:newRequest._id},{$set:{NewStaffID:newRequest.NewStaffID, NewMeetingTime:newRequest.NewMeetingTime, RequestComment: newRequest.RequestComment}});

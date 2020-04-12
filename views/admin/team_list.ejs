@@ -22,12 +22,12 @@
         <table width="100%">
             <tr>
                 <td>
-                    <h2><b>Add a staff</b></h2>
+                    <h2><b>Add A Staff</b></h2>
                     <p>Click button to add a staff.</p>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_new_staff" data-whatever="@AddNewStaff"
-                            style="float: right">addstaff
+                            style="float: right">add
                     </button>
                     <div class="modal fade" id="add_new_staff" tabindex="-1" role="dialog"
                          aria-labelledby="exampleModalLabel">
@@ -38,16 +38,18 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group" style="align-items: center">
-                                        <h4>Add staff's name:</h4>
+                                        <h4>Staff's name:</h4>
                                         <br>
                                         <input class="form-control" id="addStaffName" style="width: 100%">
 
                                     </div>
                                     <div class="form-group" style="align-items: center">
-                                        <h4>Add staff's username:</h4>
+                                        <h4>Staff's username: (E-mail)</h4>
                                         <br>
                                         <input class="form-control" id="addStaffUserName" style="width: 100%">
                                     </div>
+                                    <br>
+                                    <p>Default password is the staff name!</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" onclick="addNewStaff()">
@@ -142,23 +144,34 @@
 
 <script>
     function addNewStaff() {
-        let temp = document.createElement("form");
-        temp.action = '/admin/add_new_staff';
-        temp.method = 'post';
-        temp.style.display = "none";
-        let inputElement1 = document.createElement("input")
-        inputElement1.type = 'hidden';
-        inputElement1.name = 'addStaffName';
-        inputElement1.value = document.getElementById('addStaffName').value;
-        let inputElement2 = document.createElement("input")
-        inputElement2.type = 'hidden';
-        inputElement2.name = 'addStaffUserName';
-        inputElement2.value = document.getElementById('addStaffUserName').value;
-        temp.appendChild(inputElement1);
-        temp.appendChild(inputElement2);
-        document.body.appendChild(temp);
-        temp.submit();
-        return temp;
+        const reg=/^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/gi;
+
+        if (document.getElementById('addStaffName').value == '') {
+            alert("Please enter a name")
+        } else if (document.getElementById('addStaffUserName').value == '') {
+            alert("Please enter a username")
+        } else if (!reg.test(document.getElementById('addStaffUserName').value)) {
+            alert("Invalid username, should be a E-mail")
+        } else {
+            let temp = document.createElement("form");
+            temp.action = '/admin/add_new_staff';
+            temp.method = 'post';
+            temp.style.display = "none";
+            let inputElement1 = document.createElement("input")
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'addStaffName';
+            inputElement1.value = document.getElementById('addStaffName').value;
+            let inputElement2 = document.createElement("input")
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'addStaffUserName';
+            inputElement2.value = document.getElementById('addStaffUserName').value;
+            temp.appendChild(inputElement1);
+            temp.appendChild(inputElement2);
+            document.body.appendChild(temp);
+            temp.submit();
+            return temp;
+        }
+
     }
 </script>
 
