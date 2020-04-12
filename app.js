@@ -29,6 +29,7 @@ app.use(session({
     secret: 'shijieshangzh!y0uwand0ngsenhebuwand0ngsenderen',
     resave: false,
     saveUninitialized: true,
+    rolling: true,
     cookie: {maxAge: 60 * 60 * 1000},
     store: new MongoStore({
         url: config.mongodb,

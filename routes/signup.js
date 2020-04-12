@@ -45,7 +45,9 @@ router.post('/', function(req, res) {
                         req.session.userinfo = clientEntity._id;
                         req.session.username = email;
                         req.session.role = 'client';
-                        res.redirect('/client/myproject');
+                        req.session.save(function(err) {
+                            res.redirect('/client/myproject');
+                        });
                     });
                 } else {
                     console.log('The passwords you input are not matched');
