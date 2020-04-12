@@ -30,13 +30,13 @@ module.exports = {
     getAllocatedTeamByStaffID: function getAllocatedTeamByStaffID(id) {
         return team
             .find({StaffID: id})
-            .populate('StaffID', 'Name')
-            .populate('StudentID', 'Name StaffMark StaffFeedback')
-            .populate('Representer', 'Name')
-            .populate('ProposalID', 'Content')
+            .populate('StaffID','Name')
+            .populate('StudentID','Name StaffMark StaffFeedback')
+            .populate('Representer','Name')
+            .populate('ProposalID','Content')
             .populate({path: 'ProposalID', populate: {path: 'ClientID'}})
-            .populate({path: 'StaffMeetingID', populate: {path: 'StaffID'}})
-            .populate({path: 'StaffMeetingID', populate: {path: 'TemporaryStaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'StaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'TemporaryStaffID'}})
             .exec();
     },
 
@@ -47,13 +47,13 @@ module.exports = {
     getAllocatedTeamByTeamID: function getAllocatedTeamByTeamID(id) {
         return team
             .findById(id)
-            .populate('StaffID', 'Name')
-            .populate('StudentID', 'Name StaffMark StaffFeedback')
-            .populate('Representer', 'Name')
-            .populate('ProposalID', 'Content')
+            .populate('StaffID','Name')
+            .populate('StudentID','Name StaffMark StaffFeedback')
+            .populate('Representer','Name')
+            .populate('ProposalID','Content')
             .populate({path: 'ProposalID', populate: {path: 'ClientID'}})
-            .populate({path: 'StaffMeetingID', populate: {path: 'StaffID'}})
-            .populate({path: 'StaffMeetingID', populate: {path: 'TemporaryStaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'StaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'TemporaryStaffID'}})
             .exec();
     },
 
@@ -61,13 +61,13 @@ module.exports = {
      * @param {ObjectId} id
      * @return {meeting} a meeting
      */
-    getStaffMeetingByMeetingID: function getStaffMeetingByMeetingID(id) {
+    getStaffMeetingByMeetingID: function getStaffMeetingByMeetingID (id) {
         return meeting
             .findById(id)
             .populate('TemporaryStaffID')
             .populate('StaffID')
-            .populate({path: 'GroupID', populate: {path: 'StudentID'}})
-            .populate({path: 'GroupID', populate: {path: 'ProposalID', populate: {path: 'ClientID'}}})
+            .populate({path:'GroupID', populate:{path: 'StudentID'}})
+            .populate({path:'GroupID', populate:{path: 'ProposalID', populate: {path:'ClientID'}}})
             .populate('RecordID')
             .exec();
     },
@@ -76,7 +76,7 @@ module.exports = {
      * @param {ObjectId} id
      * @return {[meetingmodify]} a list of meeting changing request
      */
-    getStaffMeetingChangeRequestByMeetingID: function getStaffMeetingChangeRequestByMeetingID(id) {
+    getStaffMeetingChangeRequestByMeetingID: function getStaffMeetingChangeRequestByMeetingID (id) {
         return request
             .find({MeetingID: id})
             .populate('StaffID')
@@ -87,7 +87,7 @@ module.exports = {
      * @param {ObjectId} id
      * @return {[meetingmodify]} a list of meeting changing request
      */
-    getStaffMeetingChangeRequestByStaffID: function getStaffMeetingChangeRequestByStaffID(id) {
+    getStaffMeetingChangeRequestByStaffID: function getStaffMeetingChangeRequestByStaffID (id) {
         return request
             .find({StaffID: id})
             .populate('StaffID')
@@ -100,7 +100,7 @@ module.exports = {
      * @param {ObjectId} id
      * @return {team} a team
      */
-    getTeamByTeamID: function getTeamByTeamID(id) {
+    getTeamByTeamID: function getTeamByTeamID (id) {
         return team
             .findById(id)
             .exec();
@@ -173,7 +173,7 @@ module.exports = {
     },
 
     resetPasswordByStaffId: function resetPasswordByStaffId(id, password) {
-        return staff.findByIdAndUpdate(id, {Password: password});
+        return staff.findByIdAndUpdate(id, { Password: password });
     },
 
 
@@ -181,33 +181,27 @@ module.exports = {
      * @param {ObjectId} id, GroupID  id:staffID
      * @return {staff} a staff object
      */
-    updateStaffAllocatedTeamByTeamID: function updateStaffAllocatedTeamByTeamID(id, GroupID) {
-        return staff.update({_id: id}, {$addToSet: {AllocatedTeamID: GroupID}})
+    updateStaffAllocatedTeamByTeamID: function updateStaffAllocatedTeamByTeamID(id,GroupID) {
+        return staff.update({_id:id},{$addToSet:{AllocatedTeamID: GroupID}})
 
     },
 
-    updateTeamMark: function updateTeamMark(id, reason, score) {
-        return team.update({_id: id}, {$set: {StaffMark: score, StaffMarkReason: reason}});
+    updateTeamMark: function updateTeamMark(id,reason,score){
+        return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
     },
 
-    updateIndeMark: function updateIndeMark(id, score, reason) {
-        return students.update({_id: id}, {$set: {StaffMark: score, StaffMarkReason: reason}});
+    updateIndeMark: function updateIndeMark(id,score,reason){
+        return students.update({_id:id},{$set:{StaffMark:score,StaffMarkReason: reason}});
     },
 
-    updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest) {
-        return request.update({_id: newRequest._id}, {
-            $set: {
-                NewStaffID: newRequest.NewStaffID,
-                NewMeetingTime: newRequest.NewMeetingTime,
-                RequestComment: newRequest.RequestComment
-            }
-        });
+    updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){
+        return request.update({_id:newRequest._id},{$set:{NewStaffID:newRequest.NewStaffID, NewMeetingTime:newRequest.NewMeetingTime, RequestComment: newRequest.RequestComment}});
     },
 
     createMeetingChangeRequest: function createMeetingChangeRequest(newRequest) {
         return request.create(newRequest);
     },
-    addNewStaff: function addNewStaff(addStaffName, addStaffUserName) {
+    addNewStaff:function addNewStaff(addStaffName, addStaffUserName) {
         staff
             // .populate('Name')
             .create({Name: addStaffName, UserName: addStaffUserName, Password: addStaffName})
@@ -215,25 +209,23 @@ module.exports = {
 
     },
 
-    deleteStaffAllocatedTeamByTeamID: function deleteStaffAllocatedTeamByTeamID(id, groupID) {
-        return staff.update({_id: id}, {$pull: {AllocatedTeamID: {$in: groupID}}})
+    deleteStaffAllocatedTeamByTeamID : function deleteStaffAllocatedTeamByTeamID(id,groupID) {
+      return  staff.update({_id:id},{$pull:{AllocatedTeamID: {$in:groupID}}})
     },
 
-    updateMeetingRecords: function updateMeetingRecords(id, newRecords) {
-        return records.update({_id: id}, {
-            $set: {
-                LastMeetingNote: newRecords.LastMeetingNote,
-                AchievePlan: newRecords.AchievePlan,
-                Change: newRecords.Change,
-                ChangeOther: newRecords.ChangeOther,
-                RequirementCapture: newRecords.RequirementCapture,
-                TeamProgress: newRecords.TeamProgress,
-                TimeSheets: newRecords.TimeSheets,
-                ClearPlan: newRecords.ClearPlan,
-                Dynamics: newRecords.Dynamics,
-                AnyOtherNote: newRecords.AnyOtherNote,
-            }
-        });
+    updateMeetingRecords: function updateMeetingRecords(id,newRecords){
+        return records.update({_id:id},{$set:{
+            LastMeetingNote: newRecords.LastMeetingNote,
+            AchievePlan: newRecords.AchievePlan,
+            Change: newRecords.Change,
+            ChangeOther: newRecords.ChangeOther,
+            RequirementCapture: newRecords.RequirementCapture,
+            TeamProgress: newRecords.TeamProgress,
+            TimeSheets: newRecords.TimeSheets,
+            ClearPlan: newRecords.ClearPlan,
+            Dynamics: newRecords.Dynamics,
+            AnyOtherNote: newRecords.AnyOtherNote,
+        }});
     },
 
     /**

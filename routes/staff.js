@@ -392,8 +392,8 @@ router.post('/marking', function (req,res,next) {
     const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
     let studentList = [];
-    console.log(teamcontent);
-    console.log(teamselect);
+    // console.log(teamcontent);
+    // console.log(teamselect);
 
     staffModel.getTeamByTeamID(teamid)
         .then(function(result){
@@ -413,13 +413,17 @@ router.post('/marking', function (req,res,next) {
                 indicontent[i*2],
                 indicontent[i*2+1],
                 ];
-                staffModel.updateIndeMark(studentList[i].id,score,reason);
+                staffModel.updateIndeMark(studentList[i]._id,score,reason)
+                    .then(function () {
+                        //console.log(studentList[i]._id);
+                    })
             }
     })
 
-    console.log('-------');
-    console.log(studentList);
-    console.log('-------');
+    // console.log('-------');
+    // console.log(studentList);
+    // console.log('-------');
+    //staffModel.updateIndeMark(Object.Type.id(5e7b6ace4f4ed29e60233999),[1,1],['123123','ttttest'])
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             //console.log(studentList);
@@ -493,7 +497,6 @@ router.get('/discussion', function(req, res) {
         routePromise.then(function(staff) {
             const completedQAPromise = new Promise(function(resolve) {
                 let qaList = [];
-                let teamList = [];
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
@@ -503,27 +506,37 @@ router.get('/discussion', function(req, res) {
                         staffModel.getTeamByTeamID(staff.AllocatedTeamID[i]),
                     ])
                         .then(function(result) {
-                            qaList.push(result[0]);
-                            teamList.push(result[1].TeamName);
+                            qaList.push({
+                                teamName: result[1].TeamName,
+                                qas: result[0],
+                            });
                             loaded++;
                             if(loaded == staff.AllocatedTeamID.length) {
-                                resolve([qaList, teamList]);
+                                qaList.sort(function(a, b) {
+                                    if(a.teamName > b.teamName) {
+                                        return 1;
+                                    } else if(a.teamName < b.teamName) {
+                                        return -1;
+                                    } else {
+                                        return 0;
+                                    }
+                                });
+                                resolve(qaList);
                             }
                         });
                 }
 
                 if(staff.AllocatedTeamID.length == 0) {
-                    resolve([qaList, teamList]);
+                    resolve(qaList);
                 }
             });
  
-            completedQAPromise.then(function(result){
+            completedQAPromise.then(function(qa) {
                 //console.log(qa);
                 res.render('staff/discussion', {
                     pageTitle: 'Discussion',
                     username: staff.Name,
-                    qa: result[0],
-                    team: result[1],
+                    qa: qa,
                 });
             });
         });
