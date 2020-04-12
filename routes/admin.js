@@ -331,13 +331,19 @@ router.get('/timetable_change', function (req, res) {
 router.get('/reject_timetable_change_staff', function (req, res, next) {
     const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
     const rejectreason = req.query.rejectreason;
+    nowDate = new Date();
 
-    let changestaffmeetingrequest = {
+    let request = {
         _id: changeStaffMeetingRequestID,
-        Status: 'rejected'
+        Status: 'rejected',
+        AdminReply:{
+            AdminName:"Emma Norling",
+            Date:nowDate,
+            Content:rejectreason
+        }
     }
     changeStaffMeetingRequestModel.createRequestReason(rejectreason)
-    changeStaffMeetingRequestModel.adminRejectPendingStatusTimetable(changestaffmeetingrequest)
+    changeStaffMeetingRequestModel.adminRejectPendingStatusTimetable(request)
         .then(function () {
             res.redirect('/admin/timetable_change')
         })
