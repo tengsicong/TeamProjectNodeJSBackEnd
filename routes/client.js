@@ -16,14 +16,16 @@ router.get('/myproject', function(req, res, next) {
     Promise.all([
         clientModel.getClientByClientID(clientID),
         proposalModel.getProposalByClientID(clientID),
+        stageModel.getStage(),
     ])
         .then(function(proposals) {
             const client = proposals[0];
-
+            const stage = proposals[2][0];
             res.render('client/my_proposals', {
                 proposals: proposals[1],
                 pageTitle: 'My Projects',
                 username: client.Name,
+                stage: stage,
             });
         })
         .catch(next);

@@ -9,107 +9,138 @@
                     <h2 align="center">TIMETABLE</h2>
                 </table>
             </div>
-            <div class="alert alert-info" role="alert">
+            <br>
+            <div class="blank-page widget-shadow scroll">
                 <table width="100%">
                     <tr>
-                        <td width="90%" align="center">You have 2 change time requests !</td>
-                        <td width="10%" align="right"><input onclick="{location.href='./timetable_change'}"
-                                                             type="button" value="Check" class="btn btn-primary"></td>
+                        <td>
+                            <h3><b>You have 2 change time requests !</b></h3>
+                            <p>Click button to check the requests.</p>
+                        </td>
+                        <td>
+                            <button onclick="{location.href='./timetable_change'}"
+                                    style="float: right" type="button" class="btn btn-primary">Check
+                            </button>
+                        </td>
                     </tr>
                 </table>
             </div>
+
             <div class="agil-info-calendar" style="height:600px;margin-bottom:0px">
-                <!-- calendar -->
-                <div class="col-md-6 agile-calendar" style="background: white">
-                    <div class="calendar-widget">
-                        <header class="widget-header">
-                            <h4>Meeting Calender</h4>
-                        </header>
-                        <hr class="widget-separator">
-                        <!-- grids -->
-                        <div class="agile-calendar-grid">
-                            <div class="page">
+                <table width="100%">
+                    <tr>
+                        <!-- calendar -->
+                        <td width="50%">
+                            <div class="blank-page widget-shadow scroll">
+                                <h2><b>My Calendar</b></h2>
+                                <div class="agil-info-calendar">
+                                    <!-- calendar -->
+                                    <div class="agile-calendar">
+                                        <div class="calendar-widget">
+                                            <hr class="widget-separator">
+                                            <!-- grids -->
+                                            <div class="agile-calendar-grid">
+                                                <div class="page">
 
-                                <div class="w3l-calendar-left">
-                                    <div class="calendar-heading">
+                                                    <div class="w3l-calendar-left">
+                                                        <div class="calendar-heading">
 
+                                                        </div>
+                                                        <div class="monthly" id="mycalendar"></div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="monthly" id="mycalendar"></div>
                                 </div>
-
-                                <div class="clearfix"></div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- calendar -->
-                <div class="col-md-6 tables  scroll scrollbar1" style="height: 800px">
-                    <div class="widget-shadow" style="height: 95%">
-                        <h4 style="padding-top:10px;padding-left:10px">Meeting Table</h4>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Team Name</th>
-                                <th>Meeting</th>
-                                <th>Meeting Time</th>
-                                <th>Meeting Status</th>
-                                <th>Person</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <% for (let i = 0; i < allStaffMeetings.length; i++){ %>
-                                <tr>
-                                    <th scope="row"><%= allStaffMeetings[i].GroupID.TeamName %></th>
-                                    <td>staff meeting <%= i + 1 %></td>
-                                    <td><%= allStaffMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allStaffMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                        </td>
+                        <td width="50%">
+                            <!-- calendar -->
+                            <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 600px">
+                                <h2><b>Meeting Table</b></h2>
+                                <table class="table" style="margin-bottom: 0px">
+                                    <thead width="100%">
+                                    <tr width="100%">
+                                        <th style="width: 20%;padding-left:1%">Team Name</th>
+                                        <th>Meeting</th>
+                                        <th>Meeting Time</th>
+                                        <th>Meeting Status</th>
+                                        <th>Person</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="tables  scroll scrollbar1" style="height: 90%">
+                                    <div class="widget-shadow">
+                                        <table class="table">
+                                            <tbody>
+                                            <% for (let i = 0; i < allStaffMeetings.length; i++){ %>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <% if (allStaffMeetings[i].GroupID != null){ %>
+                                                            <%= allStaffMeetings[i].GroupID.TeamName %>
+                                                        <% } %>
+                                                    </th>
+                                                    <td>staff meeting <% allStaffMeetings[i].MeetingNumber %></td>
+                                                    <% if (allStaffMeetings[i].Date != null){ %>
+                                                    <td>
+                                                        <%= allStaffMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allStaffMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %>
+                                                    </td>
+                                                    <% var thetime = allStaffMeetings[i].Date.toISOString(); %>
+                                                    <% var d = new Date(Date.parse(thetime.replace(/T.*/, ' '))); %>
+                                                    <% var curDate = new Date(); %>
+                                                    <% if (d >= curDate) { %>
+                                                        <td>
+                                                            Coming
+                                                        </td>
+                                                    <% } else { %>
+                                                        <td>
+                                                            Done
+                                                        </td>
+                                                    <% } %>
+                                                    <% if (allStaffMeetings[i].StaffID != null){ %>
+                                                        <td><%= allStaffMeetings[i].StaffID.Name %></td>
+                                                    <% } %>
+                                                    <% } %>
 
-                                    <% var thetime = allStaffMeetings[i].Date.toISOString(); %>
-                                    <% var d = new Date(Date.parse(thetime.replace(/T.*/, ' '))); %>
-                                    <% var curDate = new Date(); %>
-                                    <% if (d >= curDate) { %>
-                                        <td>
-                                            Coming
-                                        </td>
-                                    <% } else { %>
-                                        <td>
-                                            Done
-                                        </td>
-                                    <% } %>
+                                                </tr>
+                                            <% } %>
+                                            <% for (let i = 0; i < allClientMeetings.length; i++){ %>
+                                                <tr>
+                                                    <th scope="row"><%= allClientMeetings[i].GroupID.TeamName %></th>
+                                                    <td>client meeting <%= i + 1 %></td>
+                                                    <td><%= allClientMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allClientMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
 
-                                    <td><%= allStaffMeetings[i].StaffID.Name %></td>
-                                </tr>
-                            <% } %>
-                            <% for (let i = 0; i < allClientMeetings.length; i++){ %>
-                                <tr>
-                                    <th scope="row"><%= allClientMeetings[i].GroupID.TeamName %></th>
-                                    <td>client meeting <%= i + 1 %></td>
-                                    <td><%= allClientMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allClientMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                                    <% var thetime = allClientMeetings[i].Date.toISOString(); %>
+                                                    <% var d = new Date(Date.parse(thetime.replace(/T.*/, ' '))); %>
+                                                    <% var curDate = new Date(); %>
+                                                    <% if (d >= curDate) { %>
+                                                        <td>
+                                                            Coming
+                                                        </td>
+                                                    <% } else { %>
+                                                        <td>
+                                                            Done
+                                                        </td>
+                                                    <% } %>
 
-                                    <% var thetime = allClientMeetings[i].Date.toISOString(); %>
-                                    <% var d = new Date(Date.parse(thetime.replace(/T.*/, ' '))); %>
-                                    <% var curDate = new Date(); %>
-                                    <% if (d >= curDate) { %>
-                                        <td>
-                                            Coming
-                                        </td>
-                                    <% } else { %>
-                                        <td>
-                                            Done
-                                        </td>
-                                    <% } %>
-
-                                    <td><%= allClientMeetings[i].ClientID.Name %></td>
-                                </tr>
-                            <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                                    <td><%= allClientMeetings[i].ClientID.Name %></td>
+                                                </tr>
+                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
+
         </div>
     </div>
 </div>
 <% include ./component/footer_script.ejs %>
-
-
 <% include ./component/footer.ejs %>

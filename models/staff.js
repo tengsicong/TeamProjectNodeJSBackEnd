@@ -134,7 +134,7 @@ module.exports = {
      * @return {[meeting]} meeting List
      */
 
-    getAllMeetingByStaffID: function getAllMeetingByStaffID(id) {
+    getAllMeetingByStaffID: function getAllMeetingByStaffIDf(id) {
         return meeting
             .find({StaffID: id})
             .populate('GroupID')
@@ -183,6 +183,13 @@ module.exports = {
 
     createMeetingChangeRequest: function createMeetingChangeRequest(newRequest) {
         return request.create(newRequest);
+    },
+    addNewStaff:function addNewStaff(addStaffName, addStaffUserName) {
+        staff
+            // .populate('Name')
+            .create({Name: addStaffName, UserName: addStaffUserName, Password: addStaffName})
+
+
     },
 
     deleteStaffAllocatedTeamByTeamID : function deleteStaffAllocatedTeamByTeamID(id,groupID) {

@@ -22,7 +22,7 @@ module.exports = {
     getTeamByTeamID: function getTeamByTeamID(id) {
         return team
             .findOne({_id: id})
-            .populate('ProposalID')
+            .populate({path: 'ProposalID', populate: {path: 'ClientID'}})
             .populate('StudentID')
             .populate('StaffID')
             .populate('ClientMeetingID')
@@ -73,62 +73,71 @@ module.exports = {
      * @param {object} team : team object.
      * @return {[team]} team
      */
-    postTeam: function postTeam (TeamName) {
-         team
-            .create({TeamName:TeamName})
-             .populate('GroupID')
+    createTeam: function createTeam(teamName) {
+        team
+            .create({TeamName: teamName})
+    },
+    updateTeamStaff: function updateTeamStaff(teamName, selector2) {
+        team
+            .findOneAndUpdate({TeamName: teamName},{$set: {StaffID: selector2}})
             .exec()
     },
-    createTeam: function createTeam (teams) {
+
+    updateTeamStudent: function updateTeamStudent(teamName, peopleID) {
+        team
+            .findOneAndUpdate({TeamName: teamName}, {$push: {StudentID: [peopleID]}})
+            .exec()
+    },
+
+    deleteTeamStudent: function deleteTeamStudent(teamName, selector2) {
         return team
-            .create(teams)
+            .findOneAndUpdate({TeamName: teamName},{$unset: {StudentID: ''}},{new:true})
+            .exec()
     },
-    //
-    // editTeam: function editTeam (newteam) {
-    //     return team
-    //     .update({_id:newteam._id})
-    //         .exec()
-    // },
-
-    deleteTeamProposalByGroupID: function deleteTeamProposalByGroupID(id){
-        return team.findOneAndUpdate({_id:id},{$unset:{ProposalID: '',ClientMeetingID: ''}},{new:true}).exec()
+    deleteTeamStaff: function deleteTeamStaff(teamName, peopleID) {
+        return team
+            .findOneAndUpdate({TeamName: teamName},{$unset: {StaffID: ''}},{new:true})
+            .exec()
     },
 
+    editTeamStaff: function editTeamStaff(staffID, newStaffID) {
+        team
+            .findOneAndUpdate({StaffID: staffID },{$set: {StaffID: newStaffID}})
+            .exec()
+    },
 
+    editTeamStudent: function editTeamStudent(studentID, newStudentID) {
+        team
+            .findOneAndUpdate({StudentID: studentID}, {$push: {StudentID: newStudentID}})
+            .exec()
+    },
 
-    // deleteTeam: function deleteTeam (teamID) {
-    // },
+    deleteTeamProposalByGroupID: function deleteTeamProposalByGroupID(id) {
+        return team.findOneAndUpdate({_id: id}, {$unset: {ProposalID: '', ClientMeetingID: ''}}, {new: true}).exec()
+    },
 
     postProjectPreferenceByStudentID: function postProjectPreferenceByStudentID(studentID, projectID) {
         return team
-            .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$push: {Preference: projectID}}, {new: true})
+            .findOneAndUpdate({StudentID: {$elemMatch: {$eq: studentID}}}, {$push: {Preference: projectID}}, {new: true})
             .exec()
     },
 
     deleteProjectPreferenceByStudentID: function deleteProjectPreferenceByStudentID(studentID) {
         return team
-            .findOneAndUpdate( {StudentID: {$elemMatch: {$eq: studentID}}}, {$unset: {Preference: ''}}, {new: true})
+            .findOneAndUpdate({StudentID: {$elemMatch: {$eq: studentID}}}, {$unset: {Preference: ''}}, {new: true})
             .exec()
     },
-    // /**
-    //  * @param { ObjectID } client id
-    //  * @return {Object: Team}
-    //  */
-    // getTeamByClientID: function getTeamByClientID(id) {
-    //     return team
-    //     .deleteOne({_id:teamID})
-    //         .exec()
-    // },
+
     postTeamNewRepresenter: function postTeamNewRepresenter(studentID, newStudentID) {
         team
-            .findOneAndUpdate({ Representer: studentID }, { $set: { Representer: newStudentID}})
+            .findOneAndUpdate({Representer: studentID}, {$set: {Representer: newStudentID}})
             .exec()
 
     },
 
-    allocateProposal : function allocateProposal(id,proposalID,clientMeetingid) {
+    allocateProposal: function allocateProposal(id, proposalID, clientMeetingid) {
         team
-            .findOneAndUpdate({_id:id},{$set:{ProposalID:proposalID,ClientMeetingID:clientMeetingid}}).exec()
+            .findOneAndUpdate({_id: id}, {$set: {ProposalID: proposalID, ClientMeetingID: clientMeetingid}}).exec()
 
     }
 };
