@@ -18,6 +18,53 @@
         </table>
     </div>
     <br>
+    <div class="blank-page widget-shadow scroll">
+        <table width="100%">
+            <tr>
+                <td>
+                    <h2><b>Add a staff</b></h2>
+                    <p>Click button to add a staff.</p>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_new_staff" data-whatever="@AddNewStaff"
+                            style="float: right">addstaff
+                    </button>
+                    <div class="modal fade" id="add_new_staff" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="exampleModalLabel">addstaff</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group" style="align-items: center">
+                                        <h4>Add staff's name:</h4>
+                                        <br>
+                                        <input class="form-control" id="addStaffName" style="width: 100%">
+
+                                    </div>
+                                    <div class="form-group" style="align-items: center">
+                                        <h4>Add staff's username:</h4>
+                                        <br>
+                                        <input class="form-control" id="addStaffUserName" style="width: 100%">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="addNewStaff()">
+                                        Set
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
     <!--auto grouping-->
     <!--team list-->
     <div class="blank-page widget-shadow scroll">
@@ -63,13 +110,17 @@
                                     </tr>
                                     <tr>
                                         <th><b>Supervisor:</b></th>
+                                        <% if(allTeam[i].StaffID != undefined){ %>
                                         <td><%= allTeam[i].StaffID.Name%></td>
+                                        <% } %>
                                     </tr>
                                     <tr>
                                         <th><b>Student:</b></th>
-                                        <td>
+                                        <td><% if (allTeam[i].StudentID[0] != undefined){%>
                                             <%= allTeam[i].StudentID[0].Name %>
-                                            <% for (let j = 1; j < allTeam[i].StudentID.length; j++) { %>
+                                            <% } %>
+
+                                        <% for (let j = 1; j < allTeam[i].StudentID.length; j++) { %>
                                                 <%= ' / ' + allTeam[i].StudentID[j].Name %>
                                             <% } %>
                                         </td>
@@ -86,16 +137,29 @@
         <% } %>
     </div>
 </div>
-<script>
-    $('.blank-page widget-shadow scroll').hover(
-        function(){
-            var top=$('body').scrollTop();
-            $(window).scroll(function(){ //滚动时，固定页面滚动条到页顶的高度，使其不滚动
-                $('body').scrollTop(top);
-            });
-        },function(){
-            $(window).off('scroll'); //鼠标移开后，解除固定
-        });
-</script>
+
 <%- include('component/footer_script')%>
+
+<script>
+    function addNewStaff() {
+        let temp = document.createElement("form");
+        temp.action = '/admin/add_new_staff';
+        temp.method = 'post';
+        temp.style.display = "none";
+        let inputElement1 = document.createElement("input")
+        inputElement1.type = 'hidden';
+        inputElement1.name = 'addStaffName';
+        inputElement1.value = document.getElementById('addStaffName').value;
+        let inputElement2 = document.createElement("input")
+        inputElement2.type = 'hidden';
+        inputElement2.name = 'addStaffUserName';
+        inputElement2.value = document.getElementById('addStaffUserName').value;
+        temp.appendChild(inputElement1);
+        temp.appendChild(inputElement2);
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+    }
+</script>
+
 <%- include('component/footer') %>

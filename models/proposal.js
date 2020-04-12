@@ -87,7 +87,7 @@ module.exports = {
      * @param {object} proposal : proposal object.
      * @return {[proposal]} proposal
      */
-    createProposal: function createProposal (proposals) {
+     createProposal: function createProposal (proposals) {
         return proposal.create(proposals)
     },
 

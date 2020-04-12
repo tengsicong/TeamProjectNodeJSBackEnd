@@ -3,38 +3,20 @@
 <div id="page-wrapper">
     <h2 class="title1">Create a new team</h2>
     <div class="blank-page widget-shadow scroll">
-        <h2 style="text-align: center"><b>Create SSIT Team</b></h2>
+        <h2 style="text-align: center"><b>Create SSIT Team <%= allTeam.length + 1 %></b></h2>
         <div class="row">
             <br>
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label for="selector1" class="col-sm-2 control-label">TeamName</label>
-                    <div class="col-sm-8">
-                        <select name="selector" id="selector1" class="form-control-project">
-                            <option>None</option>
-                            <% for (let i = 0; i < allTeam.length;i++){ %>
-                                <% if (allTeam[i].TeamName != undefined){ %>
-                                    <optgroup label="<%= allTeam[i].TeamName %>">
-                                    </optgroup>
-                                <% } %>
-                            <% } %>
 
-                            <% for (let j = 0 ;  j < 50  ;j++){ %>
-                                <% if (j > allTeam.length){ %>
-                                    <option value=""><%= j %></option>
-                                <% } %>
-                            <% } %>
-
-                        </select>
-                    </div>
                 </div>
                 <div class="form-group">
                     <label for="selector2" class="col-sm-2 control-label">Supervisor</label>
                     <div class="col-sm-8">
-                        <select name="selector" id="selector2" class="form-control-project">
-                            <option>None</option>
+                        <select name="selector2" id="selector2" class="form-control-project">
+                            <option value="None2">None</option>
                             <% for (let i = 0; i < allStaff.length; i++){ %>
-                                <option value="<%= allStaff[i]._id %>"><%= allStaff[i].Name %></option>
+                                <option value="selector2"><%= allStaff[i].Name %></option>
                             <% } %>
                         </select>
                     </div>
@@ -43,8 +25,8 @@
                     <div class="form-group">
                         <label for="selector<%= i + 3 %>" class="col-sm-2 control-label">Student <%= i + 1 %></label>
                         <div class="col-sm-8">
-                            <select name="selector" id="selector<% i + 3 %>" class="form-control-project">
-                                <option>None</option>
+                            <select name="selector<% i + 3 %>" id="selector<% i + 3 %>" class="form-control-project">
+                                <option value="None<%i+3%>">None</option>
                                 <% for (let j = 0; j < allStudent.length; j++){ %>
                                     <% if (allStudent[j].GroupID != undefined) { %>
                                         <optgroup
@@ -59,47 +41,37 @@
 
             </form>
             <div style="text-align: center">
-                                <button onclick="newTeam()" type="button" class="btn btn-primary">SUBMIT</button>
-<!--                <input type="submit" class="btn btn-primary" value=" SUBMIT">-->
+                <button type="button" class="btn btn-primary" onclick="newTeam()">SUBMIT</button>
             </div>
         </div>
     </div>
-    <%- include('component/footer_script') %>
+</div>
+<%- include('component/footer_script') %>
 
-    <script>
-        function newTeam() {
-            const selector1 = document.getElementById('selector1').value;
-            const selector2 = document.getElementById('selector2').value;
+<script>
+    function newTeam() {
+        let temp = document.createElement("form");
+        temp.action = '/admin/submit_newteam';
+        temp.method = 'post';
+        temp.style.display = "none";
+        let inputElement1 = document.createElement("select")
+        inputElement1.type = 'hidden';
+        inputElement1.name = 'selector2';
+        inputElement1.value = document.getElementById('selector2').value;
 
-            const selector = new selector();
-            selector.add(selector1);
-            selector.add(selector2);
-            // selector.add(selector3);
+        for (var i = 0; i < 6; i++) {
+            let inputElement<%i%> = document.createElement("select")
+            inputElement<%i%>.type = 'hidden';
+            inputElement<%i%>.name = 'selector<% i + 3 %>';
+            inputElement<%i%>.value = document.getElementById('selector<% i + 3 %>').value;
+            temp.appendChild(inputElement<% i %>);
 
-            let temp = document.createElement("form");
-            temp.action = 'admin/submit_newteam';
-            temp.method = 'post';
-            temp.style.display = "none";
-            const inputElement1 = document.createElement("input")
-            inputElement1.type = 'hidden';
-            inputElement1.name = 'selector1';
-            inputElement1.value = selector1;
-            const inputElement2 = document.createElement("input")
-            inputElement2.type = 'hidden';
-            inputElement2.name = 'selector2';
-            inputElement2.value = selector2;
-            // const inputElement3 = document.createElement("input")
-            // inputElement.type = 'hidden';
-            // inputElement.name = 'selector3';
-            // inputElement.value = selector3;
-            temp.appendChild(inputElement1);
-            temp.appendChild(inputElement2);
-            // temp.appendChild(inputElement3);
-
-            document.body.appendChild(temp);
-            temp.submit();
-            // console.log(document)
-            return temp;
         }
-    </script>
-    <%- include('component/footer') %>
+        temp.appendChild(inputElement1);
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+
+    }
+</script>
+<%- include('component/footer') %>
