@@ -29,11 +29,11 @@
                         <select name="selector2" id="selector2" class="form-control-project">
                             <option value="None2">None</option>
                             <% for (let i = 0; i < allStaff.length; i++){ %>
-                            <option value="<%= allStaff[i]._id %>"
-                            <% if ((team.StaffID != undefined) && (allStaff[i]._id.equals(team.StaffID._id))) { %>
+                                <option value= "<%= allStaff[i]._id %>"
+                                <% if ((team.StaffID !== undefined) && (allStaff[i]._id.equals(team.StaffID._id))) { %>
                                     selected
-                                    <% } %>
-                            >
+                                <% } %>
+                                >
                                 <%= allStaff[i].Name %>
                             </option>
                             <% } %>
@@ -59,7 +59,6 @@
                         </div>
                     </div>
                 <% } %>
-
             </form>
             <div style="text-align: center">
                 <button onclick="editTeam()" type="button" class="btn btn-primary">SUBMIT</button>
@@ -80,6 +79,7 @@
         inputElement1.type = 'hidden';
         inputElement1.name = 'selector2';
         inputElement1.value = document.getElementById('selector2').value;
+        console.log(inputElement1.value);
         let inputElement2 = document.createElement("select")
         // inputElement2.type = 'hidden';
         for (var i = 0; i < 6; i++) {
@@ -91,7 +91,6 @@
         document.body.appendChild(temp);
         temp.submit();
         return temp;
-
     }
 </script>
 <%- include('component/footer') %>

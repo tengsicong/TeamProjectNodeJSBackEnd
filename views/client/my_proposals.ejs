@@ -5,6 +5,7 @@
     <div class="blank-page widget-shadow scroll" id="client_project_div">
         <h2>
             <b>My Projects</b>
+            <%if (stage.Stage == 1){%>
             <a href="/client/myproject/create_project">
                 <button class="btn btn-primary btn-flat btn-pri" style="float:right" type="button"><i
                             aria-hidden="true" class="fa fa-plus"></i>Create
@@ -51,33 +52,25 @@
                         <div class="alert alert-danger" role="alert">You do not have a project currently!</div>
                 <%}%>
         </div>
-        <% }) %>
-<!--        <div class="grid_3 grid_5 widget-shadow">-->
-<!--            <a href="/client/myproject/project_pending">-->
-<!--                <div>-->
-<!--                    <h3 class="hdg">Topic<span class="label label-warning"-->
-<!--                                                   style="float:right;font-size:15px">Pending</span>-->
-<!--                    </h3>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    Here is the overview of the project.<i class="fa fa-angle-right"-->
-<!--                                                           style="float:right;font-size:20px"></i>-->
-<!--                </div>-->
-<!--            </a>-->
-<!--        </div>-->
+        <% }) }else{%>
+            <% proposals.forEach(function (proposal) { %>
+                <% if (proposal.Status == "approved") { %>
+        <div class="grid_3 grid_5 widget-shadow">
 
-<!--        <div class="grid_3 grid_5 widget-shadow">-->
-<!--            <a href="/client/myproject/project_rejected">-->
-<!--                <div>-->
-<!--                    <h3 class="hdg">mopic<span class="label label-danger" style="float:right;font-size:15px">Rejected</span>-->
-<!--                    </h3>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    Here is the overview of the project.<i class="fa fa-angle-right"-->
-<!--                                                           style="float:right;font-size:20px"></i>-->
-<!--                </div>-->
-<!--            </a>-->
-<!--        </div>-->
+            <a href="/client/myproject/project_approved?id=<%=proposal._id%>">
+                <div>
+                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-success" style="float:right;font-size:15px">approved</span>
+                    </h3>
+                </div>
+                <div>
+                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
+                                                                     style="float:right;font-size:20px"></i>
+                </div>
+            </a>
+        </div>
+        <%}%>
+          <%  })}%>
+
     </div>
 
 </div>
