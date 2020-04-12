@@ -275,7 +275,6 @@ router.post('/my_timetable',function (req,res) {
     let changereason = req.body.t1;
     let meetingidList = meetingchange.split('-');
     let meetingID = meetingidList[1];
-    console.log(meetingID);
     let staffchangeID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
 
@@ -290,19 +289,56 @@ router.post('/my_timetable',function (req,res) {
         let nowStaff = primaryMeetingResult.StaffID;
         if(primaryMeetingResult.TemporaryStaffID != null)
             nowStaff = primaryMeetingResult.TemporaryStaffID;
-        let newRequest = {
-            _id:mongoose.Types.ObjectId(),
-            MeetingID:meetingID,
-            StaffID:nowStaff,
-            NewMeetingTime: timechange,
-            NewStaffID: staffchangeID,
-            Status: 'Pending',
-            RequestComment:{
-                RequestName: primaryMeetingResult.StaffID.Name,
-                Date: new Date(),
-                Content: changereason,
+        let newRequest;
+        if(staffchangeID == null){
+            console.log('no staff');
+            newRequest = {
+                _id: mongoose.Types.ObjectId(),
+                MeetingID: meetingID,
+                StaffID: nowStaff,
+                NewMeetingTime: timechange,
+                Status: 'Pending',
+                RequestComment: {
+                    RequestName: primaryMeetingResult.StaffID.Name,
+                    Date: new Date(),
+                    Content: changereason,
+                }
             }
         }
+        else if(timechange == null || timechange === '') {
+            console.log('no time');
+            newRequest = {
+                _id:mongoose.Types.ObjectId(),
+                MeetingID:meetingID,
+                StaffID:nowStaff,
+                NewStaffID: staffchangeID,
+                Status: 'Pending',
+                RequestComment:{
+                    RequestName: primaryMeetingResult.StaffID.Name,
+                    Date: new Date(),
+                    Content: changereason,
+                }
+            }
+        }
+        else
+        {
+            console.log('both have');
+            newRequest = {
+                _id:mongoose.Types.ObjectId(),
+                MeetingID:meetingID,
+                StaffID:nowStaff,
+                NewMeetingTime: timechange,
+                NewStaffID: staffchangeID,
+                Status: 'Pending',
+                RequestComment:{
+                    RequestName: primaryMeetingResult.StaffID.Name,
+                    Date: new Date(),
+                    Content: changereason,
+                }
+            }
+        }
+        console.log(staffchangeID);
+        console.log(timechange);
         staffModel.createMeetingChangeRequest(newRequest)
             .then(function () {
                 res.redirect('/staff/my_timetable');
@@ -332,7 +368,6 @@ router.get('/my_timetable', function(req, res) {
                 let meetingStaff = [];
                 for(var i=0;i<meetingList.length;i++)
                     meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
-                console.log(RequestList);
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
@@ -373,7 +408,7 @@ router.post('/marking', function (req,res,next) {
                     indiselect[i*2],
                     indiselect[i*2+1],
                 ];
-                //console.log(studentList[i]);
+                console.log(score);
                 reason =[
                 indicontent[i*2],
                 indicontent[i*2+1],
@@ -458,30 +493,37 @@ router.get('/discussion', function(req, res) {
         routePromise.then(function(staff) {
             const completedQAPromise = new Promise(function(resolve) {
                 let qaList = [];
+                let teamList = [];
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
-                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
-                    qaPromise.then(function(result) {
-                        qaList.push(...result);
-                        loaded++;
-                        if(loaded == staff.AllocatedTeamID.length) {
-                            resolve(qaList);
-                        }
-                    });
+                    //Promise.all([qaModel.getQAByGroupID(staff.AllocatedTeamID[i], staffModel.getTeamByTeamID(staff.AllocatedTeamID[i])])
+                    Promise.all([
+                        qaModel.getQAByGroupID(staff.AllocatedTeamID[i]),
+                        staffModel.getTeamByTeamID(staff.AllocatedTeamID[i]),
+                    ])
+                        .then(function(result) {
+                            qaList.push(result[0]);
+                            teamList.push(result[1].TeamName);
+                            loaded++;
+                            if(loaded == staff.AllocatedTeamID.length) {
+                                resolve([qaList, teamList]);
+                            }
+                        });
                 }
 
                 if(staff.AllocatedTeamID.length == 0) {
-                    resolve(qaList);
+                    resolve([qaList, teamList]);
                 }
             });
  
-            completedQAPromise.then(function(qaList){
+            completedQAPromise.then(function(result){
                 //console.log(qa);
                 res.render('staff/discussion', {
                     pageTitle: 'Discussion',
                     username: staff.Name,
-                    qa: qaList,
+                    qa: result[0],
+                    team: result[1],
                 });
             });
         });
