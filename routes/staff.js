@@ -100,7 +100,6 @@ router.post('/meeting_detail_pre',function (req,res) {
     let changereason = req.body.changereason;
     console.log(timechange);
     let staffchangeID ;
-    let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
 
     const staffID = staffModel.getStaffByName(staffchange)
@@ -108,47 +107,27 @@ router.post('/meeting_detail_pre',function (req,res) {
             staffchangeID = result._id;
         })
 
-    const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
-    changerequest.then(function (result) {
-        requestID = result
-    })
-
     primary_meeting.then(function (result) {
         //console.log(result);
         primaryMeetingResult = result;
-        if(staffchange === primaryMeetingResult.StaffID.Name)
-            staffchangeID = null;
-        if(requestID === null)
-        {
-            console.log('create');
-            let newRequest = {
-                _id:mongoose.Types.ObjectId(),
-                MeetingID:primaryMeetingResult._id,
-                StaffID:primaryMeetingResult.StaffID,
-                NewMeetingTime: timechange,
-                NewStaffID: staffchangeID,
-                RequestComment:{
-                    RequestName: primaryMeetingResult.StaffID.Name,
-                    Date: new Date(),
-                    Content: changereason,
-                }
+        console.log('create');
+        let newRequest = {
+            _id:mongoose.Types.ObjectId(),
+            MeetingID:primaryMeetingResult._id,
+            StaffID:primaryMeetingResult.StaffID,
+            NewMeetingTime: timechange,
+            NewStaffID: staffchangeID,
+            Status: 'Pending',
+            RequestComment:{
+                RequestName: primaryMeetingResult.StaffID.Name,
+                Date: new Date(),
+                Content: changereason,
             }
-            staffModel.createMeetingChangeRequest(newRequest)
-                .then(function () {
-                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
-                })
         }
-        else
-        {
-            requestID.NewStaffID = (staffchange===null)?requestID.NewStaffID:staffchangeID;
-            requestID.NewMeetingTime = (timechange===null)?requestID.NewMeetingTime:timechange;
-            requestID.RequestComment.Content = changereason;
-            requestID.RequestComment.Date = new Date();
-            staffModel.updateMeetingChangeRequest(requestID)
-                .then(function () {
-                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
-                })
-        }
+        staffModel.createMeetingChangeRequest(newRequest)
+            .then(function () {
+                res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
+            })
     })
 
 })
@@ -256,9 +235,10 @@ router.get('/meeting_detail_post', function(req, res) {
 });
 
 router.post('/my_timetable',function (req,res) {
-    let timechange = req.body.time;
+    let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
+    console.log(timechange);
     let staffchangeID ;
     let requestID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);

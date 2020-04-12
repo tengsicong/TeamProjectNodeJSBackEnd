@@ -55,11 +55,11 @@ module.exports = {
 
     /**
      * @param {ObjectId} id
-     * @return {meetingmodify} a meeting changing request
+     * @return {[meetingmodify]} a list of meeting changing request
      */
     getStaffMeetingChangeRequestByMeetingID: function getStaffMeetingChangeRequestByMeetingID (id) {
         return request
-            .findOne({MeetingID: id})
+            .find({MeetingID: id})
             .populate('StaffID')
             .populate('NewStaffID')
             .exec();
