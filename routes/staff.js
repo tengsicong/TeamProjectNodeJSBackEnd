@@ -237,61 +237,44 @@ router.get('/meeting_detail_post', function(req, res) {
 });
 
 router.post('/my_timetable',function (req,res) {
-    let timechange = req.body.timechange;
-    let staffchange = req.body.staffchange;
-    let changereason = req.body.changereason;
-    let meetingselect = req.body.
-    console.log(timechange);
+    let timechange = req.body.changetime;
+    let staffchange = req.body.changestaff;
+    let meetingchange = req.body.meetingID;
+    let changereason = req.body.t1;
+    let meetingidList = meetingchange.split('-');
+    let meetingID = meetingidList[1];
+    console.log(meetingID);
     let staffchangeID ;
-    let requestID ;
-    const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
+    const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
 
     const staffID = staffModel.getStaffByName(staffchange)
     staffID.then(function (result) {
         staffchangeID = result._id;
     })
 
-    const changerequest = staffModel.getStaffMeetingChangeRequestByMeetingID(req.query.seq);
-    changerequest.then(function (result) {
-        requestID = result
-    })
-
     primary_meeting.then(function (result) {
         //console.log(result);
         primaryMeetingResult = result;
-        if(staffchange === primaryMeetingResult.StaffID.Name)
-            staffchangeID = null;
-        if(requestID === null)
-        {
-            console.log('create');
-            let newRequest = {
-                _id:mongoose.Types.ObjectId(),
-                MeetingID:primaryMeetingResult._id,
-                StaffID:primaryMeetingResult.StaffID,
-                NewMeetingTime: timechange,
-                NewStaffID: staffchangeID,
-                RequestComment:{
-                    RequestName: primaryMeetingResult.StaffID.Name,
-                    Date: new Date(),
-                    Content: changereason,
-                }
+        let nowStaff = primaryMeetingResult.StaffID;
+        if(primaryMeetingResult.TemporaryStaffID != null)
+            nowStaff = primaryMeetingResult.TemporaryStaffID;
+        let newRequest = {
+            _id:mongoose.Types.ObjectId(),
+            MeetingID:meetingID,
+            StaffID:nowStaff,
+            NewMeetingTime: timechange,
+            NewStaffID: staffchangeID,
+            Status: 'Pending',
+            RequestComment:{
+                RequestName: primaryMeetingResult.StaffID.Name,
+                Date: new Date(),
+                Content: changereason,
             }
-            staffModel.createMeetingChangeRequest(newRequest)
-                .then(function () {
-                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
-                })
         }
-        else
-        {
-            requestID.NewStaffID = (staffchange===null)?requestID.NewStaffID:staffchangeID;
-            requestID.NewMeetingTime = (timechange===null)?requestID.NewMeetingTime:timechange;
-            requestID.RequestComment.Content = changereason;
-            requestID.RequestComment.Date = new Date();
-            staffModel.updateMeetingChangeRequest(requestID)
-                .then(function () {
-                    res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
-                })
-        }
+        staffModel.createMeetingChangeRequest(newRequest)
+            .then(function () {
+                res.redirect('/staff/my_timetable');
+            })
     })
 
 })
@@ -311,7 +294,6 @@ router.get('/my_timetable', function(req, res) {
                 const staffList = result[1];
                 const TempmeetingList = result[3];
                 const RequestList = result[4];
-                console.log(RequestList);
                 let nowtime = new Date();
                 let meetingStaff = [];
                 for(var i=0;i<meetingList.length;i++)
@@ -346,12 +328,6 @@ router.post('/marking', function (req,res,next) {
         .then(function(result){
              list = result;
              studentList = list.StudentID;
-            // console.log('----result----');
-            // console.log(result);
-            // console.log('----result.id----');
-            // console.log(result.StudentID);
-            // console.log('----List----');
-            // console.log(list);
             console.log('----studentList----');
             console.log(studentList);
             console.log('------end----------');
@@ -361,12 +337,6 @@ router.post('/marking', function (req,res,next) {
                 staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2+1],indiselect[i*2+1]);
             }
     })
-
-    // console.log('?????????');
-    // console.log(studentList);
-    // console.log('?????????');
-
-
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
