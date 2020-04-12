@@ -48,6 +48,7 @@ router.get('/edit_team', function (req, res) {
             const allProposal = result[2];
             const allStaff = result[3];
             const allStudent = result [4];
+
             res.render('admin/edit_team', {
                 pageTitle: 'Edit Team',
                 admin: admin,
@@ -171,6 +172,7 @@ router.post('/submit_newteam', function (req, res) {
 /*edit_team*/
 router.post('/submit_editteam', function (req, res) {
     const selector2 = mongoose.Types.ObjectId(req.body.selector2);
+    console.log(req.body.selector2);
     // const selector3 = mongoose.Types.ObjectId(req.body.selector3);
     // const selector4 = mongoose.Types.ObjectId(req.body.selector4);
     // const selector5 = mongoose.Types.ObjectId(req.body.selector5);
@@ -182,7 +184,7 @@ router.post('/submit_editteam', function (req, res) {
     ])
         .then(function() {
             res.redirect('/admin/team_list');
-        })
+        });
 
     //
     // const array = []
