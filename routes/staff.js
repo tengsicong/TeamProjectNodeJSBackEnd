@@ -371,12 +371,12 @@ router.post('/marking', function (req,res,next) {
                 score = [
                     indiselect[i*2],
                     indiselect[i*2+1],
-                ]
+                ];
                 //console.log(studentList[i]);
                 reason =[
                 indicontent[i*2],
                 indicontent[i*2+1],
-                ]
+                ];
                 staffModel.updateIndeMark(studentList[i].id,score,reason);
             }
     })
