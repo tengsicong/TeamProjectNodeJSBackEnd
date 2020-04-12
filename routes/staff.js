@@ -5,6 +5,7 @@ const proposalModel = require('../models/proposal');
 const staffModel = require('../models/staff');
 const teamModel = require('../models/team');
 const qaModel = require('../models/student_staff_qa');
+const recordModel = require('../models/staffMeetingRecords');
 const mongoose = require('mongoose');
 //const meetingID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97e');
 const stageMoudel = require('../models/stage')
@@ -195,7 +196,7 @@ router.post('/meeting_detail_post',function (req,res) {
                 Dynamics:dynamics,
                 AnyOtherNote:t1[4],
             }
-            staffModel.updateMeetingRecords(RecordID,newRecord)
+            recordModel.updateMeetingRecords(RecordID,newRecord)
                 .then(function () {
                     res.redirect('/staff/meeting_detail_post?seq='+req.query.seq);
                 })
@@ -395,7 +396,7 @@ router.post('/marking', function (req,res,next) {
     // console.log(teamcontent);
     // console.log(teamselect);
 
-    staffModel.getTeamByTeamID(teamid)
+    staffModel.getAllocatedTeamByTeamID(teamid)
         .then(function(result){
              list = result;
              studentList = list.StudentID;
@@ -500,10 +501,9 @@ router.get('/discussion', function(req, res) {
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
-                    //Promise.all([qaModel.getQAByGroupID(staff.AllocatedTeamID[i], staffModel.getTeamByTeamID(staff.AllocatedTeamID[i])])
                     Promise.all([
                         qaModel.getQAByGroupID(staff.AllocatedTeamID[i]),
-                        staffModel.getTeamByTeamID(staff.AllocatedTeamID[i]),
+                        staffModel.getAllocatedTeamByTeamID(staff.AllocatedTeamID[i]),
                     ])
                         .then(function(result) {
                             qaList.push({
