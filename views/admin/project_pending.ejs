@@ -20,27 +20,27 @@
         </div>
         <table width="100%">
             <tr>
-                <td width="95%">
+                <td width="90%">
                     <a href="/admin/edit_project?id=<%=proposal._id%>">
                         <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
                     </a>
                 </td>
                 <td>
+                    <a href="/admin/delete_project?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right:8%;float: right">delete
+                        </button>
+                    </a>
+                </td>
+                <td>
                     <a href="/admin/pending_approved?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-success" data-dismiss="modal" style="margin-right:3.5%;float: right">Approved
+                    <button type="button" class="btn btn-success" data-dismiss="modal" style="margin-right:3.5%;float: right">Approve
                     </button>
                     </a>
                 </td>
                 <td>
                     <a href="/admin/pending_rejected?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right:2%;float: right">rejected
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">reject
                     </button>
-                    </a>
-                </td>
-                <td>
-                    <a href="/admin/delete_project?id=<%=proposal._id%>">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">delete
-                        </button>
                     </a>
                 </td>
             </tr>

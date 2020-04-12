@@ -26,9 +26,9 @@
                     <%}%>
                     <br>
                     <%if(student.PeopleLike==undefined){%>
-                        <tr><%= 'Preferred parter: None'%></tr>
+                        <tr><%= 'Preferred partner: None'%></tr>
                     <%}else{%>
-                        <tr><%= 'Preferred parter: '+ student.PeopleLike.Name%></tr>
+                        <tr><%= 'Preferred partner: '+ student.PeopleLike.Name%></tr>
                     <%}%>
                     <br>
                     <%if(student.PeopleDontLike==undefined || student.PeopleDontLike.length==0){%>
@@ -139,14 +139,14 @@
                         <tr>
                             <td>Personal Evaluation</td>
                             <td>Submitted via MOLE (5)</td>
-                            <td><%= team.StaffMarkReason[7] %></td>
-                            <td><%= team.StaffMark[7] + " / 10" %></td>
+                            <td><%= student.StaffFeedback[0] %></td>
+                            <td><%= student.StaffMark[0] + " / 10" %></td>
                         </tr>
                         <tr>
                             <td>Time Sheets</td>
                             <td>entered on time into epiManage every week (5)</td>
-                            <td><%= team.StaffMarkReason[8] %></td>
-                            <td><%= team.StaffMark[8] + " / 5" %></td>
+                            <td><%= student.StaffFeedback[1] %></td>
+                            <td><%= student.StaffMark[0] + " / 5" %></td>
                         </tr>
                     </table>
                 </div>
