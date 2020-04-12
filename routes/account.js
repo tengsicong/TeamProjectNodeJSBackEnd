@@ -41,7 +41,7 @@ router.post('/reset_password', function(req, res) {
                     /* TO-DO： reset password method */
                     let resetMethod;
                     if (req.session.role === 'staff') {
-                        resetMethod = staffModel.resetPasswordByStaffId(req.session.userinfo, newPW);
+                        resetMethod = staffModel.updatePasswordByStaffId(req.session.userinfo, newPW);
                     } else {
                         res.redirect('/role_select');
                         console.log('role error');

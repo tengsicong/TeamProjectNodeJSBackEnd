@@ -355,8 +355,8 @@ router.get('/my_timetable', function(req, res) {
         Promise.all([
             staffModel.getStaffByStaffID(req.session.userinfo),
             staffModel.getAllStaff(),
-            staffModel.getAllMeetingByStaffID(req.session.userinfo),
-            staffModel.getAllMeetingByTempStaffID(req.session.userinfo),
+            staffModel.getStaffMeetingByStaffID(req.session.userinfo),
+            staffModel.getStaffMeetingByTempStaffID(req.session.userinfo),
             staffModel.getStaffMeetingChangeRequestByStaffID(req.session.userinfo),
         ])
             .then(function (result) {

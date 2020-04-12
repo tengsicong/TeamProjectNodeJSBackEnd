@@ -5,21 +5,48 @@ const meeting = mongo.staff_meetings;
 const request = mongo.change_staff_meeting_requests;
 const students = mongo.students;
 
-// console.log('start')
-// staff
-//     .find()
-//     .populate('GroupID')
-//     .exec()
-//     .then(function(result) {
-//         console.log(result[0]);
-//         console.log('end');
-//     });
-
-// module.exports={
-//
-// }
-
 module.exports = {
+
+    /**
+     * @param {ObjectId} id
+     * @return {staffs} a project
+     */
+    getStaffByStaffID: function getProjectByStaffID(id) {
+        return staff
+            .findById(id)
+            .exec();
+    },
+
+    /**
+     * @param {String} name, staff's user name which is usually an email address
+     * @return {staffs} a staff object
+     */
+    getStaffByUserName: function getStaffByUserName(name) {
+        return staff
+            .findOne({UserName: name})
+            .exec();
+    },
+
+    /**
+     * @param {String} name
+     * @return {staffs} a staff object
+     */
+
+    getStaffByName: function getStaffByName(name) {
+        return staff
+            .findOne({Name: name})
+            .exec();
+    },
+
+    /**
+     * @return {[staffs]} staff object
+     */
+    getAllStaff: function getAllStaff() {
+        return staff
+            .find()
+            .exec();
+    },
+
     /**
      * @param {ObjectId} id
      * @return {[teams]} allocated teams
@@ -71,6 +98,32 @@ module.exports = {
 
     /**
      * @param {ObjectId} id
+     * @return {[meeting]} meeting List
+     */
+
+    getStaffMeetingByStaffID: function getStaffMeetingByStaffIDf(id) {
+        return meeting
+            .find({StaffID: id})
+            .populate('GroupID')
+            .populate('StaffID')
+            .populate('TemporaryStaffID')
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
+     * @return {[meeting]} meeting List
+     */
+
+    getStaffMeetingByTempStaffID: function getStaffMeetingByTempStaffID(id) {
+        return meeting
+            .find({TemporaryStaffID: id})
+            .populate('GroupID')
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
      * @return {[meetingmodify]} a list of meeting changing request
      */
     getStaffMeetingChangeRequestByMeetingID: function getStaffMeetingChangeRequestByMeetingID (id) {
@@ -93,73 +146,7 @@ module.exports = {
             .exec();
     },
 
-    /**
-     * @param {ObjectId} id
-     * @return {staffs} a project
-     */
-    getStaffByStaffID: function getProjectByStaffID(id) {
-        return staff
-            .findById(id)
-            .exec();
-    },
-
-    /**
-     * @param {String} name, staff's user name which is usually an email address
-     * @return {staffs} a staff object
-     */
-    getStaffByUserName: function getStaffByUserName(name) {
-        return staff
-            .findOne({UserName: name})
-            .exec();
-    },
-
-    /**
-     * @param {String} name
-     * @return {staffs} a staff object
-     */
-
-    getStaffByName: function getStaffByName(name) {
-        return staff
-            .findOne({Name: name})
-            .exec();
-    },
-
-    /**
-     * @return {[staffs]} staff object
-     */
-    getAllStaff: function getAllStaff() {
-        return staff
-            .find()
-            .exec();
-    },
-
-    /**
-     * @param {ObjectId} id
-     * @return {[meeting]} meeting List
-     */
-
-    getAllMeetingByStaffID: function getAllMeetingByStaffIDf(id) {
-        return meeting
-            .find({StaffID: id})
-            .populate('GroupID')
-            .populate('StaffID')
-            .populate('TemporaryStaffID')
-            .exec();
-    },
-
-    /**
-     * @param {ObjectId} id
-     * @return {[meeting]} meeting List
-     */
-
-    getAllMeetingByTempStaffID: function getAllMeetingByTempStaffID(id) {
-        return meeting
-            .find({TemporaryStaffID: id})
-            .populate('GroupID')
-            .exec();
-    },
-
-    resetPasswordByStaffId: function resetPasswordByStaffId(id, password) {
+    updatePasswordByStaffId: function updatePasswordByStaffId(id, password) {
         return staff.findByIdAndUpdate(id, { Password: password });
     },
 
@@ -168,7 +155,7 @@ module.exports = {
      * @return {staff} a staff object
      */
     updateAllocatedTeamByTeamID: function updateAllocatedTeamByTeamID(id,GroupID) {
-        return staff.update({_id:id},{$addToSet:{AllocatedTeamID: GroupID}})
+        return staff.update({_id:id},{$addToSet:{AllocatedTeamID: GroupID}});
 
     },
 
@@ -204,6 +191,3 @@ module.exports = {
         staff.findOneAndUpdate({_id: staffID}, {$addToSet: {AllocatedTeamID: groupID}});
     }
 };
-
-
-//:[{score1,reason1},{score2,reason2}]
