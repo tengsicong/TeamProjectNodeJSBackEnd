@@ -35,5 +35,11 @@ module.exports = {
             .deleteOne({MeetingID:MeetingID})
             .exec()
 
-    }
+    },
+
+    adminEditCPendingStatusTimetable: function adminEditCPendingStatusTimetable (newChangeClientMeetingRequest) {
+        return changeclientmeetingrequest
+            .update({_id:newChangeClientMeetingRequest._id},{$set:{Status:newChangeClientMeetingRequest.Status}})
+
+    },
 };

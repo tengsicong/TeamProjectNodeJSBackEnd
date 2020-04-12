@@ -82,6 +82,12 @@ module.exports = {
             .exec()
     },
 
+    addNewStudent:function addNewStudent(addStudentName, addStudentUserName) {
+        student
+            .create({Name: addStudentName, UserName: addStudentUserName, Password: addStudentName})
+
+    },
+
     deleteStudentGroupByGroupID: function deleteStudentGroupByGroupID(studentID,GroupID){
         return student
             .findOneAndUpdate({_id:studentID},{$unset:{GroupID:''}},{new:true})

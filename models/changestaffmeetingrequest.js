@@ -17,6 +17,23 @@ module.exports = {
             .populate('NewStaffID')
             .exec()
     },
+    createStaffMeetingRequest: function createStaffMeetingRequest (changeStaffMeetingRequest) {
+        return changestaffmeetingrequest
+            .create(changeStaffMeetingRequest)
+    },
+    adminEditPendingStatusTimetable: function adminEditPendingStatusTimetable (newChangeStaffMeetingRequest) {
+        return changestaffmeetingrequest
+            .update({_id:newChangeStaffMeetingRequest._id},{$set:{Status:newChangeStaffMeetingRequest.Status}})
+    },
+    adminRejectPendingStatusTimetable: function adminRejectPendingStatusTimetable (newChangeStaffMeetingRequest) {
+        return changestaffmeetingrequest
+            .update({_id:newChangeStaffMeetingRequest._id},{$set:{Status:newChangeStaffMeetingRequest.Status}})
+    },
+    createRequestReason: function createRequestReason (requestreason) {
+        return changestaffmeetingrequest
+            .create(requestreason)
+    },
+
 
     deleteChangeStaffMeetingRequestByMeetingID: function deleteChangeStaffMeetingRequestByMeetingID(MeetingID) {
         return changestaffmeetingrequest

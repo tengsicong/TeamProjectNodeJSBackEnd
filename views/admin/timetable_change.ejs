@@ -1,4 +1,4 @@
-<% include ./header1.ejs %>
+<% include ./header.ejs %>
 <!-- main content start-->
 <div id="page-wrapper">
     <div class="blank-page widget-shadow scroll">
@@ -7,42 +7,77 @@
         <div class="row">
             <table width="100%" frame=void rules=none>
                 <tr>
-                    <td width="80%">
-                        <table width="100%" border="0px" frame=void rules=none>
-                            <tr>
-                                <th width="5%">role</th>
-                                <th width="5%">name</th>
-                                <th width="10%">meeting number</th>
-                                <th width="6%">meeting team</th>
-                                <th width="16%">orgianl time</th>
-                                <th width="20%">request</th>
-                                <th width="30%">comment</th>
+                    <td width="100%">
+                        <table width="100%" class="table">
+                            <thead style=" width: calc( 100% - 1em)">
+                            <tr style="display: table;width: calc(100% - 1em);table-layout: fixed;">
+                                <th>role</th>
+                                <th>name</th>
+                                <th>meeting number</th>
+                                <th>meeting team</th>
+                                <th>orgianl time</th>
+                                <th>request</th>
+                                <th>comment</th>
+                                <th></th>
+                                <th></th>
                             </tr>
-                            <% for (let i = 0; i < changeStaffMeetingRequest.length; i++){ %>
+                            </thead>
+                            <tbody style="display: block; height: 300px;overflow-y: scroll;">
+                            <% for (let i = 0, j = 0; i < changeStaffMeetingRequest.length; i++){ %>
                                 <% if ( changeStaffMeetingRequest[i].Status == 'pending' ){ %>
-                                    <tr class="role2">
-                                        <td>Staff</td>
+                                    <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                                    <% if(j % 2 == 0) { %>
+                                        <%= j++; %>;
+                                        class="active"
+                                    <% }else { %>
+                                        <%= j++; %>;
+                                            <% } %>
+                                    >
+                                        <td scope="row">Staff</td>
                                         <td><%= changeStaffMeetingRequest[i].StaffID.Name %></td>
-                                        <td>staff meeting <%= i + 1 %></td>
-                                        <td><%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName%></td>
-                                        <td><%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
-                                        <td>
-                                            <%if (changeStaffMeetingRequest[i] != undefined) { %>
-                                                <% if (changeStaffMeetingRequest[i].NewMeetingTime != undefined ) { %>
-                                                    change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
+                                        <td><% if (changeStaffMeetingRequest[i].MeetingID != null){ %>
+                                           <%= changeStaffMeetingRequest[i].MeetingID.MeetingNumber %>
+                                        <% }else{ %>
+                                            None
+                                        <% } %></td>
+                                        <td><% if (changeStaffMeetingRequest[i].MeetingID != null){ %>
+                                       <%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName %>
+                                        <% }else{ %>
+                                            None
+                                        <% } %></td>
+                                        <td><% if (changeStaffMeetingRequest[i].MeetingID != undefined){ %>
+                                       <%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %>
+                                        <% }else{ %>
+                                            None
+                                        <% } %></td>
+                                        <td><% if (changeStaffMeetingRequest[i].NewMeetingID != undefined){ %>
+
+                                            <% if (changeStaffMeetingRequest[i] != undefined) { %>
+                                                <% if (changeStaffMeetingRequest[i].RequestComment != undefined ) { %>
+                                                    change time
+                                                    to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
                                                 <% } %>
                                                 <% if (changeStaffMeetingRequest[i].NewStaffID != undefined) { %>
-                                                        <br> change staff to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
+                                                    <br> change staff
+                                                    to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
                                                 <% } %>
                                             <% } %>
-                                        </td>
 
-                                        <td><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
-                                        <td width="5%">
-                                            <button type="button" class="btn btn-primary"
-                                                    style="width: 100%; float: right">
-                                                Approve
-                                            </button>
+                                        <% }else{ %>
+                                            None
+                                        <% } %>  </td>
+                                        <td><% if (changeStaffMeetingRequest[i].RequestComment != undefined){ %>
+                                       <%= changeStaffMeetingRequest[i].RequestComment.Content %>
+                                        <% }else{ %>
+                                            None
+                                        <% } %></td>
+                                        <td>
+                                            <a href="/admin/staff_timetable_pending?id=<%= changeStaffMeetingRequest[i]._id %>">
+                                                <button type="button" class="btn btn-primary"
+                                                        data-dismiss="modal" style="width: 100%; float: right">
+                                                    Approve
+                                                </button>
+                                            </a>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
@@ -55,19 +90,24 @@
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h3 class="modal-title" id="exampleModalLabel">Reject the
+                                                            <h3 class="modal-title" id="exampleModalLabel">Reject
+                                                                the
                                                                 request</h3>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group" style="align-items: center">
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
-                                                                <textarea id="project_name" rows="1"
+                                                                <textarea id="rejectreason" rows="1"
                                                                           class="form-control form-control"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary">Set</button>
+                                                            <a href="/admin/reject_timetable_change_staff?id=<%= changeStaffMeetingRequest[i]._id %>">
+                                                                <button name="rejectreason" type="button"
+                                                                        class="btn btn-primary">Set
+                                                                </button>
+                                                            </a>
                                                             <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">Close
                                                             </button>
@@ -76,33 +116,41 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        </td>
                                     </tr>
+
                                 <% } %>
                             <% } %>
-                            <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
+                            <% for (let i = 0, j = 0; i < changeClientMeetingRequest.length; i++){ %>
                                 <% if ( changeClientMeetingRequest[i].Status == 'pending' ){ %>
-                                    <tr class="role2">
+                                    <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                                    <% if(j % 2 == 0) { %>
+                                        <%= j++; %>;
+                                        class="active"
+                                    <% }else { %>
+                                        <%= j++; %>;
+                                            <% } %>
+                                    >
                                         <td>Client</td>
                                         <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name %></td>
-                                        <td>client meeting <%= i + 1 %>
-                                        </td>
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.GroupID.TeamName%></td>
+                                        <td><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber %></td>
+                                        <td><%= changeClientMeetingRequest[i].MeetingID.GroupID.TeamName %></td>
                                         <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
                                         <td>change time
                                             to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
                                         <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
                                         <td>
-                                            <button type="button" class="btn btn-primary"
-                                                    style="width: 100%; float: right">
-                                                Approved
-                                            </button>
+                                            <a href="/admin/client_timetable_pending?id=<%= changeClientMeetingRequest[i]._id %>">
+                                                <button type="button" class="btn btn-primary"
+                                                        data-dismiss="modal" style="width: 100%; float: right">
+                                                    Approve
+                                                </button>
+                                            </a>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
                                                     data-target="#rejectereason" data-whatever="@Rejectereason"
                                                     style="width: 100%; float: right">
-                                                Rejected
+                                                Reject
                                             </button>
                                             <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
@@ -131,15 +179,16 @@
                                                 </div>
                                             </div>
                                         </td>
+
                                     </tr>
                                 <% } %>
                             <% } %>
+
+                            </tbody>
                         </table>
                     </td>
-
                 </tr>
             </table>
-
         </div>
     </div>
 
@@ -160,13 +209,12 @@
                         </select>
 
                     </div>
-                    <% include ./component/optionselected.ejs %>
 
                 </div>
                 <div class="form-group">
                     <label for="selector2" class="col-sm-2 control-label">Select Group</label>
                     <div class="col-sm-8">
-                        <select class="form-control" style="width: 60%">
+                        <select name="group" class="form-control" style="width: 60%">
                             <% for (let i = 0; i < allTeam.length; i++) { %>
                                 <option value="allTeam[i]._id"><%= 'SSIT Team ' + allTeam[i].TeamName %></option>
                             <% } %>
@@ -176,7 +224,7 @@
                 <div class="form-group">
                     <label for="selector2" class="col-sm-2 control-label">Select Meeting</label>
                     <div class="col-sm-8">
-                        <select class="form-control" style="width: 60%">
+                        <select class="form-control" style="width: 60%" name="selectmeeting">
                             <option>Meeting 1</option>
                             <option>Meeting 2</option>
                             <option>Meeting 3</option>
@@ -188,14 +236,14 @@
                 <div class="form-group">
                     <label for="selector3" class="col-sm-2 control-label">Select Time</label>
                     <div class="col-sm-8">
-                        <input id="selector3" type="datetime-local" name="client_changetime" style="width: 60%">
+                        <input type="datetime-local" name="client_changetime" style="width: 60%">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="selector4" class="col-sm-2 control-label">Supervisor</label>
                     <div class="col-sm-8">
-                        <select class="form-control" style="width: 60%">
-                        <option>-</option>
+                        <select class="form-control" style="width: 60%" name="supervisor">
+                            <option>-</option>
                             <% for (let i = 0; i < allStaff.length; i++) { %>
                                 <option value="<%= allStaff[i]._id %>"><%= allStaff[i].Name %></option>
                             <% } %>
@@ -205,18 +253,36 @@
                 <div class="form-group">
                     <label for="input" class="col-sm-2 control-label">Place</label>
                     <div class="col-sm-8">
-                                <textarea class="form-control" rows="1" id="input"
-                                          placeholder="Enter Your Question Detail"></textarea>
+                                <textarea name="place" class="form-control" rows="1" id="input"
+                                          placeholder="place Detail"></textarea>
                     </div>
                 </div>
             </form>
             <div style="text-align: center">
-                <button onclick="window.location='team_list.html'" type="button" class="btn btn-primary">SUBMIT</button>
+                <button onclick="window.location='./team_list'" type="button" class="btn btn-primary">SUBMIT</button>
             </div>
         </div>
     </div>
 
 </div>
 
-<% include ./component/footer_script.ejs%>
+<% include ./component/footer_script.ejs %>
+
+<script>
+    function sendRejectReason() {
+        let temp = document.createElement("form");
+        temp.action = '/admin/reject_timetable_change_staff';
+        temp.method = 'post';
+        temp.style.display = "none";
+        let inputElement = document.createElement("input")
+        inputElement.type = 'hidden';
+        inputElement.name = 'rejectreason';
+        inputElement.value = document.getElementById('rejectreason').value;
+
+        temp.appendChild(inputElement);
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+    }
+</script>
 <% include ./component/footer.ejs %>
