@@ -110,11 +110,13 @@ router.post('/meeting_detail_pre',function (req,res) {
     primary_meeting.then(function (result) {
         //console.log(result);
         primaryMeetingResult = result;
-        console.log('create');
+        let nowStaff = primaryMeetingResult.StaffID;
+        if(primaryMeetingResult.TemporaryStaffID != null)
+            nowStaff = primaryMeetingResult.TemporaryStaffID;
         let newRequest = {
             _id:mongoose.Types.ObjectId(),
             MeetingID:primaryMeetingResult._id,
-            StaffID:primaryMeetingResult.StaffID,
+            StaffID:nowStaff,
             NewMeetingTime: timechange,
             NewStaffID: staffchangeID,
             Status: 'Pending',

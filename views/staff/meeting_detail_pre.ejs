@@ -14,7 +14,7 @@
                 <div class="panel-body">
                     <table>
                         <tr width="500px"><p><b>Client : </b> <%= meeting.GroupID.ProposalID.ClientID.Name %> </p></tr>
-                        <tr width="500px"><p><b>Supervisor : </b> <%= meeting.StaffID.Name %> </tr>
+                        <tr width="500px"><p><b>Supervisor : </b> <%= nowstaff.Name %> </tr>
                         <tr width="500px"><p><b>SSIT Team : </b> <%= meeting.GroupID.TeamName %> </tr>
                         <tr width="500px"><p><b>Date : </b> <%= meeting.Date.toISOString().replace(/T.*/,' ') + meeting.Date.toLocaleTimeString().replace(/ G.*/,"")%> </tr>
                         <tr width="500px"><p><b>Venue : </b> <%= meeting.Place %> </tr>
