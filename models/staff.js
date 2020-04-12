@@ -29,7 +29,7 @@ module.exports = {
         return team
             .find({StaffID: id})
             .populate('StaffID','Name')
-            .populate('StudentID','Name')
+            .populate('StudentID','Name StaffMark')
             .populate('Representer','Name')
             .populate('ProposalID','Content')
             .populate({path: 'ProposalID', populate: {path: 'ClientID'}})

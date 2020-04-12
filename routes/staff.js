@@ -351,15 +351,18 @@ router.get('/marking', function(req, res) {
             .then(function (result) {
                 const staff = result[0];
                 const allTeams = result[1];
-                const items = ['Management','','','Testing','','QA','Poster session'];
+                const idxIndPerf = 7;
+                const items = ['Management','','','Testing','','QA','Poster session','Pesonal evaluation','Timesheets'];
                 const description = ['Team organisation (regular meetings, good quality minutes of meetings appearing on time in the team google drive, work allocation).',
-                                    'Progress with implementation (problems solved, completing agreed tasks in a timely manner, maintaining risk register).',
-                                    'Key documents (story cards, design documents).',
-                                    'Unit tests (these should run automatically).',
-                                    'System tests (either running automatically, or well-documented manual test).',
-                                    'You are assessed on how well you spot problems with the code of another team. Any problems detected in your own code do not affect your grade for this part (but if a client detects them, they may mark you down).',
-                                    'How well your final presentations sells your work, and how well you did a demo of your system and answered questions.'];
-
+                                        'Progress with implementation (problems solved, completing agreed tasks in a timely manner, maintaining risk register).',
+                                        'Key documents (story cards, design documents).',
+                                        'Unit tests (these should run automatically).',
+                                        'System tests (either running automatically, or well-documented manual test).',
+                                        'You are assessed on how well you spot problems with the code of another team. Any problems detected in your own code do not affect your grade for this part (but if a client detects them, they may mark you down).',
+                                        'How well your final presentations sells your work, and how well you did a demo of your system and answered questions.',
+                                        'Submitted via MOLE in the final week of the semester.',
+                                        'Entered on time into epiManage every week (and including all the activities associated with the project).'];
+                const scores = [5,5,5,5,5,5,5,10,5];
                 //console.log(teamID);
                 res.render('staff/marking', {
                     pageTitle: 'Marking',
@@ -367,6 +370,8 @@ router.get('/marking', function(req, res) {
                     team: allTeams[teamID],
                     items: items,
                     description: description,
+                    idxIndPerf: idxIndPerf,
+                    scores: scores,
                 });
             })
     }
