@@ -83,7 +83,7 @@ module.exports = {
      * @return {team} a team
      */
     getTeamByTeamID: function getTeamByTeamID (id) {
-        return request
+        return team
             .findById(id)
             .exec();
     },
@@ -173,9 +173,9 @@ module.exports = {
         return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
     },
 
-    updateIndeMark: function updateIndeMark(id,score1,reason1,score2,reason2){
-        return students.update({_id:id},{$set:{StaffMark[0].Score:score1,StaffMark[0].Feedback:reason1,StaffMark[1].Score:score2,StaffMark[1].Feedback:reason2}});
-    },
+    // updateIndeMark: function updateIndeMark(id,score1,reason1,score2,reason2){
+    //     return students.update({_id:id},{$set:{StaffMark$[0].Score:score1}});
+    // },
 
     updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){
         return request.update({_id:newRequest._id},{$set:{NewStaffID:newRequest.NewStaffID, NewMeetingTime:newRequest.NewMeetingTime, RequestComment: newRequest.RequestComment}});
@@ -189,3 +189,6 @@ module.exports = {
       return  staff.update({_id:id},{$pull:{AllocatedTeamID: {$in:groupID}}})
     }
 };
+
+
+//:[{score1,reason1},{score2,reason2}]

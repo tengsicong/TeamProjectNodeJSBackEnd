@@ -341,16 +341,32 @@ router.post('/marking', function (req,res,next) {
     const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
     let studentList = [];
-    //console.log(select);
 
     staffModel.getTeamByTeamID(teamid)
         .then(function(result){
-            studentList = result.StudentID;
+             list = result;
+             studentList = list.StudentID;
+            // console.log('----result----');
+            // console.log(result);
+            // console.log('----result.id----');
+            // console.log(result.StudentID);
+            // console.log('----List----');
+            // console.log(list);
+            console.log('----studentList----');
+            console.log(studentList);
+            console.log('------end----------');
+            for(let i=0;i<studentList.length;i++)
+            {
+                console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
+                staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2+1],indiselect[i*2+1]);
+            }
     })
-    for(let i=0;i<studentList.length;i++)
-    {
-        staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2],indiselect[i*2+1]);
-    }
+
+    // console.log('?????????');
+    // console.log(studentList);
+    // console.log('?????????');
+
+
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
