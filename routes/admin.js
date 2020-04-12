@@ -252,7 +252,6 @@ router.post('/submit_editteam', function (req, res) {
 });
 
 router.get('/team_list', function (req, res) {
-
     Promise.all([
         adminModel.getAdminByID(adminID),
         teamModel.getAllTeam(),
@@ -363,7 +362,7 @@ router.get('/timetable_change', function (req, res) {
 router.get('/reject_timetable_change_staff', function (req, res, next) {
     const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
     const rejectreason = req.query.rejectreason;
-    nowDate = new Date();
+    const nowDate = new Date();
 
     let request = {
         _id: changeStaffMeetingRequestID,
@@ -490,7 +489,7 @@ router.get('/project_approved', function (req, res, next) {
             const proposal = result[1];
             const teams = result[2];
             const allTeam = result[3];
-            console.log(proposal.ClientID);
+            //console.log(proposal.ClientID);
             res.render('admin/project_approved', {
                 proposal: proposal,
                 teams: teams,
@@ -511,7 +510,7 @@ router.get('/project_pending', function (req, res, next) {
         .then(function (result) {
             const admin = result[0];
             const proposal = result[1];
-            console.log(proposal.ClientID);
+            //console.log(proposal.ClientID);
             res.render('admin/project_pending', {
                 proposal: proposal,
                 pageTitle: proposal.Topic,
@@ -530,7 +529,7 @@ router.get('/project_rejected', function (req, res, next) {
         .then(function (result) {
             const admin = result[0];
             const proposal = result[1];
-            console.log(proposal.Reply)
+            //console.log(proposal.Reply)
             res.render('admin/project_rejected', {
                 proposal: proposal,
                 pageTitle: proposal.Topic,
@@ -569,7 +568,7 @@ router.post('/edit_project', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     router.post('/edit_project', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-        console.log('id= ' + proposalID)
+        //console.log('id= ' + proposalID)
         const topic = req.body.topic;
         const content = req.body.content;
         newDate = new Date();
@@ -590,7 +589,7 @@ router.post('/edit_project', function (req, res, next) {
 
 router.get('/pending_approved', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
-    newDate = new Date();
+    const newDate = new Date();
     let proposal = {
         _id: proposalID,
         Date: newDate,
@@ -606,7 +605,7 @@ router.get('/pending_approved', function (req, res, next) {
 
 router.get('/pending_rejected', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
-    newDate = new Date();
+    const newDate = new Date();
     let proposal = {
         _id: proposalID,
         Date: newDate,
@@ -622,7 +621,7 @@ router.get('/pending_rejected', function (req, res, next) {
 
 router.get('/rejected_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
-    newDate = new Date();
+    const newDate = new Date();
     let proposal = {
         _id: proposalID,
         Date: newDate,
@@ -638,7 +637,7 @@ router.get('/rejected_pending', function (req, res, next) {
 
 router.get('/approved_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
-    newDate = new Date();
+    const newDate = new Date();
     let proposal = {
         _id: proposalID,
         Date: newDate,
@@ -655,7 +654,7 @@ router.get('/approved_pending', function (req, res, next) {
 router.post('/project_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
-    replyDate = new Date();
+    const replyDate = new Date();
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
@@ -679,7 +678,7 @@ router.post('/project_pending', function (req, res, next) {
 router.post('/project_rejected', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
-    replyDate = new Date();
+    const replyDate = new Date();
     Promise.all([
         adminModel.getAdminByID(adminID),
         proposalModel.getProposalByProposalID(proposalID),
@@ -730,7 +729,6 @@ router.post('/delete_team', function (req, res, next) {
 //delete project
 router.get('/delete_project', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
-    newDate = new Date();
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
         proposalModel.deleteProposal(proposalID)
@@ -745,7 +743,7 @@ router.post('/allocate_team', function (req, res) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
     const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
     proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
-    newDate = new Date();
+    const newDate = new Date();
     for (let i = 0; i < 5; i++) {
         Promise.all([
             clientModel.getClientByProposalID(proposalId),
