@@ -457,30 +457,37 @@ router.get('/discussion', function(req, res) {
         routePromise.then(function(staff) {
             const completedQAPromise = new Promise(function(resolve) {
                 let qaList = [];
+                let teamList = [];
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
-                    let qaPromise = qaModel.getQAByGroupID(staff.AllocatedTeamID[i]);
-                    qaPromise.then(function(result) {
-                        qaList.push(...result);
-                        loaded++;
-                        if(loaded == staff.AllocatedTeamID.length) {
-                            resolve(qaList);
-                        }
-                    });
+                    //Promise.all([qaModel.getQAByGroupID(staff.AllocatedTeamID[i], staffModel.getTeamByTeamID(staff.AllocatedTeamID[i])])
+                    Promise.all([
+                        qaModel.getQAByGroupID(staff.AllocatedTeamID[i]),
+                        staffModel.getTeamByTeamID(staff.AllocatedTeamID[i]),
+                    ])
+                        .then(function(result) {
+                            qaList.push(result[0]);
+                            teamList.push(result[1].TeamName);
+                            loaded++;
+                            if(loaded == staff.AllocatedTeamID.length) {
+                                resolve([qaList, teamList]);
+                            }
+                        });
                 }
 
                 if(staff.AllocatedTeamID.length == 0) {
-                    resolve(qaList);
+                    resolve([qaList, teamList]);
                 }
             });
  
-            completedQAPromise.then(function(qaList){
+            completedQAPromise.then(function(result){
                 //console.log(qa);
                 res.render('staff/discussion', {
                     pageTitle: 'Discussion',
                     username: staff.Name,
-                    qa: qaList,
+                    qa: result[0],
+                    team: result[1],
                 });
             });
         });

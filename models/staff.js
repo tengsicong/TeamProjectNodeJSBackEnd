@@ -42,6 +42,23 @@ module.exports = {
 
     /**
      * @param {ObjectId} id
+     * @return {teams} allocated team
+     */
+    getAllocatedTeamByTeamID: function getAllocatedTeamByTeamID(id) {
+        return team
+            .findById(id)
+            .populate('StaffID','Name')
+            .populate('StudentID','Name StaffMark StaffFeedback')
+            .populate('Representer','Name')
+            .populate('ProposalID','Content')
+            .populate({path: 'ProposalID', populate: {path: 'ClientID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'StaffID'}})
+            .populate({path: 'StaffMeetingID',populate: {path:'TemporaryStaffID'}})
+            .exec();
+    },
+
+    /**
+     * @param {ObjectId} id
      * @return {meeting} a meeting
      */
     getStaffMeetingByMeetingID: function getStaffMeetingByMeetingID (id) {
