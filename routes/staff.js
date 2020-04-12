@@ -240,6 +240,7 @@ router.post('/my_timetable',function (req,res) {
     let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
+    let meetingselect = req.body.
     console.log(timechange);
     let staffchangeID ;
     let requestID ;
@@ -302,12 +303,15 @@ router.get('/my_timetable', function(req, res) {
             staffModel.getAllStaff(),
             staffModel.getAllMeetingByStaffID(req.session.userinfo),
             staffModel.getAllMeetingByTempStaffID(req.session.userinfo),
+            staffModel.getStaffMeetingChangeRequestByStaffID(req.session.userinfo),
         ])
             .then(function (result) {
                 const staff = result[0];
                 const meetingList = result[2];
                 const staffList = result[1];
                 const TempmeetingList = result[3];
+                const RequestList = result[4];
+                console.log(RequestList);
                 let nowtime = new Date();
                 let meetingStaff = [];
                 for(var i=0;i<meetingList.length;i++)
@@ -320,6 +324,7 @@ router.get('/my_timetable', function(req, res) {
                     staffList: staffList,
                     nowtime: nowtime,
                     meetingStaff: meetingStaff,
+                    changeStaffMeetingRequest: RequestList,
                 });
             });
     }
@@ -330,11 +335,23 @@ router.get('/my_timetable', function(req, res) {
 
 router.post('/marking', function (req,res,next) {
     const staff=req.session.userinfo;
-    const content=req.body.t1;
-    const select = req.body.selector1;
+    const teamcontent=req.body.t1;
+    const teamselect = req.body.selector1;
+    const indiselect = req.body.selector2;
+    const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
+    let studentList = [];
     //console.log(select);
-    staffModel.updateTeamMark(teamid,content,select)
+
+    staffModel.getTeamByTeamID(teamid)
+        .then(function(result){
+            studentList = result.StudentID;
+    })
+    for(let i=0;i<studentList.length;i++)
+    {
+        staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2],indiselect[i*2+1]);
+    }
+    staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
         })

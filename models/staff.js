@@ -2,9 +2,10 @@ const mongo = require('../lib/mongo');
 const staff = mongo.staffs;
 const proposal = mongo.proposals;
 const team = mongo.teams;
-const meeting = mongo.staff_meetings
-const request = mongo.change_staff_meeting_requests
-const meetingrecord = mongo.staff_meeting_records
+const meeting = mongo.staff_meetings;
+const request = mongo.change_staff_meeting_requests;
+const meetingrecord = mongo.staff_meeting_records;
+const students = mongo.students;
 
 // console.log('start')
 // staff
@@ -62,6 +63,18 @@ module.exports = {
             .find({MeetingID: id})
             .populate('StaffID')
             .populate('NewStaffID')
+            .exec();
+    },
+    /**
+     * @param {ObjectId} id
+     * @return {[meetingmodify]} a list of meeting changing request
+     */
+    getStaffMeetingChangeRequestByStaffID: function getStaffMeetingChangeRequestByStaffID (id) {
+        return request
+            .find({StaffID: id})
+            .populate('StaffID')
+            .populate('NewStaffID')
+            .populate('MeetingID')
             .exec();
     },
 
@@ -158,6 +171,10 @@ module.exports = {
 
     updateTeamMark: function updateTeamMark(id,reason,score){
         return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
+    },
+
+    updateIndeMark: function updateIndeMark(id,score1,reason1,score2,reason2){
+        return students.update({_id:id},{$set:{StaffMark[0].Score:score1,StaffMark[0].Feedback:reason1,StaffMark[1].Score:score2,StaffMark[1].Feedback:reason2}});
     },
 
     updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){

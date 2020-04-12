@@ -17,7 +17,7 @@
                         <div class="col-sm-8">
                             <p><%= description[i]%></p>
                             <br>
-                            <select name="selector<%=i%>" id="selector<%=i%>" class="form-control-project" style="width: 100%">
+                            <select name="selector1" id="selector1" class="form-control-project" style="width: 100%">
                                 <% for(let j = 0; j < scores[i]; j++) { %>
                                     <% if(team.StaffMark[j] != j + 1){%>
                                         <option value="<%= j + 1 %>"><%= j + 1 %> - Description of criteria</option>
@@ -44,7 +44,7 @@
                             <div class="col-sm-8">
                                 <p><%= description[j] %></p>
                                 <br>
-                                <select name="selector<%= (i * (items.length - idxIndPerf) + j) %>" id="selector<%= (i * (items.length - idxIndPerf) + j) %>" class="form-control-project" style="width: 100%">
+                                <select name="selector2" id="selector2" class="form-control-project" style="width: 100%">
                                     <% for(let k = 0; k < scores[j]; k++) { %>
                                         <% if(team.StudentID[i].StaffMark[j - idxIndPerf].Score != k + 1){%>
                                             <option value="<%= k + 1 %>"><%= k + 1 %> - Description of criteria</option>
@@ -54,7 +54,7 @@
                                     <% } %>
                                 </select>
                                 <p>&nbsp</p>
-                                <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=team.StudentID[i].StaffMark[j - idxIndPerf].Feedback%> </textarea>
+                                <textarea name="t2" id="t2" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=team.StudentID[i].StaffMark[j - idxIndPerf].Feedback%> </textarea>
                             </div>
                         </div>
                         <br>
