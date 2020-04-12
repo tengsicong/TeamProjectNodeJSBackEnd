@@ -413,14 +413,17 @@ router.post('/marking', function (req,res,next) {
                 indicontent[i*2],
                 indicontent[i*2+1],
                 ];
-                staffModel.updateIndeMark(studentList[i].id,score,reason);
+                staffModel.updateIndeMark(studentList[i]._id,score,reason)
+                    .then(function () {
+                        //console.log(studentList[i]._id);
+                    })
             }
     })
 
     // console.log('-------');
     // console.log(studentList);
     // console.log('-------');
-    staffModel.updateIndeMark()
+    //staffModel.updateIndeMark(Object.Type.id(5e7b6ace4f4ed29e60233999),[1,1],['123123','ttttest'])
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             //console.log(studentList);
