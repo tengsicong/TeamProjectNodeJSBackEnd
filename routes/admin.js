@@ -371,7 +371,7 @@ router.get('/client_timetable_pending', function (req, res, next) {
         Status: 'approved'
     }
 
-    changeCLientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
+    changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
         .then(function () {
             res.redirect('/admin/timetable_change')
         })

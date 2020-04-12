@@ -77,14 +77,16 @@
                                         <table class="table">
                                             <tbody>
                                             <% for (let i = 0; i < allStaffMeetings.length; i++){ %>
-                                                <tr>
-                                                    <th scope="row">
-                                                        <% if (allStaffMeetings[i].GroupID != null){ %>
-                                                            <%= allStaffMeetings[i].GroupID.TeamName %>
-                                                        <% } %>
-                                                    </th>
-                                                    <td>staff meeting <% allStaffMeetings[i].MeetingNumber %></td>
-                                                    <% if (allStaffMeetings[i].Date != null){ %>
+                                            <tr>
+                                                <th scope="row">
+                                                    <% if (allStaffMeetings[i].GroupID != null){ %>
+                                                        <%= allStaffMeetings[i].GroupID.TeamName %>
+                                                    <% } %>
+                                                </th>
+                                                <td>staff meeting
+                                                    <%= allStaffMeetings[i].MeetingNumber %>
+                                                </td>
+                                                <% if (allStaffMeetings[i].Date != null){ %>
                                                     <td>
                                                         <%= allStaffMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allStaffMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %>
                                                     </td>
@@ -100,17 +102,18 @@
                                                             Done
                                                         </td>
                                                     <% } %>
-                                                    <% if (allStaffMeetings[i].StaffID != null){ %>
-                                                        <td><%= allStaffMeetings[i].StaffID.Name %></td>
-                                                    <% } %>
-                                                    <% } %>
+                                                <% } %>
+                                                <% if (allStaffMeetings[i].StaffID != null){ %>
+                                                    <td><%= allStaffMeetings[i].StaffID.Name %></td>
 
-                                                </tr>
+                                                <% } %>
+
+                                            </tr>
                                             <% } %>
                                             <% for (let i = 0; i < allClientMeetings.length; i++){ %>
                                                 <tr>
                                                     <th scope="row"><%= allClientMeetings[i].GroupID.TeamName %></th>
-                                                    <td>client meeting <%= i + 1 %></td>
+                                                    <td>client meeting  <%= allClientMeetings[i].MeetingNumber %></td>
                                                     <td><%= allClientMeetings[i].Date.toISOString().replace(/T.*/, ' ') + allClientMeetings[i].Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
 
                                                     <% var thetime = allClientMeetings[i].Date.toISOString(); %>
