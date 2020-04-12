@@ -332,6 +332,7 @@ router.get('/my_timetable', function(req, res) {
                 let meetingStaff = [];
                 for(var i=0;i<meetingList.length;i++)
                     meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
+                console.log(RequestList);
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
