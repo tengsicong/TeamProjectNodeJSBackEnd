@@ -35,41 +35,52 @@
             </td>
             <td width="50%">
                 <!-- calendar -->
-                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 600px" >
-                    <div  class="tables  scroll scrollbar1" style="height: 100%">
+                <div class="blank-page widget-shadow scroll" style="margin-left: 2%;height: 300px" >
+                    <h2><b>Meeting Table</b></h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 20%">Team Number</th>
+                            <th style="width: 20%">Meeting Number</th>
+                            <th style="width: 20%">Meeting Time</th>
+                            <th style="width: 20%">Meeting Status</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="clearfix"></div>
+                    <div  class="tables  scroll scrollbar1" style="height: 70%">
                         <div class="widget-shadow">
-                            <h2><b>Meeting Table</b></h2>
                             <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Team Number</th>
-                                    <th>Meeting Number</th>
-                                    <th>Meeting Time</th>
-                                    <th>Meeting Status</th>
-                                </tr>
-                                </thead>
                                 <tbody>
                                     <% for(var i=0;i<meetingList.length;i++) { %>
-                                        <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
-                                            <th>SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
-                                            <td><%= meetingList[i].MeetingNumber%></td>
-                                            <td><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                        <%if(tempMeetingList[i].Date<nowtime) { %>
+                                            <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
+                                        <% } else { %>
+                                            <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=meetingList[i]._id%>" style="cursor: pointer">
+                                        <% } %>
+                                            <th style="width: 20%">SSIT TEAM <%= meetingList[i].GroupID.TeamName%></th>
+                                            <td style="width: 20%"><%= meetingList[i].MeetingNumber%></td>
+                                            <td style="width: 20%"><%= meetingList[i].Date.toISOString().replace(/T.*/,' ') + meetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                             <%if(meetingList[i].Date<nowtime) { %>
-                                                <td>Done</td>
+                                                <td style="width: 20%">Done</td>
                                             <% } else { %>
-                                                <td>Upcoming</td>
+                                                <td style="width: 20%">Upcoming</td>
                                             <% } %>
                                         </tr>
                                     <% } %>
                                     <% for(var i=0;i<tempMeetingList.length;i++) { %>
-                                        <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=tempMeetingList[i]._id%>" style="cursor: pointer">
-                                            <th>SSIT TEAM <%= tempMeetingList[i].GroupID.TeamName%></th>
-                                            <td><%= tempMeetingList[i].MeetingNumber%> (Temporary Meeting)</td>
-                                            <td><%= tempMeetingList[i].Date.toISOString().replace(/T.*/,' ') + tempMeetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
+                                        <%if(tempMeetingList[i].Date<nowtime) { %>
+                                            <tr class="clickable-row" data-href="meeting_detail_post?seq=<%=tempMeetingList[i]._id%>" style="cursor: pointer">
+                                        <% } else { %>
+                                            <tr class="clickable-row" data-href="meeting_detail_pre?seq=<%=tempMeetingList[i]._id%>" style="cursor: pointer">
+                                        <% } %>
+                                            <th style="width: 20%">SSIT TEAM <%= tempMeetingList[i].GroupID.TeamName%></th>
+                                            <td style="width: 20%"><%= tempMeetingList[i].MeetingNumber%> (Temporary Meeting)</td>
+                                            <td style="width: 20%"><%= tempMeetingList[i].Date.toISOString().replace(/T.*/,' ') + tempMeetingList[i].Date.toLocaleTimeString().replace(/ G.*/,"")%></td>
                                             <%if(tempMeetingList[i].Date<nowtime) { %>
-                                                <td>Done</td>
+                                                <td style="width: 20%">Done</td>
                                             <% } else { %>
-                                                <td>Upcoming</td>
+                                                <td style="width: 20%">Upcoming</td>
                                             <% } %>
                                         </tr>
                                     <% } %>
