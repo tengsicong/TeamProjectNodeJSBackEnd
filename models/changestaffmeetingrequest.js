@@ -16,5 +16,12 @@ module.exports = {
             .populate('StaffID')
             .populate('NewStaffID')
             .exec()
+    },
+
+    deleteChangeStaffMeetingRequestByMeetingID: function deleteChangeStaffMeetingRequestByMeetingID(MeetingID) {
+        return changestaffmeetingrequest
+            .deleteOne({MeetingID:MeetingID})
+            .exec()
+
     }
 };

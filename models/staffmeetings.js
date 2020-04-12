@@ -19,5 +19,11 @@ module.exports = {
             .populate('GroupID')
             .populate('StaffID')
             .exec()
+    },
+
+    deleteStaffMeetingByGroupID: function deleteStaffMeetingByGroupID(GroupID) {
+        return staffmeetings
+            .deleteMany({GroupID:GroupID})
+            .exec()
     }
 };

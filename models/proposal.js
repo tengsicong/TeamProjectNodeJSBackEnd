@@ -123,8 +123,12 @@ module.exports = {
         return proposal.findByIdAndUpdate(id,{Reply:reply})
     },
 
-    deleteProposalTeamByGroupID: function deleteProposalTeamByGroupID (groupID) {
-        return proposal.deleteOne({_id:groupID}).exec()
+    deleteProposalTeamByGroupID: function deleteProposalTeamByGroupID (id,groupID) {
+        return proposal.findOneAndUpdate({_id:id},{$pull:{GroupID: {$in:groupID}}}).exec()
+    },
+
+    updateGroupOfProposalListByGroupID: function updateGroupOfProposalListByGroupID(id,groupID) {
+        return proposal.findOneAndUpdate({_id:id},{$push:{GroupID:groupID}}).exec()
     },
 
 

@@ -90,8 +90,8 @@ module.exports = {
     //         .exec()
     // },
 
-    deleteTeamProposalByProposalID: function deleteTeamProposalByProposalID(proposalID){
-        return team.deleteOne({_id:proposalID}).exec()
+    deleteTeamProposalByGroupID: function deleteTeamProposalByGroupID(id){
+        return team.findOneAndUpdate({_id:id},{$unset:{ProposalID: '',ClientMeetingID: ''}},{new:true}).exec()
     },
 
 
@@ -125,4 +125,10 @@ module.exports = {
             .exec()
 
     },
+
+    allocateProposal : function allocateProposal(id,proposalID,clientMeetingid) {
+        team
+            .findOneAndUpdate({_id:id},{$set:{ProposalID:proposalID,ClientMeetingID:clientMeetingid}}).exec()
+
+    }
 };

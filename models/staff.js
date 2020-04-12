@@ -153,4 +153,8 @@ module.exports = {
     createMeetingChangeRequest: function createMeetingChangeRequest(newRequest) {
         return request.create(newRequest);
     },
+
+    deleteStaffAllocatedTeamByTeamID : function deleteStaffAllocatedTeamByTeamID(id,groupID) {
+      return  staff.update({_id:id},{$pull:{AllocatedTeamID: {$in:groupID}}})
+    }
 };

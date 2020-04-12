@@ -20,6 +20,8 @@ module.exports = {
         return student
             .findOne({_id: id})
             .populate('GroupID')
+            .populate('PeopleLike')
+            .populate('PeopleDontLike')
             .exec();
     },
     /**
@@ -80,8 +82,10 @@ module.exports = {
             .exec()
     },
 
-    deleteStudentProposalByProposalID: function deleteStudentProposalByProposalID(proposalID){
-        return student.deleteOne({_id:proposalID}).exec()
+    deleteStudentGroupByGroupID: function deleteStudentGroupByGroupID(studentID,GroupID){
+        return student
+            .findOneAndUpdate({_id:studentID},{$unset:{GroupID:''}},{new:true})
+            .exec()
     },
 
 };

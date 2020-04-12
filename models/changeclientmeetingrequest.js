@@ -28,6 +28,12 @@ module.exports = {
 
     createChangeClientMeetingRequest :function createChangeClientMeetingRequest(request) {
         return changeclientmeetingrequest.create(request)
+    },
+
+    deleteChangeClientMeetingRequestByMeetingID: function deleteChangeClientMeetingRequestByMeetingID(MeetingID) {
+        return changeclientmeetingrequest
+            .deleteOne({MeetingID:MeetingID})
+            .exec()
 
     }
 };

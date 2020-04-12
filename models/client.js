@@ -49,10 +49,19 @@ module.exports = {
         return client.update({_id:id},{$pull:{AllProposalID: {$in:proposalID}}})
     },
 
+    deleteGroupFromClientListByGroupID: function deleteGroupFromClientListByGroupID(id,groupID) {
+        return client.findOneAndUpdate({_id:id},{$pull:{GroupID: {$in:groupID}}}).exec()
+    },
+
+    updateGroupOfClientListByGroupID: function updateGroupOfClientListByGroupID(id,groupID) {
+        return client.findOneAndUpdate({_id:id},{$push:{GroupID:groupID}}).exec()
+    },
+
 
     updateClientGroupMark: function updateClientGroupMar(id,marks,reasons){
         return team.update({_id:id},{$set:{ClientMark:marks, ClientMarkReason:reasons}});
     },
+
 
 };
 

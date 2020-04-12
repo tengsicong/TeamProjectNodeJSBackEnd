@@ -296,7 +296,7 @@ router.get('/project_approved', function (req, res, next) {
             const proposal = result[1];
             const teams = result[2];
             const allTeam = result[3];
-            console.log(proposal.ClientID);
+            //console.log(proposal.ClientID);
             res.render('admin/project_approved', {
                 proposal: proposal,
                 teams: teams,
@@ -317,7 +317,7 @@ router.get('/project_pending', function (req, res, next) {
         .then(function (result) {
             const admin = result[0];
             const proposal = result[1];
-            console.log(proposal.ClientID);
+           // console.log(proposal.ClientID);
             res.render('admin/project_pending', {
                 proposal: proposal,
                 pageTitle: proposal.Topic,
@@ -336,7 +336,7 @@ router.get('/project_rejected', function (req, res, next) {
         .then(function (result) {
             const admin = result[0];
             const proposal = result[1];
-            console.log(proposal.Reply)
+           // console.log(proposal.Reply)
             res.render('admin/project_rejected', {
                 proposal: proposal,
                 pageTitle: proposal.Topic,
@@ -464,7 +464,7 @@ router.post('/project_pending',function(req,res,next){
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
-            console.log(result[1])
+           // console.log(result[1])
             let reply = result[1].Reply;
             reply.push({
                 Author:result[0].Name,
@@ -488,7 +488,7 @@ router.post('/project_rejected',function(req,res,next){
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
-            console.log(result[1])
+           // console.log(result[1])
             let reply = result[1].Reply;
             reply.push({
                 Author:result[0].Name,
@@ -503,20 +503,31 @@ router.post('/project_rejected',function(req,res,next){
         .catch(next)
 })
 //delete team
-router.get('/delete_team',function(req,res,next){
-    const groupID = mongoose.Types.ObjectId(req.query.id);
+router.post('/delete_team',function(req,res,next){
+    const teamID = mongoose.Types.ObjectId(req.body.teamID);
+    const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
+    proposalModel.deleteProposalTeamByGroupID(proposalId,teamID);//success
+    clientMeetingModel.deleteClientMeetingByGroupID(teamID);
+    teamModel.deleteTeamProposalByGroupID(teamID);//un
     Promise.all([
-        proposalModel.getProposalBygroupID(groupID),
-        studentModel.getStudentByGroupID(groupID),
-        proposalModel.deleteProposalTeamByGroupID(groupID),
-        teamModel.deleteTeamProposalByProposalID(groupID,proposalID),
-        studentModel.deleteStudentProposalByProposalID(studentID,proposalID),
+        clientModel.getClientByProposalID(proposalId),
+        clientMeetingModel.getClientMeetingByGroupID(teamID),
         ])
         .then(function (result) {
-            res.redirect('/admin/project_list')
+            const clientID = result[0]._id;
+            clientModel.deleteGroupFromClientListByGroupID(clientID,teamID);//un
+            const meetings = result[1]
+            let meetingid=[];
+            for(let i=0;i<meetings.length;i++){
+                meetingid.push(meetings[i]._id);
+                changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid[i]);
+            };
+            res.redirect('/admin/project_approved?id='+proposalId)
         })
         .catch(next);
 })
+
+
 //delete project
 router.get('/delete_project',function(req,res,next){
     const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -530,5 +541,45 @@ router.get('/delete_project',function(req,res,next){
         })
         .catch(next)
 })
+
+router.post('/allocate_team',function(req,res){
+    const teamID = mongoose.Types.ObjectId(req.body.teamID);
+    const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
+    proposalModel.updateGroupOfProposalListByGroupID(proposalId,teamID);
+    newDate = new Date();
+    for(let i=0;i<5;i++){
+    Promise.all([
+        clientModel.getClientByProposalID(proposalId),
+        clientMeetingModel.getAllClientMeetings(),
+    ])
+        .then(function(result){
+        const  meetingnumber = result[1].length+1;
+        let clientmeeting ={
+            _id:mongoose.Types.ObjectId(),
+            GroupID:teamID,
+            Date : newDate,
+            Place: 'ClassRoom 2',
+            ClientID:result[0]._id,
+            MeetingNumber:meetingnumber+i,
+    }
+    clientMeetingModel.addClientMeeting(clientmeeting);//成功
+    })};
+    Promise.all([clientModel.getClientByProposalID(proposalId),])
+        .then(function(result){
+            clientModel.updateGroupOfClientListByGroupID(result[0]._id,teamID);
+            Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function(result){
+                const meetings = result[0];
+                console.log(meetings)
+                let meetingid=[];
+                for(let i=0;i<meetings.length;i++){
+                    meetingid.push(meetings[i]._id);
+                };
+                console.log(meetingid)
+                teamModel.allocateProposal(teamID,proposalId,meetingid);//unsuccessful
+            })
+            res.redirect('/admin/project_approved?id='+proposalId);
+        })
+})
+
 
 module.exports = router;

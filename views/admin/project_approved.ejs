@@ -121,7 +121,7 @@
                     </select>
                 </td>
                 <td>
-                    <button onclick="{ location.href='/admin/project_approved?id=<%=proposal._id%>'}" style="float: right" type="button" class="btn btn-primary" method="post">submit</button>
+                    <button onclick="Allocate()" style="float: right" type="button" class="btn btn-primary">submit</button>
                 </td>
             </tr>
         </table>
@@ -140,8 +140,7 @@
                         <table width="100%">
                             <tr>
                                 <td width="40%"><p><b>Supervisor:</b><%= ' ' + team.StaffID.Name %></p></td>
-                                <a href="/admin/delete_team?id=<%=team._id%>">
-                                    <td rowspan="2"><button class="btn btn-danger" style="float: right">Delete</button></td></a>
+                                    <td  rowspan="2"><button id="delete" value="<%=team._id%>" class="btn btn-danger" style="float: right" onclick="Delete()">Delete</button></td>
                             </tr>
                             <td width="20em"><p><b>Student:</b>
                                     <%= team.StudentID[0].Name %>
@@ -161,4 +160,65 @@
 </div>
 
 <%- include('component/footer_script')%>
+<script>
+    function Allocate() {
+        const teamID = document.getElementById('selector1').value;
+        let link = window.location.search;
+        link = link.substring(1,link.length);
+        let ProposalID = link.split("&")[0].split("=")[1];
+        if(teamID==''){
+            alert('Can not submit empty content!');
+        }else
+            {
+        // alert('teamID:'+teamID+' proposalID: '+ProposalID)
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'teamID';
+            inputElement1.value = teamID;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'proposalID';
+            inputElement2.value = ProposalID;
+
+            const form = document.createElement("form");
+            form.action = '/admin/allocate_team';
+            form.method = 'post';
+            form.style.display = "none";
+
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
+        }
+
+    function Delete() {
+        const teamID = document.getElementById('delete').value;
+        let link = window.location.search;
+        link = link.substring(1,link.length);
+        let ProposalID = link.split("&")[0].split("=")[1];
+        //alert('teamID:'+teamID+' proposalID: '+ProposalID)
+        const inputElement1 = document.createElement("input");
+        inputElement1.type = 'hidden';
+        inputElement1.name = 'teamID';
+        inputElement1.value = teamID;
+        const inputElement2 = document.createElement("input");
+        inputElement2.type = 'hidden';
+        inputElement2.name = 'proposalID';
+        inputElement2.value = ProposalID;
+
+        const form = document.createElement("form");
+        form.action = '/admin/delete_team';
+        form.method = 'post';
+        form.style.display = "none";
+
+        form.appendChild(inputElement1);
+        form.appendChild(inputElement2);
+        document.body.appendChild(form);
+        form.submit();
+        return form
+    }
+
+</script>
 <%- include('component/footer') %>
