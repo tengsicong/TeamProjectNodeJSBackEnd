@@ -46,7 +46,7 @@
                                 <br>
                                 <select name="selector2" id="selector2" class="form-control-project" style="width: 100%">
                                     <% for(let k = 0; k < scores[j]; k++) { %>
-                                        <% if(team.StudentID[i].StaffMark[j - idxIndPerf].Score != k + 1){%>
+                                        <% if(team.StudentID[i].StaffMark[j - idxIndPerf] != k + 1){%>
                                             <option value="<%= k + 1 %>"><%= k + 1 %> - Description of criteria</option>
                                         <% } else {%>
                                             <option value="<%= k + 1%>"selected><%= k + 1 %> - Description of criteria</option>
@@ -54,7 +54,7 @@
                                     <% } %>
                                 </select>
                                 <p>&nbsp</p>
-                                <textarea name="t2" id="t2" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.StudentID[i].StaffMark[j - idxIndPerf].Feedback%></textarea>
+                                <textarea name="t2" id="t2" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.StudentID[i].StaffFeedback[j - idxIndPerf]%></textarea>
                             </div>
                         </div>
                         <br>
