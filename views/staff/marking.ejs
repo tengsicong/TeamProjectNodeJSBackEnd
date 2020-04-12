@@ -19,7 +19,7 @@
                             <br>
                             <select name="selector1" id="selector1" class="form-control-project" style="width: 100%">
                                 <% for(let j = 0; j < scores[i]; j++) { %>
-                                    <% if(team.StaffMark[j] != j + 1){%>
+                                    <% if(team.StaffMark[i] != j + 1){%>
                                         <option value="<%= j + 1 %>"><%= j + 1 %> - <%=(scores[i]==5)?criteria5[4-j]:criteria10[9-j]%></option>
                                     <% } else {%>
                                         <option value="<%= j + 1%>"selected><%= j + 1 %> - <%=(scores[i]==5)?criteria5[4-j]:criteria10[9-j]%></option>
@@ -27,7 +27,7 @@
                                 <% } %>
                             </select>
                             <p>&nbsp</p>
-                            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.StaffMarkReason[i]%></textarea>
+                            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason" required><%=team.StaffMarkReason[i]%></textarea>
                         </div>
                     </div>
                     <br>
@@ -54,7 +54,7 @@
                                     <% } %>
                                 </select>
                                 <p>&nbsp</p>
-                                <textarea name="t2" id="t2" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=team.StudentID[i].StaffFeedback[j - idxIndPerf]%></textarea>
+                                <textarea name="t2" id="t2" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason" required><%=team.StudentID[i].StaffFeedback[j - idxIndPerf]%></textarea>
                             </div>
                         </div>
                         <br>

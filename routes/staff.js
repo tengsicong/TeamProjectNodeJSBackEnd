@@ -332,6 +332,7 @@ router.get('/my_timetable', function(req, res) {
                 let meetingStaff = [];
                 for(var i=0;i<meetingList.length;i++)
                     meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
+                console.log(RequestList);
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
@@ -356,19 +357,37 @@ router.post('/marking', function (req,res,next) {
     const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
     let studentList = [];
+    console.log(teamcontent);
+    console.log(teamselect);
 
     staffModel.getTeamByTeamID(teamid)
         .then(function(result){
              list = result;
              studentList = list.StudentID;
+             let score = [];
+             let reason = [];
             for(let i=0;i<studentList.length;i++)
             {
-                console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
-                staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2+1],indiselect[i*2+1]);
+                //console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
+                score = [
+                    indiselect[i*2],
+                    indiselect[i*2+1],
+                ];
+                //console.log(studentList[i]);
+                reason =[
+                indicontent[i*2],
+                indicontent[i*2+1],
+                ];
+                staffModel.updateIndeMark(studentList[i].id,score,reason);
             }
     })
+
+    console.log('-------');
+    console.log(studentList);
+    console.log('-------');
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
+            //console.log(studentList);
             res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
         })
     //.catch(next);
