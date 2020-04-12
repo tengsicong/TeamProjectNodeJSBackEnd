@@ -493,7 +493,6 @@ router.get('/discussion', function(req, res) {
         routePromise.then(function(staff) {
             const completedQAPromise = new Promise(function(resolve) {
                 let qaList = [];
-                let teamList = [];
                 let loaded = 0;
 
                 for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
@@ -503,27 +502,37 @@ router.get('/discussion', function(req, res) {
                         staffModel.getTeamByTeamID(staff.AllocatedTeamID[i]),
                     ])
                         .then(function(result) {
-                            qaList.push(result[0]);
-                            teamList.push(result[1].TeamName);
+                            qaList.push({
+                                teamName: result[1].TeamName,
+                                qas: result[0],
+                            });
                             loaded++;
                             if(loaded == staff.AllocatedTeamID.length) {
-                                resolve([qaList, teamList]);
+                                qaList.sort(function(a, b) {
+                                    if(a.teamName > b.teamName) {
+                                        return 1;
+                                    } else if(a.teamName < b.teamName) {
+                                        return -1;
+                                    } else {
+                                        return 0;
+                                    }
+                                });
+                                resolve(qaList);
                             }
                         });
                 }
 
                 if(staff.AllocatedTeamID.length == 0) {
-                    resolve([qaList, teamList]);
+                    resolve(qaList);
                 }
             });
  
-            completedQAPromise.then(function(result){
+            completedQAPromise.then(function(qa) {
                 //console.log(qa);
                 res.render('staff/discussion', {
                     pageTitle: 'Discussion',
                     username: staff.Name,
-                    qa: result[0],
-                    team: result[1],
+                    qa: qa,
                 });
             });
         });
