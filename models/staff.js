@@ -169,14 +169,13 @@ module.exports = {
 
     },
 
-
     updateTeamMark: function updateTeamMark(id,reason,score){
         return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
     },
 
-    // updateIndeMark: function updateIndeMark(id,score1,reason1,score2,reason2){
-    //     return students.update({_id:id},{$set:{StaffMark$[0].Score:score1}});
-    // },
+    updateIndeMark: function updateIndeMark(id,score,reason){
+        return students.update({_id:id},{$set:{StaffMark:score,StaffMarkReason: reason}});
+    },
 
     updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){
         return request.update({_id:newRequest._id},{$set:{NewStaffID:newRequest.NewStaffID, NewMeetingTime:newRequest.NewMeetingTime, RequestComment: newRequest.RequestComment}});

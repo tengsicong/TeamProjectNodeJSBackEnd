@@ -363,8 +363,19 @@ router.post('/marking', function (req,res,next) {
              studentList = list.StudentID;
             for(let i=0;i<studentList.length;i++)
             {
-                console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
-                staffModel.updateIndeMark(studentList[i].id,indiselect[i*2],indicontent[i*2],indiselect[i*2+1],indiselect[i*2+1]);
+                //console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
+                let score  = [2] ;
+                score = [
+                    indiselect[i*2],
+                    indiselect[i*2+1],
+                ]
+                console.log(score);
+                let reason  = [2] ;
+                reason =[
+                indicontent[i*2],
+                indicontent[i*2+1],
+                ]
+                staffModel.updateIndeMark(studentList[i].id,score,reason);
             }
     })
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
