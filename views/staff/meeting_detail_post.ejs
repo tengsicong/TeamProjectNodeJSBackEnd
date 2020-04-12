@@ -33,9 +33,9 @@
                         <div class="col-sm-8">
                             <%for(var j=0;j<3;j++) { %>
                                 <% if(record.Present[i] == j) {%>
-                                    <div class="radio-inline" style="width: 25%"><label><input type="radio" checked=""> <%=presents[j]%></label></div>
+                                    <div class="radio-inline" style="width: 25%"><label><input id="present" type="radio" checked=""> <%=presents[j]%></label></div>
                                 <% } else {%>
-                                    <div class="radio-inline" style="width: 25%"><label><input type="radio"> <%=presents[j]%></label></div>
+                                    <div class="radio-inline" style="width: 25%"><label><input id="present" type="radio"> <%=presents[j]%></label></div>
                                 <% } %>
                             <% } %>
                         </div>
