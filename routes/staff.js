@@ -392,8 +392,8 @@ router.post('/marking', function (req,res,next) {
     const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
     let studentList = [];
-    console.log(teamcontent);
-    console.log(teamselect);
+    // console.log(teamcontent);
+    // console.log(teamselect);
 
     staffModel.getTeamByTeamID(teamid)
         .then(function(result){
@@ -417,9 +417,10 @@ router.post('/marking', function (req,res,next) {
             }
     })
 
-    console.log('-------');
-    console.log(studentList);
-    console.log('-------');
+    // console.log('-------');
+    // console.log(studentList);
+    // console.log('-------');
+    staffModel.updateIndeMark()
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
             //console.log(studentList);

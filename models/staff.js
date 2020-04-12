@@ -4,7 +4,6 @@ const proposal = mongo.proposals;
 const team = mongo.teams;
 const meeting = mongo.staff_meetings;
 const request = mongo.change_staff_meeting_requests;
-const meetingrecord = mongo.staff_meeting_records;
 const students = mongo.students;
 const records = mongo.staff_meeting_records;
 
@@ -191,7 +190,7 @@ module.exports = {
     },
 
     updateIndeMark: function updateIndeMark(id,score,reason){
-        return students.update({_id:id},{$set:{StaffMark:score,StaffMarkReason: reason}});
+        return students.update({_id:id},{$set:{StaffMark:score,StaffFeedback: reason}});
     },
 
     updateMeetingChangeRequest: function updateMeetingChangeRequest(newRequest){
