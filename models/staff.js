@@ -6,6 +6,7 @@ const meeting = mongo.staff_meetings;
 const request = mongo.change_staff_meeting_requests;
 const meetingrecord = mongo.staff_meeting_records;
 const students = mongo.students;
+const records = mongo.staff_meeting_records;
 
 // console.log('start')
 // staff
@@ -187,7 +188,22 @@ module.exports = {
 
     deleteStaffAllocatedTeamByTeamID : function deleteStaffAllocatedTeamByTeamID(id,groupID) {
       return  staff.update({_id:id},{$pull:{AllocatedTeamID: {$in:groupID}}})
-    }
+    },
+
+    updateMeetingRecords: function updateMeetingRecords(id,newRecords){
+        return records.update({_id:id},{$set:{
+            LastMeetingNote: newRecords.LastMeetingNote,
+            AchievePlan: newRecords.AchievePlan,
+            Change: newRecords.Change,
+            ChangeOther: newRecords.ChangeOther,
+            RequirementCapture: newRecords.RequirementCapture,
+            TeamProgress: newRecords.TeamProgress,
+            TimeSheets: newRecords.TimeSheets,
+            ClearPlan: newRecords.ClearPlan,
+            Dynamics: newRecords.Dynamics,
+            AnyOtherNote: newRecords.AnyOtherNote,
+        }});
+    },
 };
 
 

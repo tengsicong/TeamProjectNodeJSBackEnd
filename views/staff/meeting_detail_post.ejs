@@ -2,7 +2,7 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
-    <div class="main-page">
+    <form class="main-page" method="post">
         <h2 class="title1">Meeting Details</h2>
         <div class="blank-page widget-shadow scroll">
             <h3><b>Meeting <%= meeting.MeetingNumber%></b></h3>
@@ -31,13 +31,9 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><%= meeting.GroupID.StudentID[i].Name%></label>
                         <div class="col-sm-8">
-                            <%for(var j=0;j<3;j++) { %>
-                                <% if(record.Present[i] == j) {%>
-                                    <div class="radio-inline" style="width: 25%"><label><input id="present" type="radio" checked=""> <%=presents[j]%></label></div>
-                                <% } else {%>
-                                    <div class="radio-inline" style="width: 25%"><label><input id="present" type="radio"> <%=presents[j]%></label></div>
-                                <% } %>
-                            <% } %>
+                            <div class="radio-inline" style="width: 25%"><label><input id="present" value="1" type="radio"> 1</label></div>
+                            <div class="radio-inline" style="width: 25%"><label><input id="present" value="2" type="radio"> 2</label></div>
+                            <div class="radio-inline" style="width: 25%"><label><input id="present" value="3" type="radio"> 3</label></div>
                         </div>
                     </div>
                 <div class="clearfix"></div>
@@ -48,13 +44,13 @@
         <div class="blank-page widget-shadow scroll">
             <h3>Briefly note what team activities (other than scheduled classes) have taken place since the last facilitator's meeting.
                 If anyone was absent from those activities, note it (and the reason for absence, if known).</h3><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your answer"> <%=record.LastMeetingNote%> </textarea>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your answer"><%=record.LastMeetingNote%></textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
             <h3>Did the team achieve their plans for the week? If not, why not? </h3>
             <p>(e.g. Illness, unexpected technical difficulties, team member(s) not engaging, client's requirements changed, ...)</p><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.AchievePlan%> </textarea>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.AchievePlan%></textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
@@ -66,12 +62,12 @@
                 <div>
                     <%for(var j=0;j<7;j++) { %>
                         <% if(record.Change[j] == true) {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=changes[j]%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" name="storycard" id="storycard" value="<%=j%>" checked=""><%=changes[j]%></label></div>
                         <% } else {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=changes[j]%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" name="storycard" id="storycard" value="<%=j%>" ><%=changes[j]%></label></div>
                         <% } %>
                         <% if(j == 6) {%>
-                            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.ChangeOther%> </textarea>
+                            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.ChangeOther%></textarea>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -85,7 +81,7 @@
                 They may well think that they are at 70% in week 2 but 60% in week 3 despite having captured more requirements.
                 Expect this to be a very rough estimate in the first meeting, unless you are seeing them before they see their client,
                 in which case they can legitimately answer "0".</p><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.RequirementCapture%> </textarea>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.RequirementCapture%></textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
@@ -95,9 +91,9 @@
                 <div>
                     <%for(var j=0;j<4;j++) { %>
                         <% if(record.TeamProgress == j) {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=teamProgress[j]%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" name="progress" value="<%=j%>" checked=""><%=teamProgress[j]%></label></div>
                         <% } else {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=teamProgress[j]%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" name="progress" value="<%=j%>" ><%=teamProgress[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -112,9 +108,9 @@
                 <div>
                     <%for(var j=0;j<3;j++) { %>
                         <% if(record.TimeSheets == j) {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=timeSheets[j]%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" name="timesheets" value="<%=j%>" checked=""><%=timeSheets[j]%></label></div>
                         <% } else {%>
-                        <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=timeSheets[j]%></label></div>
+                        <div class="radio-inline" style="width: 100%"><label><input type="radio" name="timesheets" value="<%=j%>" ><%=timeSheets[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -130,9 +126,9 @@
                 <div>
                     <%for(var j=0;j<3;j++) { %>
                         <% if(record.ClearPlan == j) {%>
-                            <div class="radio-inline" style="width: 100%"><label ><input type="radio" checked=""> <%=clearPlan[j]%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label ><input type="radio" name="clearPlan" value="<%=j%>" checked=""><%=clearPlan[j]%></label></div>
                         <% } else {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=clearPlan[j]%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" name="clearPlan" value="<%=j%>"><%=clearPlan[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -148,9 +144,9 @@
                 <div>
                     <%for(var j=0;j<3;j++) { %>
                         <% if(record.Dynamics == j) {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio" checked=""> <%=dynamics[j]%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" name="dynamics" value="<%=j%>" checked=""><%=dynamics[j]%></label></div>
                         <% } else {%>
-                            <div class="radio-inline" style="width: 100%"><label><input type="radio"> <%=dynamics[j]%></label></div>
+                            <div class="radio-inline" style="width: 100%"><label><input type="radio" name="dynamics" value="<%=j%>" ><%=dynamics[j]%></label></div>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -160,10 +156,11 @@
         <br>
         <div class="blank-page widget-shadow scroll">
             <h3>Any other notes</h3><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"> <%=record.AnyOtherNotes%> </textarea>
-            <button type="submit" class="btn btn-default" style="margin-left: 90%">Submit</button>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.AnyOtherNote%></textarea>
+            <button type="submit" class="btn btn-default" style="margin-left: 90%" value=" SUBMIT" >Submit</button>
         </div>
     </div>
+</form>
 </div>
 
 <%- include('footer') %>

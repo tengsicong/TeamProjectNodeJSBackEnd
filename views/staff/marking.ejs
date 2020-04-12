@@ -20,9 +20,9 @@
                             <select name="selector1" id="selector1" class="form-control-project" style="width: 100%">
                                 <% for(let j = 0; j < scores[i]; j++) { %>
                                     <% if(team.StaffMark[j] != j + 1){%>
-                                        <option value="<%= j + 1 %>"><%= j + 1 %> - Description of criteria</option>
+                                        <option value="<%= j + 1 %>"><%= j + 1 %> - <%=(scores[i]==5)?criteria5[4-j]:criteria10[9-j]%></option>
                                     <% } else {%>
-                                        <option value="<%= j + 1%>"selected><%= j + 1 %> - Description of criteria</option>
+                                        <option value="<%= j + 1%>"selected><%= j + 1 %> - <%=(scores[i]==5)?criteria5[4-j]:criteria10[9-j]%></option>
                                     <% } %>
                                 <% } %>
                             </select>
@@ -47,9 +47,9 @@
                                 <select name="selector2" id="selector2" class="form-control-project" style="width: 100%">
                                     <% for(let k = 0; k < scores[j]; k++) { %>
                                         <% if(team.StudentID[i].StaffMark[j - idxIndPerf] != k + 1){%>
-                                            <option value="<%= k + 1 %>"><%= k + 1 %> - Description of criteria</option>
+                                            <option value="<%= k + 1 %>"><%= k + 1 %> - <%=(scores[j]==5)?criteria5[4-k]:criteria10[9-k]%></option>
                                         <% } else {%>
-                                            <option value="<%= k + 1%>"selected><%= k + 1 %> - Description of criteria</option>
+                                            <option value="<%= k + 1%>"selected><%= k + 1 %> - <%=(scores[j]==5)?criteria5[4-k]:criteria10[9-k]%></option>
                                         <% } %>
                                     <% } %>
                                 </select>

@@ -23,9 +23,7 @@ router.get('/my_project', function(req, res) {
                 const staff = result[0];
                 const allTeams = result[1];
                 let groupMember = [];
-                //console.log(allTeams);
                 for (let i = 0; i < allTeams.length; i++) {
-                    //console.log(allTeams[i]);
                     groupMember[i] = '';
                     for (let j = 0; j < allTeams[i].StudentID.length; j++) {
                         groupMember[i] = groupMember[i] + allTeams[i].StudentID[j].Name;
@@ -73,10 +71,6 @@ router.get('/project_detail', function(req, res) {
                 //console.log(stage[0].Stage);
                 meetingList = allTeams[teamID].StaffMeetingID;
                 let nowtime = new Date();
-                // console.log(nowtime.toUTCString());
-                // console.log(nowtime);
-                // console.log(nowtime.toISOString().replace(/T.*/,' ') + nowtime.toLocaleTimeString().replace(/ G.*/,""));
-                // let solvednowtime = nowtime.toISOString().replace(/T.*/,' ') + nowtime.toLocaleTimeString().replace(/ G.*/,"");
                 res.render('staff/project_detail', {
                     pageTitle: 'Project Detail',
                     username: staff.Name,
@@ -169,6 +163,44 @@ router.get('/meeting_detail_pre', function(req, res) {
         res.redirect('/role_select');
     }
 });
+
+router.post('/meeting_detail_post',function (req,res) {
+    const presents = req.body.presents;
+    const t1 = req.body.t1;
+    const storycard = req.body.storycard;
+    const progress = req.body.progress;
+    const timesheets = req.body.timesheets;
+    const clearplan = req.body.clearPlan;
+    const dynamics = req.body.dynamics;
+    console.log(req.body);
+    let RecordID;
+    staffModel.getStaffMeetingByMeetingID(req.query.seq)
+        .then(function (result) {
+            meeting = result;
+            RecordID = meeting.RecordID;
+            let change = [7];
+            for(var i=0;i<7;i++)
+                change[i] = (i==storycard);
+            console.log(change);
+            let newRecord = {
+                _id:RecordID,
+                LastMeetingNote:t1[0],
+                AchievePlan:t1[1],
+                Change:change,
+                ChangeOther:t1[2],
+                RequirementCapture:t1[3],
+                TeamProgress:progress,
+                TimeSheets:timesheets,
+                ClearPlan:clearplan,
+                Dynamics:dynamics,
+                AnyOtherNote:t1[4],
+            }
+            staffModel.updateMeetingRecords(RecordID,newRecord)
+                .then(function () {
+                    res.redirect('/staff/meeting_detail_post?seq='+req.query.seq);
+                })
+        })
+})
 
 router.get('/meeting_detail_post', function(req, res) {
     const meetingID = req.query.seq;
@@ -279,6 +311,8 @@ router.post('/my_timetable',function (req,res) {
 
 })
 
+
+
 router.get('/my_timetable', function(req, res) {
     if (req.session.role === 'staff') {
         Promise.all([
@@ -316,7 +350,6 @@ router.get('/my_timetable', function(req, res) {
 });
 
 router.post('/marking', function (req,res,next) {
-    const staff=req.session.userinfo;
     const teamcontent=req.body.t1;
     const teamselect = req.body.selector1;
     const indiselect = req.body.selector2;
@@ -328,9 +361,6 @@ router.post('/marking', function (req,res,next) {
         .then(function(result){
              list = result;
              studentList = list.StudentID;
-            console.log('----studentList----');
-            console.log(studentList);
-            console.log('------end----------');
             for(let i=0;i<studentList.length;i++)
             {
                 console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
@@ -365,6 +395,24 @@ router.get('/marking', function(req, res) {
                                         'How well your final presentations sells your work, and how well you did a demo of your system and answered questions.',
                                         'Submitted via MOLE in the final week of the semester.',
                                         'Entered on time into epiManage every week (and including all the activities associated with the project).'];
+                const criteria5 = [
+                    'Very Well',
+                    'Good',
+                    'Regularly',
+                    'Insufficient',
+                    'Poor',
+                ];
+                const criteria10 = [
+                    'Very Well',
+                    '',
+                    'Good',
+                    '',
+                    'Regularly',
+                    '',
+                    'Insufficient',
+                    '',
+                    'Poor',
+                ];
                 const scores = [5,5,5,5,5,5,5,10,5];
                 //console.log(teamID);
                 res.render('staff/marking', {
@@ -375,6 +423,8 @@ router.get('/marking', function(req, res) {
                     description: description,
                     idxIndPerf: idxIndPerf,
                     scores: scores,
+                    criteria5:criteria5,
+                    criteria10:criteria10,
                 });
             })
     }
