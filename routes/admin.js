@@ -637,13 +637,33 @@ router.get('/rejected_pending', function (req, res, next) {
 
 router.get('/approved_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
+    Promise.all([teamModel.getGroupByProposalID(proposalID)]).then(function (result) {
+    const teams = result[0];
+    for(let i=0;i<teams.length;i++){
+        proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
+        clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
+        teamModel.deleteTeamProposalByGroupID(teams[i]._id);
+        Promise.all([
+            clientModel.getClientByProposalID(proposalID),
+            clientMeetingModel.getClientMeetingByGroupID(teams[i]._id),
+        ])
+            .then(function (result) {
+                const clientID = result[0]._id;
+                clientModel.deleteGroupFromClientListByGroupID(clientID, teams[i]._id);
+                const meetings = result[1]
+                for (let j = 0; j < meetings.length; j++) {
+                    const meetingid = meetings[j]._id;
+                    changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
+                }
+                ;
+    })
+    }})
     const newDate = new Date();
     let proposal = {
         _id: proposalID,
         Date: newDate,
         Status: 'pending'
     }
-
     proposalModel.adminEditPendingStatusProposal(proposal)
         .then(function () {
             res.redirect('/admin/project_pending?id=' + req.query.id)
@@ -713,11 +733,10 @@ router.post('/delete_team', function (req, res, next) {
         .then(function (result) {
             const clientID = result[0]._id;
             clientModel.deleteGroupFromClientListByGroupID(clientID, teamID);
-            const meetings = result[1]
-            let meetingid = [];
+            const meetings = result[1];
             for (let i = 0; i < meetings.length; i++) {
-                meetingid.push(meetings[i]._id);
-                changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid[i]);
+                const meetingid = meetings[i]._id;
+                changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
             }
             ;
             res.redirect('/admin/project_approved?id=' + proposalId)

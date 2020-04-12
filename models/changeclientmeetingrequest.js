@@ -32,9 +32,8 @@ module.exports = {
 
     deleteChangeClientMeetingRequestByMeetingID: function deleteChangeClientMeetingRequestByMeetingID(MeetingID) {
         return changeclientmeetingrequest
-            .deleteOne({MeetingID:MeetingID})
+            .deleteMany({MeetingID:MeetingID})
             .exec()
-
     },
 
     adminEditCPendingStatusTimetable: function adminEditCPendingStatusTimetable (newChangeClientMeetingRequest) {
