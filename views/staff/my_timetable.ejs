@@ -92,7 +92,7 @@
                 <br>
                 <div class="blank-page widget-shadow scroll" style="margin-left: 2%;">
                     <h2><b>Change Timetable</b></h2>
-                    <%if(meetingList.length+tempMeetingList.length == 0) { %>
+                    <%if(meetingList.length == 0) { %>
                         <br>
                         <div class="panel panel-danger request-info">
                             <div class="panel-heading">
@@ -125,7 +125,7 @@
                                     <% } %>
                                 </select>
                             </div>
-                            <textarea name="t1" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason"></textarea>
+                            <textarea name="t1" id="t1" style="width: 60%; resize: none" rows="3" placeholder="Enter your reason" required></textarea>
                             <div>
                                 <button class="btn btn-primary" style="margin-left: 20%">Submit</button>
                             </div>

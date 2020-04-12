@@ -44,13 +44,13 @@
         <div class="blank-page widget-shadow scroll">
             <h3>Briefly note what team activities (other than scheduled classes) have taken place since the last facilitator's meeting.
                 If anyone was absent from those activities, note it (and the reason for absence, if known).</h3><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your answer"><%=record.LastMeetingNote%></textarea>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your answer" required><%=record.LastMeetingNote%></textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
             <h3>Did the team achieve their plans for the week? If not, why not? </h3>
             <p>(e.g. Illness, unexpected technical difficulties, team member(s) not engaging, client's requirements changed, ...)</p><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.AchievePlan%></textarea>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason" required><%=record.AchievePlan%></textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">
@@ -81,7 +81,7 @@
                 They may well think that they are at 70% in week 2 but 60% in week 3 despite having captured more requirements.
                 Expect this to be a very rough estimate in the first meeting, unless you are seeing them before they see their client,
                 in which case they can legitimately answer "0".</p><br>
-            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.RequirementCapture%></textarea>
+            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason" required><%=record.RequirementCapture%></textarea>
         </div>
         <br>
         <div class="blank-page widget-shadow scroll">

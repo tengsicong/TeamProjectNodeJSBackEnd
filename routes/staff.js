@@ -332,6 +332,7 @@ router.get('/my_timetable', function(req, res) {
                 let meetingStaff = [];
                 for(var i=0;i<meetingList.length;i++)
                     meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
+                console.log(RequestList);
                 res.render('staff/my_timetable', {
                     pageTitle: 'My Timetable',
                     username: staff.Name,
@@ -371,12 +372,12 @@ router.post('/marking', function (req,res,next) {
                 score = [
                     indiselect[i*2],
                     indiselect[i*2+1],
-                ]
+                ];
                 //console.log(studentList[i]);
                 reason =[
                 indicontent[i*2],
                 indicontent[i*2+1],
-                ]
+                ];
                 staffModel.updateIndeMark(studentList[i].id,score,reason);
             }
     })
