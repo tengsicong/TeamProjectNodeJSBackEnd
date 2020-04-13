@@ -36,20 +36,20 @@ module.exports= {
             .exec();
     },
 
-    updateReplyByQAID: function updateReplyByQAID(id, replies) {
+    updateReplyByQAID: function updateReplyByQAID(id, reply) {
         return studentStaffQa
-            .findByIdAndUpdate(id, { Replies: replies });
+            .findByIdAndUpdate(id,{$push:{Replies: reply}});
     },
 
     createNewQA: function postNewQA(student, topic, content) {
         studentStaffQa
-            .create({GroupID: student.GroupID, Topic: topic, Replies: [{Author: student.Name, Comment: content, ReplyDate: new Date()}]})
+            .create({GroupID: student.GroupID, Topic: topic, Replies: [{Author: student.Name, Comment: content, ReplyDate: new Date()}]});
     },
 
     deleteQAByGroupID: function deleteQAByGroupID(GroupID) {
         return studentStaffQa
             .deleteMany({GroupID:GroupID})
-            .exec()
+            .exec();
     }
 };
 

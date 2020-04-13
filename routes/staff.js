@@ -539,14 +539,11 @@ router.post('/discussion_details', checkStaffLogin, function(req, res) {
     routePromise.then(function(staff) {
         const detailPromise = qaModel.getQAByQAID(questionID);
         detailPromise.then(function(qa){
-            let replies = qa.Replies;
-            replies.push({
+            const updatePromise = qaModel.updateReplyByQAID(qa._id, {
                 Author: staff.Name,
                 Comment: reply,
                 ReplyDate: new Date().getTime(),
             });
-            //console.log(replies);
-            const updatePromise = qaModel.updateReplyByQAID(qa._id, replies);
             updatePromise.then(function(result) {
                 res.redirect('discussion_details?id=' + qa._id);
             });
