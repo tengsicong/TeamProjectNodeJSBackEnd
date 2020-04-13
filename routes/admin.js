@@ -746,8 +746,8 @@ router.post('/delete_team', function (req, res, next) {
 
 
 //delete project
-router.get('/delete_project', function (req, res, next) {
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+router.post('/delete_project', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
         proposalModel.deleteProposal(proposalID)
