@@ -3,7 +3,7 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
-
+    <% if(stage.Stage!=0){%>
     <table width="100%">
         <tr>
             <td width="50%">
@@ -144,7 +144,9 @@
             </td>
         </tr>
     </table>
-
+    <%}else{%>
+        <div class="alert alert-danger" role="alert">This page only valid in stage 1 and stage 2. You are in stage 0.</div>
+    <%}%>
 </div>
 
 <%- include('footer') %>
@@ -165,8 +167,8 @@
             alert("Please enter the reason!");
             return false;
         }
-        var nowtime1 = new Date();
-        var nowtime2 = new Date(time);
+        const nowtime1 = new Date();
+        const nowtime2 = new Date(time);
         if(nowtime1 > nowtime2)
         {
             alert('Invalid meeting time,please check!');
