@@ -2,6 +2,7 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
+    <% if(stage.Stage!=0){%>
     <div class="blank-page widget-shadow scroll">
         <h2><b>My Teams</b></h2>
         <%if(teams.length!=0){%>
@@ -32,6 +33,9 @@
             <div class="alert alert-danger" role="alert">You do not have a team currently!</div>
         <%}%>
     </div>
+    <%}else{%>
+        <div class="alert alert-danger" role="alert">This page only valid in stage 1 and stage 2. You are in stage 0.</div>
+    <%}%>
 </div>
 
 <%- include('footer') %>

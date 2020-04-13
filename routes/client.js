@@ -77,13 +77,17 @@ router.get('/myproject/project_approved', function (req, res, next) {
         proposalModel.getProposalByProposalID(proposalID),
         clientModel.getClientByProposalID(proposalID),
         teamModel.getGroupByProposalID(proposalID),
+        stageModel.getStage(),
     ])
         .then(function (result) {
+            const stage = result[3][0];
             res.render('client/project_approved', {
                 proposal: result[0],
                 pageTitle: result[0].Topic,
                 username: result[1].Name,
                 teams: result[2],
+                stage: stage,
+                Replies: result[0].Reply,
             });
         })
         .catch(next);
@@ -216,8 +220,8 @@ router.post('/edit_project', function (req, res, next) {
 })
 
 /*Delete proposal*/
-router.get('/delete_project', function (req, res, next) {
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+router.post('/delete_project', function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
         proposalModel.deleteProposal(proposalID)
@@ -231,12 +235,15 @@ router.get('/delete_project', function (req, res, next) {
 router.get('/myteam', function (req, res, next) {
     Promise.all([
         clientModel.getClientByClientID(clientID),
+        stageModel.getStage(),
     ])
         .then(function (result) {
+            const stage = result[1][0];
             res.render('client/my_teams', {
                 teams: result[0].GroupID,
                 pageTitle: 'My Teams',
                 username: result[0].Name,
+                stage: stage,
             });
         })
         .catch(next);
@@ -321,14 +328,17 @@ router.get('/mytimetable', function (req, res, next) {
         clientModel.getClientByClientID(clientID),
         clientMeetingModel.getClientMeetingByClientID(clientID),
         changeClientMeetingRequestModel.getChangeClientMeetingRequestByClientID(clientID),
+        stageModel.getStage(),
     ])
         .then(function (result) {
             const changeClientMeetingRequest = result[2];
+            const stage = result[3][0];
             res.render('client/my_timetable', {
                 meetings: result[1],
                 pageTitle: 'My TimeTable',
                 username: result[0].Name,
                 changeClientMeetingRequest: changeClientMeetingRequest,
+                stage: stage,
             });
         })
         .catch(next);
@@ -354,7 +364,7 @@ router.post('/mytimetable', function (req, res, next) {
                 RequestComment: {
                     RequestName: result[0].ClientID.Name,
                     Date: nowDate,
-                    Content: reason
+                    Content: reason,
                 }
             }
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);

@@ -140,7 +140,7 @@
                         <table width="100%">
                             <tr>
                                 <td width="40%"><p><b>Supervisor:</b><%= ' ' + teams[i].StaffID.Name %></p></td>
-                                    <td  rowspan="2"><button id="<%=i%>" value="<%=teams[i]._id%>" class="btn btn-danger" style="float: right" onclick="Delete(<%=i%>)">Delete</button></td>
+                                    <td  rowspan="2"><button id="<%=i%>" value="<%=teams[i]._id%>" class="btn btn-danger" style="float: right" onclick="Delete(<%=i%>);return false;">Delete</button></td>
                             </tr>
                             <td width="20em"><p><b>Student:</b>
                                     <%= teams[i].StudentID[0].Name %>
@@ -189,6 +189,7 @@
             form.appendChild(inputElement2);
             document.body.appendChild(form);
             form.submit();
+            alert('Allocate successfully, please refresh the page!')
             return form
         }
         }
@@ -198,26 +199,28 @@
         let link = window.location.search;
         link = link.substring(1,link.length);
         let ProposalID = link.split("&")[0].split("=")[1];
-        //alert('teamID:'+teamID)
-        const inputElement1 = document.createElement("input");
-        inputElement1.type = 'hidden';
-        inputElement1.name = 'teamID';
-        inputElement1.value = teamID;
-        const inputElement2 = document.createElement("input");
-        inputElement2.type = 'hidden';
-        inputElement2.name = 'proposalID';
-        inputElement2.value = ProposalID;
+        if(confirm("Are you sure you want to delete this allocated Team?")) {
+            //alert('teamID:'+teamID)
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'teamID';
+            inputElement1.value = teamID;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'proposalID';
+            inputElement2.value = ProposalID;
 
-        const form = document.createElement("form");
-        form.action = '/admin/delete_team';
-        form.method = 'post';
-        form.style.display = "none";
+            const form = document.createElement("form");
+            form.action = '/admin/delete_team';
+            form.method = 'post';
+            form.style.display = "none";
 
-        form.appendChild(inputElement1);
-        form.appendChild(inputElement2);
-        document.body.appendChild(form);
-        form.submit();
-        return form
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
     }
 
 </script>

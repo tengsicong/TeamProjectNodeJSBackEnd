@@ -26,10 +26,8 @@
                     </a>
                 </td>
                 <td>
-                    <a href="/admin/delete_project?id=<%=proposal._id%>">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right:8%;float: right">delete
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete();return false;" data-dismiss="modal" style="margin-right:8%;float: right">Delete
                         </button>
-                    </a>
                 </td>
                 <td>
                     <a href="/admin/pending_approved?id=<%=proposal._id%>">
@@ -195,6 +193,26 @@
             form.style.display = "none";
 
             form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
+    }
+
+    function confirmDelete() {
+        let link = window.location.search;
+        link = link.substring(1,link.length);
+        let ProposalID = link.split("&")[0].split("=")[1];
+        if(confirm("Are you sure you want to delete this project?")){
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'proposalID';
+            inputElement2.value = ProposalID;
+            const form = document.createElement("form");
+            form.action = '/admin/delete_project';
+            form.method = 'post';
+            form.style.display = "none";
             form.appendChild(inputElement2);
             document.body.appendChild(form);
             form.submit();
