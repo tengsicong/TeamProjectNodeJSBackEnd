@@ -2,9 +2,9 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
-    <h2 class="title1">Project </h2>
+    <h2 class="title1"><b>Project </b></h2>
     <div class="blank-page widget-shadow scroll">
-        <h2><%=proposal.Topic%><span class="label label-success"
+        <h2><b><%=proposal.Topic%></b><span class="label label-success"
                                      style="float:right;font-size:15px">approved</span>
         </h2>
         <br>
@@ -20,18 +20,25 @@
         </div>
         <table width="100%">
             <tr>
-                <td width="95%">
+                <td width="100%">
                     <a href="/admin/edit_project?id=<%=proposal._id%>">
-                        <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
-                    </a>                    </td>
-                <td>
-                    <a href="/admin/approved_pending?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
-                    </button>
-                    </a>
-                </td>
+                        <button type="button" class="btn btn-primary" style="float: right">Edit</button>
+                    </a></td>
             </tr>
         </table>
+    </div>
+    <br>
+
+    <div class="blank-page widget-shadow scroll">
+        <table width="100%"><tr>
+                <td><h3 style="color: #629aa9"><b>Change project status</b></h3></td>
+                <td>
+                    <a href="/admin/approved_pending?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
+                        </button>
+                    </a>
+                </td>
+            </tr></table>
     </div>
     <br>
     <div class="blank-page widget-shadow scroll">
@@ -105,7 +112,7 @@
     </div>
     <br>
     <div class="blank-page widget-shadow scroll">
-        <h2 class="title1">Allocate team</h2>
+        <h2 class="title1"><b>Allocate team</b></h2>
         <table width="100%">
             </tr>
             <tr>

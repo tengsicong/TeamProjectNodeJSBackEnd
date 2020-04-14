@@ -376,7 +376,7 @@ router.get('/my_timetable', checkStaffLogin, function(req, res) {
                 meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
                 delnumber+=(meetingList[i].GroupID.ProposalID == null);
             }
-
+            console.log(meetingList);
             res.render('staff/my_timetable', {
                 pageTitle: 'My Timetable',
                 username: staff.Name,

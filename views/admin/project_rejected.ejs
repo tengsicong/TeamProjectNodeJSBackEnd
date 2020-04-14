@@ -2,9 +2,9 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
-    <h2 class="title1">Project </h2>
+    <h2 class="title1"><b>Project </b></h2>
     <div class="blank-page widget-shadow scroll">
-        <h2><%=proposal.Topic%><span class="label label-danger"
+        <h2><b><%=proposal.Topic%></b><span class="label label-danger"
                                      style="float:right;font-size:15px">rejected</span>
         </h2>
         <br>
@@ -20,25 +20,32 @@
         </div>
         <table width="100%">
             <tr>
-                <td width="95%">
+                <td width="90%">
                     <a href="/admin/edit_project?id=<%=proposal._id%>">
-                        <button type="button" class="btn btn-primary" style="margin-right:1%;float: right">Edit</button>
+                        <button type="button" class="btn btn-primary" style="float: right">Edit</button>
                     </a>                    </td>
-                <td>
-                        <button type="button" class="btn btn-danger"  onclick="confirmDelete();return false;" data-dismiss="modal" style="margin-right:6%;float: right">Delete
+                <td width="10%">
+                        <button type="button" class="btn btn-danger"  onclick="confirmDelete();return false;" data-dismiss="modal" style="float: right">Delete
                         </button>
                 </td>
-                <td>
-                    <a href="/admin/rejected_pending?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
-                    </button>
-                    </a>
-                </td>
-
             </tr>
         </table>
     </div>
     <br>
+
+    <div class="blank-page widget-shadow scroll">
+        <table width="100%"><tr>
+                <td><h3 style="color: #629aa9"><b>Change project status</b></h3></td>
+                <td>
+                    <a href="/admin/rejected_pending?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right">Pending
+                        </button>
+                    </a>
+                </td>
+            </tr></table>
+    </div>
+    <br>
+
     <div class="blank-page widget-shadow scroll">
         <h3 style="color: #629aa9"><b>Client related projects</b></h3>
         <% let j = 1; %>
