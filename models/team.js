@@ -73,44 +73,35 @@ module.exports = {
      * @param {object} team : team object.
      * @return {[team]} team
      */
-    createTeam: function createTeam(teamName) {
-        team
-            .create({TeamName: teamName})
-    },
-    updateTeamStaff: function updateTeamStaff(teamName, selector2) {
-        team
-            .findOneAndUpdate({TeamName: teamName},{$set: {StaffID: selector2}})
-            .exec()
-    },
-
-    updateTeamStudent: function updateTeamStudent(teamName, peopleID) {
-        team
-            .findOneAndUpdate({TeamName: teamName}, {$push: {StudentID: [peopleID]}})
-            .exec()
-    },
-
-    deleteTeamStudent: function deleteTeamStudent(teamName, selector2) {
+    createTeam: function createTeam(studentID, staffID, representer, teamName) {
         return team
-            .findOneAndUpdate({TeamName: teamName},{$unset: {StudentID: ''}},{new:true})
-            .exec()
-    },
-    deleteTeamStaff: function deleteTeamStaff(teamName, peopleID) {
-        return team
-            .findOneAndUpdate({TeamName: teamName},{$unset: {StaffID: ''}},{new:true})
+            .create({StudentID: studentID, StaffID: staffID, Representer: representer, TeamName: teamName})
             .exec()
     },
 
-    editTeamStaff: function editTeamStaff(staffID, newStaffID) {
-        team
-            .findOneAndUpdate({StaffID: staffID },{$set: {StaffID: newStaffID}})
-            .exec()
-    },
 
-    editTeamStudent: function editTeamStudent(studentID, newStudentID) {
-        team
-            .findOneAndUpdate({StudentID: studentID}, {$push: {StudentID: newStudentID}})
-            .exec()
-    },
+    // deleteTeamStudent: function deleteTeamStudent(teamName, selector2) {
+    //     return team
+    //         .findOneAndUpdate({TeamName: teamName}, {$unset: {StudentID: ''}}, {new: true})
+    //         .exec()
+    // },
+    // deleteTeamStaff: function deleteTeamStaff(teamName, peopleID) {
+    //     return team
+    //         .findOneAndUpdate({TeamName: teamName}, {$unset: {StaffID: ''}}, {new: true})
+    //         .exec()
+    // },
+
+    // editTeamStaff: function editTeamStaff(staffID, newStaffID) {
+    //     team
+    //         .findOneAndUpdate({StaffID: staffID },{$set: {StaffID: newStaffID}})
+    //         .exec()
+    // },
+    //
+    // editTeamStudent: function editTeamStudent(studentID, newStudentID) {
+    //     team
+    //         .findOneAndUpdate({StudentID: studentID}, {$push: {StudentID: newStudentID}})
+    //         .exec()
+    // },
 
     deleteTeamProposalByGroupID: function deleteTeamProposalByGroupID(id) {
         return team.findOneAndUpdate({_id: id}, {$unset: {ProposalID: '', ClientMeetingID: ''}}, {new: true}).exec()
@@ -135,9 +126,14 @@ module.exports = {
 
     },
 
-    allocateProposal: function allocateProposal(id, proposalID, clientMeetingid) {
+    allocateProposal: function allocateProposal(id, proposalID) {
         team
-            .findOneAndUpdate({_id: id}, {$set: {ProposalID: proposalID, ClientMeetingID: clientMeetingid}}).exec()
+            .findOneAndUpdate({_id: id}, {$set: {ProposalID: proposalID}}).exec()
 
+    },
+
+    addClientMeetingByGroupID : function addClientMeetingByGroupID(id,meetingID) {
+        team
+            .findOneAndUpdate({_id:id},{$addToSet:{ClientMeetingID: meetingID}}).exec()
     }
 };

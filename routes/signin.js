@@ -41,15 +41,17 @@ router.post('/', function(req, res) {
                 req.session.userinfo = person._id;
                 req.session.username = person.UserName;
                 req.session.role = role;
-                if (req.session.role === 'student') {
-                    res.redirect('/student/homepage');
-                } else if (req.session.role === 'staff') {
-                    res.redirect('/staff/my_project');
-                } else if (req.session.role === 'admin') {
-                    res.redirect('/admin/project_list')
-                } else if (req.session.role === 'client') {
-                    res.redirect('/client/myproject');
-                }
+                req.session.save(function(err) {
+                    if (req.session.role === 'student') {
+                        res.redirect('/student/homepage');
+                    } else if (req.session.role === 'staff') {
+                        res.redirect('/staff/my_project');
+                    } else if (req.session.role === 'admin') {
+                        res.redirect('/admin/project_list')
+                    } else if (req.session.role === 'client') {
+                        res.redirect('/client/myproject');
+                    }
+                });
             }
             else {
                 res.redirect('/signin?role=' + role);

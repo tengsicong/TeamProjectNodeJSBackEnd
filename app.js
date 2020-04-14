@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
@@ -29,6 +28,7 @@ app.use(session({
     secret: 'shijieshangzh!y0uwand0ngsenhebuwand0ngsenderen',
     resave: false,
     saveUninitialized: true,
+    rolling: true,
     cookie: {maxAge: 60 * 60 * 1000},
     store: new MongoStore({
         url: config.mongodb,

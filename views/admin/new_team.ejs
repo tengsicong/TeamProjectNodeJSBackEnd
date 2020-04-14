@@ -11,22 +11,22 @@
 
                 </div>
                 <div class="form-group">
-                    <label for="selector2" class="col-sm-2 control-label">Supervisor</label>
+                    <label for="selector1" class="col-sm-2 control-label">Supervisor</label>
                     <div class="col-sm-8">
-                        <select name="selector2" id="selector2" class="form-control-project">
-                            <option value="None2">None</option>
+                        <select name="selector1" id="selector1" class="form-control-project">
+                            <option value="None">None</option>
                             <% for (let i = 0; i < allStaff.length; i++){ %>
-                                <option value="selector2"><%= allStaff[i].Name %></option>
+                                <option value="<%= allStaff[i]._id %>"><%= allStaff[i].Name %></option>
                             <% } %>
                         </select>
                     </div>
                 </div>
                 <% for (var i = 0; i < 6 ; i++) { %>
                     <div class="form-group">
-                        <label for="selector<%= i + 3 %>" class="col-sm-2 control-label">Student <%= i + 1 %></label>
+                        <label for="selector<%= i + 2 %>" class="col-sm-2 control-label">Student <%= i + 1 %></label>
                         <div class="col-sm-8">
-                            <select name="selector<% i + 3 %>" id="selector<% i + 3 %>" class="form-control-project">
-                                <option value="None<%i+3%>">None</option>
+                            <select name="selector<%= i + 2 %>" id="selector<%= i + 2 %>" class="form-control-project">
+                                <option value="None">None</option>
                                 <% for (let j = 0; j < allStudent.length; j++){ %>
                                     <% if (allStudent[j].GroupID != undefined) { %>
                                         <optgroup
@@ -50,28 +50,57 @@
 
 <script>
     function newTeam() {
-        
-        let temp = document.createElement("form");
-        temp.action = '/admin/submit_newteam';
-        temp.method = 'post';
-        temp.style.display = "none";
-        let inputElement1 = document.createElement("select")
-        inputElement1.type = 'hidden';
-        inputElement1.name = 'selector2';
-        inputElement1.value = document.getElementById('selector2').value;
+        // 判断是否有staff---tixing
+        // 判断是否有student--txiing
+        // 判断选的不同student--txing
+        // post
 
-        for (var i = 0; i < 6; i++) {
-            let inputElement<%i%> = document.createElement("select")
-            inputElement<%i%>.type = 'hidden';
-            inputElement<%i%>.name = 'selector<% i + 3 %>';
-            inputElement<%i%>.value = document.getElementById('selector<% i + 3 %>').value;
-            temp.appendChild(inputElement<% i %>);
+        const studentArray = [];
+        for (let i = 2; i < 8; i++) {
+            const selectorName = 'selector' + i;
+            if (document.getElementById(selectorName).value != 'None') {
+                studentArray.push(document.getElementById(selectorName).value)
+            }
+        }
 
+        const myset = new mySet();
+        studentArray.forEach(function (element) {
+            myset.add(element);
+        })
+
+        if (document.getElementById('selector1').value == 'None') {
+            alert("Please choose a staff!")
+        } else if (studentArray.length == 0) {
+            alert("Please choose at least one student!")
+        } else if (studentArray.length > myset.size()) {
+            alert("Please don't choose the same student.")
+        } else {
+            const inputElement1 = document.createElement('input');
+            inputElement1.type = "hidden";
+            inputElement1.name = "staffID";
+            inputElement1.value = document.getElementById('selector1').value
+
+            const inputElement2 = document.createElement('input');
+            inputElement2.type = "hidden";
+            inputElement2.name = "studentID"
+            inputElement2.value = studentArray.toString();
+
+            const form = document.createElement('form');
+            form.action = '/admin/submit_newteam';
+            form.method = 'post';
+            form.style.display = 'none';
+
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            document.body.appendChild(form);
+            form.submit();
+            return form;
         }
         temp.appendChild(inputElement1);
         document.body.appendChild(temp);
         temp.submit();
         return temp;
+
     }
 </script>
 <%- include('component/footer') %>

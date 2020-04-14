@@ -22,6 +22,7 @@ module.exports = {
             .find({ClientID:id})
             //.populate('ClientID')
             .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
+            .populate({path: 'MeetingID',populate:{ path: 'GroupID' }})
             .exec()
     },
 
@@ -32,9 +33,8 @@ module.exports = {
 
     deleteChangeClientMeetingRequestByMeetingID: function deleteChangeClientMeetingRequestByMeetingID(MeetingID) {
         return changeclientmeetingrequest
-            .deleteOne({MeetingID:MeetingID})
+            .deleteMany({MeetingID:MeetingID})
             .exec()
-
     },
 
     adminEditCPendingStatusTimetable: function adminEditCPendingStatusTimetable (newChangeClientMeetingRequest) {
