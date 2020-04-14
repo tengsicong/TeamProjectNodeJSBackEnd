@@ -269,8 +269,8 @@ router.get('/timetable', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         staffMeetingModel.getAllStaffMeetings(),
-        staffModel.getStaffByStaffID((staffID)),
-        clientModel.getClientByClientID(clientID),
+        staffModel.getStaffByStaffID(),
+        clientModel.getClientByClientID(),
         clientMeetingModel.getAllClientMeetings(),
 
     ])
@@ -295,7 +295,7 @@ router.get('/timetable', function (req, res) {
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
-        staffModel.getAllStaff((staffID)),
+        staffModel.getAllStaff(),
         changeStaffMeetingRequestModel.getChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getChangeClientMeetingRequest(),
         teamModel.getAllTeam(),
