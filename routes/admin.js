@@ -355,39 +355,6 @@ router.get('/client_request_approve', function (req, res) {
             })
         })
 })
-/* edit meeting request*/
-router.post('/mytimetable', function (req, res, next) {
-    const selectMeetingid = mongoose.Types.ObjectId(req.body.selectmeeting);
-    const group = mongoose.Types.ObjectId(req.body.group);
-    let role = req.body.role;
-    role = mongoose.Types.ObjectId(role);
-    const place = req.body.place;
-    const supervisor = mongoose.Types.ObjectId(req.body.supervisor);
-    const client_changetime = req.body.client_changetime;
-
-    nowDate = new Date();
-    Promise.all([
-        clientMeetingModel.getClientMeetingByMeetingID(selectMeetingid),
-        // staffMeetingModel.getStaffMeetingByMeetingID(selectMeetingid)
-    ])
-        .then(function (result) {
-            const meetings = result[1];
-            let request = {
-                MeetingID: result[0]._id,
-                ClientID: clientID,
-                Status: 'pending',
-                NewMeetingTime: time,
-                RequestComment: {
-                    RequestName: result[0].ClientID.Name,
-                    Date: nowDate,
-                    Content: reason
-                }
-            }
-            changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
-            res.redirect('/admin/timetable')
-        });
-});
-
 
 router.get('/project_list', function (req, res, next) {
     Promise.all([

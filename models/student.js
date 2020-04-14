@@ -24,6 +24,7 @@ module.exports = {
             .populate('PeopleDontLike')
             .exec();
     },
+
     /**
      * @param {Number} id
      * @return {Object} a student object
@@ -33,19 +34,6 @@ module.exports = {
             .find()
             .populate('GroupID')
             .populate({path: 'GroupID', populate: {path: 'ProposalID'}})
-            .exec();
-    },
-
-    getStudentByClientID: function getStudentByClientID(id) {
-        return student
-            .populate('GroupID')
-            .find({GroupID: id})
-            .exec();
-    },
-
-    getStudentByGroupID: function getStudentByGroupID(id) {
-        return student
-            .findOne({_id: id})
             .exec();
     },
 
@@ -68,14 +56,6 @@ module.exports = {
             .exec()
     },
 
-    /**
-     * @param {ObjectId} id, GroupID  id:studentID
-     * @return {client} a client object
-     */
-    updateStudentTeamByTeamID: function updateStudentTeamByTeamID(id, GroupID) {
-        return student.update({_id: id}, {$addToSet: {GroupID: GroupID}})
-
-    },
     deletePeopleDontLikeByStudentID: function deletePeopleDontLikeByStudentID(studentID) {
         return student
             .findOneAndUpdate({_id: studentID}, {$unset: {PeopleDontLike: ''}}, {new: true})
@@ -88,11 +68,6 @@ module.exports = {
 
     },
 
-    deleteStudentGroupByGroupID: function deleteStudentGroupByGroupID(studentID, GroupID) {
-        return student
-            .findOneAndUpdate({_id: studentID}, {$unset: {GroupID: ''}}, {new: true})
-            .exec()
-    },
 
     postTeamMateMarkByStudentID: function postTeamMateMarkByStudentID(studentID, mark) {
         return student

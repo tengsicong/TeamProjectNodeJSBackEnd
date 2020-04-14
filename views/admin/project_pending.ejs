@@ -36,16 +36,14 @@
 
     <div class="blank-page widget-shadow scroll">
         <table width="100%"><tr>
-                <td width="80%"><h3 style="color: #629aa9"><b>Change project status</b></h3></td>
-                <td width="10%">
-                    <a href="/admin/pending_approved?id=<%=proposal._id%>">
-                        <button type="button" class="btn btn-success" data-dismiss="modal" style="float: right">Approve
-                        </button>
-                    </a>
-                </td>
+                <td width="90%"><h3 style="color: #629aa9"><b>Change project status</b></h3></td>
                 <td width="10%">
                     <a href="/admin/pending_rejected?id=<%=proposal._id%>">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">reject
+                        </button>
+                    </a>
+                    <a href="/admin/pending_approved?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" style="float: right; margin-right: 10%">Approve
                         </button>
                     </a>
                 </td>
