@@ -53,4 +53,12 @@ module.exports = {
             .populate('GroupID')
             .populate('StaffID')
     },
+
+    updateStaffMeetingRecordByMeetingID: function updateStaffMeetingRecordByMeetingID(id,rid) {
+        return staffmeetings.update({_id:id},{$set:{RecordID:rid}});
+    },
+
+    // updateTeamMark: function updateTeamMark(id,reason,score){
+    //     return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
+    // },
 };

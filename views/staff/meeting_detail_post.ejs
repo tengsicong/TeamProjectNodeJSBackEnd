@@ -2,7 +2,7 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
-    <form class="main-page" method="post">
+    <form class="main-page" method="post" onsubmit="return my_check()">
         <h2 class="title1">Meeting Details</h2>
         <div class="blank-page widget-shadow scroll">
             <h3><b>Meeting <%= meeting.MeetingNumber%></b></h3>
@@ -67,7 +67,7 @@
                             <div class="radio-inline" style="width: 100%"><label><input type="radio" name="storycard" id="storycard" value="<%=j%>" ><%=changes[j]%></label></div>
                         <% } %>
                         <% if(j == 6) {%>
-                            <textarea name="t1" id="t1" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.ChangeOther%></textarea>
+                            <textarea name="t1" id="t12" style="width: 100%; resize: none" rows="3" placeholder="Enter your reason"><%=record.ChangeOther%></textarea>
                         <% } %>
                         <div class="clearfix"></div>
                     <% } %>
@@ -162,5 +162,16 @@
     </div>
 </form>
 </div>
+
+
+<script type="text/javascript">
+    function my_check() {
+        var content = document.getElementById("t12").value;
+        var obj = document.getElementById("storycard");
+        var item = null;
+        alert(content);
+        return true;
+    }
+</script>
 
 <%- include('footer') %>

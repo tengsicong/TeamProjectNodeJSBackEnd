@@ -19,4 +19,15 @@ module.exports = {
         }});
     },
 
+    createStaffMeetingRecord: function createStaffMeetingRecord (newRecords) {
+        return staffmeetingrecords
+            .create(newRecords)
+    },
+
+    deleteStaffMeetingRecordByRecordID: function deleteChangeStaffMeetingRequestByMeetingID(id) {
+        return staffmeetingrecords
+            .deleteOne({_id:id})
+            .exec()
+    }
+
 };

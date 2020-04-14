@@ -8,7 +8,8 @@ const staffModel = require('../models/staff');
 const teamModel = require('../models/team');
 const qaModel = require('../models/student_staff_qa');
 const recordModel = require('../models/staffMeetingRecords');
-const stageMoudel = require('../models/stage')
+const stageModel = require('../models/stage');
+const staffMeetingModel = require('../models/staffmeetings');
 
 //const meetingID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97e');
 //const staffID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97f');
@@ -45,7 +46,7 @@ router.get('/project_detail', checkStaffLogin, function(req, res) {
     Promise.all([
         staffModel.getStaffByStaffID(req.session.userinfo),
         staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
-        stageMoudel.getStage(),
+        stageModel.getStage(),
     ])
         .then(function (result) {
             const staff = result[0];
@@ -62,7 +63,6 @@ router.get('/project_detail', checkStaffLogin, function(req, res) {
                 }
             }
             let meetingList = [];
-            //console.log(stage[0].Stage);
             meetingList = allTeams[teamID].StaffMeetingID;
             let nowtime = new Date();
             res.render('staff/project_detail', {
@@ -156,18 +156,17 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
     const timesheets = req.body.timesheets;
     const clearplan = req.body.clearPlan;
     const dynamics = req.body.dynamics;
-    console.log(req.body);
     let RecordID;
-    staffModel.getStaffMeetingByMeetingID(req.query.seq)
+    const MeetingId = req.query.seq;
+    staffModel.getStaffMeetingByMeetingID(MeetingId)
         .then(function (result) {
             meeting = result;
             RecordID = meeting.RecordID;
             let change = [7];
             for(var i=0;i<7;i++)
                 change[i] = (i==storycard);
-            console.log(change);
             let newRecord = {
-                _id:RecordID,
+                _id:mongoose.Types.ObjectId(),
                 LastMeetingNote:t1[0],
                 AchievePlan:t1[1],
                 Change:change,
@@ -178,8 +177,16 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
                 ClearPlan:clearplan,
                 Dynamics:dynamics,
                 AnyOtherNote:t1[4],
+            };
+            console.log('------');
+            console.log(newRecord._id);
+            console.log('--------');
+            if(RecordID != null)
+            {
+                recordModel.deleteStaffMeetingRecordByRecordID(RecordID).then();
             }
-            recordModel.updateMeetingRecords(RecordID,newRecord)
+            staffMeetingModel.updateStaffMeetingRecordByMeetingID(MeetingId,newRecord._id).then();
+            recordModel.createStaffMeetingRecord(newRecord)
                 .then(function () {
                     res.redirect('/staff/meeting_detail_post?seq='+req.query.seq);
                 })
@@ -197,7 +204,6 @@ router.get('/meeting_detail_post', checkStaffLogin, function(req, res) {
             ]
         )
             .then(function (result) {
-                console.log(meetingID);
                 const staff = result[1];
                 const meeting = result[0];
                 let nowtime = new Date();
@@ -216,27 +222,43 @@ router.get('/meeting_detail_post', checkStaffLogin, function(req, res) {
                     'Exceeds expectations',
                     'Slightly behind',
                     'Significantly behind',
-                ]
+                ];
                 let timeSheets = [
                     'Yes',
                     'Yes, except those who have not engaged (noted in records here AND recorded in minutes)',
                     'No',
-                ]
+                ];
                 let clearPlan = [
                     'Yes',
                     'Some plan, but not detailed enough',
                     'No',
-                ]
+                ];
                 let dynamics = [
                     'Seem fine',
                     'I have minor concerns',
                     'I have major concerns (please email Emma too)',
-                ]
+                ];
+                let record = meeting.RecordID;
+                if(record == null)
+                {
+                    record = {
+                        LastMeetingNote:'',
+                        AchievePlan:'',
+                        Change:9,
+                        ChangeOther:'',
+                        RequirementCapture:'',
+                        TeamProgress:9,
+                        TimeSheets:9,
+                        ClearPlan:9,
+                        Dynamics:9,
+                        AnyOtherNote:'',
+                    };
+                }
                 res.render('staff/meeting_detail_post',{
                     meeting : meeting,
                     pageTitle : 'Meeting Detail',
                     username: staff.Name,
-                    record: meeting.RecordID,
+                    record: record,
                     nowtime : nowtime,
                     presents: presents,
                     changes: changes,

@@ -40,10 +40,5 @@ module.exports = {
     //         .populate('GroupID')
     //         // .populate('ClientID')
     // },
-    deleteChangeStaffMeetingRequestByMeetingID: function deleteChangeStaffMeetingRequestByMeetingID(MeetingID) {
-        return changestaffmeetingrequest
-            .deleteOne({MeetingID:MeetingID})
-            .exec()
 
-    }
 };
