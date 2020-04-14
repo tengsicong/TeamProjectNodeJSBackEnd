@@ -94,6 +94,18 @@ module.exports = {
             .exec()
     },
 
+    postTeamMateMarkByStudentID: function postTeamMateMarkByStudentID(studentID, mark) {
+        return student
+            .findOneAndUpdate({_id: studentID}, {$addToSet: {Mark: mark}})
+            .exec()
+    },
+
+    postMarkedForTeamMate: function postMarkedForTeamMate(studentID) {
+        return student
+            .findOneAndUpdate({_id: studentID}, {$set: {MarkForTeam: true}})
+            .exec()
+    }
+
 };
 
 // const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');

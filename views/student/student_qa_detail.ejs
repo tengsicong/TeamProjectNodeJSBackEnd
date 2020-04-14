@@ -3,25 +3,32 @@
 
 <!-- main content start-->
 
-<div id="page-wrapper">
+<div id="page-wrapper" xmlns="http://www.w3.org/1999/html">
     <div class="main-page">
         <div class="blank-page widget-shadow scroll">
-            <h2><b><%=qa.Topic%></b></h2>
+            <h2><b><%= qa.Topic %></b></h2>
             <br><br>
             <% for (let i = 0; i < qa.Replies.length; i++) { %>
-            <div class="reply-panel widget-shadow scroll">
-                <h4 class="reply-user"><b>#<%=i+1%></b><span><%= ' ' + qa.Replies[i].Author %></span></h4>
-                <br>
-                <p class="reply-content"><%=qa.Replies[i].Comment%></p>
-                <br>
-                <p style="color:gray; font-weight:bold"> Post Time: <%= qa.Replies[0].ReplyDate.toISOString().replace(/T.*/,' ')+qa.Replies[0].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></p>
-            </div>
+                <div class="reply-panel widget-shadow scroll">
+                    <h4 class="reply-user"><b>#<%= i + 1 %></b><span><%= ' ' + qa.Replies[i].Author %></span></h4>
+                    <br>
+                    <p class="reply-content"><%= qa.Replies[i].Comment %></p>
+                    <br>
+                    <p style="color:gray; font-weight:bold"> Post
+                        Time: <%= qa.Replies[i].ReplyDate.toISOString().replace(/T.*/, ' ') + qa.Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/, "") %></p>
+                </div>
             <% } %>
             <br><br>
-            <textarea class= "reply-area" placeholder="Your Reply" wrap="virtual"></textarea>
-            <br><br>
-            <button type="submit" class="btn btn-primary sub-reply" style="align-content: center">Submit</button>
-            <div class="clearfix"> </div>
+            <form action="/student/post_reply?id=<%= qa._id %>" method="post">
+                <textarea class="reply-area" placeholder="Your Reply" wrap="virtual" id="reply" name="reply"
+                          required="required"></textarea>
+                <textarea style="display: none" name="name"><%= student.Name %></textarea>
+                <br><br>
+                <button type="submit" value="Submit" class="btn btn-primary sub-reply" style="align-content: center">
+                    Submit
+                </button>
+            </form>
+            <div class="clearfix"></div>
         </div>
     </div>
 </div>

@@ -39,9 +39,6 @@ router.get('/all_projects', function(req, res) {
             const student = result[0];
             const allProposals = result[1];
             const myProposal = result[2];
-            // console.log('1' + student);
-            console.log('2' + allProposals);
-            // console.log('3' + myProposal.GroupID)
             res.render('student/all_projects', {
                 pageTitle: 'All Projects',
                 student: student,
@@ -81,14 +78,15 @@ router.get('/student_qa', function(req, res) {
 });
 
 router.get('/student_qa_detail', function(req, res) {
-    const questionID = parseInt(req.query.id);
+    const qaID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         studentModel.getStudentByStudentID(studentID),
-        studentStaffQAModel.getQAByStudentID(studentID),
+        studentStaffQAModel.getQAByQAID(qaID),
     ])
         .then(function(result) {
             const student = result[0];
-            const qa = result[1][questionID];
+            const qa = result[1];
+            console.log(qa)
             res.render('student/student_qa_detail', {
                 pageTitle: 'Question Detail',
                 student: student,
@@ -107,7 +105,6 @@ router.get('/my_project', function(req, res) {
             const student = result[0];
             const proposal = result[1];
             const team = result[2];
-            console.log(team)
             res.render('student/my_project', {
                 pageTitle: 'My Project',
                 student: student,
@@ -192,7 +189,6 @@ router.get('/my_mark', function(req, res) {
             const student = result[0];
             const team = result[1];
             const stage = result[2][0];
-            console.log(team)
             res.render('student/my_mark', {
                 pageTitle: 'My Mark',
                 student: student,
@@ -263,7 +259,6 @@ router.post('/set_project_preference', function(req, res) {
 });
 
 router.post('/post_qa', function(req, res) {
-    console.log('enter')
     const topic = req.body.topic;
     const content = req.body.content;
     studentModel.getStudentByStudentID(studentID).then(function (result) {
@@ -271,5 +266,38 @@ router.post('/post_qa', function(req, res) {
     })
     res.redirect('/student/student_qa');
 });
+
+router.post('/marking_teammate', function(req, res) {
+    const markString = req.body.mark;
+    const markArray = markString.split(',');
+    for (let i = 0; i < markArray.length; i++) {
+        markArray[i] = parseInt(markArray[i]);
+    }
+    teamModel.getTeamByStudentID(studentID).then(function(result) {
+        const studentIDArray = [];
+        let j = 0;
+        for (let i = 0; i < result.StudentID.length; i++) {
+            if (! result.StudentID[i]._id.equals(studentID)) {
+                studentModel.postTeamMateMarkByStudentID(result.StudentID[i]._id, markArray[j]).then();
+                j++;
+            }
+        }
+        studentModel.postMarkedForTeamMate(studentID).then();
+    })
+    res.redirect('/student/homepage');
+
+});
+
+router.post('/post_reply', function(req, res) {
+    const reply = req.body.reply;
+    const name = req.body.name;
+    console.log(name);
+    console.log(reply);
+    const id = mongoose.Types.ObjectId(req.query.id);
+    studentStaffQAModel.postReplyByQAID(id, name, reply).then();
+    res.redirect('/student/student_qa_detail?id=' + id);
+
+});
+
 
 module.exports = router;

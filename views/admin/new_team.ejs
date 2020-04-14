@@ -50,6 +50,7 @@
 
 <script>
     function newTeam() {
+        
         let temp = document.createElement("form");
         temp.action = '/admin/submit_newteam';
         temp.method = 'post';
@@ -71,7 +72,6 @@
         document.body.appendChild(temp);
         temp.submit();
         return temp;
-
     }
 </script>
 <%- include('component/footer') %>
