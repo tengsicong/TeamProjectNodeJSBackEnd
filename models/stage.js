@@ -10,5 +10,9 @@ module.exports = {
 
     changeStage: function changeStage(number) {
         return stage
+            .findOneAndUpdate({}, {$set: {Stage: number}})
+            .exec()
     }
 };
+
+
