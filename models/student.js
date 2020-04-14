@@ -104,7 +104,7 @@ module.exports = {
         return student
             .findOneAndUpdate({_id: studentID}, {$set: {MarkForTeam: true}})
             .exec()
-    }
+    },
 
     /**
      * @author: wang

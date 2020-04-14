@@ -796,5 +796,47 @@ router.post('/allocate_team', function (req, res) {
             res.redirect('/admin/project_approved?id=' + proposalId);
         });
 });
+    router.post('/allocate_team', function (req, res) {
+        const teamID = mongoose.Types.ObjectId(req.body.teamID);
+        const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
+        proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
+        newDate = new Date();
+        for (let i = 0; i < 5; i++) {
+            Promise.all([
+                clientModel.getClientByProposalID(proposalId),
+                clientMeetingModel.getAllClientMeetings(),
+            ])
+                .then(function (result) {
+                    const meetingnumber = result[1].length + 1;
+                    let clientmeeting = {
+                        _id: mongoose.Types.ObjectId(),
+                        GroupID: teamID,
+                        Date: newDate,
+                        Place: 'ClassRoom 2',
+                        ClientID: result[0]._id,
+                        MeetingNumber: meetingnumber + i,
+                    };
+                    clientMeetingModel.addClientMeeting(clientmeeting).then(function (result) {
+                        teamModel.addMeeting(meetingID)
+                    });//成功
+                });
+        };
+        Promise.all([clientModel.getClientByProposalID(proposalId),])
+            .then(function (result) {
+                clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
+                Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
+                    const meetings = result[0];
+                    console.log(meetings)
+                    let meetingid = [];
+                    for (let i = 0; i < meetings.length; i++) {
+                        meetingid.push(meetings[i]._id);
+                    }
+                    ;
+                    console.log(meetingid)
+                    teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
+                });
+                res.redirect('/admin/project_approved?id=' + proposalId);
+            });
+    });
 
 module.exports = router;
