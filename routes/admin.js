@@ -17,20 +17,7 @@ const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
 // const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
 const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-const Temp = '5e7b6f794f4ed29e60233aa2';
-// staffMeetingModel.getAllStaffMeetings().then(function (result) {
-//     console.log(result[4])
-// })
-// teamModel.getAllTeam().then(function (result) {
-//     console.log(result.length+1)
-// })
-// changeStaffMeetingRequestModel.getChangeStaffMeetingRequest().then(function (result) {
-//     console.log(result[0])
-// });
-// changeClientMeetingRequestModel.getChangeClientMeetingRequest().then(function (result) {
-//     console.log(result[0])
-// })
-//
+
 
 /* GET edit team page. */
 router.get('/edit_team', function (req, res) {
@@ -295,7 +282,7 @@ router.get('/timetable', function (req, res) {
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
-        staffModel.getAllStaff((staffID)),
+        staffModel.getAllStaff(),
         changeStaffMeetingRequestModel.getChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getChangeClientMeetingRequest(),
         teamModel.getAllTeam(),
@@ -729,47 +716,48 @@ router.post('/allocate_team', function (req, res) {
             res.redirect('/admin/project_approved?id=' + proposalId);
         });
 });
-    router.post('/allocate_team', function (req, res) {
-        const teamID = mongoose.Types.ObjectId(req.body.teamID);
-        const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
-        proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
-        newDate = new Date();
-        for (let i = 0; i < 5; i++) {
-            Promise.all([
-                clientModel.getClientByProposalID(proposalId),
-                clientMeetingModel.getAllClientMeetings(),
-            ])
-                .then(function (result) {
-                    const meetingnumber = result[1].length + 1;
-                    let clientmeeting = {
-                        _id: mongoose.Types.ObjectId(),
-                        GroupID: teamID,
-                        Date: newDate,
-                        Place: 'ClassRoom 2',
-                        ClientID: result[0]._id,
-                        MeetingNumber: meetingnumber + i,
-                    };
-                    clientMeetingModel.addClientMeeting(clientmeeting).then(function (result) {
-                        teamModel.addMeeting(meetingID)
-                    });//成功
-                });
-        };
-        Promise.all([clientModel.getClientByProposalID(proposalId),])
-            .then(function (result) {
-                clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
-                Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
-                    const meetings = result[0];
-                    console.log(meetings)
-                    let meetingid = [];
-                    for (let i = 0; i < meetings.length; i++) {
-                        meetingid.push(meetings[i]._id);
-                    }
-                    ;
-                    console.log(meetingid)
-                    teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
-                });
-                res.redirect('/admin/project_approved?id=' + proposalId);
-            });
-    });
+
+// router.post('/allocate_team', function (req, res) {
+//         const teamID = mongoose.Types.ObjectId(req.body.teamID);
+//         const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
+//         proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
+//         newDate = new Date();
+//         for (let i = 0; i < 5; i++) {
+//             Promise.all([
+//                 clientModel.getClientByProposalID(proposalId),
+//                 clientMeetingModel.getAllClientMeetings(),
+//             ])
+//                 .then(function (result) {
+//                     const meetingnumber = result[1].length + 1;
+//                     let clientmeeting = {
+//                         _id: mongoose.Types.ObjectId(),
+//                         GroupID: teamID,
+//                         Date: newDate,
+//                         Place: 'ClassRoom 2',
+//                         ClientID: result[0]._id,
+//                         MeetingNumber: meetingnumber + i,
+//                     };
+//                     clientMeetingModel.addClientMeeting(clientmeeting).then(function (result) {
+//                         teamModel.addMeeting(meetingID)
+//                     });//成功
+//                 });
+//         };
+//         Promise.all([clientModel.getClientByProposalID(proposalId),])
+//             .then(function (result) {
+//                 clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
+//                 Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
+//                     const meetings = result[0];
+//                     console.log(meetings)
+//                     let meetingid = [];
+//                     for (let i = 0; i < meetings.length; i++) {
+//                         meetingid.push(meetings[i]._id);
+//                     }
+//                     ;
+//                     console.log(meetingid)
+//                     teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
+//                 });
+//                 res.redirect('/admin/project_approved?id=' + proposalId);
+//             });
+//     });
 
 module.exports = router;
