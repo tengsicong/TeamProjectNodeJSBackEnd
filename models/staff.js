@@ -185,9 +185,21 @@ module.exports = {
     },
 
     /**
-     * @author: want
+     * @author: wang
      */
     postGroupIDByStaffID: function postGroupIDByStaffID(staffID, groupID) {
-        staff.findOneAndUpdate({_id: staffID}, {$addToSet: {AllocatedTeamID: groupID}});
+        return staff
+            .findOneAndUpdate({_id: staffID}, {$addToSet: {AllocatedTeamID: groupID}})
+            .exec()
+    },
+    deletePreGroupID: function deletePreGroupID(preStaffID) {
+        return staff
+            .findOneAndUpdate({_id: preStaffID},{$unset:{AllocatedTeamID: ['']}})
+            .exec()
+    },
+    addNewStaffGroupID: function addNewStaffGroupID(staffID, groupID) {
+        return staff
+            .findOneAndUpdate({_id: staffID},{$addToSet:{AllocatedTeamID:[groupID] }},{new: true})
+            .exec()
     }
 };

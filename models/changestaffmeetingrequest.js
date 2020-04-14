@@ -21,17 +21,17 @@ module.exports = {
         return changestaffmeetingrequest
             .create(changeStaffMeetingRequest)
     },
-    adminEditPendingStatusTimetable: function adminEditPendingStatusTimetable (newChangeStaffMeetingRequest) {
+
+    adminApproveRequest: function adminEditPendingStatusTimetable (id) {
         return changestaffmeetingrequest
-            .update({_id:newChangeStaffMeetingRequest._id},{$set:{Status:newChangeStaffMeetingRequest.Status}})
+            .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
+
     },
-    adminRejectPendingStatusTimetable: function adminRejectPendingStatusTimetable (newChangeStaffMeetingRequest) {
+
+    adminRejectRequest: function adminRejectRequest (command) {
         return changestaffmeetingrequest
-            .update({_id:newChangeStaffMeetingRequest._id},{$set:{Status:newChangeStaffMeetingRequest.Status}})
-    },
-    createRequestReason: function createRequestReason (request) {
-        return changestaffmeetingrequest
-            .create(request)
+            .findOneAndUpdate({_id: command.id}, {$set: {Status: command.Status, AdminReply: command.AdminReply}},{new:true})
+            .exec()
     },
 
     // getChangeStaffMeetingRequestByChangeStaffMeetingRequestID: function getChangeStaffMeetingRequestByChangeStaffMeetingRequestID(id) {

@@ -69,7 +69,7 @@
                                             None
                                         <% } %></td>
                                         <td>
-                                            <a href="/admin/staff_timetable_pending?id=<%= changeStaffMeetingRequest[i]._id %>">
+                                            <a href="/admin/staff_request_approve?id=<%= changeStaffMeetingRequest[i]._id %>">
                                                 <button type="button" class="btn btn-primary"
                                                         data-dismiss="modal" style="width: 100%; float: right">
                                                     Approve
@@ -78,11 +78,11 @@
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
-                                                    data-target="#rejectereason" data-whatever="@Rejectereason"
+                                                    data-target="#rejectreason" data-whatever="@Rejectreason"
                                                     style="width: 100%; float: right">
                                                 Reject
                                             </button>
-                                            <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="rejectreason" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
@@ -92,16 +92,18 @@
                                                                 request</h3>
                                                         </div>
                                                         <div class="modal-body">
+                                                            <form>
                                                             <div class="form-group" style="align-items: center">
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
-                                                                <textarea id="rejectreason" rows="1"
+                                                                <textarea id="reason" rows="1"
                                                                           class="form-control form-control"></textarea>
                                                             </div>
+                                                            </form>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a href="/admin/reject_timetable_change_staff?id=<%= changeStaffMeetingRequest[i]._id %>">
-                                                                <button name="rejectreason" type="button"
+                                                            <a href="/admin/staff_request_reject?id=<%= changeStaffMeetingRequest[i]._id %>">
+                                                                <button onclick="sendRejectReason()" type="button"
                                                                         class="btn btn-primary">Set
                                                                 </button>
                                                             </a>
@@ -136,7 +138,7 @@
                                             to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
                                         <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
                                         <td>
-                                            <a href="/admin/client_timetable_pending?id=<%= changeClientMeetingRequest[i]._id %>">
+                                            <a href="/admin/client_request_approve?id=<%= changeClientMeetingRequest[i]._id %>">
                                                 <button type="button" class="btn btn-primary"
                                                         data-dismiss="modal" style="width: 100%; float: right">
                                                     Approve
@@ -145,14 +147,15 @@
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
-                                                    data-target="#rejectereason" data-whatever="@Rejectereason"
+                                                    data-target="#rejectreason" data-whatever="@Rejectreason"
                                                     style="width: 100%; float: right">
                                                 Reject
                                             </button>
-                                            <div class="modal fade" id="rejectereason" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="rejectreason" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
+                                                        <form>
                                                         <div class="modal-header">
                                                             <h3 class="modal-title" id="exampleModalLabel">Reject the
                                                                 request</h3>
@@ -161,12 +164,13 @@
                                                             <div class="form-group" style="align-items: center">
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
-                                                                <textarea id="project_name" rows="1"
+                                                                <textarea id="reason" rows="1"
                                                                           class="form-control form-control"></textarea>
                                                             </div>
                                                         </div>
+                                                        </form>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary">Set</button>
+                                                            <button onclick="sendRejectReason()" type="button" class="btn btn-primary">Set</button>
                                                             <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">
                                                                 Close
@@ -267,19 +271,25 @@
 
 <script>
     function sendRejectReason() {
-        let temp = document.createElement("form");
-        temp.action = '/admin/reject_timetable_change_staff';
-        temp.method = 'post';
-        temp.style.display = "none";
-        let inputElement = document.createElement("input")
-        inputElement.type = 'hidden';
-        inputElement.name = 'rejectreason';
-        inputElement.value = document.getElementById('rejectreason').value;
+        const rejectreason = document.getElementById('reason').value;
+        if (rejectreason == '') {
+            alert('Please enter a reason');
+        } else {
+            const form = document.createElement("form");
+            form.action = '/admin/staff_request_reject';
+            form.method = 'post';
+            form.style.display = "none";
 
-        temp.appendChild(inputElement);
-        document.body.appendChild(temp);
-        temp.submit();
-        return temp;
+            const inputElement = document.createElement("input")
+            inputElement.type = 'hidden';
+            inputElement.name = 'rejectreason';
+            inputElement.value = rejectreason;
+            form.appendChild(inputElement);
+
+            document.body.appendChild(form);
+            form.submit();
+            return form
+        }
     }
 </script>
 <% include ./component/footer.ejs %>
