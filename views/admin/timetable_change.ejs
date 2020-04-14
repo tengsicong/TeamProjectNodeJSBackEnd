@@ -76,16 +76,15 @@
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
                                                                 <textarea id="reason" rows="1"
-                                                                          class="form-control form-control"></textarea>
+                                                                          class="form-control form-control" ></textarea>
+                                                                <textarea id="personID" rows="1"
+                                                                          class="form-control form-control" style="display: none"><%= changeStaffMeetingRequest[i]._id%></textarea>
                                                             </div>
                                                             </form>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a href="/admin/staff_request_reject?id=<%= changeStaffMeetingRequest[i]._id %>">
-                                                                <button onclick="sendRejectReason()" type="button"
-                                                                        class="btn btn-primary">Set
+                                                                <button  type="button" class="btn btn-primary" onclick="sendRejectReason()">Set
                                                                 </button>
-                                                            </a>
                                                             <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">Close
                                                             </button>
@@ -144,12 +143,14 @@
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
                                                                 <textarea id="reason" rows="1"
-                                                                          class="form-control form-control"></textarea>
+                                                                          class="form-control form-control" ></textarea>
+                                                                <textarea id="personID" rows="1"
+                                                                          class="form-control form-control" ></textarea>
                                                             </div>
                                                         </div>
                                                         </form>
                                                         <div class="modal-footer">
-                                                            <button onclick="sendRejectReason()" type="button" class="btn btn-primary">Set</button>
+                                                            <button onclick="sendRejectReason('client')" type="button" class="btn btn-primary">Set</button>
                                                             <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">
                                                                 Close
@@ -163,7 +164,6 @@
                                     </tr>
                                 <% } %>
                             <% } %>
-
                             </tbody>
                         </table>
                     </td>
@@ -250,25 +250,27 @@
 
 <script>
     function sendRejectReason() {
-        const rejectreason = document.getElementById('reason').value;
-        if (rejectreason == '') {
-            alert('Please enter a reason');
-        } else {
-            const form = document.createElement("form");
-            form.action = '/admin/staff_request_reject';
-            form.method = 'post';
-            form.style.display = "none";
-
-            const inputElement = document.createElement("input")
-            inputElement.type = 'hidden';
-            inputElement.name = 'rejectreason';
-            inputElement.value = rejectreason;
-            form.appendChild(inputElement);
-
-            document.body.appendChild(form);
-            form.submit();
-            return form
-        }
+        console.log("a" + document.getElementById('reason');
+        // const rejectReason = document.getElementById('reason').value;
+        // console.log(rejectReason);
+        // if (rejectReason == '') {
+        //     alert('Please enter a reason');
+        // } else {
+        //     const form = document.createElement("form");
+        //     form.action = '/admin/staff_request_reject';
+        //     form.method = 'post';
+        //     form.style.display = "none";
+        //
+        //     const inputElement = document.createElement("input")
+        //     inputElement.type = 'hidden';
+        //     inputElement.name = 'rejectReason';
+        //     inputElement.value = rejectReason;
+        //     form.appendChild(inputElement);
+        //
+        //     document.body.appendChild(form);
+        //     form.submit();
+        //     return form
+        // }
     }
 </script>
 <% include ./component/footer_script.ejs %>
