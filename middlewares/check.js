@@ -11,15 +11,15 @@ module.exports = {
         checkRoleLogin('admin', req, res, next);
     },
 
-    checkClientLogin: function checkLogin(req, res, next) {
+    checkClientLogin: function checkClientLogin(req, res, next) {
         checkRoleLogin('client', req, res, next);
     },
 
-    checkStaffLogin: function checkLogin(req, res, next) {
+    checkStaffLogin: function checkStaffLogin(req, res, next) {
         checkRoleLogin('staff', req, res, next);
     },
 
-    checkStudentLogin: function checkLogin(req, res, next) {
+    checkStudentLogin: function checkStudentLogin(req, res, next) {
         checkRoleLogin('student', req, res, next);
     },
 };
