@@ -6,6 +6,18 @@ const studentStaffQAModel = require('../models/student_staff_qa')
 const teamModel = require('../models/team');
 const stageModel = require('../models/stage');
 const checkStudentLogin = require('../middlewares/check').checkStudentLogin;
+const nodemailer  = require('nodemailer');
+
+const config = require('config-lite')(__dirname);
+let transporter = nodemailer.createTransport(config.transporter);
+
+transporter.sendMail({
+    from: 'ssit_group3@outlook.com', // sender address
+    to: "yourmail@mail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>" // html body
+});
 
 
 
