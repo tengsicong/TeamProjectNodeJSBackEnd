@@ -7,4 +7,8 @@ module.exports = {
             .find()
             .exec();
     },
+
+    changeStage: function changeStage(number) {
+        return stage
+    }
 };
