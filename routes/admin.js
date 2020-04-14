@@ -11,13 +11,9 @@ const staffMeetingModel = require('../models/staffmeetings');
 const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
 
-
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-// const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
-const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
-const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-const Temp = '5e7b6f794f4ed29e60233aa2';
+
 // staffMeetingModel.getAllStaffMeetings().then(function (result) {
 //     console.log(result[4])
 // })
@@ -269,8 +265,8 @@ router.get('/timetable', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         staffMeetingModel.getAllStaffMeetings(),
-        staffModel.getStaffByStaffID((staffID)),
-        clientModel.getClientByClientID(clientID),
+        staffModel.getStaffByStaffID(),
+        clientModel.getClientByClientID(),
         clientMeetingModel.getAllClientMeetings(),
 
     ])
@@ -295,7 +291,7 @@ router.get('/timetable', function (req, res) {
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
-        staffModel.getAllStaff((staffID)),
+        staffModel.getAllStaff(),
         changeStaffMeetingRequestModel.getChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getChangeClientMeetingRequest(),
         teamModel.getAllTeam(),
