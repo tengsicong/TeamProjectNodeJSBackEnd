@@ -29,7 +29,7 @@ router.post('/reset_password', checkLogin, function(req, res) {
         res.redirect('/role_select');
         console.log('role error');
     }
-    
+
     Promise.all([method])
         .then(function(result) {
             let person = result[0];
@@ -42,7 +42,10 @@ router.post('/reset_password', checkLogin, function(req, res) {
                 let resetMethod;
                 if (req.session.role === 'staff') {
                     resetMethod = staffModel.updatePasswordByStaffId(req.session.userinfo, newPW);
-                } else {
+                } else if (req.session.role === 'student') {
+                    resetMethod = studentModel.updatePasswordByStudentId(req.session.userinfo, newPW)
+                }
+                else {
                     res.redirect('/role_select');
                     console.log('role error');
                 }
