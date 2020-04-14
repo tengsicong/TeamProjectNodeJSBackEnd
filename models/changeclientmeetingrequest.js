@@ -37,9 +37,14 @@ module.exports = {
             .exec()
     },
 
-    adminEditCPendingStatusTimetable: function adminEditCPendingStatusTimetable (newChangeClientMeetingRequest) {
+    adminEditCPendingStatusTimetable: function adminApproveRequest (newChangeClientMeetingRequest) {
         return changeclientmeetingrequest
             .update({_id:newChangeClientMeetingRequest._id},{$set:{Status:newChangeClientMeetingRequest.Status}})
+
+    },
+    adminApproveRequest: function adminApproveRequest (id) {
+        return changeclientmeetingrequest
+            .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
 
     },
 };

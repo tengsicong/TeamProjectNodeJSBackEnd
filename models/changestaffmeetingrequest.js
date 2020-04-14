@@ -22,7 +22,7 @@ module.exports = {
             .create(changeStaffMeetingRequest)
     },
 
-    adminApproveRequest: function adminEditPendingStatusTimetable (id) {
+    adminApproveRequest: function adminApproveRequest (id) {
         return changestaffmeetingrequest
             .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
 
