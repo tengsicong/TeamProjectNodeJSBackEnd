@@ -11,13 +11,9 @@ const staffMeetingModel = require('../models/staffmeetings');
 const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
 
-
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-// const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
-const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
-const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-const Temp = '5e7b6f794f4ed29e60233aa2';
+
 // staffMeetingModel.getAllStaffMeetings().then(function (result) {
 //     console.log(result[4])
 // })
@@ -59,20 +55,7 @@ router.get('/edit_team', function (req, res) {
             });
         });
 });
-// router.post('/editTeam',function (req,res,next) {
-//     const groupID = mongoose.Types.ObjectId(req.query.id);
-//
-//     let team = {
-//         _id:groupID,
-//
-//     }
-//
-//     teamModel.editTeam(team)
-//         .then(function () {
-//             res.redirect('/admin/team_list')
-//         })
-//         .catch(next)
-// });
+
 /* GET new team page. */
 router.get('/new_team', function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
@@ -130,125 +113,102 @@ router.post('/submit_newteam', function (req, res) {
     teamModel.getAllTeam().then(function (result) {
         const teamName = result.length + 1;
         teamModel.createTeam(studentIDArray, staffID, representer, teamName).then(function (result) {
+            const groupID = result._id;
             for (let i = 0; i < studentIDArray.length; i++) {
-                studentModel.postStudentTeamByStudentID(studentIDArray[i]._id, result._id).then();
+                studentModel.postStudentTeamByStudentID(studentIDArray[i], groupID).then();
             }
-            staffModel.postGroupIDByStaffID(staffID, result._id).then();
-
+            staffModel.postGroupIDByStaffID(staffID, groupID).then();
+            const date = new Date();
+            const place = "classroom n";
+            Promise.all([
+                staffMeetingModel.createStaffMeeting(groupID, staffID, date, place, Number(1)),
+                staffMeetingModel.createStaffMeeting(groupID, staffID, date, place, Number(2)),
+                staffMeetingModel.createStaffMeeting(groupID, staffID, date, place, Number(3)),
+                staffMeetingModel.createStaffMeeting(groupID, staffID, date, place, Number(4)),
+                staffMeetingModel.createStaffMeeting(groupID, staffID, date, place, Number(5)),
+            ])
+                .then(function (result) {
+                    const staffMeetingList = result;
+                    for (let i = 0; i < staffMeetingList.length; i++) {
+                        teamModel.addStaffMeetingID(groupID, staffMeetingList[i]._id).then();
+                    }
+                    res.redirect('/admin/team_list');
+                })
         });
 
     })
-
-
-    // const team = teamModel.getAllTeam();
-    // const teamName = team.length + 1;
-    // teamModel.createTeam(teamName)
-    //
-    // let selector2 = req.body.selector2;
-    // let selector3 = req.body.selector3;
-    // let selector4 = req.body.selector4;
-    // let selector5 = req.body.selector5;
-    // let selector6 = req.body.selector6;
-    // let selector7 = req.body.selector7;
-    // let selector8 = req.body.selector8;
-    //
-    // const array = []
-    // if (selector3 != 'None3') {
-    //     selector3 = mongoose.Types.ObjectId(selector3);
-    //     array.push(selector3)
-    // }
-    // if (selector4 != 'None4') {
-    //     selector4 = mongoose.Types.ObjectId(selector4);
-    //     array.push(selector4)
-    // }
-    // if (selector5 != 'None5') {
-    //     selector5 = mongoose.Types.ObjectId(selector5);
-    //
-    //     array.push(selector5)
-    // }
-    // if (selector6 != 'None6') {
-    //     selector6 = mongoose.Types.ObjectId(selector6);
-    //
-    //     array.push(selector6)
-    // }
-    // if (selector7 != 'None7') {
-    //     selector7 = mongoose.Types.ObjectId(selector7);
-    //     array.push(selector7)
-    // }
-    // if (selector8 != 'None8') {
-    //     selector8 = mongoose.Types.ObjectId(selector8);
-    //     array.push(selector8)
-    // }
-    // if (selector2 != 'None2') {
-    //     selector2 = mongoose.Types.ObjectId(selector2);
-    //         Promise.all([
-    //         teamModel.updateTeamStaff(teamName, selector2),
-    //     ]).then();
-    // } else {
-    //     Promise.all([
-    //         teamModel.deleteTeamStaff(teamName),
-    //     ]).then();
-    // }
-    // if (array.length != 0) {
-    //     teamModel.deleteTeamStudent(teamName).then();
-    //     array.forEach(function (element) {
-    //         teamModel.updateTeamStudent(teamName, element)
-    //     })
-    // } else {
-    //     teamModel.deleteTeamStudent(teamName).then();
-    // }
-    //
-    // res.redirect('/admin/new_team');
-
 });
 /*edit_team*/
 router.post('/submit_editteam', function (req, res) {
-    const selector2 = mongoose.Types.ObjectId(req.body.selector2);
-    // console.log(req.body.selector2);
-    // const selector3 = mongoose.Types.ObjectId(req.body.selector3);
-    // const selector4 = mongoose.Types.ObjectId(req.body.selector4);
-    // const selector5 = mongoose.Types.ObjectId(req.body.selector5);
-    // const selector6 = mongoose.Types.ObjectId(req.body.selector6);
-    // const selector7 = mongoose.Types.ObjectId(req.body.selector7);
-    // const selector8 = mongoose.Types.ObjectId(req.body.selector8);
-    teamModel.editTeamStaff(staffID, selector2)
-        .then(function () {
-            res.redirect('/admin/team_list');
-        });
+    // 定义获得的staff的id
+    // 定义获得的student id
+    // 定义teamname
+    //edit team
+    //获取当前groupID
+    //获取新staffID
+    //获取新studentlist
+    //studentlist（string）---array【id】
+    //(1)根据我已有groupID和stafffID新生成5new staffmeeting--返回值（5个meeting对象）
+    //根据上一步的返回值------array【id】
+    // (2)teams 根据groupid来findOneAndUpdate---覆盖staffID，studentIDlist，staffmeetingIDlist，RepresenterID-------返回值（旧的team的信息)
+    // (3)获取旧的staffID,旧的studentID------->查找到的对应对象的GROUPid信息删掉, ,旧的staffmettingID--->对应的staffmeeting对象完全删除
+    // (4)新staffID, studengID[]------>添加GroupID
+    //---redirect
+    // 1--2---3，4,redirect
+    //只改200010-wkxtest (team库-studentid[]元素  students库-200010， wkxde groupID，  team库--representer， staffmeeting
+    const staffID = mongoose.Types.ObjectId(req.body.staffID);
+    const studentID = req.body.studentID;
+    const studentArray = studentID.split(',');
+    const studentIDArray = [];
+    studentArray.forEach(function (result) {
+        studentIDArray.push(mongoose.Types.ObjectId(result));
+    })
+    const representer = mongoose.Types.ObjectId(studentArray[0])
 
-    //
-    // const array = []
-    //
-    // if (selector3 != 'None3') {
-    //     array.push(selector3)
-    // }
-    // if (selector4 != 'None4') {
-    //     array.push(selector4)
-    // }
-    // if (selector5 != 'None5') {
-    //     array.push(selector5)
-    // }
-    // if (selector6 != 'None6') {
-    //     array.push(selector6)
-    // }
-    // if (selector7 != 'None7') {
-    //     array.push(selector7)
-    // }
-    // if (selector8 != 'None8') {
-    //     array.push(selector8)
-    // }
-    // if (selector2 != 'None2') {
-    //     Promise.all([
-    //         teamModel.editTeamStaff(selector2),
-    //     ]).then();
-    // }
-    // if (array.length != 0) {
-    //     array.forEach(function (element) {
-    //         teamModel.editTeamStudent(element)
-    //     })
-    // }
+    const Tid = mongoose.Types.ObjectId(req.body.Tid);
+    const date = new Date();
+    const place = "classroom m";
 
+    Promise.all([
 
+        staffMeetingModel.createStaffMeeting(staffID, Tid, date, place, Number(1)),
+        staffMeetingModel.createStaffMeeting(staffID, Tid, date, place, Number(2)),
+        staffMeetingModel.createStaffMeeting(staffID, Tid, date, place, Number(3)),
+        staffMeetingModel.createStaffMeeting(staffID, Tid, date, place, Number(4)),
+        staffMeetingModel.createStaffMeeting(staffID, Tid, date, place, Number(5)),
+
+    ]).then(function (result) {
+        const staffMeetingList = [];
+
+        result.forEach(function (list) {
+            staffMeetingList.push(list)
+        })
+        const staffMeetingIDList = [];
+        for (let i = 0; i < staffMeetingList.length; i++) {
+            staffMeetingIDList.push(staffMeetingList[i]._id)
+        }
+        console.log(staffMeetingIDList);
+        teamModel.editTeam(Tid, staffID, studentIDArray, staffMeetingIDList, representer)
+            .then(function (result) {
+                // console.log(result)
+                const preStaffID = result.StaffID;
+                const preStudentID = result.StudentID;
+                const prestaffmeetingID = result.StaffMeetingID;
+                staffModel.deletePreGroupID(preStaffID)
+                for (let j = 0; j < preStudentID.length; j++) {
+                    studentModel.deletePreStudentGroupID((preStudentID[j])).then()
+                }
+                for (let j = 0; j < prestaffmeetingID.length; j++) {
+                    staffMeetingModel.deletePreStaffMeeting(prestaffmeetingID[j]).then();
+                }
+                    staffModel.addNewStaffGroupID(staffID, Tid)
+                for (let j = 0; j < studentIDArray.length; j++) {
+                    studentModel.addNewStudentGroupID((studentIDArray[j]),Tid )
+                }
+                    res.redirect('/admin/team_list')
+            })
+
+    });
 });
 
 router.get('/team_list', function (req, res) {
@@ -297,11 +257,6 @@ router.post('/add_new_staff', function (req, res) {
     const addStaffUserName = req.body.addStaffUserName;
     const addStaffID = mongoose.Types.ObjectId(req.body._id);
     staffModel.addNewStaff(addStaffName, addStaffUserName)
-    staffMeetingModel.addStaffMeeting1(addStaffID)
-    staffMeetingModel.addStaffMeeting2(addStaffID)
-    staffMeetingModel.addStaffMeeting3(addStaffID)
-    staffMeetingModel.addStaffMeeting4(addStaffID)
-    staffMeetingModel.addStaffMeeting5(addStaffID)
 
     res.redirect('/admin/team_list');
 
@@ -310,8 +265,8 @@ router.get('/timetable', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         staffMeetingModel.getAllStaffMeetings(),
-        staffModel.getStaffByStaffID((staffID)),
-        clientModel.getClientByClientID(clientID),
+        staffModel.getStaffByStaffID(),
+        clientModel.getClientByClientID(),
         clientMeetingModel.getAllClientMeetings(),
 
     ])
@@ -336,7 +291,7 @@ router.get('/timetable', function (req, res) {
 router.get('/timetable_change', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
-        staffModel.getAllStaff((staffID)),
+        staffModel.getAllStaff(),
         changeStaffMeetingRequestModel.getChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getChangeClientMeetingRequest(),
         teamModel.getAllTeam(),
@@ -359,55 +314,52 @@ router.get('/timetable_change', function (req, res) {
             });
         })
 });
-router.get('/reject_timetable_change_staff', function (req, res, next) {
-    const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    const rejectreason = req.query.rejectreason;
-    const nowDate = new Date();
 
-    let request = {
-        _id: changeStaffMeetingRequestID,
+router.get('/staff_request_reject', function (req, res) {
+    const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
+    const rejectreason = req.body.rejectreason;
+    const nowDate = new Date();
+    console.log(rejectreason)
+
+    let command = {
+        id: changeStaffMeetingRequestID,
         Status: 'rejected',
         AdminReply: {
             AdminName: "Emma Norling",
             Date: nowDate,
-            Content: rejectreason
+            Content: rejectreason,
         }
     }
-    changeStaffMeetingRequestModel.createRequestReason(rejectreason)
-    changeStaffMeetingRequestModel.adminRejectPendingStatusTimetable(request)
+    changeStaffMeetingRequestModel.adminRejectRequest(command)
         .then(function () {
             res.redirect('/admin/timetable_change')
         })
-        .catch(next)
-
 })
-router.get('/staff_timetable_pending', function (req, res, next) {
+
+router.get('/staff_request_approve', function (req, res) {
     const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    let changestaffmeetingrequest = {
-        _id: changeStaffMeetingRequestID,
-        Status: 'approved'
-    }
-
-    changeStaffMeetingRequestModel.adminEditPendingStatusTimetable(changestaffmeetingrequest)
-        .then(function () {
-            res.redirect('/admin/timetable_change')
+    changeStaffMeetingRequestModel.adminApproveRequest(changeStaffMeetingRequestID)
+        .then(function (result) {
+            const meetingtime = result.NewMeetingTime;
+            const newstaff = result.NewStaffID;
+            const staffmeetingID = result.MeetingID
+            staffMeetingModel.editStaffMeetingByChangeMeeting(staffmeetingID, meetingtime, newstaff).then(function () {
+                res.redirect('/admin/timetable_change')
+            })
         })
-        .catch(next)
-
 })
-router.get('/client_timetable_pending', function (req, res, next) {
-    const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    let changeclientmeetingrequest = {
-        _id: changeClientMeetingRequestID,
-        Status: 'approved'
-    }
 
+router.get('/client_request_approve', function (req, res) {
+    const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
     changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
         .then(function () {
-            res.redirect('/admin/timetable_change')
-        })
-        .catch(next)
+            const meetingtime = result.NewMeetingTime;
+            const clientmeetingID = result.MeetingID;
+            clientMeetingModel.editClientMeetingByChangeMeeting(clientmeetingID, meetingtime).then(function () {
 
+                res.redirect('/admin/timetable_change')
+            })
+        })
 })
 /* edit meeting request*/
 router.post('/mytimetable', function (req, res, next) {
@@ -638,26 +590,26 @@ router.get('/rejected_pending', function (req, res, next) {
 router.get('/approved_pending', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([teamModel.getGroupByProposalID(proposalID)]).then(function (result) {
-    const teams = result[0];
-    for(let i=0;i<teams.length;i++){
-        proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
-        teamModel.deleteTeamProposalByGroupID(teams[i]._id);
-        Promise.all([
-            clientModel.getClientByProposalID(proposalID),
-            clientMeetingModel.getClientMeetingByGroupID(teams[i]._id),
-        ])
-            .then(function (result) {
-                const clientID = result[0]._id;
-                clientModel.deleteGroupFromClientListByGroupID(clientID, teams[i]._id);
-                const meetings = result[1]
-                for (let j = 0; j < meetings.length; j++) {
-                    const meetingid = meetings[j]._id;
-                    changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
-                }
-                clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
-                ;
-    })
-    }})
+        const teams = result[0];
+        for(let i=0;i<teams.length;i++){
+            proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
+            teamModel.deleteTeamProposalByGroupID(teams[i]._id);
+            Promise.all([
+                clientModel.getClientByProposalID(proposalID),
+                clientMeetingModel.getClientMeetingByGroupID(teams[i]._id),
+            ])
+                .then(function (result) {
+                    const clientID = result[0]._id;
+                    clientModel.deleteGroupFromClientListByGroupID(clientID, teams[i]._id);
+                    const meetings = result[1]
+                    for (let j = 0; j < meetings.length; j++) {
+                        const meetingid = meetings[j]._id;
+                        changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
+                    }
+                    clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
+                    ;
+                })
+        }})
     const newDate = new Date();
     let proposal = {
         _id: proposalID,
@@ -671,29 +623,6 @@ router.get('/approved_pending', function (req, res, next) {
         .catch(next)
 });
 
-router.post('/project_pending', function (req, res, next) {
-    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-    const comment = req.body.comment;
-    const replyDate = new Date();
-    Promise.all([
-        adminModel.getAdminByID(adminID),
-        proposalModel.getProposalByProposalID(proposalID),
-    ])
-        .then(function (result) {
-            // console.log(result[1])
-            let reply = result[1].Reply;
-            reply.push({
-                Author: result[0].Name,
-                Comment: comment,
-                ReplyDate: replyDate,
-            });
-            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
-            addComment.then(function () {
-                res.redirect('/admin/project_pending?id=' + proposalID)
-            })
-        })
-        .catch(next)
-});
 
 router.post('/project_rejected', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);

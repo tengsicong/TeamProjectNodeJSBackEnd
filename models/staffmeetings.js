@@ -2,7 +2,7 @@ const mongo = require('../lib/mongo');
 const staffmeetings = mongo.staff_meetings;
 const student = mongo.students;
 const staff = mongo.staffs;
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
 
 module.exports = {
@@ -26,33 +26,29 @@ module.exports = {
             .deleteMany({GroupID: GroupID})
             .exec()
     },
-    addStaffMeeting1: function addStaffMeeting1(addStaffID) {
-        staffmeetings
-            .create({StaffID: addStaffID, MeetingNumber: 1, Date: Date('2012-11-04T07:58:51.000+0000'),})
-    },
-    addStaffMeeting2: function addStaffMeeting2(addStaffID) {
-        staffmeetings
-            .create({StaffID: addStaffID, MeetingNumber: 2, Date: Date('2012-11-04T07:58:51.000+0000')})
-    },
-    addStaffMeeting3: function addStaffMeeting3(addStaffID) {
-        staffmeetings
-            .create({StaffID: addStaffID, MeetingNumber: 3, Date: Date('2012-11-04T07:58:51.000+0000')})
-    },
-    addStaffMeeting4: function addStaffMeeting4(addStaffID) {
-        staffmeetings
-            .create({StaffID: addStaffID, MeetingNumber: 4, Date: Date('2012-11-04T07:58:51.000+0000')})
-    },
-    addStaffMeeting5: function addStaffMeeting5(addStaffID) {
-        staffmeetings
-            .create({StaffID: addStaffID, MeetingNumber: 5, Date: Date('2012-11-04T07:58:51.000+0000')})
-    },
 
     getStaffMeetingByMeetingID: function getStaffMeetingByMeetingID(id) {
         return staffmeetings
-            .findOne({_id:id})
+            .findOne({_id: id})
             .populate('GroupID')
             .populate('StaffID')
     },
+
+    createStaffMeeting: function createStaffMeeting(staffID, groupID, date, place, number) {
+        return staffmeetings
+            .create({StaffID: staffID, GroupID: groupID, Date: date, Place: place, MeetingNumber: number})
+    },
+    deletePreStaffMeeting: function deletePreStaffMeeting(staffmeetingIDList) {
+        return staffmeetings
+            .findOneAndDelete({_id: staffmeetingIDList})
+    },
+
+    editStaffMeetingByChangeMeeting: function editStaffMeetingByChangeMeeting(id, newtime, newstaff) {
+        return staffmeetings
+            .update({_id: id}, {$set: {Date: newtime, StaffID: newstaff}}, {new: true})
+            .exec()
+    },
+
 
     updateStaffMeetingRecordByMeetingID: function updateStaffMeetingRecordByMeetingID(id,rid) {
         return staffmeetings.update({_id:id},{$set:{RecordID:rid}});

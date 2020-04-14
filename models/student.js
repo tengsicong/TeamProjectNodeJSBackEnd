@@ -32,7 +32,7 @@ module.exports = {
         return student
             .find()
             .populate('GroupID')
-            .populate({path: 'GroupID',populate:{ path: 'ProposalID' }})
+            .populate({path: 'GroupID', populate: {path: 'ProposalID'}})
             .exec();
     },
 
@@ -72,8 +72,8 @@ module.exports = {
      * @param {ObjectId} id, GroupID  id:studentID
      * @return {client} a client object
      */
-    updateStudentTeamByTeamID: function updateStudentTeamByTeamID(id,GroupID) {
-        return student.update({_id:id},{$addToSet:{GroupID: GroupID}})
+    updateStudentTeamByTeamID: function updateStudentTeamByTeamID(id, GroupID) {
+        return student.update({_id: id}, {$addToSet: {GroupID: GroupID}})
 
     },
     deletePeopleDontLikeByStudentID: function deletePeopleDontLikeByStudentID(studentID) {
@@ -82,15 +82,15 @@ module.exports = {
             .exec()
     },
 
-    addNewStudent:function addNewStudent(addStudentName, addStudentUserName) {
+    addNewStudent: function addNewStudent(addStudentName, addStudentUserName) {
         student
             .create({Name: addStudentName, UserName: addStudentUserName, Password: addStudentName})
 
     },
 
-    deleteStudentGroupByGroupID: function deleteStudentGroupByGroupID(studentID,GroupID){
+    deleteStudentGroupByGroupID: function deleteStudentGroupByGroupID(studentID, GroupID) {
         return student
-            .findOneAndUpdate({_id:studentID},{$unset:{GroupID:''}},{new:true})
+            .findOneAndUpdate({_id: studentID}, {$unset: {GroupID: ''}}, {new: true})
             .exec()
     },
 
@@ -110,11 +110,20 @@ module.exports = {
      * @author: wang
      */
     postStudentTeamByStudentID: function postStudentTeamByStudentID(studentID, groupID) {
-        student
-            .findOneAndUpdate({_id: student}, {$set: {GroupID: groupID}})
+        return student
+            .findOneAndUpdate({_id: studentID}, {$set: {GroupID: groupID}})
             .exec()
-    }
-
+    },
+    deletePreStudentGroupID: function deletePreStudentGroupID(studentID) {
+        return student
+            .findOneAndUpdate({_id: studentID}, {$unset: {GroupID: ''}},{new: true})
+            .exec()
+    },
+    addNewStudentGroupID: function addNewStudentGroupID( studentID, groupID) {
+        return student
+            .findOneAndUpdate({_id: studentID}, {$set: {GroupID: groupID}},{new: true})
+            .exec()
+    },
 };
 
 // const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');

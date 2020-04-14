@@ -76,9 +76,13 @@ module.exports = {
     createTeam: function createTeam(studentID, staffID, representer, teamName) {
         return team
             .create({StudentID: studentID, StaffID: staffID, Representer: representer, TeamName: teamName})
-            .exec()
     },
 
+    editTeam: function editTeam(Tid, staffID, studentID, staffMeetingIDList,representer){
+        return team
+            .findOneAndUpdate({_id: Tid},{$set:{StaffID: staffID, StudentID: studentID, StaffMeetingID: staffMeetingIDList, Representer:representer }})
+            .exec()
+    },
 
     // deleteTeamStudent: function deleteTeamStudent(teamName, selector2) {
     //     return team
@@ -132,8 +136,18 @@ module.exports = {
 
     },
 
-    addClientMeetingByGroupID : function addClientMeetingByGroupID(id,meetingID) {
+    addClientMeetingByGroupID: function addClientMeetingByGroupID(id, meetingID) {
         team
-            .findOneAndUpdate({_id:id},{$addToSet:{ClientMeetingID: meetingID}}).exec()
-    }
+            .findOneAndUpdate({_id: id}, {$addToSet: {ClientMeetingID: meetingID}}).exec()
+    },
+    addStaffMeetingID: function addStaffMeetingID(groupID, staffMeetingID) {
+        return team
+            .findOneAndUpdate({_id: groupID}, {$addToSet: {StaffMeetingID: staffMeetingID}})
+            .exec()
+    },
+    getTeamBygroupID: function getTeamBygroupID(id) {
+        return team
+            .find({_id: id})
+            .exec();
+    },
 };
