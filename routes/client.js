@@ -7,15 +7,14 @@ const mongoose = require('mongoose');
 const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
-const stageModel = require('../models/stage')
-const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
-//const clientID = mongoose.Types.ObjectId("5e7d1f82f8f7d40d64f332b7")
+const stageModel = require('../models/stage');
+const checkClientLogin = require('../middlewares/check').checkClientLogin;
 
 
-router.get('/myproject', function (req, res, next) {
+router.get('/myproject', checkClientLogin, function (req, res,  next) {
     Promise.all([
-        clientModel.getClientByClientID(clientID),
-        proposalModel.getProposalByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
+        proposalModel.getProposalByClientID(req.session.userinfo),
         stageModel.getStage(),
     ])
         .then(function (proposals) {
@@ -32,9 +31,9 @@ router.get('/myproject', function (req, res, next) {
     // res.render('client/client_myproposals');
 });
 
-router.get('/myproject/create_project', function (req, res, next) {
+router.get('/myproject/create_project', checkClientLogin, function (req, res, next) {
     Promise.all([
-        clientModel.getClientByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
     ])
         .then(function (result) {
             const client = result[0];
@@ -49,8 +48,8 @@ router.get('/myproject/create_project', function (req, res, next) {
 
 
 /*Create new proposals*/
-router.post('/myproject/create_project', function (req, res, next) {
-    const client = clientID;
+router.post('/myproject/create_project', checkClientLogin, function (req, res, next) {
+    const client = req.session.userinfo;
     const topic = req.body.topic;
     const content = req.body.content;
     const nowDate = new Date();
@@ -72,7 +71,7 @@ router.post('/myproject/create_project', function (req, res, next) {
 });
 
 
-router.get('/myproject/project_approved', function (req, res, next) {
+router.get('/myproject/project_approved', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         proposalModel.getProposalByProposalID(proposalID),
@@ -95,7 +94,7 @@ router.get('/myproject/project_approved', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/myproject/project_pending', function (req, res, next) {
+router.get('/myproject/project_pending', checkClientLogin, function (req, res, next) {
     //console.log(req.query.id);
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
@@ -115,7 +114,7 @@ router.get('/myproject/project_pending', function (req, res, next) {
 
 
 /*添加评论*/
-router.post('/myproject/project_pending', function (req, res, next) {
+router.post('/myproject/project_pending', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     const replyDate = new Date();
@@ -140,7 +139,7 @@ router.post('/myproject/project_pending', function (req, res, next) {
 })
 
 
-router.get('/myproject/project_rejected', function (req, res, next) {
+router.get('/myproject/project_rejected', checkClientLogin, function (req, res, next) {
     //console.log(req.query.id);
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
@@ -159,7 +158,7 @@ router.get('/myproject/project_rejected', function (req, res, next) {
 });
 
 /*添加评论*/
-router.post('/myproject/project_rejected', function (req, res, next) {
+router.post('/myproject/project_rejected', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const comment = req.body.comment;
     const replyDate = new Date();
@@ -184,7 +183,7 @@ router.post('/myproject/project_rejected', function (req, res, next) {
 })
 
 
-router.get('/edit_project', function (req, res, next) {
+router.get('/edit_project',  checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         proposalModel.getProposalByProposalID(proposalID),
@@ -201,7 +200,7 @@ router.get('/edit_project', function (req, res, next) {
 });
 
 /*Edit proposal*/
-router.post('/edit_project', function (req, res, next) {
+router.post('/edit_project', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     //console.log('id= '+ proposalID)
     const topic = req.body.topic;
@@ -222,10 +221,10 @@ router.post('/edit_project', function (req, res, next) {
 })
 
 /*Delete proposal*/
-router.post('/delete_project', function (req, res, next) {
+router.post('/delete_project', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
-        clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
+        clientModel.deleteProposalFromClientListByProposalID(req.session.userinfo, proposalID),
         proposalModel.deleteProposal(proposalID)
     ])
         .then(function (result) {
@@ -234,9 +233,9 @@ router.post('/delete_project', function (req, res, next) {
         .catch(next)
 })
 
-router.get('/myteam', function (req, res, next) {
+router.get('/myteam', checkClientLogin, function (req, res, next) {
     Promise.all([
-        clientModel.getClientByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
         stageModel.getStage(),
     ])
         .then(function (result) {
@@ -251,10 +250,10 @@ router.get('/myteam', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/myteam/teampage', function (req, res, next) {
+router.get('/myteam/teampage', checkClientLogin, function (req, res, next) {
     const teamID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        clientModel.getClientByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
         teamModel.getTeamByTeamID(teamID),
         stageModel.getStage()
     ])
@@ -273,10 +272,10 @@ router.get('/myteam/teampage', function (req, res, next) {
 });
 
 
-router.get('/myteam/teammark', function (req, res, next) {
+router.get('/myteam/teammark', checkClientLogin, function (req, res, next) {
     const teamID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        clientModel.getClientByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
         teamModel.getTeamByTeamID(teamID),
     ])
         .then(function (result) {
@@ -291,10 +290,10 @@ router.get('/myteam/teammark', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/myteam/edit_teammark', function (req, res, next) {
+router.get('/myteam/edit_teammark', checkClientLogin, function (req, res, next) {
     const teamID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        clientModel.getClientByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
         teamModel.getTeamByTeamID(teamID),
     ])
         .then(function (result) {
@@ -309,7 +308,7 @@ router.get('/myteam/edit_teammark', function (req, res, next) {
         .catch(next);
 });
 
-router.post('/myteam/teammark', function (req, res, next) {
+router.post('/myteam/teammark', checkClientLogin, function (req, res, next) {
     const teamid = mongoose.Types.ObjectId(req.body.GroupID);
     let marks = [];
     let reasons = [];
@@ -325,11 +324,11 @@ router.post('/myteam/teammark', function (req, res, next) {
 });
 
 
-router.get('/mytimetable', function (req, res, next) {
+router.get('/mytimetable', checkClientLogin, function (req, res, next) {
     Promise.all([
-        clientModel.getClientByClientID(clientID),
-        clientMeetingModel.getClientMeetingByClientID(clientID),
-        changeClientMeetingRequestModel.getChangeClientMeetingRequestByClientID(clientID),
+        clientModel.getClientByClientID(req.session.userinfo),
+        clientMeetingModel.getClientMeetingByClientID(req.session.userinfo),
+        changeClientMeetingRequestModel.getChangeClientMeetingRequestByClientID(req.session.userinfo),
         stageModel.getStage(),
     ])
         .then(function (result) {
@@ -348,7 +347,7 @@ router.get('/mytimetable', function (req, res, next) {
 
 
 /*发送更改会议请求*/
-router.post('/mytimetable', function (req, res, next) {
+router.post('/mytimetable', checkClientLogin, function (req, res, next) {
     const selectMeetingid = mongoose.Types.ObjectId(req.body.selection);
     const reason = req.body.reason;
     const time = req.body.time;
@@ -360,7 +359,7 @@ router.post('/mytimetable', function (req, res, next) {
             const meetings = result[1];
             let request = {
                 MeetingID: result[0]._id,
-                ClientID: clientID,
+                ClientID: req.session.userinfo,
                 Status: 'pending',
                 NewMeetingTime: time,
                 RequestComment: {

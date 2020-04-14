@@ -62,6 +62,9 @@ module.exports = {
         return team.update({_id:id},{$set:{ClientMark:marks, ClientMarkReason:reasons}});
     },
 
+    updatePasswordByClientId: function updatePasswordByClientId(id, password) {
+        return client.findByIdAndUpdate(id, { Password: password });
+    },
 
 };
 
