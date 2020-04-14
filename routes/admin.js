@@ -641,7 +641,6 @@ router.get('/approved_pending', function (req, res, next) {
     const teams = result[0];
     for(let i=0;i<teams.length;i++){
         proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
-        clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
         teamModel.deleteTeamProposalByGroupID(teams[i]._id);
         Promise.all([
             clientModel.getClientByProposalID(proposalID),
@@ -655,6 +654,7 @@ router.get('/approved_pending', function (req, res, next) {
                     const meetingid = meetings[j]._id;
                     changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
                 }
+                clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
                 ;
     })
     }})
@@ -724,7 +724,6 @@ router.post('/delete_team', function (req, res, next) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
     const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
     proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);
-    clientMeetingModel.deleteClientMeetingByGroupID(teamID);
     teamModel.deleteTeamProposalByGroupID(teamID);
     Promise.all([
         clientModel.getClientByProposalID(proposalId),
@@ -738,6 +737,7 @@ router.post('/delete_team', function (req, res, next) {
                 const meetingid = meetings[i]._id;
                 changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
             }
+            clientMeetingModel.deleteClientMeetingByGroupID(teamID);
             ;
             res.redirect('/admin/project_approved?id=' + proposalId)
         })
