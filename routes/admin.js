@@ -14,20 +14,6 @@ const changeClientMeetingRequestModel = require('../models/changeclientmeetingre
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
 
-// staffMeetingModel.getAllStaffMeetings().then(function (result) {
-//     console.log(result[4])
-// })
-// teamModel.getAllTeam().then(function (result) {
-//     console.log(result.length+1)
-// })
-// changeStaffMeetingRequestModel.getChangeStaffMeetingRequest().then(function (result) {
-//     console.log(result[0])
-// });
-// changeClientMeetingRequestModel.getChangeClientMeetingRequest().then(function (result) {
-//     console.log(result[0])
-// })
-//
-
 /* GET edit team page. */
 router.get('/edit_team', function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
@@ -187,10 +173,8 @@ router.post('/submit_editteam', function (req, res) {
         for (let i = 0; i < staffMeetingList.length; i++) {
             staffMeetingIDList.push(staffMeetingList[i]._id)
         }
-        console.log(staffMeetingIDList);
         teamModel.editTeam(Tid, staffID, studentIDArray, staffMeetingIDList, representer)
             .then(function (result) {
-                // console.log(result)
                 const preStaffID = result.StaffID;
                 const preStudentID = result.StudentID;
                 const prestaffmeetingID = result.StaffMeetingID;
@@ -219,7 +203,6 @@ router.get('/team_list', function (req, res) {
         .then(function (result) {
             const admin = result[0];
             const allTeam = result[1];
-            // console.log(allTeam)
             res.render('admin/team_list', {
                 pageTitle: 'Team List',
                 admin: admin,
@@ -236,8 +219,6 @@ router.get('/student_list', function (req, res) {
         .then(function (result) {
             const admin = result[0];
             const allStudent = result[1];
-            console.log(allStudent[0].GroupID.ProposalID);
-
             res.render('admin/student_list', {
                 pageTitle: 'Student List',
                 admin: admin,
@@ -300,10 +281,6 @@ router.get('/timetable_change', function (req, res) {
             const changeStaffMeetingRequest = result[2];
             const changeClientMeetingRequest = result[3];
             const allTeam = result[4];
-            console.log(changeClientMeetingRequest);
-            console.log(changeStaffMeetingRequest);
-
-
             res.render('admin/timetable_change', {
                 pageTitle: 'Change Timetable',
                 admin: admin,
@@ -315,23 +292,25 @@ router.get('/timetable_change', function (req, res) {
         })
 });
 
-router.get('/staff_request_reject', function (req, res) {
-    const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    const rejectreason = req.body.rejectreason;
+router.post('/staff_request_reject', function (req, res) {
+    const staffMeetingID = req.body.staffMeetingID;
+    const rejectReason = req.body.rejectReason;
+    console.log('enter')
     const nowDate = new Date();
-    let command = {
-        id: changeStaffMeetingRequestID,
-        Status: 'rejected',
-        AdminReply: {
-            AdminName: "Emma Norling",
-            Date: nowDate,
-            Content: rejectreason,
-        }
-    }
-    changeStaffMeetingRequestModel.adminRejectRequest(command)
-        .then(function () {
-            res.redirect('/admin/timetable_change')
-        })
+    console.log(rejectReason);
+    // let command = {
+    //     id: changeStaffMeetingRequestID,
+    //     Status: 'rejected',
+    //     AdminReply: {
+    //         AdminName: "Emma Norling",
+    //         Date: nowDate,
+    //         Content: rejectReason,
+    //     }
+    // }
+    // changeStaffMeetingRequestModel.adminRejectRequest(command)
+    //     .then(function () {
+    //         res.redirect('/admin/timetable_change')
+    //     })
 })
 
 router.get('/staff_request_approve', function (req, res) {
@@ -341,7 +320,6 @@ router.get('/staff_request_approve', function (req, res) {
             const staffmeetingID = result.MeetingID;
             if (result.NewStaffID != undefined) {
                 const newStaff = result.NewStaffID;
-                console.log(newStaff)
                 staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffmeetingID, newStaff).then();
             }
             if (result.NewMeetingTime != undefined) {
@@ -411,7 +389,7 @@ router.get('/project_approved', function (req, res, next) {
             const proposal = result[1];
             const teams = result[2];
             const allTeam = result[3];
-            //console.log(proposal.ClientID);
+
             res.render('admin/project_approved', {
                 proposal: proposal,
                 teams: teams,
@@ -432,7 +410,6 @@ router.get('/project_pending', function (req, res, next) {
         .then(function (result) {
             const admin = result[0];
             const proposal = result[1];
-            //console.log(proposal.ClientID);
             res.render('admin/project_pending', {
                 proposal: proposal,
                 pageTitle: proposal.Topic,
@@ -451,7 +428,6 @@ router.get('/project_rejected', function (req, res, next) {
         .then(function (result) {
             const admin = result[0];
             const proposal = result[1];
-            //console.log(proposal.Reply)
             res.render('admin/project_rejected', {
                 proposal: proposal,
                 pageTitle: proposal.Topic,
@@ -474,7 +450,6 @@ router.get('/student_detail', function (req, res, next) {
             const student = result[1];
             const team = result[2];
             const proposal = result[3];
-            //console.log(team.StaffMark);
             res.render('admin/student_detail', {
                 pageTitle: 'Student Detail',
                 admin: admin,
@@ -490,7 +465,6 @@ router.post('/edit_project', function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     router.post('/edit_project', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-        //console.log('id= ' + proposalID)
         const topic = req.body.topic;
         const content = req.body.content;
         newDate = new Date();
@@ -603,7 +577,6 @@ router.post('/project_rejected', function (req, res, next) {
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
-            // console.log(result[1])
             let reply = result[1].Reply;
             reply.push({
                 Author: result[0].Name,
@@ -696,47 +669,5 @@ router.post('/allocate_team', function (req, res) {
         });
 });
 
-// router.post('/allocate_team', function (req, res) {
-//         const teamID = mongoose.Types.ObjectId(req.body.teamID);
-//         const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
-//         proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
-//         newDate = new Date();
-//         for (let i = 0; i < 5; i++) {
-//             Promise.all([
-//                 clientModel.getClientByProposalID(proposalId),
-//                 clientMeetingModel.getAllClientMeetings(),
-//             ])
-//                 .then(function (result) {
-//                     const meetingnumber = result[1].length + 1;
-//                     let clientmeeting = {
-//                         _id: mongoose.Types.ObjectId(),
-//                         GroupID: teamID,
-//                         Date: newDate,
-//                         Place: 'ClassRoom 2',
-//                         ClientID: result[0]._id,
-//                         MeetingNumber: meetingnumber + i,
-//                     };
-//                     clientMeetingModel.addClientMeeting(clientmeeting).then(function (result) {
-//                         teamModel.addMeeting(meetingID)
-//                     });//成功
-//                 });
-//         };
-//         Promise.all([clientModel.getClientByProposalID(proposalId),])
-//             .then(function (result) {
-//                 clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
-//                 Promise.all([clientMeetingModel.getClientMeetingByGroupID(teamID)]).then(function (result) {
-//                     const meetings = result[0];
-//                     console.log(meetings)
-//                     let meetingid = [];
-//                     for (let i = 0; i < meetings.length; i++) {
-//                         meetingid.push(meetings[i]._id);
-//                     }
-//                     ;
-//                     console.log(meetingid)
-//                     teamModel.allocateProposal(teamID, proposalId, meetingid);//unsuccessful
-//                 });
-//                 res.redirect('/admin/project_approved?id=' + proposalId);
-//             });
-//     });
 
 module.exports = router;
