@@ -11,13 +11,22 @@ const staffMeetingModel = require('../models/staffmeetings');
 const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
 
-
 const mongoose = require('mongoose');
 const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-// const Tid = mongoose.Types.ObjectId('5e8bb4392366cc3ae6242fb5');
-const staffID = mongoose.Types.ObjectId('5e7a97ab66135760069ca372');
-const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
 
+// staffMeetingModel.getAllStaffMeetings().then(function (result) {
+//     console.log(result[4])
+// })
+// teamModel.getAllTeam().then(function (result) {
+//     console.log(result.length+1)
+// })
+// changeStaffMeetingRequestModel.getChangeStaffMeetingRequest().then(function (result) {
+//     console.log(result[0])
+// });
+// changeClientMeetingRequestModel.getChangeClientMeetingRequest().then(function (result) {
+//     console.log(result[0])
+// })
+//
 
 /* GET edit team page. */
 router.get('/edit_team', function (req, res) {
@@ -256,24 +265,18 @@ router.get('/timetable', function (req, res) {
     Promise.all([
         adminModel.getAdminByID(adminID),
         staffMeetingModel.getAllStaffMeetings(),
-        staffModel.getStaffByStaffID((staffID)),
-        clientModel.getClientByClientID(clientID),
         clientMeetingModel.getAllClientMeetings(),
 
     ])
         .then(function (result) {
             const admin = result[0];
             const allStaffMeetings = result[1];
-            const staff = result[2];
-            const client = result[3];
-            const allClientMeetings = result[4];
+            const allClientMeetings = result[2];
 
             res.render('admin/timetable', {
                 pageTitle: 'Timetable',
                 admin: admin,
                 allStaffMeetings: allStaffMeetings,
-                staff: staff,
-                client: client,
                 allClientMeetings: allClientMeetings,
             });
         });
