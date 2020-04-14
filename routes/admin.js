@@ -295,7 +295,7 @@ router.get('/timetable_change', function (req, res) {
 router.post('/staff_request_reject', function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
-    console.log('enter')
+    console.log('enter');
     console.log(reason);
     console.log(requestID);
     // let command = {

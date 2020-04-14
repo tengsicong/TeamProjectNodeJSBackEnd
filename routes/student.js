@@ -5,15 +5,14 @@ const proposalModel = require('../models/proposal');
 const studentStaffQAModel = require('../models/student_staff_qa')
 const teamModel = require('../models/team');
 const stageModel = require('../models/stage');
-const mongoose = require('mongoose');
-const studentID = mongoose.Types.ObjectId('5e95848bb0515753f158b546');
+const checkStudentLogin = require('../middlewares/check').checkStudentLogin;
 
 
 
-router.get('/homepage', function(req, res) {
+router.get('/homepage', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
-        teamModel.getTeamByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
+        teamModel.getTeamByStudentID(req.session.userinfo),
         stageModel.getStage(),
     ])
         .then(function(result) {
@@ -29,11 +28,11 @@ router.get('/homepage', function(req, res) {
         });
 });
 
-router.get('/all_projects', function(req, res) {
+router.get('/all_projects', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
         proposalModel.getAllProposals('approved'),
-        proposalModel.getProposalByStudentID(studentID),
+        proposalModel.getProposalByStudentID(req.session.userinfo),
     ])
         .then(function(result) {
             const student = result[0];
@@ -48,9 +47,9 @@ router.get('/all_projects', function(req, res) {
         });
 });
 
-router.get('/timetable', function(req, res) {
+router.get('/timetable', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
     ])
         .then(function(result) {
             const student = result[0];
@@ -61,10 +60,10 @@ router.get('/timetable', function(req, res) {
         });
 });
 
-router.get('/student_qa', function(req, res) {
+router.get('/student_qa', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
-        studentStaffQAModel.getQAByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
+        studentStaffQAModel.getQAByStudentID(req.session.userinfo),
     ])
         .then(function(result) {
             const student = result[0];
@@ -77,10 +76,10 @@ router.get('/student_qa', function(req, res) {
         });
 });
 
-router.get('/student_qa_detail', function(req, res) {
+router.get('/student_qa_detail', checkStudentLogin, function(req, res) {
     const qaID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
         studentStaffQAModel.getQAByQAID(qaID),
     ])
         .then(function(result) {
@@ -95,11 +94,11 @@ router.get('/student_qa_detail', function(req, res) {
         });
 });
 
-router.get('/my_project', function(req, res) {
+router.get('/my_project', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
-        proposalModel.getProposalByStudentID(studentID),
-        teamModel.getTeamByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
+        proposalModel.getProposalByStudentID(req.session.userinfo),
+        teamModel.getTeamByStudentID(req.session.userinfo),
     ])
         .then(function(result) {
             const student = result[0];
@@ -114,10 +113,10 @@ router.get('/my_project', function(req, res) {
         });
 });
 
-router.get('/project_detail', function(req, res) {
+router.get('/project_detail', checkStudentLogin, function(req, res) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function(result) {
@@ -131,9 +130,9 @@ router.get('/project_detail', function(req, res) {
         });
 });
 
-router.get('/person_preference', function(req, res) {
+router.get('/person_preference', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
         studentModel.getAllStudent(),
     ])
         .then(function(result) {
@@ -147,9 +146,9 @@ router.get('/person_preference', function(req, res) {
         })
 });
 
-router.get('/proposal_preference', function(req, res) {
+router.get('/proposal_preference', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
         proposalModel.getAllProposals('approved'),
     ])
         .then(function(result) {
@@ -163,10 +162,10 @@ router.get('/proposal_preference', function(req, res) {
         })
 });
 
-router.get('/mark_teammate', function(req, res) {
+router.get('/mark_teammate', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
-        teamModel.getTeamByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
+        teamModel.getTeamByStudentID(req.session.userinfo),
     ])
         .then(function(result) {
             const student = result[0];
@@ -179,10 +178,10 @@ router.get('/mark_teammate', function(req, res) {
         })
 });
 
-router.get('/my_mark', function(req, res) {
+router.get('/my_mark', checkStudentLogin, function(req, res) {
     Promise.all([
-        studentModel.getStudentByStudentID(studentID),
-        teamModel.getTeamByStudentID(studentID),
+        studentModel.getStudentByStudentID(req.session.userinfo),
+        teamModel.getTeamByStudentID(req.session.userinfo),
         stageModel.getStage(),
     ])
         .then(function(result) {
@@ -198,7 +197,7 @@ router.get('/my_mark', function(req, res) {
         })
 });
 
-router.post('/set_people_preference', function (req, res) {
+router.post('/set_people_preference', checkStudentLogin, function (req, res) {
     console.log('enter')
     let person1 = req.body.person1;
     let person2 = req.body.person2;
@@ -216,79 +215,79 @@ router.post('/set_people_preference', function (req, res) {
     if (person1 != 'None1') {
         person1 = mongoose.Types.ObjectId(person1);
         Promise.all([
-            studentModel.postPeopleLikeByStudentID(studentID, person1),
+            studentModel.postPeopleLikeByStudentID(req.session.userinfo, person1),
         ]).then();
     } else {
         Promise.all([
-            studentModel.deletePeopleLikeByStudentID((studentID)),
+            studentModel.deletePeopleLikeByStudentID((req.session.userinfo)),
         ]).then();
     }
     console.log(array.length)
     if(array.length != 0) {
-        studentModel.deletePeopleDontLikeByStudentID(studentID).then();
+        studentModel.deletePeopleDontLikeByStudentID(req.session.userinfo).then();
         array.forEach(function (element) {
-            studentModel.postPeopleDontLikeByStudentID(studentID, element);
+            studentModel.postPeopleDontLikeByStudentID(req.session.userinfo, element);
         })
     } else {
-        studentModel.deletePeopleDontLikeByStudentID(studentID).then();
+        studentModel.deletePeopleDontLikeByStudentID(req.session.userinfo).then();
     }
     res.redirect('/student/homepage');
 });
 
-router.post('/set_new_representer', function(req, res) {
+router.post('/set_new_representer', checkStudentLogin, function(req, res) {
     const representerID = mongoose.Types.ObjectId(req.body.representerID);
     Promise.all([
-        teamModel.postTeamNewRepresenter(studentID, representerID),
+        teamModel.postTeamNewRepresenter(req.session.userinfo, representerID),
     ])
         .then(function() {
             res.redirect('/student/homepage');
         })
 });
 
-router.post('/set_project_preference', function(req, res) {
+router.post('/set_project_preference', checkStudentLogin, function(req, res) {
     const projectList = req.body.projectList;
-    teamModel.deleteProjectPreferenceByStudentID(studentID).then();
+    teamModel.deleteProjectPreferenceByStudentID(req.session.userinfo).then();
     if (projectList != '') {
         let array = projectList.split(',');
         array.pop();
         array.forEach(function(element) {
-            teamModel.postProjectPreferenceByStudentID(studentID, mongoose.Types.ObjectId(element));
+            teamModel.postProjectPreferenceByStudentID(req.session.userinfo, mongoose.Types.ObjectId(element));
         })
     }
     res.redirect('/student/homepage');
 });
 
-router.post('/post_qa', function(req, res) {
+router.post('/post_qa', checkStudentLogin, function(req, res) {
     const topic = req.body.topic;
     const content = req.body.content;
-    studentModel.getStudentByStudentID(studentID).then(function (result) {
+    studentModel.getStudentByStudentID(req.session.userinfo).then(function (result) {
         studentStaffQAModel.createNewQA(result, topic, content);
     })
     res.redirect('/student/student_qa');
 });
 
-router.post('/marking_teammate', function(req, res) {
+router.post('/marking_teammate', checkStudentLogin, function(req, res) {
     const markString = req.body.mark;
     const markArray = markString.split(',');
     for (let i = 0; i < markArray.length; i++) {
         markArray[i] = parseInt(markArray[i]);
     }
-    teamModel.getTeamByStudentID(studentID).then(function(result) {
+    teamModel.getTeamByStudentID(req.session.userinfo).then(function(result) {
         const studentIDArray = [];
         let j = 0;
         for (let i = 0; i < result.StudentID.length; i++) {
-            if (! result.StudentID[i]._id.equals(studentID)) {
+            if (! result.StudentID[i]._id.equals(req.session.userinfo)) {
                 studentModel.postTeamMateMarkByStudentID(result.StudentID[i]._id, markArray[j]).then();
                 j++;
             }
         }
-        studentModel.postMarkedForTeamMate(studentID).then();
+        studentModel.postMarkedForTeamMate(req.session.userinfo).then();
     })
     res.redirect('/student/homepage');
 
 });
 
-router.post('/post_reply', function(req, res) {
+router.post('/post_reply', checkStudentLogin, function(req, res) {
     const reply = req.body.reply;
     const name = req.body.name;
     console.log(name);

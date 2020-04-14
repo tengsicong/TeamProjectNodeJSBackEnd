@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 
 module.exports = {
 
+    updatePasswordByStudentId: function updatePasswordByStudentId(id, password) {
+        return student
+            .findByIdAndUpdate(id, { Password: password })
+            .exec();
+    },
+
     getStudentByUserName: function getStudentByUserName(email) {
         return student
             .findOne({UserName: email})
