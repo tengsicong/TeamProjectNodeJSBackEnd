@@ -46,8 +46,13 @@ module.exports = {
             .populate('GroupID')
             .populate('ClientID')
             .exec()
-    }
+    },
 
+        editClientMeetingByChangeMeeting: function editClientMeetingByChangeMeeting(id, newtime) {
+        return clientmeetings
+            .update({_id: id}, {$set: {Date: newtime}}, {new: true})
+            .exec()
+    },
 
 
 

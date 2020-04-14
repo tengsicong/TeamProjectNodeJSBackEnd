@@ -321,8 +321,9 @@ router.get('/timetable_change', function (req, res) {
 
 router.get('/staff_request_reject', function (req, res) {
     const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    const rejectreason = req.query.rejectreason;
+    const rejectreason = req.body.rejectreason;
     const nowDate = new Date();
+    console.log(rejectreason)
 
     let command = {
         id: changeStaffMeetingRequestID,
@@ -333,7 +334,6 @@ router.get('/staff_request_reject', function (req, res) {
             Content: rejectreason,
         }
     }
-    console.log(rejectreason)
     changeStaffMeetingRequestModel.adminRejectRequest(command)
         .then(function () {
             res.redirect('/admin/timetable_change')
@@ -351,22 +351,19 @@ router.get('/staff_request_approve', function (req, res) {
                 res.redirect('/admin/timetable_change')
             })
         })
-    //[!!shao hao duo dong xistaff meeting  de new time / new supervisor]
 })
 
-router.get('/client_request_approve', function (req, res, next) {
+router.get('/client_request_approve', function (req, res) {
     const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    let changeclientmeetingrequest = {
-        _id: changeClientMeetingRequestID,
-        Status: 'approved'
-    }
-
     changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
         .then(function () {
-            res.redirect('/admin/timetable_change')
-        })
-        .catch(next)
+            const meetingtime = result.NewMeetingTime;
+            const clientmeetingID = result.MeetingID;
+            clientMeetingModel.editClientMeetingByChangeMeeting(clientmeetingID, meetingtime).then(function () {
 
+                res.redirect('/admin/timetable_change')
+            })
+        })
 })
 /* edit meeting request*/
 router.post('/mytimetable', function (req, res, next) {
