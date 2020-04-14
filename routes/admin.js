@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const checkAdminLogin = require('../middlewares/check').checkAdminLogin;
+
 const proposalModel = require('../models/proposal');
 const teamModel = require('../models/team');
 const adminModel = require('../models/admin');
@@ -12,13 +14,13 @@ const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequ
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
 
 const mongoose = require('mongoose');
-const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-
+// const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
+// const adminID = req.session.userinfo
 /* GET edit team page. */
-router.get('/edit_team', function (req, res) {
+router.get('/edit_team', checkAdminLogin,function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         teamModel.getTeamByTeamID(Tid),
         proposalModel.getAllProposals(),
         staffModel.getAllStaff(),
@@ -43,11 +45,11 @@ router.get('/edit_team', function (req, res) {
 });
 
 /* GET new team page. */
-router.get('/new_team', function (req, res) {
+router.get('/new_team', checkAdminLogin,function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
 
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         teamModel.getTeamByTeamID(Tid),
         proposalModel.getAllProposals(),
         staffModel.getAllStaff(),
@@ -76,7 +78,7 @@ router.get('/new_team', function (req, res) {
 });
 /*submit*/
 /*Create a new team*/
-router.post('/submit_newteam', function (req, res) {
+router.post('/submit_newteam',checkAdminLogin, function (req, res) {
     // 定义获得的staff的id
     // 定义获得的student id
     // 定义teamname
@@ -125,7 +127,7 @@ router.post('/submit_newteam', function (req, res) {
     })
 });
 /*edit_team*/
-router.post('/submit_editteam', function (req, res) {
+router.post('/submit_editteam',checkAdminLogin, function (req, res) {
     // 定义获得的staff的id
     // 定义获得的student id
     // 定义teamname
@@ -195,9 +197,9 @@ router.post('/submit_editteam', function (req, res) {
     });
 });
 
-router.get('/team_list', function (req, res) {
+router.get('/team_list', checkAdminLogin,function (req, res) {
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         teamModel.getAllTeam(),
     ])
         .then(function (result) {
@@ -210,10 +212,10 @@ router.get('/team_list', function (req, res) {
             });
         });
 });
-router.get('/student_list', function (req, res) {
+router.get('/student_list', checkAdminLogin,function (req, res) {
 
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         studentModel.getAllStudent(),
     ])
         .then(function (result) {
@@ -226,14 +228,14 @@ router.get('/student_list', function (req, res) {
             });
         });
 });
-router.post('/add_new_student', function (req, res) {
+router.post('/add_new_student',checkAdminLogin, function (req, res) {
     const addStudentName = req.body.addStudentName;
     const addStudentUserName = req.body.addStudentUserName;
     studentModel.addNewStudent(addStudentName, addStudentUserName)
     res.redirect('/admin/student_list');
 
 });
-router.post('/add_new_staff', function (req, res) {
+router.post('/add_new_staff',checkAdminLogin, function (req, res) {
     const addStaffName = req.body.addStaffName;
     const addStaffUserName = req.body.addStaffUserName;
     const addStaffID = mongoose.Types.ObjectId(req.body._id);
@@ -242,9 +244,9 @@ router.post('/add_new_staff', function (req, res) {
     res.redirect('/admin/team_list');
 
 });
-router.get('/timetable', function (req, res) {
+router.get('/timetable', checkAdminLogin,function (req, res) {
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         staffMeetingModel.getAllStaffMeetings(),
         clientMeetingModel.getAllClientMeetings(),
         changeStaffMeetingRequestModel.getAllChangeStaffMeetingRequest(),
@@ -267,9 +269,9 @@ router.get('/timetable', function (req, res) {
         });
 });
 
-router.get('/timetable_change', function (req, res) {
+router.get('/timetable_change', checkAdminLogin,function (req, res) {
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         staffModel.getAllStaff(),
         changeStaffMeetingRequestModel.getAllChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getAllChangeClientMeetingRequest(),
@@ -292,7 +294,7 @@ router.get('/timetable_change', function (req, res) {
         })
 });
 
-router.post('/staff_request_reject', function (req, res) {
+router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
     console.log('enter');
@@ -313,7 +315,7 @@ router.post('/staff_request_reject', function (req, res) {
     //     })
 })
 
-router.post('/client_request_reject', function (req, res) {
+router.post('/client_request_reject', checkAdminLogin,function (req, res) {
     const staffMeetingID = req.body.staffMeetingID;
     const rejectReason = req.body.rejectReason;
     console.log('enter')
@@ -334,7 +336,7 @@ router.post('/client_request_reject', function (req, res) {
     //     })
 })
 
-router.get('/staff_request_approve', function (req, res) {
+router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
     const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
     changeStaffMeetingRequestModel.adminApproveRequest(changeStaffMeetingRequestID)
         .then(function (result) {
@@ -351,7 +353,7 @@ router.get('/staff_request_approve', function (req, res) {
     res.redirect('/admin/timetable_change')
 })
 
-router.get('/client_request_approve', function (req, res) {
+router.get('/client_request_approve',checkAdminLogin, function (req, res) {
     const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
     changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
         .then(function () {
@@ -364,9 +366,9 @@ router.get('/client_request_approve', function (req, res) {
         })
 })
 
-router.get('/project_list', function (req, res, next) {
+router.get('/project_list', checkAdminLogin,function (req, res, next) {
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getAllProposals(),
     ])
         .then(function (result) {
@@ -380,10 +382,10 @@ router.get('/project_list', function (req, res, next) {
         });
 });
 
-router.get('/edit_project', function (req, res, next) {
+router.get('/edit_project', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
@@ -397,10 +399,10 @@ router.get('/edit_project', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_approved', function (req, res, next) {
+router.get('/project_approved',checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getProposalByProposalID(proposalID),
         teamModel.getGroupByProposalID(proposalID),
         teamModel.getAllTeam(),
@@ -422,10 +424,10 @@ router.get('/project_approved', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_pending', function (req, res, next) {
+router.get('/project_pending', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
@@ -440,10 +442,10 @@ router.get('/project_pending', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_rejected', function (req, res, next) {
+router.get('/project_rejected',checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
@@ -458,10 +460,10 @@ router.get('/project_rejected', function (req, res, next) {
         .catch(next);
 });
 
-router.get('/student_detail', function (req, res, next) {
+router.get('/student_detail', checkAdminLogin,function (req, res, next) {
     const studentID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         studentModel.getStudentByStudentID(studentID),
         teamModel.getTeamByStudentID(studentID),
         proposalModel.getProposalByStudentID(studentID),
@@ -482,7 +484,7 @@ router.get('/student_detail', function (req, res, next) {
 });
 
 //edit project
-router.post('/edit_project', function (req, res, next) {
+router.post('/edit_project',checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     router.post('/edit_project', function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
@@ -504,7 +506,7 @@ router.post('/edit_project', function (req, res, next) {
     });
 });
 
-router.get('/pending_approved', function (req, res, next) {
+router.get('/pending_approved',checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const newDate = new Date();
     let proposal = {
@@ -520,7 +522,7 @@ router.get('/pending_approved', function (req, res, next) {
         .catch(next)
 });
 
-router.get('/pending_rejected', function (req, res, next) {
+router.get('/pending_rejected', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const newDate = new Date();
     let proposal = {
@@ -536,7 +538,7 @@ router.get('/pending_rejected', function (req, res, next) {
         .catch(next)
 });
 
-router.get('/rejected_pending', function (req, res, next) {
+router.get('/rejected_pending',checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const newDate = new Date();
     let proposal = {
@@ -552,7 +554,7 @@ router.get('/rejected_pending', function (req, res, next) {
         .catch(next)
 });
 
-router.get('/approved_pending', function (req, res, next) {
+router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([teamModel.getGroupByProposalID(proposalID)]).then(function (result) {
         const teams = result[0];
@@ -589,12 +591,12 @@ router.get('/approved_pending', function (req, res, next) {
 });
 
 
-router.post('/project_rejected', function (req, res, next) {
+router.post('/project_rejected', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     const replyDate = new Date();
     Promise.all([
-        adminModel.getAdminByID(adminID),
+        adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
@@ -613,7 +615,7 @@ router.post('/project_rejected', function (req, res, next) {
 });
 
 //delete team
-router.post('/delete_team', function (req, res, next) {
+router.post('/delete_team', checkAdminLogin,function (req, res, next) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
     const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
     proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);
@@ -639,7 +641,7 @@ router.post('/delete_team', function (req, res, next) {
 
 
 //delete project
-router.post('/delete_project', function (req, res, next) {
+router.post('/delete_project', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(clientID, proposalID),
@@ -651,7 +653,7 @@ router.post('/delete_project', function (req, res, next) {
         .catch(next)
 });
 
-router.post('/allocate_team', function (req, res) {
+router.post('/allocate_team', checkAdminLogin,function (req, res) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
     const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
     proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);

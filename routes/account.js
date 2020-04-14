@@ -46,8 +46,8 @@ router.post('/reset_password', checkLogin, function(req, res) {
                     resetMethod = studentModel.updatePasswordByStudentId(req.session.userinfo, newPW)
                 } else if (req.session.role === 'client') {
                     resetMethod = clientModel.updatePasswordByClientId(req.session.userinfo, newPW);
-                } else if () {
-
+                } else if (req.session.role === 'admin') {
+                    resetMethod = adminModel.updatePasswordByAdminId(req.session.userinfo, newPW)
                 }
                 else {
                     res.redirect('/role_select');
