@@ -132,7 +132,7 @@
         <% if(teams.length>0){%>
         <%for(let i=0;i<teams.length;i++){%>
             <div class="grid_3 grid_5 widget-shadow">
-                <a href="#">
+                <a href="/admin/edit_team?id=<%=teams[i]._id%>">
                     <div>
                         <h3><b><%= 'SSIT Team ' + teams[i].TeamName%></b></h3>
                     </div>
