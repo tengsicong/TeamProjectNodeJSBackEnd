@@ -61,7 +61,6 @@ module.exports= {
         })
         return studentStaffQa
             .findOneAndUpdate({_id: id}, {$push: {Replies: r}})
-            .exec()
             .exec();
     }
 };

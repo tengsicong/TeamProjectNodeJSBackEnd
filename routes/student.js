@@ -6,7 +6,7 @@ const studentStaffQAModel = require('../models/student_staff_qa')
 const teamModel = require('../models/team');
 const stageModel = require('../models/stage');
 const mongoose = require('mongoose');
-const studentID = mongoose.Types.ObjectId('5e7b6ace4f4ed29e60233999');
+const studentID = mongoose.Types.ObjectId('5e95848bb0515753f158b546');
 
 
 
@@ -199,6 +199,7 @@ router.get('/my_mark', function(req, res) {
 });
 
 router.post('/set_people_preference', function (req, res) {
+    console.log('enter')
     let person1 = req.body.person1;
     let person2 = req.body.person2;
     let person3 = req.body.person3;
@@ -211,7 +212,6 @@ router.post('/set_people_preference', function (req, res) {
         person3 = mongoose.Types.ObjectId(person3);
         array.push(person3)
     }
-
     //edit database
     if (person1 != 'None1') {
         person1 = mongoose.Types.ObjectId(person1);
@@ -223,6 +223,7 @@ router.post('/set_people_preference', function (req, res) {
             studentModel.deletePeopleLikeByStudentID((studentID)),
         ]).then();
     }
+    console.log(array.length)
     if(array.length != 0) {
         studentModel.deletePeopleDontLikeByStudentID(studentID).then();
         array.forEach(function (element) {
@@ -231,7 +232,6 @@ router.post('/set_people_preference', function (req, res) {
     } else {
         studentModel.deletePeopleDontLikeByStudentID(studentID).then();
     }
-
     res.redirect('/student/homepage');
 });
 

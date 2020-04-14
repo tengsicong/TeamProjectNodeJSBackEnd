@@ -7,10 +7,9 @@ const changeclientmeetingrequest = mongo.change_client_meeting_requests;
 
 
 module.exports = {
-    getChangeClientMeetingRequest: function getChangeClientMeetingRequest() {
+    getAllChangeClientMeetingRequest: function getAllChangeClientMeetingRequest() {
         return changeclientmeetingrequest
             .find()
-            // .populate('ClientID')
             .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
             .populate({path: 'MeetingID',populate:{ path: 'GroupID' }})
             .exec()
@@ -37,9 +36,14 @@ module.exports = {
             .exec()
     },
 
-    adminEditCPendingStatusTimetable: function adminEditCPendingStatusTimetable (newChangeClientMeetingRequest) {
+    adminEditCPendingStatusTimetable: function adminApproveRequest (newChangeClientMeetingRequest) {
         return changeclientmeetingrequest
             .update({_id:newChangeClientMeetingRequest._id},{$set:{Status:newChangeClientMeetingRequest.Status}})
+
+    },
+    adminApproveRequest: function adminApproveRequest (id) {
+        return changeclientmeetingrequest
+            .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
 
     },
 };

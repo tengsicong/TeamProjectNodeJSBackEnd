@@ -8,7 +8,7 @@ const changestaffmeetingrequest = mongo.change_staff_meeting_requests;
 
 module.exports = {
 
-    getChangeStaffMeetingRequest: function getChangeStaffMeetingRequest() {
+    getAllChangeStaffMeetingRequest: function getChangeAllStaffMeetingRequest() {
         return changestaffmeetingrequest
             .find()
             // .populate( 'MeetingID')
@@ -22,7 +22,7 @@ module.exports = {
             .create(changeStaffMeetingRequest)
     },
 
-    adminApproveRequest: function adminEditPendingStatusTimetable (id) {
+    adminApproveRequest: function adminApproveRequest (id) {
         return changestaffmeetingrequest
             .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
 

@@ -2,9 +2,9 @@
 
 <!-- main content start-->
 <div id="page-wrapper">
-    <h2 class="title1">Project </h2>
+    <h2 class="title1"><b>Project </b></h2>
     <div class="blank-page widget-shadow scroll">
-        <h2><%=proposal.Topic%><span class="label label-warning"
+        <h2><b><%=proposal.Topic%></b><span class="label label-warning"
                                      style="float:right;font-size:15px">pending</span>
         </h2>
         <br>
@@ -20,27 +20,36 @@
         </div>
         <table width="100%">
             <tr>
-                <td width="80%">
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete();return false;" data-dismiss="modal" style="margin-left:1%;float:right">Delete
-                    </button>
+                <td width="90%">
                     <a href="/admin/edit_project?id=<%=proposal._id%>">
                         <button type="button" class="btn btn-primary" style="float: right" >Edit</button>
                     </a>
                 </td>
+                <td width="10%">
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete();return false;" data-dismiss="modal" style="float:right">Delete
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
 
-                <td width="20%">
+    <div class="blank-page widget-shadow scroll">
+        <table width="100%"><tr>
+                <td width="90%"><h3 style="color: #629aa9"><b>Change project status</b></h3></td>
+                <td width="5%">
+                    <a href="/admin/pending_approved?id=<%=proposal._id%>">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" style="float: right">Approve
+                        </button>
+                    </a>
+                </td>
+                <td width="5%">
                     <a href="/admin/pending_rejected?id=<%=proposal._id%>">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" style="float: right">reject
                         </button>
                     </a>
-                    <a href="/admin/pending_approved?id=<%=proposal._id%>">
-                    <button type="button" class="btn btn-success" data-dismiss="modal" style="margin-right:4%;float: right">Approve
-                    </button>
-                    </a>
                 </td>
-
-            </tr>
-        </table>
+            </tr></table>
     </div>
     <br>
     <div class="blank-page widget-shadow scroll">
