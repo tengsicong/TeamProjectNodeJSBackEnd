@@ -276,6 +276,8 @@ router.get('/timetable_change', checkAdminLogin,function (req, res) {
         changeStaffMeetingRequestModel.getAllChangeStaffMeetingRequest(),
         changeClientMeetingRequestModel.getAllChangeClientMeetingRequest(),
         teamModel.getAllTeam(),
+        clientMeetingModel.getAllClientMeetings(),
+        staffMeetingModel.getAllStaffMeetings(),
     ])
         .then(function (result) {
             const admin = result[0];
@@ -283,15 +285,75 @@ router.get('/timetable_change', checkAdminLogin,function (req, res) {
             const changeStaffMeetingRequest = result[2];
             const changeClientMeetingRequest = result[3];
             const allTeam = result[4];
+            const allClientMeeting = result[5];
+            const allStaffMeeting = result[6];
             res.render('admin/timetable_change', {
                 pageTitle: 'Change Timetable',
                 admin: admin,
                 allStaff: allStaff,
                 allTeam: allTeam,
+                allClientMeeting : allClientMeeting,
+                allStaffMeeting : allStaffMeeting,
                 changeStaffMeetingRequest: changeStaffMeetingRequest,
                 changeClientMeetingRequest: changeClientMeetingRequest,
             });
         })
+});
+
+
+router.post('/client_timetable_change', checkAdminLogin,function (req, res) {
+    const changeClientMeetingID = mongoose.Types.ObjectId(req.body.client_meetingid);
+    const changeClientMeetingDate = req.body.client_changetime;
+    const changeClientMeetingPlace = req.body.client_place;
+    Promise.all([
+        clientMeetingModel.getClientMeetingByMeetingID(changeClientMeetingID),
+    ])
+        .then(function (result) {
+            if(changeClientMeetingPlace == ''){
+                clientMeetingModel.updateClientMeetingByMeetingID(changeClientMeetingID,changeClientMeetingDate,result[0].Place)
+            }else{
+                clientMeetingModel.updateClientMeetingByMeetingID(changeClientMeetingID,changeClientMeetingDate,changeClientMeetingPlace)
+            }
+        })
+    res.redirect('/admin/timetable_change');
+});
+
+router.post('/staff_timetable_change', checkAdminLogin,function (req, res) {
+    const changeStaffMeetingID = mongoose.Types.ObjectId(req.body.staff_meetingid);
+    const changeStaffMeetingDate = req.body.staff_changetime;
+    const changeStaffMeetingPlace = req.body.staff_place;
+    const TempStaffID = req.body.staff_supervisor;
+    Promise.all([
+        staffMeetingModel.getStaffMeetingByMeetingID(changeStaffMeetingID),
+    ])
+        .then(function (result) {
+            if(changeStaffMeetingDate == '' ){
+                if(changeStaffMeetingPlace == ''){
+                staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,result[0].Date,result[0].Place,TempStaffID)
+                } else if(changeStaffMeetingPlace != ''){
+                    if(TempStaffID!='none'){
+                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,result[0].Date,changeStaffMeetingPlace,TempStaffID)
+                    }else{
+                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID,result[0].Date,changeStaffMeetingPlace)
+                    }
+                }
+            }else if(changeStaffMeetingDate != ''){
+                if(changeStaffMeetingPlace == ''){
+                    if(TempStaffID!='none'){
+                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,result[0].Place,TempStaffID)
+                    } else {
+                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,result[0].Place)
+                    }
+                } else if(changeStaffMeetingPlace != ''){
+                    if(TempStaffID!='none'){
+                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,changeStaffMeetingPlace,TempStaffID)
+                    } else {
+                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,changeStaffMeetingPlace)
+                    }
+                }
+            }
+        })
+        res.redirect('/admin/timetable_change');
 });
 
 router.post('/staff_request_reject',checkAdminLogin, function (req, res) {

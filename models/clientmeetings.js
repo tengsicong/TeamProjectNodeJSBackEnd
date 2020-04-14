@@ -48,11 +48,20 @@ module.exports = {
             .exec()
     },
 
-        editClientMeetingByChangeMeeting: function editClientMeetingByChangeMeeting(id, newtime) {
+    editClientMeetingByChangeMeeting: function editClientMeetingByChangeMeeting(id, newtime) {
         return clientmeetings
             .update({_id: id}, {$set: {Date: newtime}}, {new: true})
             .exec()
     },
+
+
+    updateClientMeetingByMeetingID: function updateClientMeetingByMeetingID(id, newtime,newPlace) {
+        return clientmeetings
+            .findOneAndUpdate({_id: id}, {$set: {Date: newtime, Place:newPlace}}, {new: true})
+            .exec()
+    },
+
+
 
 
 
