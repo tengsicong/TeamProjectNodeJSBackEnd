@@ -17,35 +17,35 @@
                 <% if (proposal.Status == "approved") { %>
             <a href="/client/myproject/project_approved?id=<%=proposal._id%>">
                 <div>
-                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-success" style="float:right;font-size:15px">approved</span>
+                    <h3><b><%=proposal.Topic%></b><span class="label label-success" style="float:right;font-size:15px">approved</span>
                     </h3>
                 </div>
                 <div>
-                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
-                                              style="float:right;font-size:20px"></i>
+                    <p><%=proposal.Content.substring(0,200) + '...'%><span><i class="fa fa-angle-right"
+                                                                              style="float:right;font-size:20px"></i></span></p>
                 </div>
             </a>
                 <% } else if(proposal.Status == "pending"){ %>
             <a href="/client/myproject/project_pending?id=<%=proposal._id%>">
                 <div>
-                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-warning"
+                    <h3><b><%=proposal.Topic%></b><span class="label label-warning"
                                            style="float:right;font-size:15px">Pending</span>
                 </h3>
                 </div>
                 <div>
-                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
-                                              style="float:right;font-size:20px"></i>
+                    <p><%=proposal.Content.substring(0,200) + '...'%><span><i class="fa fa-angle-right"
+                                                                              style="float:right;font-size:20px"></i></span></p>
                 </div>
             </a>
                 <% } else if(proposal.Status == "rejected"){ %>
             <a href="/client/myproject/project_rejected?id=<%=proposal._id%>">
                 <div>
-                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-danger" style="float:right;font-size:15px">Rejected</span>
+                    <h3><b><%=proposal.Topic%></b><span class="label label-danger" style="float:right;font-size:15px">Rejected</span>
                     </h3>
                 </div>
                 <div>
-                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
-                                              style="float:right;font-size:20px"></i>
+                    <p><%=proposal.Content.substring(0,200) + '...'%><span><i class="fa fa-angle-right"
+                                                                              style="float:right;font-size:20px"></i></span></p>
                 </div>
             </a>
                 <%} else { %>
@@ -53,21 +53,22 @@
                 <%}%>
         </div>
         <% }) }else{%>
+            </h2>
 
             <% proposals.forEach(function (proposal) { %>
                 <% if (proposal.Status == "approved") { %>
-                <div class="grid_3 grid_5 widget-shadow">
+            <div class="grid_3 grid_5 widget-shadow">
             <a href="/client/myproject/project_approved?id=<%=proposal._id%>">
                 <div>
-                    <h3 style="color:black"><b><%=proposal.Topic%></b><span class="label label-success" style="float:right;font-size:15px">approved</span>
+                    <h3><b><%=proposal.Topic%></b><span class="label label-success" style="float:right;font-size:15px">approved</span>
                     </h3>
                 </div>
-                <div style="font-size: 10px">
-                    <%=proposal.Content.substring(0,200) + '...'%><i class="fa fa-angle-right"
-                                                                     style="float:right;font-size:20px"></i>
+                <div>
+                    <p><%=proposal.Content.substring(0,200) + '...'%><span><i class="fa fa-angle-right"
+                                                                              style="float:right;font-size:20px"></i></span></p>
                 </div>
             </a>
-        </div>
+            </div>
         <%}%>
           <%  })}%>
 

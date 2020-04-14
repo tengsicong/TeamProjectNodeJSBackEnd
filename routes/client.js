@@ -9,6 +9,7 @@ const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
 const stageModel = require('../models/stage')
 const clientID = mongoose.Types.ObjectId('5e7d2198f8f7d40d64f332d5');
+//const clientID = mongoose.Types.ObjectId("5e7d1f82f8f7d40d64f332b7")
 
 
 router.get('/myproject', function (req, res, next) {
