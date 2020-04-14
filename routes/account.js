@@ -44,8 +44,8 @@ router.post('/reset_password', checkLogin, function(req, res) {
                     resetMethod = staffModel.updatePasswordByStaffId(req.session.userinfo, newPW);
                 } else if (req.session.role === 'student') {
                     resetMethod = studentModel.updatePasswordByStudentId(req.session.userinfo, newPW)
-                } else if () {
-
+                } else if (req.session.role === 'client') {
+                    resetMethod = clientModel.updatePasswordByClientId(req.session.userinfo, newPW);
                 } else if () {
 
                 }
