@@ -57,11 +57,11 @@
                                         </td>
                                         <td width="5%">
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
-                                                    data-target="#rejectreason" data-whatever="@Rejectreason"
+                                                    data-target="#staffrejectreason" data-whatever="@staffRejectReason"
                                                     style="width: 100%; float: right">
                                                 Reject
                                             </button>
-                                            <div class="modal fade" id="rejectreason" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="staffrejectreason" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
@@ -71,24 +71,23 @@
                                                                 request</h3>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form>
+
                                                             <div class="form-group" style="align-items: center">
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
-                                                                <textarea id="reason" rows="1"
+                                                                <textarea id="staffReason<%= i %>" rows="1"
                                                                           class="form-control form-control" ></textarea>
-                                                                <textarea id="personID" rows="1"
+                                                                <textarea id="staffRequestID<%= i %>" rows="1"
                                                                           class="form-control form-control" style="display: none"><%= changeStaffMeetingRequest[i]._id%></textarea>
                                                             </div>
-                                                            </form>
+
                                                         </div>
                                                         <div class="modal-footer">
-                                                                <button  type="button" class="btn btn-primary" onclick="sendRejectReason()">Set
-                                                                </button>
-                                                            <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">Close
+                                                            <button  type="button" class="btn btn-primary" onclick="sendRejectReason(<%= i + ", \'staff\'"%>)">Set</button>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
                                                             </button>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -125,15 +124,15 @@
                                         </td>
                                         <td width="5%">
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
-                                                    data-target="#rejectreason" data-whatever="@Rejectreason"
+                                                    data-target="#clientrejectreason<%= i %>" data-whatever="@clientRejectreason"
                                                     style="width: 100%; float: right">
                                                 Reject
                                             </button>
-                                            <div class="modal fade" id="rejectreason" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="clientrejectreason<%= i %>" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
-                                                        <form>
+                                                        <form action="/admin/client_request_reject" method="post">
                                                         <div class="modal-header">
                                                             <h3 class="modal-title" id="exampleModalLabel">Reject the
                                                                 request</h3>
@@ -142,20 +141,20 @@
                                                             <div class="form-group" style="align-items: center">
                                                                 <h4>feedback:&nbsp;reject reason </h4>
                                                                 <br>
-                                                                <textarea id="reason" rows="1"
+                                                                <textarea id="clientReason<%= i %>" rows="1"
                                                                           class="form-control form-control" ></textarea>
-                                                                <textarea id="personID" rows="1"
-                                                                          class="form-control form-control" ></textarea>
+                                                                <textarea id="clientRequestID<%= i %>" rows="1"
+                                                                          class="form-control form-control" style="display: none" ><%=changeClientMeetingRequest[i]._id%></textarea>
                                                             </div>
                                                         </div>
-                                                        </form>
                                                         <div class="modal-footer">
-                                                            <button onclick="sendRejectReason('client')" type="button" class="btn btn-primary">Set</button>
+                                                            <button type="button" class="btn btn-primary" onclick="sendRejectReason(<%= i + ", \'client\'"%>)">Set</button>
                                                             <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">
                                                                 Close
                                                             </button>
                                                         </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -249,28 +248,44 @@
 <% include ./component/footer.ejs %>
 
 <script>
-    function sendRejectReason() {
-        console.log("a" + document.getElementById('reason');
-        // const rejectReason = document.getElementById('reason').value;
-        // console.log(rejectReason);
-        // if (rejectReason == '') {
-        //     alert('Please enter a reason');
-        // } else {
-        //     const form = document.createElement("form");
-        //     form.action = '/admin/staff_request_reject';
-        //     form.method = 'post';
-        //     form.style.display = "none";
-        //
-        //     const inputElement = document.createElement("input")
-        //     inputElement.type = 'hidden';
-        //     inputElement.name = 'rejectReason';
-        //     inputElement.value = rejectReason;
-        //     form.appendChild(inputElement);
-        //
-        //     document.body.appendChild(form);
-        //     form.submit();
-        //     return form
-        // }
+    function sendRejectReason(number, string) {
+        const inputElement1 = document.createElement("input")
+        inputElement1.type = 'hidden';
+        inputElement1.name = 'reason';
+        const inputElement2 = document.createElement("input");
+        inputElement2.type = 'hidden';
+        inputElement2.name = 'requestID';
+        const form = document.createElement('form');
+        form.style.display = 'none';
+        form.method = 'post';
+
+        if (string == 'staff') {
+            form.action = '/admin/staff_request_reject';
+            const id = 'staffReason' + number.toString()
+            const id1= 'staffRequest' +  number.toString()
+            if (document.getElementById(id).value == '') {
+                alert("Please enter your reason1")
+            } else {
+                inputElement1.value = document.getElementById(id).value;
+                inputElement2.value = document.getElementById(id1).value;
+            }
+        }
+        if (string == 'client') {
+            form.action = '/admin/staff_request_reject';
+            const id = 'clientReason' + number.toString()
+            const id1 = 'clientRequestID' + number.toString()
+            if (document.getElementById(id).value == '') {
+                alert('Please enter your reason2')
+            } else {
+                inputElement1.value = document.getElementById(id).value;
+                inputElement2.value = document.getElementById(id1).value;
+            }
+        }
+        form.appendChild(inputElement1);
+        form.appendChild(inputElement2);
+        document.body.appendChild(form);
+        form.submit();
+        return form;
     }
-</script>
+// </script>
 <% include ./component/footer_script.ejs %>
