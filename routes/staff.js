@@ -149,8 +149,8 @@ router.get('/meeting_detail_pre', checkStaffLogin, function(req, res) {
 });
 
 router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
-    const presents = req.body.presents;
     const t1 = req.body.t1;
+    let present = req.body.present;
     const storycard = req.body.storycard;
     const progress = req.body.progress;
     const timesheets = req.body.timesheets;
@@ -158,6 +158,9 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
     const dynamics = req.body.dynamics;
     let RecordID;
     const MeetingId = req.query.seq;
+    for(let i=0;i<present.length;i++)
+        present[i]%=3;
+    console.log(present);
     staffModel.getStaffMeetingByMeetingID(MeetingId)
         .then(function (result) {
             meeting = result;
@@ -167,6 +170,7 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
                 change[i] = (i==storycard);
             let newRecord = {
                 _id:mongoose.Types.ObjectId(),
+                Present:present,
                 LastMeetingNote:t1[0],
                 AchievePlan:t1[1],
                 Change:change,
@@ -178,9 +182,6 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
                 Dynamics:dynamics,
                 AnyOtherNote:t1[4],
             };
-            console.log('------');
-            console.log(newRecord._id);
-            console.log('--------');
             if(RecordID != null)
             {
                 recordModel.deleteStaffMeetingRecordByRecordID(RecordID).then();

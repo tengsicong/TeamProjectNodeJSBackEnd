@@ -31,9 +31,13 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><%= meeting.GroupID.StudentID[i].Name%></label>
                         <div class="col-sm-8">
-                            <div class="radio-inline" style="width: 25%"><label><input id="present" value="1" type="radio"> 1</label></div>
-                            <div class="radio-inline" style="width: 25%"><label><input id="present" value="2" type="radio"> 2</label></div>
-                            <div class="radio-inline" style="width: 25%"><label><input id="present" value="3" type="radio"> 3</label></div>
+                            <%for(var j=0;j<3;j++) { %>
+                                <% if(record.Present[i] == j) {%>
+                                <div class="radio-inline" style="width: 25%"><label><input id="present" name="present" value="<%=i*3+j%>" type="checkbox" checked=""> <%=presents[j]%></label></div>
+                                <% } else {%>
+                                <div class="radio-inline" style="width: 25%"><label><input id="present" name="present" value="<%=i*3+j%>" type="checkbox"> <%=presents[j]%></label></div>
+                                <% } %>
+                            <% } %>
                         </div>
                     </div>
                 <div class="clearfix"></div>
@@ -168,8 +172,58 @@
     function my_check() {
         var content = document.getElementById("t12").value;
         var obj = document.getElementById("storycard");
-        var item = null;
-        alert(content);
+        storycard = $('input[name=storycard]:checked').val();
+        progress = $('input[name=progress]:checked').val();
+        timesheets = $('input[name=timesheets]:checked').val();
+        clearPlan = $('input[name=clearPlan]:checked').val();
+        dynamics = $('input[name=dynamics]:checked').val();
+        present = $('input[name=present]:checked').val();
+        var checkID = [];
+        var checkNUM = [];
+        $("input[name=present]:checked").each(function(i){
+            checkID[i] =$(this).val();
+        });
+        $("input[name=present]").each(function(i){
+            checkNUM[i] =$(this).val();
+        });
+        let statu = 0;
+        for(let i=1;i<checkID.length;i++){
+            if(Math.floor(checkID[i]/3) === Math.floor(checkID[i-1]/3)){
+                statu = 1;
+                break;
+            }
+            else if(Math.floor(checkID[i]/3) - Math.floor(checkID[i-1]/3) > 1){
+                statu = 2;
+                break;
+            }
+        }
+        if(checkID.length > checkNUM.length/3 || statu == 1)
+        {
+            alert('each student should have at most 1 present status');
+            return false;
+        }
+        else if(checkID.length < checkNUM.length/3 || statu == 2)
+        {
+            alert('each student should have at least 1 present status');
+            return false;
+        }
+        if(storycard == undefined) {alert('Please fulfill storycard part');return false;}
+        if(storycard == 6)
+            if(content == ''){
+                alert('you should fulfill the reason of changes in the storycard');
+                return false;
+            }
+        else
+            if(content != '') {
+                alert('The reason in changes of storycard part should leave blank if you have not choose the Other option ');
+                return false;
+            }
+        if(progress == undefined) {alert('Please fulfill progress part');return false;}
+        if(timesheets == undefined) {alert('Please fulfill timesheets part');return false;}
+        if(clearPlan == undefined) {alert('Please fulfill Clear Plan part');return false;}
+        if(dynamics == undefined) {alert('Please fulfill dynamics part');return false;}
+        // var item = null;
+        // alert(content);
         return true;
     }
 </script>
