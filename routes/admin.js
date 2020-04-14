@@ -293,6 +293,27 @@ router.get('/timetable_change', function (req, res) {
 });
 
 router.post('/staff_request_reject', function (req, res) {
+    const requestID = mongoose.Types.ObjectId(req.body.requestID);
+    const reason = req.body.reason;
+    console.log('enter')
+    console.log(reason);
+    console.log(requestID);
+    // let command = {
+    //     id: changeStaffMeetingRequestID,
+    //     Status: 'rejected',
+    //     AdminReply: {
+    //         AdminName: "Emma Norling",
+    //         Date: nowDate,
+    //         Content: rejectReason,
+    //     }
+    // }
+    // changeStaffMeetingRequestModel.adminRejectRequest(command)
+    //     .then(function () {
+    //         res.redirect('/admin/timetable_change')
+    //     })
+})
+
+router.post('/client_request_reject', function (req, res) {
     const staffMeetingID = req.body.staffMeetingID;
     const rejectReason = req.body.rejectReason;
     console.log('enter')
