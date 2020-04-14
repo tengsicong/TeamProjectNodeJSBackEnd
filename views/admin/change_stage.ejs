@@ -1,0 +1,58 @@
+<%- include('header') %>
+
+<!-- main content start-->
+<div id="page-wrapper">
+    <div class="blank-page widget-shadow scroll">
+        <h2 class="title1"><b>Change stage</b></h2>
+        <table width="100%">
+            <tr>
+            <form class="form-horizontal" method="post">
+                <td style="width:90%">
+                    <select name="selector1" id="selector1" class="form-control" style="width: 50%">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </td>
+            </form>
+                <td>
+                    <button onclick="changeStage()" style="float: right" type="button" class="btn btn-primary">submit</button>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Description</h3>
+            </div>
+            <div class="panel-body">
+                <p><b>Stage 0: </b>Collect all information.</p>
+                <p><b>Stage 1: </b>Finish collecting information. Admin can edit projects. However, clients cannot create new projects. In this stage, students will be allocated in their teams and get their projects. Students begin to work on projects.</p>
+                <p><b>Stage 2: </b>Finish working on projects. Clients and staffs mark for students. Students check their marks.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('component/footer_script')%>
+<script>
+    function changeStage() {
+        const stage = document.getElementById('selector1').value;
+        const inputElement1 = document.createElement("input");
+        inputElement1.type = 'hidden';
+        inputElement1.name = 'stage';
+        inputElement1.value = stage;
+
+        const form = document.createElement("form");
+        form.action = '/admin/change_stage';
+        form.method = 'post';
+        form.style.display = "none";
+
+        form.appendChild(inputElement1);
+        document.body.appendChild(form);
+        form.submit();
+        return form
+    }
+</script>
+
+<%- include('component/footer') %>

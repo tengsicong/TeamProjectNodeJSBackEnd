@@ -5,6 +5,7 @@ const checkAdminLogin = require('../middlewares/check').checkAdminLogin;
 const proposalModel = require('../models/proposal');
 const teamModel = require('../models/team');
 const adminModel = require('../models/admin');
+const stageModel = require('../models/stage');
 const staffModel = require('../models/staff');
 const clientModel = require('../models/client');
 const studentModel = require('../models/student');
@@ -691,6 +692,34 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
             res.redirect('/admin/project_approved?id=' + proposalId);
         });
 });
+
+router.get('/change_stage', checkAdminLogin,function (req, res) {
+    Promise.all([
+        adminModel.getAdminByID(req.session.userinfo),
+        stageModel.getStage(),
+
+    ])
+        .then(function (result) {
+            const admin = result[0];
+            const stage=result[1];
+            res.render('admin/change_stage', {
+                pageTitle: 'Change stage',
+                admin: admin,
+                stage:stage,
+            });
+        })
+});
+
+router.post('/change_stage', checkAdminLogin, function (req,res) {
+    const stage = mongoose.Types.ObjectId(req.body.stage);
+    Promise.all([
+        stageModel.changeStage(stage),
+    ])
+    .then(function () {
+        res.redirect('/admin/change_stage')
+    })
+});
+
 
 
 module.exports = router;
