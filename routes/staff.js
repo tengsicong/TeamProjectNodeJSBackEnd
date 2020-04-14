@@ -304,7 +304,7 @@ router.post('/my_timetable', checkStaffLogin, function (req,res) {
                 MeetingID: meetingID,
                 StaffID: nowStaff,
                 NewMeetingTime: timechange,
-                Status: 'Pending',
+                Status: 'pending',
                 RequestComment: {
                     RequestName: primaryMeetingResult.StaffID.Name,
                     Date: new Date(),
@@ -319,7 +319,7 @@ router.post('/my_timetable', checkStaffLogin, function (req,res) {
                 MeetingID:meetingID,
                 StaffID:nowStaff,
                 NewStaffID: staffchangeID,
-                Status: 'Pending',
+                Status: 'pending',
                 RequestComment:{
                     RequestName: primaryMeetingResult.StaffID.Name,
                     Date: new Date(),
@@ -336,7 +336,7 @@ router.post('/my_timetable', checkStaffLogin, function (req,res) {
                 StaffID:nowStaff,
                 NewMeetingTime: timechange,
                 NewStaffID: staffchangeID,
-                Status: 'Pending',
+                Status: 'pending',
                 RequestComment:{
                     RequestName: primaryMeetingResult.StaffID.Name,
                     Date: new Date(),
