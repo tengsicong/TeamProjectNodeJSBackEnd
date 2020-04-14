@@ -17,19 +17,22 @@
                         <tr>
                             <td width="40%"><p><b>Supervisor:</b> <%=teams[i].StaffID.Name%><span><i class="fa fa-angle-right" style="float:right;font-size: 35px"/></span></p></td>
                         </tr>
-                        <td width="20em"><p><b>Student:</b>
+                        <td width="20em">
+                            <p>
+                                <b>Student:</b>
                                 <%let students = teams[i].StudentID;%>
                                 <%= students[0].Name %>
                                 <% for (let j = 1; j < students.length; j++) { %>
                                     <%= ' / ' + students[j].Name %>
                                 <% } %>
-                            </p></td>
-                        </tr>
+                            </p>
+                        </td>
                     </table>
                 </div>
             </a>
         </div>
         <%}} else{%>
+        <br>
             <div class="alert alert-danger" role="alert">You do not have a team currently!</div>
         <%}%>
     </div>
