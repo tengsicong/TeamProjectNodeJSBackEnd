@@ -371,8 +371,12 @@ router.get('/my_timetable', checkStaffLogin, function(req, res) {
             const RequestList = result[4];
             let nowtime = new Date();
             let meetingStaff = [];
-            for(var i=0;i<meetingList.length;i++)
+            let delnumber = 0;
+            for(var i=0;i<meetingList.length;i++){
                 meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
+                delnumber+=(meetingList[i].GroupID.ProposalID == null);
+            }
+
             res.render('staff/my_timetable', {
                 pageTitle: 'My Timetable',
                 username: staff.Name,
@@ -382,6 +386,7 @@ router.get('/my_timetable', checkStaffLogin, function(req, res) {
                 nowtime: nowtime,
                 meetingStaff: meetingStaff,
                 changeStaffMeetingRequest: RequestList,
+                delnumber: delnumber,
             });
         });
 });
