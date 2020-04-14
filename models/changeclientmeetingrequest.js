@@ -7,10 +7,9 @@ const changeclientmeetingrequest = mongo.change_client_meeting_requests;
 
 
 module.exports = {
-    getChangeClientMeetingRequest: function getChangeClientMeetingRequest() {
+    getAllChangeClientMeetingRequest: function getAllChangeClientMeetingRequest() {
         return changeclientmeetingrequest
             .find()
-            // .populate('ClientID')
             .populate({path: 'MeetingID',populate:{ path: 'ClientID' }})
             .populate({path: 'MeetingID',populate:{ path: 'GroupID' }})
             .exec()

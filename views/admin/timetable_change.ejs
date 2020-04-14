@@ -11,15 +11,15 @@
                         <table width="100%" class="table">
                             <thead style=" width: calc( 100% - 1em)">
                             <tr style="display: table;width: calc(100% - 1em);table-layout: fixed;">
-                                <th>role</th>
-                                <th>name</th>
-                                <th>meeting number</th>
-                                <th>meeting team</th>
-                                <th>orgianl time</th>
-                                <th>request</th>
-                                <th>comment</th>
-                                <th></th>
-                                <th></th>
+                                <th width="10%">role</th>
+                                <th width="10%">name</th>
+                                <th width="10%">meeting number</th>
+                                <th width="10%">meeting team</th>
+                                <th width="10%">orgianl time</th>
+                                <th width="25%">request</th>
+                                <th width="25%">comment</th>
+                                <th width="5%"></th>
+                                <th width="5%"></th>
                             </tr>
                             </thead>
                             <tbody style="display: block; height: 300px;overflow-y: scroll;">
@@ -33,42 +33,21 @@
                                         <%= j++; %>;
                                             <% } %>
                                     >
-                                        <td scope="row">Staff</td>
-                                        <td><%= changeStaffMeetingRequest[i].StaffID.Name %></td>
-                                        <td><% if (changeStaffMeetingRequest[i].MeetingID != null){ %>
-                                           <%= changeStaffMeetingRequest[i].MeetingID.MeetingNumber %>
-                                        <% }else{ %>
-                                            None
-                                        <% } %></td>
-                                        <td><% if (changeStaffMeetingRequest[i].MeetingID != null){ %>
-                                       <%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName %>
-                                        <% }else{ %>
-                                            None
-                                        <% } %></td>
-                                        <td><% if (changeStaffMeetingRequest[i].MeetingID != undefined){ %>
-                                       <%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %>
-                                        <% }else{ %>
-                                            None
-                                        <% } %></td>
-                                        <td>
-                                            <% if (changeStaffMeetingRequest[i] != undefined) { %>
-                                                <% if (changeStaffMeetingRequest[i].RequestComment != undefined ) { %>
-                                                    change time
-                                                    to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %>
-
-                                                    <br> change staff
-                                                    to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
-                                                <% } %>
-
-                                        <% }else{ %>
-                                            None
-                                        <% } %>  </td>
-                                        <td><% if (changeStaffMeetingRequest[i].RequestComment != undefined){ %>
-                                       <%= changeStaffMeetingRequest[i].RequestComment.Content %>
-                                        <% }else{ %>
-                                            None
-                                        <% } %></td>
-                                        <td>
+                                        <td scope="row" width="10%">Staff</td>
+                                        <td width="10%"><%= changeStaffMeetingRequest[i].StaffID.Name %></td>
+                                        <td width="10%"><%= changeStaffMeetingRequest[i].MeetingID.MeetingNumber %></td>
+                                        <td width="10%"><%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName %></td>
+                                        <td width="10%"><%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                        <td width="25%">
+                                            <% if (changeStaffMeetingRequest[i].NewMeetingTime != undefined) {%>
+                                                change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %> <br>
+                                            <% } %>
+                                            <% if (changeStaffMeetingRequest[i].NewStaffID != undefined) { %>
+                                                change staff to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
+                                            <% } %>
+                                        </td>
+                                        <td width="25%"><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
+                                        <td width="5%">
                                             <a href="/admin/staff_request_approve?id=<%= changeStaffMeetingRequest[i]._id %>">
                                                 <button type="button" class="btn btn-primary"
                                                         data-dismiss="modal" style="width: 100%; float: right">
@@ -76,7 +55,7 @@
                                                 </button>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td width="5%">
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
                                                     data-target="#rejectreason" data-whatever="@Rejectreason"
                                                     style="width: 100%; float: right">
@@ -129,16 +108,15 @@
                                         <%= j++; %>;
                                             <% } %>
                                     >
-                                        <td>Client</td>
-                                       
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name %></td>
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber %></td>
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.GroupID.TeamName %></td>
-                                        <td><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
-                                        <td>change time
-                                            to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
-                                        <td><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
-                                        <td>
+                                        <td width="10%">Client</td>
+
+                                        <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.ClientID.Name %></td>
+                                        <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber %></td>
+                                        <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.GroupID.TeamName %></td>
+                                        <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                        <td width="25%">change time to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                        <td width="25%"><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
+                                        <td width="5%">
                                             <a href="/admin/client_request_approve?id=<%= changeClientMeetingRequest[i]._id %>">
                                                 <button type="button" class="btn btn-primary"
                                                         data-dismiss="modal" style="width: 100%; float: right">
@@ -146,7 +124,7 @@
                                                 </button>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td width="5%">
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
                                                     data-target="#rejectreason" data-whatever="@Rejectreason"
                                                     style="width: 100%; float: right">

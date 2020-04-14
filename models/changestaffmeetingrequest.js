@@ -8,7 +8,7 @@ const changestaffmeetingrequest = mongo.change_staff_meeting_requests;
 
 module.exports = {
 
-    getChangeStaffMeetingRequest: function getChangeStaffMeetingRequest() {
+    getAllChangeStaffMeetingRequest: function getChangeAllStaffMeetingRequest() {
         return changestaffmeetingrequest
             .find()
             // .populate( 'MeetingID')

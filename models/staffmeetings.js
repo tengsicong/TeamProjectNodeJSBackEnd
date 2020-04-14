@@ -43,12 +43,17 @@ module.exports = {
             .findOneAndDelete({_id: staffmeetingIDList})
     },
 
-    editStaffMeetingByChangeMeeting: function editStaffMeetingByChangeMeeting(id, newtime, newstaff) {
+    editStaffMeetingTimeByStaffMeetingID: function editStaffMeetingTimeByStaffMeetingID(id, newTime) {
         return staffmeetings
-            .update({_id: id}, {$set: {Date: newtime, StaffID: newstaff}}, {new: true})
+            .update({_id: id}, {$set: {Date: newTime}}, {new: true})
             .exec()
     },
 
+    editStaffMeetingNewStaffByStaffMeetingID: function editStaffMeetingNewStaffByStaffMeetingID(id, newStaffID) {
+        return staffmeetings
+            .update({_id: id}, {$set: {TemporaryStaffID: newStaffID}}, {new: true})
+            .exec()
+    },
 
     updateStaffMeetingRecordByMeetingID: function updateStaffMeetingRecordByMeetingID(id,rid) {
         return staffmeetings.update({_id:id},{$set:{RecordID:rid}});
