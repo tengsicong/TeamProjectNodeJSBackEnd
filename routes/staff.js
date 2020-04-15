@@ -586,7 +586,7 @@ router.post('/discussion_details', checkStaffLogin, function(req, res) {
                     from: config.transporter.auth.user, // sender address
                     to: qa.Author.UserName, // list of receivers
                     subject: 'New reply from ' + staff.Name + ' to your question', // Subject line
-                    text: staff.Name + ' replied to your question' + qa.Topic + '\n Comment:' + reply, // plain text body
+                    text: staff.Name + ' replied to your question ' + qa.Topic + '\n Comment:' + reply, // plain text body
                     html: 'Greeting, <br>' + staff.Name + ' replied to your question <b>' + qa.Topic + '</b><br>' + 
                             '<p>\"' + reply + '\"</p><br>' + 
                             'Team Project', // html body
