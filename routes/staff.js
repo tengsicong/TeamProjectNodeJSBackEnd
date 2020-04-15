@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const nodemailer  = require('nodemailer');
 const checkStaffLogin = require('../middlewares/check').checkStaffLogin;
 const studentModel = require('../models/student');
 const proposalModel = require('../models/proposal');
@@ -10,9 +11,17 @@ const qaModel = require('../models/student_staff_qa');
 const recordModel = require('../models/staffMeetingRecords');
 const stageModel = require('../models/stage');
 const staffMeetingModel = require('../models/staffmeetings');
+const config = require('config-lite')(__dirname);
 
-//const meetingID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97e');
-//const staffID = mongoose.Types.ObjectId('5e7aaa02c35155e53fe5c97f');
+let transporter = nodemailer.createTransport(config.transporter);
+transporter.verify(function(error, success) {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Server is ready to take our messages');
+    }
+});
+
 
 router.get('/my_project', checkStaffLogin, function(req, res) {
     Promise.all([
@@ -546,7 +555,6 @@ router.get('/discussion_details', checkStaffLogin, function(req, res) {
 
     const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
     routePromise.then(function(staff) {
-
         const detailPromise = qaModel.getQAByQAID(questionID);
         detailPromise.then(function(qa){
             //console.log(qa);
@@ -567,12 +575,27 @@ router.post('/discussion_details', checkStaffLogin, function(req, res) {
     routePromise.then(function(staff) {
         const detailPromise = qaModel.getQAByQAID(questionID);
         detailPromise.then(function(qa){
+            console.log(qa);
             const updatePromise = qaModel.updateReplyByQAID(qa._id, {
                 Author: staff.Name,
                 Comment: reply,
                 ReplyDate: new Date().getTime(),
             });
             updatePromise.then(function(result) {
+                transporter.sendMail({
+                    from: config.transporter.auth.user, // sender address
+                    to: qa.Author.UserName, // list of receivers
+                    subject: 'New reply from ' + staff.Name + ' to your question', // Subject line
+                    text: staff.Name + ' replied to your question' + qa.Topic + '\n Comment:' + reply, // plain text body
+                    html: 'Greeting, <br>' + staff.Name + ' replied to your question <b>' + qa.Topic + '</b><br>' + 
+                            '<p>\"' + reply + '\"</p><br>' + 
+                            'Team Project', // html body
+                }, function(error, info) {
+                    if(error)
+                        return console.log(error);
+                    console.log(`Message: ${info.messageId}`);
+                    console.log(`sent: ${info.response}`);
+                });
                 res.redirect('discussion_details?id=' + qa._id);
             });
         });
