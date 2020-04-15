@@ -547,9 +547,7 @@ router.get('/student_detail', checkAdminLogin,function (req, res, next) {
 });
 
 //edit project
-router.post('/edit_project',checkAdminLogin, function (req, res, next) {
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
-    router.post('/edit_project', function (req, res, next) {
+    router.post('/edit_project', checkAdminLogin,function (req, res, next) {
         const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
         const topic = req.body.topic;
         const content = req.body.content;
@@ -567,7 +565,6 @@ router.post('/edit_project',checkAdminLogin, function (req, res, next) {
             })
             .catch(next)
     });
-});
 
 router.get('/pending_approved',checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
@@ -763,7 +760,7 @@ router.get('/change_stage', checkAdminLogin,function (req, res) {
     ])
         .then(function (result) {
             const admin = result[0];
-            const stage=result[1];
+            const stage=result[1][0];
             res.render('admin/change_stage', {
                 pageTitle: 'Change stage',
                 admin: admin,
@@ -773,7 +770,7 @@ router.get('/change_stage', checkAdminLogin,function (req, res) {
 });
 
 router.post('/change_stage', checkAdminLogin, function (req,res) {
-    const stage = mongoose.Types.ObjectId(req.body.stage);
+    const stage = req.body.stage;
     Promise.all([
         stageModel.changeStage(stage),
     ])
