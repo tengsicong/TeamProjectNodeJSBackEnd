@@ -68,62 +68,7 @@
         <div class="alert alert-danger" role="alert">Not allocated yet!</div>
         <%}%>
     </div>
-    <% }else{ %>
-        <br>
-    <div class="blank-page widget-shadow scroll">
-        <h2 class="title1"><b>Comments</b></h2>
-
-
-        <% if(Replies.length!=0){%>
-        <div class="bs-example widget-shadow" data-example-id="contextual-table" style="overflow-y:auto; ">
-            <table class="table" style="margin-bottom:0px">
-                <thead>
-                <tr>
-                    <th style="width: 20%;font-size: 20px"><b>Name</b></th>
-                    <th style="width: 65%;font-size: 20px"><b>Comment</b></th>
-                    <th style="width: 20%;font-size: 20px"><b>Comment Date</b></th>
-                </tr>
-                </thead>
-                <tbody>
-                <%for(let i = 0; i < Replies.length; i++) {%>
-                    <% if ((i%2) == 1) { %>
-                    <tr>
-                        <td><b><%=Replies[i].Author%></b></td>
-                        <td><%=Replies[i].Comment%></td>
-                        <td><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                    </tr>
-
-                    <% } else{ %>
-                    <tr class="active">
-                        <th scope="row"><b><%=Replies[i].Author%></b></th>
-                        <td><%=Replies[i].Comment%></td>
-                        <td><%=Replies[i].ReplyDate.toISOString().replace(/T.*/,' ')+Replies[i].ReplyDate.toLocaleTimeString().replace(/ G.*/,"")%></td>
-                    </tr>
-                <%}}%>
-                </tbody>
-            </table>
-        </div>
-        <%} else{%>
-            <div class="alert alert-danger" role="alert">No comment yet!</div>
-        <%}%>
-        <br>
-
-        <div class="row">
-            <br>
-            <form class="form-horizontal" method="post">
-                <div class="form-group">
-                    <label for="project_name" class="col-sm-2 control-label">Make a comment</label>
-                    <div class="col-sm-8">
-                        <textarea id="comment" rows="6" class="form-control form-control"></textarea>
-                    </div>
-                </div>
-            </form>
-            <div style="text-align: center">
-                <button type="button" class="btn btn-primary" onclick="checkComment()">SUBMIT</button>
-            </div>
-        </div>
-    </div>
-    <% } %>
+    <% }%>
 </div>
 
 <%- include('footer') %>

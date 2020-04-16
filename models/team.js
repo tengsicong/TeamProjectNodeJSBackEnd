@@ -47,7 +47,6 @@ module.exports = {
             .populate('StudentID')
             .populate('StaffID')
             .populate('ProposalID')
-
             .exec();
     },
 
