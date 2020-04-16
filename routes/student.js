@@ -11,16 +11,6 @@ const nodemailer  = require('nodemailer');
 const config = require('config-lite')(__dirname);
 let transporter = nodemailer.createTransport(config.transporter);
 
-transporter.sendMail({
-    from: 'ssit_group3@outlook.com', // sender address
-    to: "yourmail@mail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>" // html body
-});
-
-
-
 router.get('/homepage', checkStudentLogin, function(req, res) {
     Promise.all([
         studentModel.getStudentByStudentID(req.session.userinfo),
@@ -274,6 +264,14 @@ router.post('/post_qa', checkStudentLogin, function(req, res) {
     const content = req.body.content;
     studentModel.getStudentByStudentID(req.session.userinfo).then(function (result) {
         studentStaffQAModel.createNewQA(result, topic, content);
+    });
+    teamModel.getTeamByStudentID(req.session.userinfo).then(function (result) {
+        transporter.sendMail({
+            from: 'ssit_group3@outlook.com',
+            to: result.StaffID.UserName,
+            subject: "SSIT Team Project: a new student question",
+            text: "You have a new student question from SSIT Team " + result.TeamName + " .",
+        });
     })
     res.redirect('/student/student_qa');
 });

@@ -28,17 +28,9 @@ module.exports = {
 
     },
 
-    adminRejectRequest: function adminRejectRequest (command) {
+    adminRejectRequest: function adminRejectRequest (requestID, adminName, comment) {
         return changestaffmeetingrequest
-            .findOneAndUpdate({_id: command.id}, {$set: {Status: command.Status, AdminReply: command.AdminReply}},{new:true})
+            .findOneAndUpdate({_id: requestID}, {$set: {Status: 'rejected', AdminReply: {AdminName: adminName, Date: new Date(), Content: comment}}},{new:true})
             .exec()
     },
-
-    // getChangeStaffMeetingRequestByChangeStaffMeetingRequestID: function getChangeStaffMeetingRequestByChangeStaffMeetingRequestID(id) {
-    //     return changestaffmeetingrequest
-    //         .findOne({_id:id})
-    //         .populate('GroupID')
-    //         // .populate('ClientID')
-    // },
-
 };

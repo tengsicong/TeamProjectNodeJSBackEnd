@@ -18,15 +18,7 @@ const nodemailer  = require('nodemailer');
 const config = require('config-lite')(__dirname);
 
 let transporter = nodemailer.createTransport(config.transporter);
-transporter.verify(function(error, success) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log('Server is ready to take our messages');
-    }
-});
-// const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-// const adminID = req.session.userinfo
+
 /* GET edit team page. */
 router.get('/edit_team', checkAdminLogin,function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
@@ -583,7 +575,6 @@ router.get('/student_detail', checkAdminLogin,function (req, res, next) {
                     subject: 'Project edited', // Subject line
                     text: 'Your project: ' + proposalID.Topic + 'has been edited. ' , // plain text body
                 } );
-                if(team!==undefined){
                 for(let i=0;i<team.length;i++) {
                     for (let j = 0; j < team[i].StudentID[j].length; i++) {
                         transporter.sendMail({
@@ -591,25 +582,15 @@ router.get('/student_detail', checkAdminLogin,function (req, res, next) {
                             to: team[i].StudentID[j].UserName, // list of receivers
                             subject: 'Project edited', // Subject line
                             text: 'Your project: ' + proposalID.Topic + 'has been edited. ', // plain text body
-                        }, function(error, info) {
-                            if(error)
-                                return console.log(error);
-                            console.log(`Message: ${info.messageId}`);
-                            console.log(`sent: ${info.response}`);
                         });
                         transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
                             to: team[i].StaffID.UserName, // list of receivers
                             subject: 'Project edited', // Subject line
                             text: 'Your project: ' + proposalID.Topic + 'has been edited. ', // plain text body
-                        }, function(error, info) {
-                            if(error)
-                                return console.log(error);
-                            console.log(`Message: ${info.messageId}`);
-                            console.log(`sent: ${info.response}`);
                         });
                     }
-                }}
+                }
                 res.redirect('/admin/project_list')
             })
             .catch(next)
@@ -635,11 +616,6 @@ router.get('/pending_approved',checkAdminLogin, function (req, res, next) {
                 to: client.UserName, // list of receivers
                 subject: 'Project status changed', // Subject line
                 text: 'Your project: ' + proposalID.Topic + 'has been approved. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
             res.redirect('/admin/project_approved?id=' + req.query.id)
         })
@@ -666,11 +642,6 @@ router.get('/pending_rejected', checkAdminLogin,function (req, res, next) {
                 to: client.UserName, // list of receivers
                 subject: 'Project status changed', // Subject line
                 text: 'Your project: ' + proposalID.Topic + 'has been rejected. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
             res.redirect('/admin/project_rejected?id=' + req.query.id)
         })
@@ -697,11 +668,6 @@ router.get('/rejected_pending',checkAdminLogin, function (req, res, next) {
                 to: client.UserName, // list of receivers
                 subject: 'Project status changed', // Subject line
                 text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
             res.redirect('/admin/project_pending?id=' + req.query.id)
         })
@@ -722,13 +688,7 @@ router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
                 to: client.UserName, // list of receivers
                 subject: 'Project status changed', // Subject line
                 text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
-            if(teams!==undefined){
             for(let i=0;i<teams.length;i++) {
                 for (let j = 0; j < teams[i].StudentID[j].length; j++) {
                     transporter.sendMail({
@@ -736,25 +696,15 @@ router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
                         to: teams[i].StudentID[j].UserName, // list of receivers
                         subject: 'Project status changed', // Subject line
                         text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
-                    }, function(error, info) {
-                        if(error)
-                            return console.log(error);
-                        console.log(`Message: ${info.messageId}`);
-                        console.log(`sent: ${info.response}`);
                     });
                     transporter.sendMail({
                         from: 'ssit_group3@outlook.com', // sender address
                         to: teams[i].StaffID.UserName, // list of receivers
                         subject: 'Project status changed', // Subject line
                         text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
-                    }, function(error, info) {
-                        if(error)
-                            return console.log(error);
-                        console.log(`Message: ${info.messageId}`);
-                        console.log(`sent: ${info.response}`);
                     });
                 }
-            }}
+            }
 
             for(let i=0;i<teams.length;i++){
             proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
@@ -813,11 +763,6 @@ router.post('/project_pending', checkAdminLogin,function (req, res, next) {
                     to: client.UserName, // list of receivers
                     subject: 'New comment received', // Subject line
                     text: admin.Name + ' made a comment in your project: ' + proposalID.Topic + '\n Comment: ' + comment, // plain text body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
                 } );
                 res.redirect('/admin/project_pending?id=' + proposalID)
             })
@@ -850,11 +795,6 @@ router.post('/project_rejected', checkAdminLogin,function (req, res, next) {
                     to: client.UserName, // list of receivers
                     subject: 'New comment received', // Subject line
                     text: admin.Name + ' made a comment in your project: ' + proposalID.Topic + '\n Comment: ' + comment, // plain text body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
                 } );
                 res.redirect('/admin/project_rejected?id=' + proposalID)
             })
@@ -880,11 +820,6 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
                 to: client.UserName, // list of receivers
                 subject: 'Team deleted', // Subject line
                 text: 'Your team ' + teamID.TeamName + 'has been deleted from project: '+ proposalId.Topic+'.', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
             if(teamID.StaffID!==undefined || teamID.StudentID!==undefined){
                 transporter.sendMail({
@@ -892,11 +827,6 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
                     to: teamID.StaffID.UserName, // list of receivers
                     subject: 'Team deleted', // Subject line
                     text: 'Your team ' + teamID.TeamName + 'has been deleted from project: '+ proposalId.Topic+'.', // plain text body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
                 });
                 for (let i = 0; i < teamID.StudentID[i].length; i++) {
                     transporter.sendMail({
@@ -904,11 +834,6 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
                         to: teamID.StudentID[i].UserName, // list of receivers
                         subject: 'Team deleted', // Subject line
                         text: 'Your team ' + teamID.TeamName + 'has been deleted from project: '+ proposalId.Topic+'.', // plain text body
-                    }, function(error, info) {
-                        if(error)
-                            return console.log(error);
-                        console.log(`Message: ${info.messageId}`);
-                        console.log(`sent: ${info.response}`);
                     });
                 }
             }
@@ -941,12 +866,8 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
                 to: client.UserName, // list of receivers
                 subject: 'Project deleted', // Subject line
                 text: 'Your project: ' + proposalID.Topic + 'has been deleted. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
+        })
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(client._id,proposalID),
         proposalModel.deleteProposal(proposalID)
@@ -954,10 +875,8 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
         .then(function (result) {
             res.redirect('/admin/project_list')
         })
-        })
         .catch(next)
 });
-
 
 router.post('/allocate_team', checkAdminLogin,function (req, res) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
@@ -977,22 +896,12 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
                     to: client.UserName, // list of receivers
                     subject: 'Team allocated', // Subject line
                     text: 'Your project: ' + proposalID.Topic + 'has been allocated a new team. ', // plain text body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
                 } );
                 transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: teamID.StaffID.UserName, // list of receivers
                     subject: 'Project allocated', // Subject line
                     text: 'Your team has been allocated a project: '+ proposalId.Topic, // plain text body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
                 });
                 for (let i = 0; i < teamID.StudentID[i].length; i++) {
                     transporter.sendMail({
@@ -1000,11 +909,6 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
                         to: teamID.StudentID[i].UserName, // list of receivers
                         subject: 'Project allocated', // Subject line
                         text: 'Your team has been allocated a project: '+ proposalId.Topic, // plain text body
-                    }, function(error, info) {
-                        if(error)
-                            return console.log(error);
-                        console.log(`Message: ${info.messageId}`);
-                        console.log(`sent: ${info.response}`);
                     });
                 }
 
@@ -1063,48 +967,30 @@ router.post('/change_stage', checkAdminLogin, function (req,res) {
         const client = result[1];
         const student = result[2];
         const staff = result[3];
-        if(client!==undefined){
         for(let i=0; i < client.length;i++){
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: client[i].UserName, // list of receivers
                 subject: 'Stage changed', // Subject line
                 text: 'Stage has been changed.', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
-        }}
-        if(student!==undefined){
+        }
         for(let i=0; i < student.length;i++){
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: student[i].UserName, // list of receivers
                 subject: 'Stage changed', // Subject line
                 text: 'Stage has been changed. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
-        }}
-        if(staff!==undefined){
+        }
         for(let i=0; i < staff.length;i++){
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: staff[i].UserName, // list of receivers
                 subject: 'Stage changed', // Subject line
                 text: 'Stage has been changed. ', // plain text body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
             } );
-        }}
+        }
         res.redirect('/admin/change_stage')
     })
 });
