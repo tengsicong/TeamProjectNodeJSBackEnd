@@ -14,13 +14,6 @@ const checkClientLogin = require('../middlewares/check').checkClientLogin;
 const config = require('config-lite')(__dirname);
 
 let transporter = nodemailer.createTransport(config.transporter);
-transporter.verify(function(error, success) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log('Server is ready to take our messages');
-    }
-});
 
 router.get('/myproject', checkClientLogin, function (req, res,  next) {
     Promise.all([
