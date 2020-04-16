@@ -99,10 +99,10 @@ text-decoration:underline;
     margin: 0em 0em 1.5em 0em;
 }
 .login-page input.user {
-    background: url(public/images/user.png)no-repeat 8px 16px #fff;
+    background: url(../../images/user.png)no-repeat 8px 16px #fff;
 }
 .login-page input.lock {
-    background: url(public/images/lock.png)no-repeat 8px 16px #fff;
+    background: url(../../images/lock.png)no-repeat 8px 16px #fff;
 }
 .login-page label.checkbox {
     margin: 0 0 0 1.3em;
@@ -261,14 +261,14 @@ p.creating {
     margin: 0em 0 1.5em 0;
 }
 .signup-page input[type="email"]{
-    background: url(public/images/mail.png)no-repeat 8px 16px #fff;
+    background: url(../../images/mail.png)no-repeat 8px 16px #fff;
 	background-size: 20px;
 }
 .signup-page input[type="text"] {
-    background: url(public/images/user.png)no-repeat 8px 16px #fff;
+    background: url(../../images/user.png)no-repeat 8px 16px #fff;
 }
 .signup-page input[type="password"] {
-    background: url(public/images/lock.png)no-repeat 8px 16px #fff;
+    background: url(../../images/lock.png)no-repeat 8px 16px #fff;
 }
 .signup-page input[type="text"]:focus ,.signup-page input[type="email"]:focus,.signup-page input[type="password"]:focus,.login-page input[type="email"]:focus,.login-page input[type="password"]:focus{
     border-color: #337ab7;
