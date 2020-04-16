@@ -14,8 +14,7 @@ const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequ
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
 
 const mongoose = require('mongoose');
-// const adminID = mongoose.Types.ObjectId('5e7ce2e2ad9b3de5109cb8eb');
-// const adminID = req.session.userinfo
+
 /* GET edit team page. */
 router.get('/edit_team', checkAdminLogin,function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
@@ -257,14 +256,25 @@ router.get('/timetable', checkAdminLogin,function (req, res) {
             const admin = result[0];
             const allStaffMeetings = result[1];
             const allClientMeetings = result[2];
-            const changeRequstNumber = result[3].length + result[4].length;
-
+            const changeStaffMeetingRequest = result[3];
+            const changeClientMeetingRequest = result[4];
+            let changeRequestNumber = 0;
+            for (let i = 0; i < changeStaffMeetingRequest.length; i++) {
+                if (changeStaffMeetingRequest[i].Status == 'pending') {
+                    changeRequestNumber++;
+                }
+            }
+            for (let i = 0; i < changeClientMeetingRequest.length; i++) {
+                if (changeClientMeetingRequest[i].Status == 'pending') {
+                    changeRequestNumber++;
+                }
+            }
             res.render('admin/timetable', {
                 pageTitle: 'Timetable',
                 admin: admin,
                 allStaffMeetings: allStaffMeetings,
                 allClientMeetings: allClientMeetings,
-                changeRequstNumber: changeRequstNumber,
+                changeRequestNumber: changeRequestNumber,
             });
         });
 });
@@ -297,76 +307,45 @@ router.get('/timetable_change', checkAdminLogin,function (req, res) {
 router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
-    console.log('enter');
-    console.log(reason);
-    console.log(requestID);
-    // let command = {
-    //     id: changeStaffMeetingRequestID,
-    //     Status: 'rejected',
-    //     AdminReply: {
-    //         AdminName: "Emma Norling",
-    //         Date: nowDate,
-    //         Content: rejectReason,
-    //     }
-    // }
-    // changeStaffMeetingRequestModel.adminRejectRequest(command)
-    //     .then(function () {
-    //         res.redirect('/admin/timetable_change')
-    //     })
+    adminModel.getAdminByID(req.session.userinfo).then(function (result) {
+        changeStaffMeetingRequestModel.adminRejectRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+    })
 })
 
 router.post('/client_request_reject', checkAdminLogin,function (req, res) {
-    const staffMeetingID = req.body.staffMeetingID;
-    const rejectReason = req.body.rejectReason;
-    console.log('enter')
-    const nowDate = new Date();
-    console.log(rejectReason);
-    // let command = {
-    //     id: changeStaffMeetingRequestID,
-    //     Status: 'rejected',
-    //     AdminReply: {
-    //         AdminName: "Emma Norling",
-    //         Date: nowDate,
-    //         Content: rejectReason,
-    //     }
-    // }
-    // changeStaffMeetingRequestModel.adminRejectRequest(command)
-    //     .then(function () {
-    //         res.redirect('/admin/timetable_change')
-    //     })
+    const requestID = mongoose.Types.ObjectId(req.body.staffMeetingID);
+    const rejectReason = req.body.reason;
+    adminModel.getAdminByID(req.session.userinfo).then(function (result) {
+        changeClientMeetingRequestModel.adminRejectRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+    })
 })
 
 router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
-    const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    changeStaffMeetingRequestModel.adminApproveRequest(changeStaffMeetingRequestID)
-        .then(function (result) {
-            const staffmeetingID = result.MeetingID;
-            if (result.NewStaffID != undefined) {
-                const newStaff = result.NewStaffID;
-                staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffmeetingID, newStaff).then();
-            }
-            if (result.NewMeetingTime != undefined) {
-                const newMeetingTime = result.NewMeetingTime;
-                staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffmeetingID, newMeetingTime).then();
-            }
-        })
+    const requestID = mongoose.Types.ObjectId(req.query.id);
+    changeStaffMeetingRequestModel.adminApproveRequest(requestID).then(function (result) {
+        const staffMeetingID = result.MeetingID;
+        if (result.NewStaffID != undefined) {
+            const newStaff = result.NewStaffID;
+            staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffMeetingID, newStaff).then();
+        }
+        if (result.NewMeetingTime != undefined) {
+            const newMeetingTime = result.NewMeetingTime;
+            staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffMeetingID, newMeetingTime).then();
+        }
+    })
     res.redirect('/admin/timetable_change')
 })
 
 router.get('/client_request_approve',checkAdminLogin, function (req, res) {
-    const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
-        .then(function () {
-            const meetingtime = result.NewMeetingTime;
-            const clientmeetingID = result.MeetingID;
-            clientMeetingModel.editClientMeetingByChangeMeeting(clientmeetingID, meetingtime).then(function () {
-
-                res.redirect('/admin/timetable_change')
-            })
-        })
+    const requestID = mongoose.Types.ObjectId(req.query.id);
+    changeClientMeetingRequestModel.adminApproveRequest(requestID).then(function (result) {
+        const clientMeetingID = result.MeetingID;
+        const newMeetingTime = result.NewMeetingTime;
+        clientMeetingModel.editClientMeetingTimeByClientMeetingID(clientMeetingID, newMeetingTime).then(res.redirect('/admin/timetable_change'));
+    })
 })
 
-router.get('/project_list', checkAdminLogin,function (req, res, next) {
+router.get('/project_list', checkAdminLogin,function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getAllProposals(),

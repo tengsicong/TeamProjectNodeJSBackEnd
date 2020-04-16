@@ -1,8 +1,4 @@
 const mongo = require('../lib/mongo');
-const clientmeetings = mongo.client_meetings;
-const student = mongo.students;
-const client = mongo.clients;
-const mongoose = require('mongoose');
 const changeclientmeetingrequest = mongo.change_client_meeting_requests;
 
 
@@ -32,18 +28,20 @@ module.exports = {
 
     deleteChangeClientMeetingRequestByMeetingID: function deleteChangeClientMeetingRequestByMeetingID(MeetingID) {
         return changeclientmeetingrequest
-            .deleteMany({MeetingID:MeetingID})
+            .deleteMany({MeetingID: MeetingID})
             .exec()
     },
 
-    adminEditCPendingStatusTimetable: function adminApproveRequest (newChangeClientMeetingRequest) {
+    adminRejectRequest: function adminRejectRequest (requestID, adminName, comment) {
         return changeclientmeetingrequest
-            .update({_id:newChangeClientMeetingRequest._id},{$set:{Status:newChangeClientMeetingRequest.Status}})
-
+            .findOneAndUpdate({_id: requestID}, {$set: {Status: 'rejected', AdminReply: {AdminName: adminName, Date: new Date(), Content: comment}}},{new:true})
+            .exec()
     },
+
     adminApproveRequest: function adminApproveRequest (id) {
         return changeclientmeetingrequest
             .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
 
     },
+
 };

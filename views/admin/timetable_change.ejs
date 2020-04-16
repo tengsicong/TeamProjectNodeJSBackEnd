@@ -23,7 +23,8 @@
                             </tr>
                             </thead>
                             <tbody style="display: block; height: 300px;overflow-y: scroll;">
-                            <% for (let i = 0, j = 0; i < changeStaffMeetingRequest.length; i++){ %>
+                            <% let j = 0;%>
+                            <% for (let i = 0; i < changeStaffMeetingRequest.length; i++){ %>
                                 <% if ( changeStaffMeetingRequest[i].Status == 'pending' ){ %>
                                     <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
                                     <% if(j % 2 == 0) { %>
@@ -49,19 +50,12 @@
                                         <td width="25%"><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
                                         <td width="5%">
                                             <a href="/admin/staff_request_approve?id=<%= changeStaffMeetingRequest[i]._id %>">
-                                                <button type="button" class="btn btn-primary"
-                                                        data-dismiss="modal" style="width: 100%; float: right">
-                                                    Approve
-                                                </button>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal" style="width: 100%; float: right">Approve</button>
                                             </a>
                                         </td>
                                         <td width="5%">
-                                            <button type="button" class="btn btn-danger " data-toggle="modal"
-                                                    data-target="#staffrejectreason" data-whatever="@staffRejectReason"
-                                                    style="width: 100%; float: right">
-                                                Reject
-                                            </button>
-                                            <div class="modal fade" id="staffrejectreason" tabindex="-1" role="dialog"
+                                            <button type="button" class="btn btn-danger " data-toggle="modal" data-target="#staffrejectreason<%= i %>" data-whatever="@staffRejectReason" style="width: 100%; float: right">Reject</button>
+                                            <div class="modal fade" id="staffrejectreason<%= i %>" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
@@ -96,7 +90,7 @@
 
                                 <% } %>
                             <% } %>
-                            <% for (let i = 0, j = 0; i < changeClientMeetingRequest.length; i++){ %>
+                            <% for (let i = 0; i < changeClientMeetingRequest.length; i++){ %>
                                 <% if ( changeClientMeetingRequest[i].Status == 'pending' ){ %>
                                     <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
                                     <% if(j % 2 == 0) { %>
@@ -262,7 +256,8 @@
         if (string == 'staff') {
             form.action = '/admin/staff_request_reject';
             const id = 'staffReason' + number.toString()
-            const id1= 'staffRequest' +  number.toString()
+            const id1= 'staffRequestID' +  number.toString()
+            console.log(id + id1)
             if (document.getElementById(id).value == '') {
                 alert("Please enter your reason1")
             } else {

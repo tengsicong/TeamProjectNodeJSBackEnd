@@ -48,9 +48,9 @@ module.exports = {
             .exec()
     },
 
-        editClientMeetingByChangeMeeting: function editClientMeetingByChangeMeeting(id, newtime) {
+    editClientMeetingTimeByClientMeetingID: function editClientMeetingTimeByClientMeetingID(id, newTime) {
         return clientmeetings
-            .update({_id: id}, {$set: {Date: newtime}}, {new: true})
+            .findOneAndUpdate({_id: id}, {$set: {Date: newTime}}, {new: true})
             .exec()
     },
 

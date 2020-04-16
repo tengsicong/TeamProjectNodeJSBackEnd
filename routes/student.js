@@ -11,13 +11,13 @@ const nodemailer  = require('nodemailer');
 const config = require('config-lite')(__dirname);
 let transporter = nodemailer.createTransport(config.transporter);
 
-transporter.sendMail({
-    from: 'ssit_group3@outlook.com', // sender address
-    to: "yourmail@mail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>" // html body
-});
+// transporter.sendMail({
+//     from: 'ssit_group3@outlook.com', // sender address
+//     to: "yourmail@mail.com", // list of receivers
+//     subject: "Hello ✔", // Subject line
+//     text: "Hello world?", // plain text body
+//     html: "<b>Hello world?</b>" // html body
+// });
 
 
 
