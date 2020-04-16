@@ -502,52 +502,39 @@ router.get('/marking', checkStaffLogin, function(req, res) {
 });
 
 router.get('/discussion', checkStaffLogin, function(req, res) {
-    const routePromise = staffModel.getStaffByStaffID(req.session.userinfo);
-    routePromise.then(function(staff) {
-        const completedQAPromise = new Promise(function(resolve) {
-            let qaList = [];
-            let loaded = 0;
+    Promise.all([
+        staffModel.getStaffByStaffID(req.session.userinfo),
+        staffModel.getAllocatedTeamByStaffID(req.session.userinfo),
+    ])
+        .then(function(result) {
+            const staff = result[0];
+            const allTeams = result[1];
 
-            for(let i = 0; i < staff.AllocatedTeamID.length; i++) {
-                Promise.all([
-                    qaModel.getQAByGroupID(staff.AllocatedTeamID[i]),
-                    staffModel.getAllocatedTeamByTeamID(staff.AllocatedTeamID[i]),
-                ])
-                    .then(function(result) {
+            const completedQA = async () => {
+                let qaList = [];
+
+                for (let i = 0; i < allTeams.length; i++) {
+                    if(allTeams[i].ProposalID !== undefined) {
+                        let qa =  await qaModel.getQAByGroupID(allTeams[i]._id);
                         qaList.push({
-                            teamName: result[1].TeamName,
-                            qas: result[0],
+                            teamName: allTeams[i].TeamName,
+                            qas: qa,
                         });
-                        loaded++;
-                        if(loaded == staff.AllocatedTeamID.length) {
-                            qaList.sort(function(a, b) {
-                                if(a.teamName > b.teamName) {
-                                    return 1;
-                                } else if(a.teamName < b.teamName) {
-                                    return -1;
-                                } else {
-                                    return 0;
-                                }
-                            });
-                            resolve(qaList);
-                        }
-                    });
-            }
+                    }
+                }
 
-            if(staff.AllocatedTeamID.length == 0) {
-                resolve(qaList);
-            }
-        });
- 
-        completedQAPromise.then(function(qa) {
-            //console.log(qa);
-            res.render('staff/discussion', {
-                pageTitle: 'Discussion',
-                username: staff.Name,
-                qa: qa,
+                return qaList;
+            };
+
+            completedQA().then(function(qa) {
+                //console.log(qa);
+                res.render('staff/discussion', {
+                    pageTitle: 'Discussion',
+                    username: staff.Name,
+                    qa: qa,
+                });
             });
         });
-    });
 });
 
 router.get('/discussion_details', checkStaffLogin, function(req, res) {
