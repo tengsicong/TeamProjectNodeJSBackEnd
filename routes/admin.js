@@ -20,11 +20,6 @@ const nodemailer = require('nodemailer');
 const config = require('config-lite')(__dirname);
 let transporter = nodemailer.createTransport(config.transporter);
 
-const nodemailer  = require('nodemailer');
-const config = require('config-lite')(__dirname);
-
-let transporter = nodemailer.createTransport(config.transporter);
-
 /* GET edit team page. */
 router.get('/edit_team', checkAdminLogin, function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
