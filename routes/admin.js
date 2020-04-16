@@ -13,9 +13,7 @@ const clientMeetingModel = require('../models/clientmeetings');
 const staffMeetingModel = require('../models/staffmeetings');
 const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
-
 const mongoose = require('mongoose');
-
 const nodemailer  = require('nodemailer');
 const config = require('config-lite')(__dirname);
 
@@ -870,7 +868,6 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
                 subject: 'Project deleted', // Subject line
                 text: 'Your project: ' + proposalID.Topic + 'has been deleted. ', // plain text body
             } );
-        })
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(client._id,proposalID),
         proposalModel.deleteProposal(proposalID)
@@ -878,8 +875,10 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
         .then(function (result) {
             res.redirect('/admin/project_list')
         })
+        })
         .catch(next)
 });
+
 
 router.post('/allocate_team', checkAdminLogin,function (req, res) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
