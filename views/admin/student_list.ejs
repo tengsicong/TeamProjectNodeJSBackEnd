@@ -8,10 +8,14 @@
                 <table width="100%">
                     <tr>
                         <td width="70%"><h2 style="color:#629aa9">Student list</h2></td>
-                        <td width="10%"><input type="search" placeholder="student name..."></td>
+                        <!--                                                <form action="/admin/search" method="GET">-->
+                        <td width="10%"><input id="search" name="name" type="search" placeholder="student name..."></td>
                         <td width="10%">
-                            <button type="button" class="btn btn-primary">search</button>
+                            <!--    <button onclick="getSearchPage()" type="button" class="btn btn-primary">search</button>-->
+                            <input id="btn" class="btn btn-primary" type="button" value="search">
                         </td>
+                        <!--%- include('component/search') %-->
+                        <!--                        </form>-->
                         <td width="10%">
                             <button data-toggle="modal" data-target="#add_new_student" data-whatever="@AddNewStudent"
                                     class="btn btn-primary" style="float:right;">addstudent
@@ -53,102 +57,103 @@
                 </table>
             </div>
             <br/>
+            <ul id="list">
+                <div class="blank-page widget-shadow" data-example-id="contextual-table" style="margin-top:10px">
+                    <div class="table" width="100%">
+                        <table width="100%" class="table">
+                            <thead style=" width: calc( 100% - 1em )">
+                            <tr style="display: table;width: 100%;table-layout: fixed;">
+                                <h3><b>Allocated students</b></h3>
+                            </tr>
+                            <br>
+                            <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Group</th>
+                                <th>Project</th>
+                            </tr>
+                            </thead>
+                            <tbody style="display: block; height: 300px;overflow-y: scroll;">
+                            <% for (var i = 0, j = 0; i < allStudent.length ; i++) { %>
+                                <% if (allStudent[i].GroupID == undefined) { %>
 
-            <div class="blank-page widget-shadow">
-                <table width="100%" class="table">
-                    <thead style=" width: calc( 100% - 1em )">
-                    <tr style="display: table;width: 100%;table-layout: fixed;">
-                        <h3><b>Allocated students</b></h3>
-                    </tr>
-                    <br>
-                    <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
-                        <th>Name</th>
-                        <th>E-mail</th>
-                        <th>Group</th>
-                        <th>Project</th>
-                    </tr>
-                    </thead>
-                    <tbody style="display: block; height: 300px;overflow-y: scroll;">
-                    <% for (var i = 0, j = 0; i < allStudent.length ; i++) { %>
-                        <% if (allStudent[i].GroupID == undefined) { %>
+                                <% }else{ %>
+                                    <a href="/admin/student_detail?id=<%= allStudent[i]._id %>">
+                                        <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                                        <% if(j % 2 == 0) { %>
+                                            <%= j++; %>
+                                            class="active"
+                                        <% }else { %>
+                                            <%= j++; %>
+                                                <% } %>
+                                            onclick="window.location.href='/admin/student_detail?id=<%= allStudent[i]._id %>'"
+                                        >
 
-                        <% }else{ %>
-                            <a href="/admin/student_detail?id=<%= allStudent[i]._id %>">
-                                <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
-                                <% if(j % 2 == 0) { %>
-                                    <%= j++; %>
-                                    class="active"
-                                <% }else { %>
-                                    <%= j++; %>
-                                        <% } %>
-                                    onclick="window.location.href='/admin/student_detail?id=<%= allStudent[i]._id %>'"
-                                >
+                                            <td scope="row"><%= allStudent[i].Name %></td>
+                                            <td><%= allStudent[i].UserName %></td>
+                                            <td><%= allStudent[i].GroupID.TeamName %></td>
+                                            <td>
+                                                <% if (allStudent[i].GroupID.ProposalID != undefined) { %>
+                                                    <%= allStudent[i].GroupID.ProposalID.Topic %>
+                                                <% } else { %>
+                                                    None
+                                                <% } %>
+                                            </td>
 
-                                    <td scope="row"><%= allStudent[i].Name %></td>
-                                    <td><%= allStudent[i].UserName %></td>
-                                    <td><%= allStudent[i].GroupID.TeamName %></td>
-                                    <td>
-                                        <% if (allStudent[i].GroupID.ProposalID != undefined) { %>
-                                            <%= allStudent[i].GroupID.ProposalID.Topic %>
-                                        <% } else { %>
-                                            None
-                                        <% } %>
-                                    </td>
-
-                                </tr>
-                            </a>
-                        <% } %>
-                    <% } %>
-                    </tbody>
-
-                </table>
-            </div>
-
-            <div class="blank-page widget-shadow" data-example-id="contextual-table" style="margin-top:10px">
-                <div class="table" width="100%">
-                    <table width="100%" class="table">
-                        <thead style=" width: calc( 100% - 1em )">
-                        <tr style="display: table;width: 100%;table-layout: fixed;">
-                            <h3><b>Unallocated students</b></h3>
-                        </tr>
-                        <br>
-                        <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Group</th>
-                            <th>Project</th>
-                        </tr>
-                        </thead>
-                        <tbody style="display: block; height: 300px;overflow-y: scroll;">
-                        <% for (var i = 0, j = 0; i < allStudent.length ; i++) { %>
-                            <% if (allStudent[i].GroupID == undefined) { %>
-                                <!--                        <a href="/admin/student_detail?id=<%= allStudent[i]._id %>">-->
-                                <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
-                                <% if(j % 2 == 0) { %>
-                                    <%= j++; %>;
-                                    class="active"
-                                <% }else { %>
-                                    <%= j++; %>;
-                                        <% } %>
-                                    onclick="window.location.href='/admin/student_detail?id=<%= allStudent[i]._id %>'"
-                                >
-
-                                    <td scope="row"><%= allStudent[i].Name %></td>
-                                    <td><%= allStudent[i].UserName %></td>
-                                    <td>None</td>
-                                    <td>None</td>
-
-                                </tr>
-
-                            <% }else{ %>
-
+                                        </tr>
+                                    </a>
+                                <% } %>
                             <% } %>
-                        <% } %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                            </tbody>
 
+                        </table>
+                    </div>
+                </div>
+                <div class="blank-page widget-shadow" data-example-id="contextual-table" style="margin-top:10px">
+                    <div class="table" width="100%">
+                        <table width="100%" class="table">
+                            <thead style=" width: calc( 100% - 1em )">
+                            <tr style="display: table;width: 100%;table-layout: fixed;">
+                                <h3><b>Unallocated students</b></h3>
+                            </tr>
+                            <br>
+                            <tr style="display: table; width: calc( 100% - 1em );table-layout: fixed;">
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Group</th>
+                                <th>Project</th>
+                            </tr>
+                            </thead>
+                            <tbody style="display: block; height: 300px;overflow-y: scroll;">
+                            <% for (var i = 0, j = 0; i < allStudent.length ; i++) { %>
+                                <% if (allStudent[i].GroupID == undefined) { %>
+                                    <!--                        <a href="/admin/student_detail?id=<%= allStudent[i]._id %>">-->
+                                    <tr style="cursor:pointer;display: table;width: 100%;table-layout: fixed;"
+                                    <% if(j % 2 == 0) { %>
+                                        <%= j++; %>;
+                                        class="active"
+                                    <% }else { %>
+                                        <%= j++; %>;
+                                            <% } %>
+                                        onclick="window.location.href='/admin/student_detail?id=<%= allStudent[i]._id %>'"
+                                    >
+
+                                        <td scope="row"><%= allStudent[i].Name %></td>
+                                        <td><%= allStudent[i].UserName %></td>
+                                        <td>None</td>
+                                        <td>None</td>
+
+                                    </tr>
+
+                                <% }else{ %>
+
+                                <% } %>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ul>
         </div>
     </div>
 </div>
@@ -184,6 +189,144 @@
             return temp;
         }
     }
+
+    // function getSearchPage(n) {
+    //     let inputElement = document.createElement("input")
+    //     inputElement.type = 'hidden';
+    //     inputElement.name = 'search';
+    //     let form = document.createElement("form");
+    //     form.method = 'get';
+    //     form.style.display = "none";
+    //     form.action = '/admin/search';
+    //     const id = 'search' + n.toString()
+    //     const search = document.getElementById(id).value;
+    //     if (search != '') {
+    //         inputElement.value = search;
+    //         form.appendChild(inputElement);
+    //         document.body.appendChild(form);
+    //         form.submit();
+    //         console.log(inputElement)
+    //         return form;
+    //     }
+    // }
+    // $('#search').keydown(function(event){
+    //     if(event.keyCode == 13 || event.onclick == ){
+    //         var keyword = $(this).val()
+    //         // alert(keyword)
+    //         $('li').hide()//将原有的内容隐藏
+    //         //然后将含有keyword的li进行渐变显示
+    //         $("p").filter(":Contains("+keyword+")").parents('.todo-ltem').fadeIn(2000)
+    //     }
+
+    // })
+</script>
+
+<script>
+    $(function () {
+        $("#btn").click(function () {
+            $.ajax({
+                type: "get",
+                url: "http://127.0.0.1:3000/admin/student_list",
+                async: true,
+                // dataType: "json",
+                dataType: "binary",
+                success: function (data) {
+                    // $("#list").html(data);
+                    let dataObj = eval('(' + data + ')');//转换为json对象
+
+                    console.log(data);
+
+
+                    const oTxt = document.getElementById('search');
+                    const oBtn = document.getElementById('btn');
+                    const oList = document.getElementById('list');
+
+                    let students = [dataObj];//数组内 存所有students
+                    //点击事件
+                    oBtn.addEventListener('click', function () {
+                        const keyWord = oTxt.value;
+                        // var studentList = searchByIndexOf(keyWord,students);
+                        console.log(studentList);
+                        let studentList = searchByRegExp(keyWord, students);
+                        renderStudents(studentList);
+                    }, false);
+                    //回车查询
+                    oTxt.addEventListener('keydown', function (e) {
+                        if (e.keyCode == 13) {
+                            let keyWord = oTxt.value;
+                            let studentList = searchByRegExp(keyWord, students);
+                            renderStudents(studentList);
+                        }
+                    }, false);
+                    let cpLock = false;
+                    $('#txt').on('compositionstart', function () {
+                        cpLock = true;
+                        console.log("不搜索")
+                    });
+
+                    $('#txt').on('input', function () {
+                        if (!cpLock) {
+                            console.log("字母搜索")
+                            var keyWord = oTxt.value;
+                            var studentList = searchByRegExp(keyWord, students);
+                            renderStudents(studentList);
+                        }
+                    });
+
+                    function renderStudents(list) {
+                        if (!(list instanceof Array)) {
+                            return;
+                        }
+                        oList.innerHTML = '';
+                        const len = list.length;
+                        let item = null;
+                        for (let i = 0; i < len; i++) {
+                            item = document.createElement('li');
+                            item.innerHTML = list[i];
+                            oList.appendChild(item);
+                        }
+                    }
+
+                    //模糊匹配的时候如果不区分大小写，可以使用toLowerCase()或者toUpperCase()转换之后去匹配。
+
+                    //模糊查询1:利用字符串的indexOf方法
+                    function searchByIndexOf(keyWord, list) {
+                        if (!(list instanceof Array)) {
+                            return;
+                        }
+                        let len = list.length;
+                        let arr = [];
+                        for (let i = 0; i < len; i++) {
+                            //如果字符串中不包含目标字符会返回-1
+                            if (list[i].indexOf(keyWord) >= 0) {
+                                arr.push(list[i]);
+                            }
+                        }
+                        return arr;
+                    }
+
+                    //正则匹配
+                    function searchByRegExp(keyWord, list) {
+                        if (!(list instanceof Array)) {
+                            return;
+                        }
+                        let len = list.length;
+                        let arr = [];
+                        let reg = new RegExp(keyWord);
+                        for (let i = 0; i < len; i++) {
+                            //如果字符串中不包含目标字符会返回-1
+                            if (list[i].match(reg)) {
+                                arr.push(list[i]);
+                            }
+                        }
+                        return arr;
+                    }
+
+                    renderStudents(students);
+                }
+            });
+        });
+    });
 </script>
 
 <%- include('component/footer') %>

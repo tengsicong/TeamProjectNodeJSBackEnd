@@ -13,14 +13,20 @@ const clientMeetingModel = require('../models/clientmeetings');
 const staffMeetingModel = require('../models/staffmeetings');
 const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
+
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+
+const config = require('config-lite')(__dirname);
+let transporter = nodemailer.createTransport(config.transporter);
+
 const nodemailer  = require('nodemailer');
 const config = require('config-lite')(__dirname);
 
 let transporter = nodemailer.createTransport(config.transporter);
 
 /* GET edit team page. */
-router.get('/edit_team', checkAdminLogin,function (req, res) {
+router.get('/edit_team', checkAdminLogin, function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -228,26 +234,53 @@ router.get('/student_list', checkAdminLogin,function (req, res) {
                 pageTitle: 'Student List',
                 admin: admin,
                 allStudent: allStudent,
-            });
+            })
+            return res.send(data)
+
         });
 });
-router.post('/add_new_student',checkAdminLogin, function (req, res) {
+router.post('/add_new_student', checkAdminLogin, function (req, res) {
     const addStudentName = req.body.addStudentName;
     const addStudentUserName = req.body.addStudentUserName;
-    studentModel.addNewStudent(addStudentName, addStudentUserName)
-    res.redirect('/admin/student_list');
-
+    Promise.all([
+        studentModel.addNewStudent(addStudentName, addStudentUserName)
+    ]).then(function (newstudent) {
+        transporter.sendMail({
+            from: '1010870945@qq.com', // sender address
+            to: newstudent.UserName, // list of receivers
+            subject: 'Registered successfully! ', // Subject line
+            text: 'Welcome,' + newstudent.Name + '!' + '\n Your account initial password is' + newstudent.password + ', for security, please change to a more safe password.', // plain text body
+            html: 'Welcome, <br> <b>' + newstudent.Name + '</b>!' + '\n Your account initial password is<b>' + newstudent.password + '</b>, <b>for security, please change to a more safe password.</b>',// html body
+        });
+        res.redirect('/admin/student_list')
+    })
 });
-router.post('/add_new_staff',checkAdminLogin, function (req, res) {
+router.post('/add_new_staff', checkAdminLogin, function (req, res) {
     const addStaffName = req.body.addStaffName;
     const addStaffUserName = req.body.addStaffUserName;
     const addStaffID = mongoose.Types.ObjectId(req.body._id);
-    staffModel.addNewStaff(addStaffName, addStaffUserName)
+    Promise.all([
+        staffModel.addNewStaff(addStaffName, addStaffUserName)
+    ]).then(function (result) {
+        const newstaff = result[0];
+        transporter.sendMail({
+            from: '1010870945@qq.com', // sender address
+            to: newstaff.UserName, // list of receivers
+            subject: 'Registered successfully! ', // Subject line
+            text: 'Welcome,' + newstaff.Name + '!' + '\n Your account initial password is' + newstaff.password + ', for security, please change to a more safe password.', // plain text body
+            html: 'Welcome, <br> <b>' + newstaff.Name + '</b>!' + '\n Your account initial password is<b>' + newstaff.password + '</b>, <b>for security, please change to a more safe password.</b>',// html body
+        }, function (error, info) {
+            if (error)
+                return console.log(error);
+            console.log(`Message: ${info.messageId}`);
+            console.log(`sent: ${info.response}`);
+        });
+    })
 
     res.redirect('/admin/team_list');
 
 });
-router.get('/timetable', checkAdminLogin,function (req, res) {
+router.get('/timetable', checkAdminLogin, function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         staffMeetingModel.getAllStaffMeetings(),
@@ -272,7 +305,7 @@ router.get('/timetable', checkAdminLogin,function (req, res) {
         });
 });
 
-router.get('/timetable_change', checkAdminLogin,function (req, res) {
+router.get('/timetable_change', checkAdminLogin, function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         staffModel.getAllStaff(),
@@ -406,32 +439,87 @@ router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
     changeStaffMeetingRequestModel.adminApproveRequest(changeStaffMeetingRequestID)
         .then(function (result) {
             const staffmeetingID = result.MeetingID;
+            // email to request staff
+            if (result.NewMeetingTime != undefined) {
+                if (result.NewStaffID != undefined) {
+                    transporter.sendMail({
+                        from: '1010870945@qq.com', // sender address
+                        to: result.StaffID.UserName, // list of receivers
+                        subject: 'Request approved! ', // Subject line
+                        text: 'Congratulations!,' + result.StaffID.Name + '!' + '\n Your change meeting request successfully approved.' + '\n Meeting time:' + result.NewMeetingTime + ',\nMeeting staff:' + result.NewStaffID, // plain text body
+                        html: 'Welcome, <br> <b>' + result.StaffID.Name + '</b>!' + '\n Your change meeting request successfully approved.' + '\n <b>Meeting time:</b>' + result.NewMeetingTime + ',\n <b>Meeting staff:</b>' + result.NewStaffID,// html body
+                    });
+                } else {
+                    transporter.sendMail({
+                        from: '1010870945@qq.com', // sender address
+                        to: result.StaffID.UserName, // list of receivers
+                        subject: 'Request approved! ', // Subject line
+                        text: 'Congratulations!,' + result.StaffID.Name + '!' + '\n Your change meeting request successfully approved.' + '\n Meeting time:' + result.NewMeetingTime, // plain text body
+                        html: 'Welcome, <br> <b>' + result.StaffID.Name + '</b>!' + '\n Your change meeting request successfully approved.' + '\n <b>Meeting time:</b>' + result.NewMeetingTime,// html body
+                    });
+                }
+            } else {
+                if (result.NewStaffID != undefined) {
+                    transporter.sendMail({
+                        from: '1010870945@qq.com', // sender address
+                        to: result.StaffID.UserName, // list of receivers
+                        subject: 'Request approved! ', // Subject line
+                        text: 'Congratulations!,' + result.StaffID.Name + '!' + '\n Your change meeting request successfully approved.' + ',\nMeeting staff:' + result.NewStaffID, // plain text body
+                        html: 'Welcome, <br> <b>' + result.StaffID.Name + '</b>!' + '\n Your change meeting request successfully approved.' + ',\n <b>Meeting staff:</b>' + result.NewStaffID,// html body
+                    });
+                } else {
+
+                }
+            }
+            // email to meeting staff
             if (result.NewStaffID != undefined) {
                 const newStaff = result.NewStaffID;
-                staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffmeetingID, newStaff).then();
+                staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffmeetingID, newStaff).then(function (newmeeting) {
+                    transporter.sendMail({
+                        from: '1010870945@qq.com', // sender address
+                        to: newmeeting.StaffID.UserName, // list of receivers
+                        subject: 'Update Meeting Change! ', // Subject line
+                        text: 'Hi,' + newmeeting.StaffID.UserName + '!' + '\n You have a new change of meeting.' + '\n Meeting time: ' + newmeeting.Date + '\nMeeting place:' + newmeeting.Place, // plain text body
+                        html: 'Hi, <br> <b>' + newmeeting.StaffID.UserName + '</b>!' + '\n You have a new change of a meeting.' + ',\n <b>Meeting time:</b>' + newmeeting.Date + '\n<b>Meeting place:</b>' + newmeeting.Place,// html body
+                    });
+                });
             }
             if (result.NewMeetingTime != undefined) {
                 const newMeetingTime = result.NewMeetingTime;
-                staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffmeetingID, newMeetingTime).then();
+                staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffmeetingID, newMeetingTime).then(function (newmeeting) {
+                    transporter.sendMail({
+                        from: '1010870945@qq.com', // sender address
+                        to: newmeeting.StaffID.UserName, // list of receivers
+                        subject: 'Update Meeting Change! ', // Subject line
+                        text: 'Hi,' + newmeeting.StaffID.UserName + '!' + '\n You have a new change of meeting.' + '\n Meeting time: ' + newmeeting.Date + '\nMeeting place:' + newmeeting.Place, // plain text body
+                        html: 'Hi, <br> <b>' + newmeeting.StaffID.UserName + '</b>!' + '\n You have a new change of a meeting.' + ',\n <b>Meeting time:</b>' + newmeeting.Date + '\n<b>Meeting place:</b>' + newmeeting.Place,// html body
+                    });
+                });
             }
         })
     res.redirect('/admin/timetable_change')
 })
 
-router.get('/client_request_approve',checkAdminLogin, function (req, res) {
+router.get('/client_request_approve', checkAdminLogin, function (req, res) {
     const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
     changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
         .then(function () {
             const meetingtime = result.NewMeetingTime;
             const clientmeetingID = result.MeetingID;
-            clientMeetingModel.editClientMeetingByChangeMeeting(clientmeetingID, meetingtime).then(function () {
-
+            clientMeetingModel.editClientMeetingByChangeMeeting(clientmeetingID, meetingtime).then(function (newmeeting) {
+                transporter.sendMail({
+                    from: '1010870945@qq.com', // sender address
+                    to: newmeeting.ClientID.UserName, // list of receivers
+                    subject: 'Update Meeting Change! ', // Subject line
+                    text: 'Hi,' + newmeeting.ClientID.UserName + '!' + '\n You have a new change of meeting.' + '\n Meeting time: ' + newmeeting.Date + '\nMeeting place:' + newmeeting.Place, // plain text body
+                    html: 'Hi, <br> <b>' + newmeeting.ClientID.UserName + '</b>!' + '\n You have a new change of a meeting.' + ',\n <b>Meeting time:</b>' + newmeeting.Date + '\n<b>Meeting place:</b>' + newmeeting.Place,// html body
+                });
                 res.redirect('/admin/timetable_change')
             })
         })
 })
 
-router.get('/project_list', checkAdminLogin,function (req, res, next) {
+router.get('/project_list', checkAdminLogin, function (req, res, next) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getAllProposals(),
@@ -943,14 +1031,15 @@ router.get('/change_stage', checkAdminLogin,function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         stageModel.getStage(),
+
     ])
         .then(function (result) {
             const admin = result[0];
-            const stage = result[1][0];
+            const stage=result[1][0];
             res.render('admin/change_stage', {
                 pageTitle: 'Change stage',
                 admin: admin,
-                stage: stage,
+                stage:stage,
             });
         })
 });
