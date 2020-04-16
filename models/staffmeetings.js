@@ -59,6 +59,18 @@ module.exports = {
         return staffmeetings.update({_id:id},{$set:{RecordID:rid}});
     },
 
+
+    updateStaffMeetingWithTempStaffByMeetingID: function updateStaffMeetingWithTempStaffByMeetingID(id, newtime,newPlace, tempStaff) {
+        return staffmeetings
+            .findOneAndUpdate({_id: id}, {$set: {Date: newtime, Place:newPlace, TemporaryStaffID: tempStaff}}, {new: true})
+            .exec()
+    },
+
+    updateStaffMeetingByMeetingID: function updateStaffMeetingByMeetingID(id, newtime,newPlace) {
+        return staffmeetings
+            .findOneAndUpdate({_id: id}, {$set: {Date: newtime, Place:newPlace}}, {new: true})
+            .exec()
+    },
     // updateTeamMark: function updateTeamMark(id,reason,score){
     //     return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
     // },

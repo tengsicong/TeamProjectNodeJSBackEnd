@@ -28,12 +28,14 @@ module.exports= {
     getQAByGroupID: function getQAByGroupID(id) {
         return studentStaffQa
             .find({GroupID: id})
+            .populate('Author', 'Name UserName')
             .exec();
     },
 
     getQAByQAID: function getQAByQAID(id) {
         return studentStaffQa
             .findById(id)
+            .populate('Author', 'Name UserName')
             .exec();
     },
 

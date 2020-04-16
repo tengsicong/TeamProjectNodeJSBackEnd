@@ -55,5 +55,14 @@ module.exports = {
     },
 
 
+    updateClientMeetingByMeetingID: function updateClientMeetingByMeetingID(id, newtime,newPlace) {
+        return clientmeetings
+            .findOneAndUpdate({_id: id}, {$set: {Date: newtime, Place:newPlace}}, {new: true})
+            .exec()
+    },
+
+
+
+
 
 };

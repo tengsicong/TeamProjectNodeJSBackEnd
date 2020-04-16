@@ -25,6 +25,12 @@ module.exports = {
             .exec();
     },
 
+    getAllClient: function getAllClient() {
+        return client
+            .find()
+            .exec();
+    },
+
     getClientByProposalID: function getClientByProposalID(id) {
         return client
             .findOne({AllProposalID: id})

@@ -168,55 +168,33 @@
     <br>
 
     <div class="blank-page widget-shadow scroll">
-        <h2><b>Edit Meeting</b></h2>
+        <h2><b>Edit Staff Meeting</b></h2>
         <div class="row">
             <br>
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label for="selector1" class="col-sm-2 control-label">Role</label>
-                    <div class="col-sm-8">
-                        <select name="role" id="role" class="form-control" style="width: 60%">
-                            <option value="staff">Staff</option>
-                            <option value="client">Client</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <label for="selector2" class="col-sm-2 control-label">Select Group</label>
-                    <div class="col-sm-8">
-                        <select name="group" class="form-control" style="width: 60%">
-                            <% for (let i = 0; i < allTeam.length; i++) { %>
-                                <option value="allTeam[i]._id"><%= 'SSIT Team ' + allTeam[i].TeamName %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="selector2" class="col-sm-2 control-label">Select Meeting</label>
                     <div class="col-sm-8">
-                        <select class="form-control" style="width: 60%" name="selectmeeting">
-                            <option>Meeting 1</option>
-                            <option>Meeting 2</option>
-                            <option>Meeting 3</option>
-                            <option>Meeting 4</option>
-                            <option>Meeting 5</option>
+                        <select class="form-control" style="width: 60%" id="staff_meetingid" name="staff_meetingid">
+                            <option value="none">-</option>
+                            <%for(let i = 0; i < allStaffMeeting.length; i++){%>
+                            <%if(allStaffMeeting[i].GroupID.ProposalID!= undefined){%>
+                            <option value="<%= allStaffMeeting[i]._id%>">SSIT Team <%=allStaffMeeting[i].GroupID.TeamName %> Staff Meeting <%= allStaffMeeting[i].MeetingNumber%></option>
+                            <%}}%>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="selector3" class="col-sm-2 control-label">Select Time</label>
                     <div class="col-sm-8">
-                        <input type="datetime-local" name="client_changetime" style="width: 60%">
+                        <input type="datetime-local" id="staff_date" name="staff_changetime" style="width: 60%">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="selector4" class="col-sm-2 control-label">Supervisor</label>
                     <div class="col-sm-8">
-                        <select class="form-control" style="width: 60%" name="supervisor">
-                            <option>-</option>
+                        <select class="form-control" style="width: 60%" id="new_supervisor" name="staff_supervisor">
+                            <option value="none">-</option>
                             <% for (let i = 0; i < allStaff.length; i++) { %>
                                 <option value="<%= allStaff[i]._id %>"><%= allStaff[i].Name %></option>
                             <% } %>
@@ -226,13 +204,51 @@
                 <div class="form-group">
                     <label for="input" class="col-sm-2 control-label">Place</label>
                     <div class="col-sm-8">
-                                <textarea name="place" class="form-control" rows="1" id="input"
+                                <textarea name="staff_place" class="form-control" rows="1" id="staff_newplace"
                                           placeholder="place Detail"></textarea>
                     </div>
                 </div>
             </form>
             <div style="text-align: center">
-                <button onclick="window.location='./team_list'" type="button" class="btn btn-primary">SUBMIT</button>
+                <button class="btn btn-primary" onclick="changeStaffMeeting()">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="blank-page widget-shadow scroll">
+        <h2><b>Edit Client Meeting</b></h2>
+        <div class="row">
+            <br>
+            <form class="form-horizontal" method="post">
+                <div class="form-group">
+                    <label for="selector2" class="col-sm-2 control-label">Select Meeting</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" style="width: 60%" id="clientMeetingNumber" name="client_meetingid">
+                            <option value="none">-</option>
+                            <%for(let i = 0; i < allClientMeeting.length;i++){%>
+                            <option value="<%=allClientMeeting[i]._id%>">SSIT Team <%=allClientMeeting[i].GroupID.TeamName %> Client Meeting <%= allClientMeeting[i].MeetingNumber%></option>
+                            <%}%>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selector3" class="col-sm-2 control-label">Select Time</label>
+                    <div class="col-sm-8">
+                        <input type="datetime-local" id="clientMeetingDate" name="client_changetime" style="width: 60%">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input" class="col-sm-2 control-label">Place</label>
+                    <div class="col-sm-8">
+                                <textarea name="client_place" class="form-control" rows="1" id="clientMeetingPlace"
+                                          placeholder="place Detail"></textarea>
+                    </div>
+                </div>
+            </form>
+            <div style="text-align: center">
+                <button class="btn btn-primary" onclick="changeClientMeeting()">SUBMIT</button>
             </div>
         </div>
     </div>
@@ -282,5 +298,97 @@
         form.submit();
         return form;
     }
-// </script>
+
+    function changeStaffMeeting(){
+        const date = document.getElementById("staff_date").value;
+        const meetingid = document.getElementById("staff_meetingid").value;
+        const supervisor = document.getElementById("new_supervisor").value;
+        const place = document.getElementById("staff_newplace").value;
+        const nowtime1 = new Date();
+        const nowtime2 = new Date(date);
+        if(meetingid == 'none'){
+            alert("please select a meeting!");
+        }  else if(nowtime1 > nowtime2)
+        {
+            alert('Time must after the time of mow!');
+        }
+        else if(date != ''||supervisor !='none'||place != '')
+        {
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'staff_meetingid';
+            inputElement1.value = meetingid;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'staff_changetime';
+            inputElement2.value = date;
+            const inputElement3 = document.createElement("input");
+            inputElement3.type = 'hidden';
+            inputElement3.name = 'staff_place';
+            inputElement3.value = place;
+            const inputElement4 = document.createElement("input");
+            inputElement4.type = 'hidden';
+            inputElement4.name = 'staff_supervisor';
+            inputElement4.value = supervisor;
+            const form = document.createElement("form");
+            form.action = '/admin/staff_timetable_change';
+            form.method = 'post';
+            form.style.display = "none";
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            form.appendChild(inputElement3);
+            form.appendChild(inputElement4);
+            document.body.appendChild(form);
+            form.submit();
+            alert('Change staff meeting successfully!');
+            return form;
+        } else{
+            alert("Please enter new date or select a supervisor or enter the new place.");
+        }
+    }
+
+    function changeClientMeeting(){
+        const date = document.getElementById("clientMeetingDate").value;
+        const meetingid = document.getElementById("clientMeetingNumber").value;
+        const place = document.getElementById("clientMeetingPlace").value;
+        const nowtime1 = new Date();
+        const nowtime2 = new Date(date);
+        if(meetingid == 'none'){
+            alert("please select a meeting!");
+        }
+        else if(date == ''){
+            alert("Please select a time!");
+        }else if(nowtime1 > nowtime2)
+        {
+            alert('Time must after the time of mow!');
+        } else {
+            const inputElement1 = document.createElement("input");
+            inputElement1.type = 'hidden';
+            inputElement1.name = 'client_meetingid';
+            inputElement1.value = meetingid;
+            const inputElement2 = document.createElement("input");
+            inputElement2.type = 'hidden';
+            inputElement2.name = 'client_changetime';
+            inputElement2.value = date;
+            const inputElement3 = document.createElement("input");
+            inputElement3.type = 'hidden';
+            inputElement3.name = 'client_place';
+            inputElement3.value = place;
+            const form = document.createElement("form");
+            form.action = '/admin/client_timetable_change';
+            form.method = 'post';
+            form.style.display = "none";
+            form.appendChild(inputElement1);
+            form.appendChild(inputElement2);
+            form.appendChild(inputElement3);
+            document.body.appendChild(form);
+            form.submit();
+            alert('Change client meeting successfully!');
+            return form;
+
+        }
+    }
+
+
+</script>
 <% include ./component/footer_script.ejs %>
