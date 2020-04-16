@@ -13,14 +13,15 @@ const clientMeetingModel = require('../models/clientmeetings');
 const staffMeetingModel = require('../models/staffmeetings');
 const changeStaffMeetingRequestModel = require('../models/changestaffmeetingrequest');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest');
-const mongoose = require('mongoose');
-const nodemailer  = require('nodemailer');
-const config = require('config-lite')(__dirname);
 
+const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+
+const config = require('config-lite')(__dirname);
 let transporter = nodemailer.createTransport(config.transporter);
 
 /* GET edit team page. */
-router.get('/edit_team', checkAdminLogin,function (req, res) {
+router.get('/edit_team', checkAdminLogin, function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -228,26 +229,52 @@ router.get('/student_list', checkAdminLogin,function (req, res) {
                 pageTitle: 'Student List',
                 admin: admin,
                 allStudent: allStudent,
-            });
+            })
+            return res.send(data)
+
         });
 });
-router.post('/add_new_student',checkAdminLogin, function (req, res) {
+router.post('/add_new_student', checkAdminLogin, function (req, res) {
     const addStudentName = req.body.addStudentName;
     const addStudentUserName = req.body.addStudentUserName;
-    studentModel.addNewStudent(addStudentName, addStudentUserName)
-    res.redirect('/admin/student_list');
-
+    Promise.all([
+        studentModel.addNewStudent(addStudentName, addStudentUserName)
+    ]).then(function (newstudent) {
+        transporter.sendMail({
+            from: '1010870945@qq.com', // sender address
+            to: newstudent.UserName, // list of receivers
+            subject: 'Registered successfully! ', // Subject line
+            text: 'Welcome,' + newstudent.Name + '!' + '\n Your account initial password is' + newstudent.password + ', for security, please change to a more safe password.', // plain text body
+            html: 'Welcome, <br> <b>' + newstudent.Name + '</b>!' + '\n Your account initial password is<b>' + newstudent.password + '</b>, <b>for security, please change to a more safe password.</b>',// html body
+        });
+        res.redirect('/admin/student_list')
+    })
 });
-router.post('/add_new_staff',checkAdminLogin, function (req, res) {
+router.post('/add_new_staff', checkAdminLogin, function (req, res) {
     const addStaffName = req.body.addStaffName;
     const addStaffUserName = req.body.addStaffUserName;
-    const addStaffID = mongoose.Types.ObjectId(req.body._id);
-    staffModel.addNewStaff(addStaffName, addStaffUserName)
+    Promise.all([
+        staffModel.addNewStaff(addStaffName, addStaffUserName)
+    ]).then(function (result) {
+        const newStaff = result[0];
+        transporter.sendMail({
+            from: '1010870945@qq.com', // sender address
+            to: newStaff.UserName, // list of receivers
+            subject: 'Registered successfully! ', // Subject line
+            text: 'Welcome,' + newStaff.Name + '!' + '\n Your account initial password is' + newstaff.password + ', for security, please change to a more safe password.', // plain text body
+            html: 'Welcome, <br> <b>' + newStaff.Name + '</b>!' + '\n Your account initial password is<b>' + newStaff.password + '</b>, <b>for security, please change to a more safe password.</b>',// html body
+        }, function (error, info) {
+            if (error)
+                return console.log(error);
+            console.log(`Message: ${info.messageId}`);
+            console.log(`sent: ${info.response}`);
+        });
+    })
 
     res.redirect('/admin/team_list');
 
 });
-router.get('/timetable', checkAdminLogin,function (req, res) {
+router.get('/timetable', checkAdminLogin, function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         staffMeetingModel.getAllStaffMeetings(),
@@ -260,19 +287,30 @@ router.get('/timetable', checkAdminLogin,function (req, res) {
             const admin = result[0];
             const allStaffMeetings = result[1];
             const allClientMeetings = result[2];
-            const changeRequstNumber = result[3].length + result[4].length;
-
+            const changeStaffMeetingRequest = result[3];
+            const changeClientMeetingRequest = result[4];
+            let changeRequestNumber = 0;
+            for (let i = 0; i < changeStaffMeetingRequest.length; i++) {
+                if (changeStaffMeetingRequest[i].Status == 'pending') {
+                    changeRequestNumber++;
+                }
+            }
+            for (let i = 0; i < changeClientMeetingRequest.length; i++) {
+                if (changeClientMeetingRequest[i].Status == 'pending') {
+                    changeRequestNumber++;
+                }
+            }
             res.render('admin/timetable', {
                 pageTitle: 'Timetable',
                 admin: admin,
                 allStaffMeetings: allStaffMeetings,
                 allClientMeetings: allClientMeetings,
-                changeRequstNumber: changeRequstNumber,
+                changeRequestNumber: changeRequestNumber,
             });
         });
 });
 
-router.get('/timetable_change', checkAdminLogin,function (req, res) {
+router.get('/timetable_change', checkAdminLogin, function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         staffModel.getAllStaff(),
@@ -362,76 +400,45 @@ router.post('/staff_timetable_change', checkAdminLogin,function (req, res) {
 router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
-    console.log('enter');
-    console.log(reason);
-    console.log(requestID);
-    // let command = {
-    //     id: changeStaffMeetingRequestID,
-    //     Status: 'rejected',
-    //     AdminReply: {
-    //         AdminName: "Emma Norling",
-    //         Date: nowDate,
-    //         Content: rejectReason,
-    //     }
-    // }
-    // changeStaffMeetingRequestModel.adminRejectRequest(command)
-    //     .then(function () {
-    //         res.redirect('/admin/timetable_change')
-    //     })
+    adminModel.getAdminByID(req.session.userinfo).then(function (result) {
+        changeStaffMeetingRequestModel.adminRejectRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+    })
 })
 
 router.post('/client_request_reject', checkAdminLogin,function (req, res) {
-    const staffMeetingID = req.body.staffMeetingID;
-    const rejectReason = req.body.rejectReason;
-    console.log('enter')
-    const nowDate = new Date();
-    console.log(rejectReason);
-    // let command = {
-    //     id: changeStaffMeetingRequestID,
-    //     Status: 'rejected',
-    //     AdminReply: {
-    //         AdminName: "Emma Norling",
-    //         Date: nowDate,
-    //         Content: rejectReason,
-    //     }
-    // }
-    // changeStaffMeetingRequestModel.adminRejectRequest(command)
-    //     .then(function () {
-    //         res.redirect('/admin/timetable_change')
-    //     })
+    const requestID = mongoose.Types.ObjectId(req.body.staffMeetingID);
+    const rejectReason = req.body.reason;
+    adminModel.getAdminByID(req.session.userinfo).then(function (result) {
+        changeClientMeetingRequestModel.adminRejectRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+    })
 })
 
 router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
-    const changeStaffMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    changeStaffMeetingRequestModel.adminApproveRequest(changeStaffMeetingRequestID)
-        .then(function (result) {
-            const staffmeetingID = result.MeetingID;
-            if (result.NewStaffID != undefined) {
-                const newStaff = result.NewStaffID;
-                staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffmeetingID, newStaff).then();
-            }
-            if (result.NewMeetingTime != undefined) {
-                const newMeetingTime = result.NewMeetingTime;
-                staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffmeetingID, newMeetingTime).then();
-            }
-        })
+    const requestID = mongoose.Types.ObjectId(req.query.id);
+    changeStaffMeetingRequestModel.adminApproveRequest(requestID).then(function (result) {
+        const staffMeetingID = result.MeetingID;
+        if (result.NewStaffID != undefined) {
+            const newStaff = result.NewStaffID;
+            staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffMeetingID, newStaff).then();
+        }
+        if (result.NewMeetingTime != undefined) {
+            const newMeetingTime = result.NewMeetingTime;
+            staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffMeetingID, newMeetingTime).then();
+        }
+    })
     res.redirect('/admin/timetable_change')
 })
 
 router.get('/client_request_approve',checkAdminLogin, function (req, res) {
-    const changeClientMeetingRequestID = mongoose.Types.ObjectId(req.query.id);
-    changeClientMeetingRequestModel.adminEditCPendingStatusTimetable(changeclientmeetingrequest)
-        .then(function () {
-            const meetingtime = result.NewMeetingTime;
-            const clientmeetingID = result.MeetingID;
-            clientMeetingModel.editClientMeetingByChangeMeeting(clientmeetingID, meetingtime).then(function () {
-
-                res.redirect('/admin/timetable_change')
-            })
-        })
+    const requestID = mongoose.Types.ObjectId(req.query.id);
+    changeClientMeetingRequestModel.adminApproveRequest(requestID).then(function (result) {
+        const clientMeetingID = result.MeetingID;
+        const newMeetingTime = result.NewMeetingTime;
+        clientMeetingModel.editClientMeetingTimeByClientMeetingID(clientMeetingID, newMeetingTime).then(res.redirect('/admin/timetable_change'));
+    })
 })
 
-router.get('/project_list', checkAdminLogin,function (req, res, next) {
+router.get('/project_list', checkAdminLogin, function (req, res, next) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         proposalModel.getAllProposals(),
@@ -967,6 +974,7 @@ router.post('/change_stage', checkAdminLogin, function (req,res) {
         const client = result[1];
         const student = result[2];
         const staff = result[3];
+        const staff1Mess = ''
         for(let i=0; i < client.length;i++){
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address

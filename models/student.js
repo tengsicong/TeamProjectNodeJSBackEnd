@@ -69,7 +69,7 @@ module.exports = {
     },
 
     addNewStudent: function addNewStudent(addStudentName, addStudentUserName) {
-        student
+        return student
             .create({Name: addStudentName, UserName: addStudentUserName, Password: addStudentName})
 
     },
@@ -105,6 +105,17 @@ module.exports = {
             .findOneAndUpdate({_id: studentID}, {$set: {GroupID: groupID}},{new: true})
             .exec()
     },
+    /**
+     * @author: wang
+     * search
+     */
+    getSearchStudent: function getSearchStudent(search) {
+        return student
+            .find({$or:[
+                {Name: {$regex:search}},
+                {Username: {$regex:search}}
+                ]})
+    }
 };
 
 // const studentID = mongoose.Types.ObjectId('5e8c235739bad87c4c0c5e26');
