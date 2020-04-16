@@ -4,12 +4,23 @@ const clientModel = require('../models/client');
 const proposalModel = require('../models/proposal');
 const teamModel = require('../models/team');
 const mongoose = require('mongoose');
+const nodemailer  = require('nodemailer');
 const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
 const stageModel = require('../models/stage');
+const adminModel = require('../models/admin');
 const checkClientLogin = require('../middlewares/check').checkClientLogin;
+const config = require('config-lite')(__dirname);
 
+let transporter = nodemailer.createTransport(config.transporter);
+transporter.verify(function(error, success) {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Server is ready to take our messages');
+    }
+});
 
 router.get('/myproject', checkClientLogin, function (req, res,  next) {
     Promise.all([
@@ -49,23 +60,42 @@ router.get('/myproject/create_project', checkClientLogin, function (req, res, ne
 
 /*Create new proposals*/
 router.post('/myproject/create_project', checkClientLogin, function (req, res, next) {
-    const client = req.session.userinfo;
+    const clientID = req.session.userinfo;
     const topic = req.body.topic;
     const content = req.body.content;
     const nowDate = new Date();
     let proposal = {
         _id: mongoose.Types.ObjectId(),
-        ClientID: client,
+        ClientID: clientID,
         Topic: topic,
         Content: content,
         Date: nowDate,
         Status: 'pending'
     }
-    proposalModel.createProposal(proposal)
-    clientModel.updateClientProposalListByProposalID(client, proposal._id)
-        .then(function () {
+    Promise.all([
+        clientModel.getClientByClientID(clientID),
+        proposalModel.createProposal(proposal),
+        clientModel.updateClientProposalListByProposalID(clientID, proposal._id),
+        adminModel.getAllAdmin(),
+    ])
+        .then(function (result) {
+            const admin = result[3];
+            const client = result[0];
+            transporter.sendMail({
+                from: config.transporter.auth.user, // sender address
+                to: admin.UserName, // list of receivers
+                subject: 'New proposal from ' + client.Name + ' was created', // Subject line
+                text: client.Name + ' created ' + proposal.Topic + '\n Content:' + proposal.Content, // plain text body
+                html: 'Hi, <br>' + client.Name + ' created a new proposal <b>' + proposal.Topic + '</b><br>' +
+                    '<p>' + proposal.Content + ' <br>Please check and handle it!</p><br>' +
+                    'Team Project', // html body
+            }, function(error, info) {
+                if(error)
+                    return console.log(error);
+                console.log(`Message: ${info.messageId}`);
+                console.log(`sent: ${info.response}`);
+            });
             res.redirect('/client/myproject/project_pending?id=' + proposal._id)
-            //res.redirect('/client/myproject')
         })
         .catch(next)
 });
@@ -121,19 +151,36 @@ router.post('/myproject/project_pending', checkClientLogin, function (req, res, 
     Promise.all([
         clientModel.getClientByProposalID(proposalID),
         proposalModel.getProposalByProposalID(proposalID),
+        adminModel.getAllAdmin(),
     ])
         .then(function (result) {
-            //console.log(result[1])
-            let reply = result[1].Reply;
+            const admin = result[2];
+            const client = result[0];
+            const proposal = result[1];
+            let reply = proposal.Reply;
             reply.push({
-                Author: result[0].Name,
+                Author: client.Name,
                 Comment: comment,
                 ReplyDate: replyDate,
             });
-            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            const addComment = proposalModel.addProposalComment(proposal._id, reply);
             addComment.then(function () {
+                transporter.sendMail({
+                    from: config.transporter.auth.user, // sender address
+                    to: admin.UserName, // list of receivers
+                    subject: 'New comment for ' + proposal.Topic, // Subject line
+                    text: client.Name + ' add new comment for ' + proposal.Topic + '\n Comment:' + comment, // plain text body
+                    html: 'Hi, '+admin.Name+'<br>' + client.Name + ' added new comments for <b>' + proposal.Topic + '</b><br>' +
+                        '<p>' + comment + ' <br>Please check it!</p><br>' +
+                        'Team Project', // html body
+                }, function(error, info) {
+                    if(error)
+                        return console.log(error);
+                    console.log(`Message: ${info.messageId}`);
+                    console.log(`sent: ${info.response}`);
+                });
                 res.redirect('/client/myproject/project_pending?id=' + proposalID)
-            })
+            });
         })
         .catch(next)
 })
@@ -159,25 +206,43 @@ router.get('/myproject/project_rejected', checkClientLogin, function (req, res, 
 
 /*添加评论*/
 router.post('/myproject/project_rejected', checkClientLogin, function (req, res, next) {
-    const proposalID = mongoose.Types.ObjectId(req.query.id);
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     const replyDate = new Date();
     Promise.all([
         clientModel.getClientByProposalID(proposalID),
         proposalModel.getProposalByProposalID(proposalID),
+        adminModel.getAllAdmin(),
     ])
         .then(function (result) {
             //console.log(result[1])
-            let reply = result[1].Reply;
+            const admin = result[2];
+            const client = result[0];
+            const proposal = result[1];
+            let reply = proposal.Reply;
             reply.push({
                 Author: result[0].Name,
                 Comment: comment,
                 ReplyDate: replyDate,
             });
-            const addComment = proposalModel.addProposalComment(result[1]._id, reply);
+            const addComment = proposalModel.addProposalComment(proposal._id, reply);
             addComment.then(function () {
-                res.redirect('/client/myproject/project_rejected?id=' + req.query.id)
-            })
+                transporter.sendMail({
+                    from: config.transporter.auth.user, // sender address
+                    to: admin.UserName, // list of receivers
+                    subject: 'New comment for ' + proposal.Topic, // Subject line
+                    text: client.Name + ' add new comment for ' + proposal.Topic + '\n Comment:' + comment, // plain text body
+                    html: 'Hi, '+admin.Name+'<br>' + client.Name + ' added new comments for <b>' + proposal.Topic + '</b><br>' +
+                        '<p>' + comment + ' <br>Please check it!</p><br>' +
+                        'Team Project', // html body
+                }, function(error, info) {
+                    if(error)
+                        return console.log(error);
+                    console.log(`Message: ${info.messageId}`);
+                    console.log(`sent: ${info.response}`);
+                });
+                res.redirect('/client/myproject/project_rejected?id=' + proposalID)
+            });
         })
         .catch(next)
 })
@@ -225,9 +290,26 @@ router.post('/delete_project', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(req.session.userinfo, proposalID),
-        proposalModel.deleteProposal(proposalID)
+        proposalModel.deleteProposal(proposalID),
+        adminModel.getAllAdmin(),
     ])
         .then(function (result) {
+            const admin = result[2];
+            const client = result[0];
+            const proposal = result[1];
+            transporter.sendMail({
+                from: config.transporter.auth.user, // sender address
+                to: admin.UserName, // list of receivers
+                subject: 'Delete ' + proposal.Topic, // Subject line
+                text: client.Name + ' delete ' + proposal.Topic, // plain text body
+                html: 'Hi, '+admin.Name+'<br>' + client.Name + ' has deleted <b>' + proposal.Topic + '</b><br>' +
+                    'Team Project', // html body
+            }, function(error, info) {
+                if(error)
+                    return console.log(error);
+                console.log(`Message: ${info.messageId}`);
+                console.log(`sent: ${info.response}`);
+            });
             res.redirect('/client/myproject')
         })
         .catch(next)
@@ -308,8 +390,10 @@ router.get('/myteam/edit_teammark', checkClientLogin, function (req, res, next) 
         .catch(next);
 });
 
+//mark for team
 router.post('/myteam/teammark', checkClientLogin, function (req, res, next) {
     const teamid = mongoose.Types.ObjectId(req.body.GroupID);
+    const clientID = req.session.userinfo;
     let marks = [];
     let reasons = [];
     for (let i = 1; i < 9; i++) {
@@ -319,7 +403,34 @@ router.post('/myteam/teammark', checkClientLogin, function (req, res, next) {
         reasons.push(eval('req.body.mark' + i + '_reason'))
     }
     clientModel.updateClientGroupMark(teamid, marks, reasons).then(function () {
-        res.redirect('/client/myteam/teampage?id=' + teamid);
+        Promise.all([
+            teamModel.getTeamByTeamID(teamid),
+            clientModel.getClientByClientID(clientID),
+            proposalModel.getProposalByGroupID(teamid),
+        ]).then(function (result) {
+            const team = result[0];
+            const students = team.StudentID;
+            const client = result[1];
+            const proposal = result[2];
+            for(let i=0;i<students.length;i++){
+               const studentEmail = students[i].UserName;
+               const studentName = students[i].Name;
+                transporter.sendMail({
+                    from: config.transporter.auth.user, // sender address
+                    to: studentEmail, // list of receivers
+                    subject: 'Client Mark for your project ' + proposal.Topic, // Subject line
+                    text: client.Name + ' gave client mark for your project ' + proposal.Topic, // plain text body
+                    html: 'Hi, '+studentName+'<br>' + client.Name + ' marked for your project <b>' + proposal.Topic + '</b><br>' +
+                        'Team Project', // html body
+                }, function(error, info) {
+                    if(error)
+                        return console.log(error);
+                    console.log(`Message: ${info.messageId}`);
+                    console.log(`sent: ${info.response}`);
+                });
+            }
+            res.redirect('/client/myteam/teampage?id=' + teamid);
+        })
     })
 });
 
@@ -353,22 +464,38 @@ router.post('/mytimetable', checkClientLogin, function (req, res, next) {
     const time = req.body.time;
     const nowDate = new Date();
     Promise.all([
-        clientMeetingModel.getClientMeetingByMeetingID(selectMeetingid)
+        clientMeetingModel.getClientMeetingByMeetingID(selectMeetingid),
+        adminModel.getAllAdmin(),
     ])
         .then(function (result) {
-            const meetings = result[1];
+            const client = result[0].ClientID;
+            const admin = result[1];
             let request = {
                 MeetingID: result[0]._id,
                 ClientID: req.session.userinfo,
                 Status: 'pending',
                 NewMeetingTime: time,
                 RequestComment: {
-                    RequestName: result[0].ClientID.Name,
+                    RequestName: client.Name,
                     Date: nowDate,
                     Content: reason,
                 }
             }
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
+            transporter.sendMail({
+                from: config.transporter.auth.user, // sender address
+                to: admin.UserName, // list of receivers
+                subject: 'New change client meeting request from ' + client.Name, // Subject line
+                text: 'Client '+ client.Name + ' send new change meeting request for ' + 'SSIT Team '+result[0].GroupID.TeamName +' Client Meeting '+ result[0].MeetingNumber+ '\n Reason:' + reason, // plain text body
+                html: 'Hi, '+admin.Name+'<br>' + client.Name + ' send new change meeting request for <b>' + 'SSIT Team '+result[0].GroupID.TeamName +' Client Meeting '+ result[0].MeetingNumber + '</b><br>Reason: ' +
+                    '<p>' + reason + ' <br>Please check it!</p><br>' +
+                    'Team Project', // html body
+            }, function(error, info) {
+                if(error)
+                    return console.log(error);
+                console.log(`Message: ${info.messageId}`);
+                console.log(`sent: ${info.response}`);
+            });
             res.redirect('/client/mytimetable')
         });
 });
