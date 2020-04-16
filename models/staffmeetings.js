@@ -71,7 +71,5 @@ module.exports = {
             .findOneAndUpdate({_id: id}, {$set: {Date: newtime, Place:newPlace}}, {new: true})
             .exec()
     },
-    // updateTeamMark: function updateTeamMark(id,reason,score){
-    //     return team.update({_id:id},{$set:{StaffMark:score, StaffMarkReason:reason}});
-    // },
+
 };

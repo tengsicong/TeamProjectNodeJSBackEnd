@@ -32,15 +32,16 @@ module.exports = {
             .exec()
     },
 
-    adminRejectRequest: function adminRejectRequest (requestID, adminName, comment) {
+    adminRejectClientRequest: function adminRejectClientRequest (requestID, adminName, comment) {
         return changeclientmeetingrequest
             .findOneAndUpdate({_id: requestID}, {$set: {Status: 'rejected', AdminReply: {AdminName: adminName, Date: new Date(), Content: comment}}},{new:true})
             .exec()
     },
 
-    adminApproveRequest: function adminApproveRequest (id) {
+    adminApproveClientRequest: function adminApproveClientRequest (id) {
         return changeclientmeetingrequest
             .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
+            .exec()
 
     },
 

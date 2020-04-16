@@ -282,9 +282,10 @@
             }
         }
         if (string == 'client') {
-            form.action = '/admin/staff_request_reject';
+            form.action = '/admin/client_request_reject';
             const id = 'clientReason' + number.toString()
             const id1 = 'clientRequestID' + number.toString()
+            console.log(id + id1)
             if (document.getElementById(id).value == '') {
                 alert('Please enter your reason2')
             } else {

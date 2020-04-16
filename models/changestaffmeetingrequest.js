@@ -22,13 +22,13 @@ module.exports = {
             .create(changeStaffMeetingRequest)
     },
 
-    adminApproveRequest: function adminApproveRequest (id) {
+    adminApproveStaffRequest: function adminApproveStaffRequest (id) {
         return changestaffmeetingrequest
             .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
 
     },
 
-    adminRejectRequest: function adminRejectRequest (requestID, adminName, comment) {
+    adminRejectStaffRequest: function adminRejectStaffRequest (requestID, adminName, comment) {
         return changestaffmeetingrequest
             .findOneAndUpdate({_id: requestID}, {$set: {Status: 'rejected', AdminReply: {AdminName: adminName, Date: new Date(), Content: comment}}},{new:true})
             .exec()

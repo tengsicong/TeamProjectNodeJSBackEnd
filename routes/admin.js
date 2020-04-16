@@ -398,24 +398,27 @@ router.post('/staff_timetable_change', checkAdminLogin,function (req, res) {
 });
 
 router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
+    console.log('srr')
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
     adminModel.getAdminByID(req.session.userinfo).then(function (result) {
-        changeStaffMeetingRequestModel.adminRejectRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+        changeStaffMeetingRequestModel.adminRejectStaffRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
     })
 })
 
 router.post('/client_request_reject', checkAdminLogin,function (req, res) {
-    const requestID = mongoose.Types.ObjectId(req.body.staffMeetingID);
-    const rejectReason = req.body.reason;
+    console.log('crr')
+    const requestID = mongoose.Types.ObjectId(req.body.requestID);
+    const reason = req.body.reason;
     adminModel.getAdminByID(req.session.userinfo).then(function (result) {
-        changeClientMeetingRequestModel.adminRejectRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+        changeClientMeetingRequestModel.adminRejectClientRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
     })
 })
 
 router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
+    console.log('sra')
     const requestID = mongoose.Types.ObjectId(req.query.id);
-    changeStaffMeetingRequestModel.adminApproveRequest(requestID).then(function (result) {
+    changeStaffMeetingRequestModel.adminApproveStaffRequest(requestID).then(function (result) {
         const staffMeetingID = result.MeetingID;
         if (result.NewStaffID != undefined) {
             const newStaff = result.NewStaffID;
@@ -430,8 +433,9 @@ router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
 })
 
 router.get('/client_request_approve',checkAdminLogin, function (req, res) {
+    console.log('cra')
     const requestID = mongoose.Types.ObjectId(req.query.id);
-    changeClientMeetingRequestModel.adminApproveRequest(requestID).then(function (result) {
+    changeClientMeetingRequestModel.adminApproveClientRequest(requestID).then(function (result) {
         const clientMeetingID = result.MeetingID;
         const newMeetingTime = result.NewMeetingTime;
         clientMeetingModel.editClientMeetingTimeByClientMeetingID(clientMeetingID, newMeetingTime).then(res.redirect('/admin/timetable_change'));
@@ -974,31 +978,39 @@ router.post('/change_stage', checkAdminLogin, function (req,res) {
         const client = result[1];
         const student = result[2];
         const staff = result[3];
-        const staff1Mess = ''
-        for(let i=0; i < client.length;i++){
-            transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client[i].UserName, // list of receivers
-                subject: 'Stage changed', // Subject line
-                text: 'Stage has been changed.', // plain text body
-            } );
+        const asyncSendMail = async function(){
+            for(let i=0; i < client.length;i++){
+                let to = ''
+                to = to + client[i].UserName + ',';
+                await transporter.sendMail({
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: to, // list of receivers
+                    subject: 'Stage changed', // Subject line
+                    text: 'Stage has been changed.' + stage, // plain text body
+                } ).then(console.log);
+            }
+            // for(let i=0; i < student.length;i++){
+            //     await transporter.sendMail({
+            //         from: 'ssit_group3@outlook.com', // sender address
+            //         to: student[i].UserName, // list of receivers
+            //         subject: 'Stage changed', // Subject line
+            //         text: 'Stage has been changed. ' + stage, // plain text body
+            //     } ).then(console.log);
+            // }
+            // for(let i=0; i < staff.length;i++){
+            //     await transporter.sendMail({
+            //         from: 'ssit_group3@outlook.com', // sender address
+            //         to: staff[i].UserName, // list of receivers
+            //         subject: 'Stage changed', // Subject line
+            //         text: 'Stage has been changed. ' + stage, // plain text body
+            //     } ).then(console.log);
+            // }
         }
-        for(let i=0; i < student.length;i++){
-            transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: student[i].UserName, // list of receivers
-                subject: 'Stage changed', // Subject line
-                text: 'Stage has been changed. ', // plain text body
-            } );
-        }
-        for(let i=0; i < staff.length;i++){
-            transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: staff[i].UserName, // list of receivers
-                subject: 'Stage changed', // Subject line
-                text: 'Stage has been changed. ', // plain text body
-            } );
-        }
+        asyncSendMail().then();
+
+
+
+
         res.redirect('/admin/change_stage')
     })
 });
