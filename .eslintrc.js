@@ -4,10 +4,15 @@ module.exports = {
 		'commonjs': true,
 		'es6': true
 	},
-	'extends': 'eslint:recommended',
+	'extends': 'standard',
 	'globals': {
 		'Atomics': 'readonly',
-		'SharedArrayBuffer': 'readonly'
+		'SharedArrayBuffer': 'readonly',
+		"describe": true,
+		"beforeEach": true,
+		"afterEach": true,
+		"after": true,
+		"it": true
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018

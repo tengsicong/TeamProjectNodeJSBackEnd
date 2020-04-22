@@ -200,7 +200,6 @@ router.get('/my_mark', checkStudentLogin, function(req, res) {
 });
 
 router.post('/set_people_preference', checkStudentLogin, function (req, res) {
-    console.log('enter')
     let person1 = req.body.person1;
     let person2 = req.body.person2;
     let person3 = req.body.person3;
