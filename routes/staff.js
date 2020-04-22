@@ -11,6 +11,8 @@ const qaModel = require('../models/student_staff_qa');
 const recordModel = require('../models/staffMeetingRecords');
 const stageModel = require('../models/stage');
 const staffMeetingModel = require('../models/staffmeetings');
+const adminModel = require('../models/admin');
+
 const config = require('config-lite')(__dirname);
 
 let transporter = nodemailer.createTransport(config.transporter);
@@ -92,6 +94,12 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
         staffchangeID = result._id;
     });
 
+    let adminemail = [];
+    adminstatus.then(function (result) {
+        for(var i=0;i<result.size;i++)
+            adminemail[i] = result[i].UserName;
+    })
+
     primary_meeting.then(function (result) {
         //console.log(result);
         let primaryMeetingResult = result;
@@ -111,6 +119,12 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
                 Content: changereason,
             }
         };
+        transporter.sendMail({
+            from: 'ssit_group3@outlook.com',
+            to: adminemail,
+            subject: "SSIT Team Project: a new staff meeting changing request",
+            text: "You have a new staff meeting changing request from Staff " + result.StaffID.Name + " .",
+        });
         staffModel.createMeetingChangeRequest(newRequest)
             .then(function () {
                 res.redirect('/staff/meeting_detail_pre?seq='+req.query.seq);
@@ -187,6 +201,15 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
             {
                 recordModel.deleteStaffMeetingRecordByRecordID(RecordID).then();
             }
+            let email = [];
+            for(let i=0;i<studentList.length;i++)
+                email[i] = result.StudentID[i].UserName;
+            transporter.sendMail({
+                from: 'ssit_group3@outlook.com',
+                to: email,
+                subject: "SSIT Team Project: a new meeting record",
+                text: "You have a new meeting record from Staff " + result.StaffID.Name + " .",
+            });
             staffMeetingModel.updateStaffMeetingRecordByMeetingID(MeetingId,newRecord._id).then();
             recordModel.createStaffMeetingRecord(newRecord)
                 .then(function () {
@@ -276,7 +299,7 @@ router.get('/meeting_detail_post', checkStaffLogin, function(req, res) {
     }
 });
 
-router.post('/my_timetable', checkStaffLogin, function (req,res) {
+router.post('/my_timetable', checkStaffLogin, function (req, res) {
     let timechange = req.body.changetime;
     let staffchange = req.body.changestaff;
     let meetingchange = req.body.meetingID;
@@ -284,11 +307,17 @@ router.post('/my_timetable', checkStaffLogin, function (req,res) {
     let meetingidList = meetingchange.split('-');
     let meetingID = meetingidList[1];
     let staffchangeID ;
-    const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
 
+    const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
+    const adminstatus = adminModel.getAllAdmin();
     const staffID = staffModel.getStaffByName(staffchange)
     staffID.then(function (result) {
         staffchangeID = result._id;
+    })
+    let adminemail = [];
+    adminstatus.then(function (result) {
+        for(var i=0;i<result.size;i++)
+            adminemail[i] = result[i].UserName;
     })
 
     primary_meeting.then(function (result) {
@@ -330,7 +359,6 @@ router.post('/my_timetable', checkStaffLogin, function (req,res) {
         }
         else
         {
-            console.log('both have');
             newRequest = {
                 _id:mongoose.Types.ObjectId(),
                 MeetingID:meetingID,
@@ -345,8 +373,12 @@ router.post('/my_timetable', checkStaffLogin, function (req,res) {
                 }
             }
         }
-        console.log(staffchangeID);
-        console.log(timechange);
+        transporter.sendMail({
+            from: 'ssit_group3@outlook.com',
+            to: adminemail,
+            subject: "SSIT Team Project: a new staff meeting changing request",
+            text: "You have a new staff meeting changing request from Staff " + result.StaffID.Name + " .",
+        });
         staffModel.createMeetingChangeRequest(newRequest)
             .then(function () {
                 res.redirect('/staff/my_timetable');
@@ -408,9 +440,17 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
              studentList = list.StudentID;
              let score = [];
              let reason = [];
+             let email = [];
+            for(let i=0;i<studentList.length;i++)
+                email[i] = result.StudentID[i].UserName;
+            transporter.sendMail({
+                from: 'ssit_group3@outlook.com',
+                to: email,
+                subject: "SSIT Team Project: a new mark",
+                text: "You have a new mark from Staff " + result.StaffID.Name + " .",
+            });
             for(let i=0;i<studentList.length;i++)
             {
-                //console.log(indiselect[i*2] +'---'+ indiselect[i*2+1]);
                 score = [
                     indiselect[i*2],
                     indiselect[i*2+1],
@@ -426,17 +466,10 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
                     })
             }
     })
-
-    // console.log('-------');
-    // console.log(studentList);
-    // console.log('-------');
-    //staffModel.updateIndeMark(Object.Type.id(5e7b6ace4f4ed29e60233999),[1,1],['123123','ttttest'])
     staffModel.updateTeamMark(teamid,teamcontent,teamselect)
         .then(function () {
-            //console.log(studentList);
             res.redirect('/staff/marking?seq='+req.query.seq+'&id='+req.query.id);
         })
-    //.catch(next);
 })
 
 router.get('/marking', checkStaffLogin, function(req, res) {
