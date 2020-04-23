@@ -580,28 +580,30 @@ router.get('/student_detail', checkAdminLogin,function (req, res, next) {
             .then(function (result) {
                 const client = result[1];
                 const team = result[2];
-                transporter.sendMail({
+                const asyncSendMail = async function(){
+                    await transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: client.UserName, // list of receivers
-                    subject: 'Project edited', // Subject line
-                    text: 'Your project: ' + proposalID.Topic + 'has been edited. ' , // plain text body
-                } );
+                    subject: 'SSIT Team Project: project edited', // Subject line
+                    text: 'Your project: ' + topic + ' has been edited. ' , // plain text body
+                } ).then();
                 for(let i=0;i<team.length;i++) {
-                    for (let j = 0; j < team[i].StudentID[j].length; i++) {
-                        transporter.sendMail({
+                    for (let j = 0; j < team[i].StudentID.length; j++) {
+                        await transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
                             to: team[i].StudentID[j].UserName, // list of receivers
-                            subject: 'Project edited', // Subject line
-                            text: 'Your project: ' + proposalID.Topic + 'has been edited. ', // plain text body
-                        });
-                        transporter.sendMail({
+                            subject: 'SSIT Team Project: project edited', // Subject line
+                            text: 'Your project: ' + topic + ' has been edited. ', // plain text body
+                        }).then();
+                        await transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
                             to: team[i].StaffID.UserName, // list of receivers
-                            subject: 'Project edited', // Subject line
-                            text: 'Your project: ' + proposalID.Topic + 'has been edited. ', // plain text body
-                        });
+                            subject: 'SSIT Team Project: project edited', // Subject line
+                            text: 'Your project: ' + topic + ' has been edited. ', // plain text body
+                        }).then();
                     }
-                }
+                }}
+                asyncSendMail().then();
                 res.redirect('/admin/project_list')
             })
             .catch(next)
@@ -618,16 +620,20 @@ router.get('/pending_approved',checkAdminLogin, function (req, res, next) {
     Promise.all([
         proposalModel.adminEditPendingStatusProposal(proposal),
         clientModel.getClientByProposalID(proposalID),
+        proposalModel.getProposalByProposalID(proposalID),
     ])
 
         .then(function (result) {
             const client = result[1];
-            transporter.sendMail({
+            const proposal1 = result[2];
+            const asyncSendMail = async function(){
+                await transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: client.UserName, // list of receivers
-                subject: 'Project status changed', // Subject line
-                text: 'Your project: ' + proposalID.Topic + 'has been approved. ', // plain text body
-            } );
+                subject: 'SSIT Team Project: project status changed', // Subject line
+                text: 'Your project: ' + proposal1.Topic + ' has been approved. ', // plain text body
+            } );}
+            asyncSendMail().then();
             res.redirect('/admin/project_approved?id=' + req.query.id)
         })
         .catch(next)
@@ -644,16 +650,20 @@ router.get('/pending_rejected', checkAdminLogin,function (req, res, next) {
     Promise.all([
         proposalModel.adminEditPendingStatusProposal(proposal),
         clientModel.getClientByProposalID(proposalID),
+        proposalModel.getProposalByProposalID(proposalID),
     ])
 
         .then(function (result) {
             const client = result[1];
-            transporter.sendMail({
+            const proposal1 = result[2];
+            const asyncSendMail = async function(){
+                await transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: client.UserName, // list of receivers
-                subject: 'Project status changed', // Subject line
-                text: 'Your project: ' + proposalID.Topic + 'has been rejected. ', // plain text body
-            } );
+                subject: 'SSIT Team Project: project status changed', // Subject line
+                text: 'Your project: ' + proposal1.Topic + 'has been rejected. ', // plain text body
+            } );}
+            asyncSendMail().then();
             res.redirect('/admin/project_rejected?id=' + req.query.id)
         })
         .catch(next)
@@ -670,16 +680,20 @@ router.get('/rejected_pending',checkAdminLogin, function (req, res, next) {
     Promise.all([
         proposalModel.adminEditPendingStatusProposal(proposal),
         clientModel.getClientByProposalID(proposalID),
+        proposalModel.getProposalByProposalID(proposalID),
     ])
 
         .then(function (result) {
             const client = result[1];
-            transporter.sendMail({
+            const proposal1 = result[2];
+            const asyncSendMail = async function(){
+                await transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: client.UserName, // list of receivers
-                subject: 'Project status changed', // Subject line
-                text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
-            } );
+                subject: 'SSIT Team Project: project status changed', // Subject line
+                text: 'Your project: ' + proposal1.Topic + 'has been pending. ', // plain text body
+            } );}
+            asyncSendMail().then();
             res.redirect('/admin/project_pending?id=' + req.query.id)
         })
         .catch(next)
@@ -690,32 +704,36 @@ router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
     Promise.all([
         teamModel.getGroupByProposalID(proposalID),
         clientModel.getClientByProposalID(proposalID),
+        proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
-        const teams = result[0];
+            const teams = result[0];
             const client = result[1];
-            transporter.sendMail({
+            const proposal = result[2];
+            const asyncSendMail = async function(){
+                await transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: client.UserName, // list of receivers
-                subject: 'Project status changed', // Subject line
-                text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
+                subject: 'SSIT Team Project: project status changed', // Subject line
+                text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
             } );
             for(let i=0;i<teams.length;i++) {
-                for (let j = 0; j < teams[i].StudentID[j].length; j++) {
-                    transporter.sendMail({
+                for (let j = 0; j < teams[i].StudentID.length; j++) {
+                    await transporter.sendMail({
                         from: 'ssit_group3@outlook.com', // sender address
                         to: teams[i].StudentID[j].UserName, // list of receivers
-                        subject: 'Project status changed', // Subject line
-                        text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
+                        subject: 'SSIT Team Project: project status changed', // Subject line
+                        text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
                     });
-                    transporter.sendMail({
+                    await transporter.sendMail({
                         from: 'ssit_group3@outlook.com', // sender address
                         to: teams[i].StaffID.UserName, // list of receivers
-                        subject: 'Project status changed', // Subject line
-                        text: 'Your project: ' + proposalID.Topic + 'has been pending. ', // plain text body
+                        subject: 'SSIT Team Project: project status changed', // Subject line
+                        text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
                     });
                 }
-            }
+            }}
+            asyncSendMail().then();
 
             for(let i=0;i<teams.length;i++){
             proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
@@ -766,15 +784,18 @@ router.post('/project_pending', checkAdminLogin,function (req, res, next) {
                 ReplyDate: replyDate,
             });
             const admin = result[0];
+            const proposal = result[1];
             const client = result[2];
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                transporter.sendMail({
+                const asyncSendMail = async function(){
+                    await transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: client.UserName, // list of receivers
-                    subject: 'New comment received', // Subject line
-                    text: admin.Name + ' made a comment in your project: ' + proposalID.Topic + '\n Comment: ' + comment, // plain text body
-                } );
+                    subject: 'SSIT Team Project: new comment received', // Subject line
+                    text: admin.Name + ' has made a comment in your project: ' + proposal.Topic + '.', // plain text body
+                } );}
+                asyncSendMail().then();
                 res.redirect('/admin/project_pending?id=' + proposalID)
             })
         })
@@ -798,15 +819,18 @@ router.post('/project_rejected', checkAdminLogin,function (req, res, next) {
                 ReplyDate: replyDate,
             });
             const admin = result[0];
+            const proposal = result[1];
             const client = result[2];
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                transporter.sendMail({
+                const asyncSendMail = async function(){
+                    await transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: client.UserName, // list of receivers
-                    subject: 'New comment received', // Subject line
-                    text: admin.Name + ' made a comment in your project: ' + proposalID.Topic + '\n Comment: ' + comment, // plain text body
-                } );
+                    subject: 'SSIT Team Project: new comment received', // Subject line
+                    text: admin.Name + ' has made a comment in your project: ' + proposal.Topic + '.', // plain text body
+                } );}
+                asyncSendMail().then();
                 res.redirect('/admin/project_rejected?id=' + proposalID)
             })
         })
@@ -822,34 +846,14 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
     Promise.all([
         clientModel.getClientByProposalID(proposalId),
         clientMeetingModel.getClientMeetingByGroupID(teamID),
+        teamModel.getTeamByTeamID(teamID),
+        proposalModel.getProposalByProposalID(proposalId),
     ])
         .then(function (result) {
             const clientID = result[0]._id;
             const client = result[0];
-            transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'Team deleted', // Subject line
-                text: 'Your team ' + teamID.TeamName + 'has been deleted from project: '+ proposalId.Topic+'.', // plain text body
-            } );
-            if(teamID.StaffID!==undefined || teamID.StudentID!==undefined){
-                transporter.sendMail({
-                    from: 'ssit_group3@outlook.com', // sender address
-                    to: teamID.StaffID.UserName, // list of receivers
-                    subject: 'Team deleted', // Subject line
-                    text: 'Your team ' + teamID.TeamName + 'has been deleted from project: '+ proposalId.Topic+'.', // plain text body
-                });
-                for (let i = 0; i < teamID.StudentID[i].length; i++) {
-                    transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: teamID.StudentID[i].UserName, // list of receivers
-                        subject: 'Team deleted', // Subject line
-                        text: 'Your team ' + teamID.TeamName + 'has been deleted from project: '+ proposalId.Topic+'.', // plain text body
-                    });
-                }
-            }
-            else{
-            }
+            const teams = result[2];
+            const proposal = result[3];
             clientModel.deleteGroupFromClientListByGroupID(clientID, teamID);
             const meetings = result[1];
             for (let i = 0; i < meetings.length; i++) {
@@ -858,6 +862,31 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
             }
             clientMeetingModel.deleteClientMeetingByGroupID(teamID);
             ;
+            const asyncSendMail = async function(){
+                await transporter.sendMail({
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: team deleted', // Subject line
+                    text: 'Your team ' + teams.TeamName + ' has been deleted from project: '+ proposal.Topic+'.', // plain text body
+                } );
+                if(teams.StaffID!==undefined || teams.StudentID!==undefined){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: teams.StaffID.UserName, // list of receivers
+                        subject: 'SSIT Team Project: team deleted', // Subject line
+                        text: 'Your team ' + teams.TeamName + ' has been deleted from project: '+ proposal.Topic+'.', // plain text body
+                    });
+                    for (let i = 0; i < teams.StudentID.length; i++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: teams.StudentID[i].UserName, // list of receivers
+                            subject: 'SSIT Team Project: team deleted', // Subject line
+                            text: 'Your team ' + teams.TeamName + ' has been deleted from project: '+ proposal.Topic+'.', // plain text body
+                        });
+                    }
+                }
+                else{}}
+            asyncSendMail().then();
             res.redirect('/admin/project_approved?id=' + proposalId)
         })
         .catch(next);
@@ -869,22 +898,27 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
         clientModel.getClientByProposalID(proposalID),
+        proposalModel.getProposalByProposalID(proposalID),
     ])
         .then(function (result) {
             const client = result[0];
-            transporter.sendMail({
+            const proposal = result[1];
+            const asyncSendMail = async function(){
+                await transporter.sendMail({
                 from: 'ssit_group3@outlook.com', // sender address
                 to: client.UserName, // list of receivers
-                subject: 'Project deleted', // Subject line
-                text: 'Your project: ' + proposalID.Topic + 'has been deleted. ', // plain text body
-            } );
-        })
+                subject: 'SSIT Team Project: project deleted', // Subject line
+                text: 'Your project: ' + proposal.Topic + ' has been deleted. ', // plain text body
+            } );}
+            asyncSendMail().then();
+
     Promise.all([
         clientModel.deleteProposalFromClientListByProposalID(client._id,proposalID),
         proposalModel.deleteProposal(proposalID)
     ])
         .then(function (result) {
             res.redirect('/admin/project_list')
+        })
         })
         .catch(next)
 });
@@ -901,28 +935,6 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
         ])
             .then(function (result) {
                 const meetingnumber = result[1].length + 1;
-                const client = result[0];
-                transporter.sendMail({
-                    from: 'ssit_group3@outlook.com', // sender address
-                    to: client.UserName, // list of receivers
-                    subject: 'Team allocated', // Subject line
-                    text: 'Your project: ' + proposalID.Topic + 'has been allocated a new team. ', // plain text body
-                } );
-                transporter.sendMail({
-                    from: 'ssit_group3@outlook.com', // sender address
-                    to: teamID.StaffID.UserName, // list of receivers
-                    subject: 'Project allocated', // Subject line
-                    text: 'Your team has been allocated a project: '+ proposalId.Topic, // plain text body
-                });
-                for (let i = 0; i < teamID.StudentID[i].length; i++) {
-                    transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: teamID.StudentID[i].UserName, // list of receivers
-                        subject: 'Project allocated', // Subject line
-                        text: 'Your team has been allocated a project: '+ proposalId.Topic, // plain text body
-                    });
-                }
-
                 let clientmeeting = {
                     _id: mongoose.Types.ObjectId(),
                     GroupID: teamID,
@@ -938,7 +950,9 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
             });
     }
     ;
-    Promise.all([clientModel.getClientByProposalID(proposalId),])
+    Promise.all([
+        clientModel.getClientByProposalID(proposalId),
+    ])
         .then(function (result) {
             clientModel.updateGroupOfClientListByGroupID(result[0]._id, teamID);
             Promise.all([
@@ -946,6 +960,38 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
             ]).then(function (result) {
                 teamModel.allocateProposal(teamID, proposalId);
             });
+            Promise.all([
+                clientModel.getClientByProposalID(proposalId),
+                teamModel.getTeamByTeamID(teamID),
+                proposalModel.getProposalByProposalID(proposalId),
+            ])
+                .then(function (result) {
+                    const client = result[0];
+                    const teams = result[1];
+                    const proposal = result[2];
+                    const asyncSendMail = async function(){
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: client.UserName, // list of receivers
+                            subject: 'SSIT Team Project: team allocated', // Subject line
+                            text: 'Your project: ' + proposal.Topic + ' has been allocated a new team. ', // plain text body
+                        } );
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: teams.StaffID.UserName, // list of receivers
+                            subject: 'SSIT Team Project: team allocated', // Subject line
+                            text: 'Your team has been allocated a project: '+ proposal.Topic, // plain text body
+                        });
+                        for (let i = 0; i < teams.StudentID[i].length; i++) {
+                            await transporter.sendMail({
+                                from: 'ssit_group3@outlook.com', // sender address
+                                to: teams.StudentID[i].UserName, // list of receivers
+                                subject: 'SSIT Team Project: team allocated', // Subject line
+                                text: 'Your team has been allocated a project: '+ proposal.Topic, // plain text body
+                            });
+                        }}
+                    asyncSendMail().then();
+                })
             res.redirect('/admin/project_approved?id=' + proposalId);
         });
 });
@@ -979,32 +1025,69 @@ router.post('/change_stage', checkAdminLogin, function (req,res) {
         const student = result[2];
         const staff = result[3];
         const asyncSendMail = async function(){
+            if(stage==0){
             for(let i=0; i < client.length;i++){
                 let to = ''
                 to = to + client[i].UserName + ',';
                 await transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: to, // list of receivers
-                    subject: 'Stage changed', // Subject line
-                    text: 'Stage has been changed.' + stage, // plain text body
-                } ).then(console.log);
-            }
-            // for(let i=0; i < student.length;i++){
-            //     await transporter.sendMail({
-            //         from: 'ssit_group3@outlook.com', // sender address
-            //         to: student[i].UserName, // list of receivers
-            //         subject: 'Stage changed', // Subject line
-            //         text: 'Stage has been changed. ' + stage, // plain text body
-            //     } ).then(console.log);
-            // }
-            // for(let i=0; i < staff.length;i++){
-            //     await transporter.sendMail({
-            //         from: 'ssit_group3@outlook.com', // sender address
-            //         to: staff[i].UserName, // list of receivers
-            //         subject: 'Stage changed', // Subject line
-            //         text: 'Stage has been changed. ' + stage, // plain text body
-            //     } ).then(console.log);
-            // }
+                    subject: 'SSIT Team Project: stage changed', // Subject line
+                    text: 'Stage has been changed to: ' + stage+'. Now you can create, edit and delete your projects.', // plain text body
+                } ).then();
+            }}
+            if(stage==1){
+                for(let i=0; i < client.length;i++){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: client[i].UserName, // list of receivers
+                        subject: 'SSIT Team Project: stage changed', // Subject line
+                        text: 'Stage has been changed to: ' + stage+'. Now you cannot create your projects.', // plain text body
+                    } ).then();}
+
+                for(let j=0; j< student.length; j++){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: student[j].UserName, // list of receivers
+                        subject: 'SSIT Team Project: stage changed', // Subject line
+                        text: 'Stage has been changed to: ' + stage + '.', // plain text body
+                            } ).then();}
+
+                for(let k=0; k< staff.length; k++){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: staff[k].UserName, // list of receivers
+                        subject: 'SSIT Team Project: stage changed', // Subject line
+                        text: 'Stage has been changed to: ' + stage + '.', // plain text body
+                            } ).then();}
+                }
+            if(stage==2){
+
+                for(let i=0; i < client.length;i++){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: client[i].UserName, // list of receivers
+                        subject: 'SSIT Team Project: stage changed', // Subject line
+                        text: 'Stage has been changed to: ' + stage+'. Now you can mark your students.', // plain text body
+                    } ).then();}
+
+                    for(let j=0; j< student.length; j++){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: student[j].UserName, // list of receivers
+                        subject: 'SSIT Team Project: stage changed', // Subject line
+                        text: 'Stage has been changed to: ' + stage + '.', // plain text body
+                    } ).then();}
+
+                for(let k=0; k< staff.length; k++){
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: staff[k].UserName, // list of receivers
+                        subject: 'SSIT Team Project: stage changed', // Subject line
+                        text: 'Stage has been changed to: ' + stage + '. Now you can mark for your students.', // plain text body
+                    } ).then();}
+                }
+
         }
         asyncSendMail().then();
 
