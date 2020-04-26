@@ -16,10 +16,10 @@
                                 <th width="10%">meeting number</th>
                                 <th width="10%">meeting team</th>
                                 <th width="10%">orgianl time</th>
-                                <th width="25%">request</th>
-                                <th width="25%">comment</th>
-                                <th width="5%"></th>
-                                <th width="5%"></th>
+                                <th width="20%">request</th>
+                                <th width="20%">comment</th>
+                                <th width="10%"></th>
+                                <th width="10%"></th>
                             </tr>
                             </thead>
                             <tbody style="display: block; height: 300px;overflow-y: scroll;">
@@ -39,7 +39,7 @@
                                         <td width="10%"><%= changeStaffMeetingRequest[i].MeetingID.MeetingNumber %></td>
                                         <td width="10%"><%= changeStaffMeetingRequest[i].MeetingID.GroupID.TeamName %></td>
                                         <td width="10%"><%= changeStaffMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
-                                        <td width="25%">
+                                        <td width="20%">
                                             <% if (changeStaffMeetingRequest[i].NewMeetingTime != undefined) {%>
                                                 change time to <%= changeStaffMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeStaffMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %> <br>
                                             <% } %>
@@ -47,13 +47,13 @@
                                                 change staff to <%= changeStaffMeetingRequest[i].NewStaffID.Name %>
                                             <% } %>
                                         </td>
-                                        <td width="25%"><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
-                                        <td width="5%">
+                                        <td width="20%"><%= changeStaffMeetingRequest[i].RequestComment.Content %></td>
+                                        <td width="10%">
                                             <a href="/admin/staff_request_approve?id=<%= changeStaffMeetingRequest[i]._id %>">
                                                 <button type="button" class="btn btn-primary" data-dismiss="modal" style="width: 100%; float: right">Approve</button>
                                             </a>
                                         </td>
-                                        <td width="5%">
+                                        <td width="10%">
                                             <button type="button" class="btn btn-danger " data-toggle="modal" data-target="#staffrejectreason<%= i %>" data-whatever="@staffRejectReason" style="width: 100%; float: right">Reject</button>
                                             <div class="modal fade" id="staffrejectreason<%= i %>" tabindex="-1" role="dialog"
                                                  aria-labelledby="exampleModalLabel">
@@ -106,9 +106,9 @@
                                         <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.MeetingNumber %></td>
                                         <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.GroupID.TeamName %></td>
                                         <td width="10%"><%= changeClientMeetingRequest[i].MeetingID.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].MeetingID.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
-                                        <td width="25%">change time to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
-                                        <td width="25%"><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
-                                        <td width="5%">
+                                        <td width="20%">change time to <%= changeClientMeetingRequest[i].RequestComment.Date.toISOString().replace(/T.*/, ' ') + changeClientMeetingRequest[i].RequestComment.Date.toLocaleTimeString().replace(/ G.*/, "") %></td>
+                                        <td width="20%"><%= changeClientMeetingRequest[i].RequestComment.Content %></td>
+                                        <td width="10%">
                                             <a href="/admin/client_request_approve?id=<%= changeClientMeetingRequest[i]._id %>">
                                                 <button type="button" class="btn btn-primary"
                                                         data-dismiss="modal" style="width: 100%; float: right">
@@ -116,7 +116,7 @@
                                                 </button>
                                             </a>
                                         </td>
-                                        <td width="5%">
+                                        <td width="10%">
                                             <button type="button" class="btn btn-danger " data-toggle="modal"
                                                     data-target="#clientrejectreason<%= i %>" data-whatever="@clientRejectreason"
                                                     style="width: 100%; float: right">

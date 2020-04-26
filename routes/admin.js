@@ -20,6 +20,23 @@ const nodemailer = require('nodemailer');
 const config = require('config-lite')(__dirname);
 let transporter = nodemailer.createTransport(config.transporter);
 
+router.post('/search', checkAdminLogin, function (req, res) {
+    const search = req.body.search;
+    console.log(search)
+    Promise.all([
+        adminModel.getAdminByID(req.session.userinfo),
+        studentModel.getSearchStudent(search),
+    ]).then(function (result) {
+        const admin = result[0];
+        const searchStudent = result[1];
+        res.render('admin/search_students', {
+            pageTitle: 'Search Student List',
+            admin: admin,
+            searchStudent: searchStudent,
+        })
+    })
+})
+
 /* GET edit team page. */
 router.get('/edit_team', checkAdminLogin, function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
@@ -82,18 +99,7 @@ router.get('/new_team', checkAdminLogin,function (req, res) {
 });
 /*submit*/
 /*Create a new team*/
-router.post('/submit_newteam',checkAdminLogin, function (req, res) {
-    // 定义获得的staff的id
-    // 定义获得的student id
-    // 定义teamname
-    //
-    // teams库
-    // students库
-    // staffs库
-    // strecord
-    // staffmeeting库
-
-
+router.post('/submit_newteam', checkAdminLogin, function (req, res) {
     const staffID = mongoose.Types.ObjectId(req.body.staffID);
     const studentID = req.body.studentID;
     const studentArray = studentID.split(',');
@@ -131,23 +137,8 @@ router.post('/submit_newteam',checkAdminLogin, function (req, res) {
     })
 });
 /*edit_team*/
-router.post('/submit_editteam',checkAdminLogin, function (req, res) {
-    // 定义获得的staff的id
-    // 定义获得的student id
-    // 定义teamname
-    //edit team
-    //获取当前groupID
-    //获取新staffID
-    //获取新studentlist
-    //studentlist（string）---array【id】
-    //(1)根据我已有groupID和stafffID新生成5new staffmeeting--返回值（5个meeting对象）
-    //根据上一步的返回值------array【id】
-    // (2)teams 根据groupid来findOneAndUpdate---覆盖staffID，studentIDlist，staffmeetingIDlist，RepresenterID-------返回值（旧的team的信息)
-    // (3)获取旧的staffID,旧的studentID------->查找到的对应对象的GROUPid信息删掉, ,旧的staffmettingID--->对应的staffmeeting对象完全删除
-    // (4)新staffID, studengID[]------>添加GroupID
-    //---redirect
-    // 1--2---3，4,redirect
-    //只改200010-wkxtest (team库-studentid[]元素  students库-200010， wkxde groupID，  team库--representer， staffmeeting
+router.post('/submit_editteam', checkAdminLogin, function (req, res) {
+
     const staffID = mongoose.Types.ObjectId(req.body.staffID);
     const studentID = req.body.studentID;
     const studentArray = studentID.split(',');
@@ -230,7 +221,7 @@ router.get('/student_list', checkAdminLogin,function (req, res) {
                 admin: admin,
                 allStudent: allStudent,
             })
-            return res.send(data)
+            // return res.send(data)
 
         });
 });
@@ -239,14 +230,21 @@ router.post('/add_new_student', checkAdminLogin, function (req, res) {
     const addStudentUserName = req.body.addStudentUserName;
     Promise.all([
         studentModel.addNewStudent(addStudentName, addStudentUserName)
-    ]).then(function (newstudent) {
-        transporter.sendMail({
-            from: '1010870945@qq.com', // sender address
-            to: newstudent.UserName, // list of receivers
-            subject: 'Registered successfully! ', // Subject line
-            text: 'Welcome,' + newstudent.Name + '!' + '\n Your account initial password is' + newstudent.password + ', for security, please change to a more safe password.', // plain text body
-            html: 'Welcome, <br> <b>' + newstudent.Name + '</b>!' + '\n Your account initial password is<b>' + newstudent.password + '</b>, <b>for security, please change to a more safe password.</b>',// html body
-        });
+    ]).then(function (result) {
+        const newStudent = result[0];
+        const asyncSendMail = async function () {
+            await transporter.sendMail({
+                from: 'ssit_group3@outlook.com', // sender address
+                // from: '1010870945@qq.com',
+                to: newStudent.UserName, // list of receivers
+                subject: 'SSIT Team Project: Registered successfully! ', // Subject line
+                text: 'Welcome,' + newStudent.Name + '!' + '\n Your account initial password is ' + newStudent.Password + ', for security, please change to a more safe password.', // plain text body
+                html: 'Welcome, <br> <b>' + newStudent.Name + '</b>!' + '\n Your account initial password is <b>' + newStudent.Password + '</b>, for security, please change to a more safe password.',// html body
+            }).then(console.log);
+        }
+
+        asyncSendMail().then();
+
         res.redirect('/admin/student_list')
     })
 });
@@ -257,22 +255,20 @@ router.post('/add_new_staff', checkAdminLogin, function (req, res) {
         staffModel.addNewStaff(addStaffName, addStaffUserName)
     ]).then(function (result) {
         const newStaff = result[0];
-        transporter.sendMail({
-            from: '1010870945@qq.com', // sender address
-            to: newStaff.UserName, // list of receivers
-            subject: 'Registered successfully! ', // Subject line
-            text: 'Welcome,' + newStaff.Name + '!' + '\n Your account initial password is' + newstaff.password + ', for security, please change to a more safe password.', // plain text body
-            html: 'Welcome, <br> <b>' + newStaff.Name + '</b>!' + '\n Your account initial password is<b>' + newStaff.password + '</b>, <b>for security, please change to a more safe password.</b>',// html body
-        }, function (error, info) {
-            if (error)
-                return console.log(error);
-            console.log(`Message: ${info.messageId}`);
-            console.log(`sent: ${info.response}`);
-        });
+        const asyncSendMail = async function () {
+            await transporter.sendMail({
+                from: 'ssit_group3@outlook.com', // sender address
+                // from: '1010870945@qq.com',
+                to: newStaff.UserName, // list of receivers
+                subject: 'SSIT Team Project: Registered successfully! ', // Subject line
+                text: 'Welcome,' + newStaff.Name + '!' + '\n Your account initial password is' + newStaff.Password + ', for security, please change to a more safe password.', // plain text body
+                html: 'Welcome, <br> <b>' + newStaff.Name + '</b>!' + '\n Your account initial password is<b>' + newStaff.Password + '</b>, for security, please change to a more safe password.',// html body
+            }).then(console.log);
+        }
+        asyncSendMail().then();
+
+        res.redirect('/admin/team_list')
     })
-
-    res.redirect('/admin/team_list');
-
 });
 router.get('/timetable', checkAdminLogin, function (req, res) {
     Promise.all([
@@ -402,7 +398,21 @@ router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
     adminModel.getAdminByID(req.session.userinfo).then(function (result) {
-        changeStaffMeetingRequestModel.adminRejectStaffRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+        changeStaffMeetingRequestModel.adminRejectStaffRequest(requestID, result.Name, reason).then(
+            function(staffChange){
+                const asyncSendMail = async function () {
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        // from: '1010870945@qq.com', // sender address
+                        to: staffChange.StaffID.UserName, // list of receivers
+                        subject: 'SSIT Team Project: Reject Meeting Change! ', // Subject line
+                        text: 'Sorry!, ' + staffChange.StaffID.Name + '!' + '\n Your change meeting request is rejected. More information please check your own account page.', // plain text body
+                        html: 'Sorry!, <b>' + staffChange.StaffID.Name + '</b>!' + '\n Your change meeting request is rejected. More information please check your own account page.',// html body
+                    }).then(console.log);
+                }
+                asyncSendMail().then();
+                res.redirect('/admin/timetable_change')
+            })
     })
 })
 
@@ -411,7 +421,22 @@ router.post('/client_request_reject', checkAdminLogin,function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
     adminModel.getAdminByID(req.session.userinfo).then(function (result) {
-        changeClientMeetingRequestModel.adminRejectClientRequest(requestID, result.Name, reason).then(res.redirect('/admin/timetable_change'));
+        changeClientMeetingRequestModel.adminRejectClientRequest(requestID, result.Name, reason).then(
+            function(clientChange){
+                const asyncSendMail = async function () {
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        // from: '1010870945@qq.com', // sender address
+                        to: clientChange.ClientID.UserName, // list of receivers
+                        subject: 'SSIT Team Project: Reject Meeting Change! ', // Subject line
+                        text: 'Sorry!, ' + clientChange.ClientID.Name + '!' + '\n Your change meeting request is rejected. More information please check your own account page.', // plain text body
+                        html: 'Sorry!, <b>' + clientChange.ClientID.Name + '</b>!' + '\n Your change meeting request is rejected. More information please check your own account page.',// html body
+                    }).then(console.log);
+                }
+                asyncSendMail().then();
+                res.redirect('/admin/timetable_change')
+            }
+            )
     })
 })
 
@@ -420,13 +445,59 @@ router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
     const requestID = mongoose.Types.ObjectId(req.query.id);
     changeStaffMeetingRequestModel.adminApproveStaffRequest(requestID).then(function (result) {
         const staffMeetingID = result.MeetingID;
+        const preStaffID = result.StaffID
+
+        const asyncSendMail = async function () {
+            await transporter.sendMail({
+                from: 'ssit_group3@outlook.com', // sender address
+                // from: '1010870945@qq.com', // sender address
+                to: preStaffID.UserName, // list of receivers
+                subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
+                text: 'Congratulations!, ' + preStaffID.Name + '!' + '\n Your change meeting request successfully approved.', // plain text body
+                html: 'Congratulations!, <b>' + preStaffID.Name + '</b>!' + '\n Your change meeting request successfully approved.',// html body
+            }).then(console.log);
+        }
+        asyncSendMail().then();
         if (result.NewStaffID != undefined) {
             const newStaff = result.NewStaffID;
-            staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffMeetingID, newStaff).then();
+            Promise.all([
+                staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffMeetingID, newStaff)
+            ])
+           .then(
+            function (newResult) {
+                const newStaffID = newResult[0].TemporaryStaffID;
+                const newStaffUserName = newStaffID.UserName;
+                const asyncSendMail = async function () {
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        // from: '1010870945@qq.com',
+                        to: newStaffUserName, // list of receivers
+                        subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
+                        text: 'Hi,' + newStaffID.Name + '!' + '\n You have a new change of meeting.', // plain text body
+                        html: 'Hi, <br> <b>' + newStaffID.Name + '</b>!' + '\n You have a new change of a meeting.',// html body
+                    }).then(console.log);
+                }
+                asyncSendMail().then();
+            })
         }
         if (result.NewMeetingTime != undefined) {
             const newMeetingTime = result.NewMeetingTime;
-            staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffMeetingID, newMeetingTime).then();
+            staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffMeetingID, newMeetingTime).then(
+            function (newResult) {
+                const newStaffID = newResult.TemporaryStaffID;
+                const asyncSendMail = async function () {
+                    await transporter.sendMail({
+                        from: 'ssit_group3@outlook.com', // sender address
+                        // from: '1010870945@qq.com',
+                        to: newStaffID.UserName, // list of receivers
+                        subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
+                        text: 'Hi,' + newStaffID.Name + '!' + '\n You have a new change of meeting.', // plain text body
+                        html: 'Hi, <br> <b>' + newStaffID.Name + '</b>!' + '\n You have a new change of a meeting.',// html body
+                    }).then(console.log);
+                }
+                asyncSendMail().then();
+            }
+            )
         }
     })
     res.redirect('/admin/timetable_change')
@@ -438,7 +509,20 @@ router.get('/client_request_approve',checkAdminLogin, function (req, res) {
     changeClientMeetingRequestModel.adminApproveClientRequest(requestID).then(function (result) {
         const clientMeetingID = result.MeetingID;
         const newMeetingTime = result.NewMeetingTime;
-        clientMeetingModel.editClientMeetingTimeByClientMeetingID(clientMeetingID, newMeetingTime).then(res.redirect('/admin/timetable_change'));
+        clientMeetingModel.editClientMeetingTimeByClientMeetingID(clientMeetingID, newMeetingTime).then(function (newMeeting) {
+            const asyncSendMail = async function () {
+                await transporter.sendMail({
+                    from: 'ssit_group3@outlook.com', // sender address
+                    // from: '1010870945@qq.com',
+                    to: newMeeting.ClientID.UserName, // list of receivers
+                    subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
+                    text: 'Hi,' + newMeeting.ClientID.Name + '!' + '\n You have a new change of meeting.' + '\n Meeting time: ' + newMeeting.Date + '\nMeeting place:' + newMeeting.Place, // plain text body
+                    html: 'Hi, <br> <b>' + newMeeting.ClientID.Name + '</b>!' + '\n You have a new change of a meeting.' + ',\n <b>Meeting time:</b>' + newMeeting.Date + '\n<b>Meeting place:</b>' + newMeeting.Place,// html body
+                }).then(console.log);
+            }
+            asyncSendMail().then();
+            res.redirect('/admin/timetable_change')
+        })
     })
 })
 

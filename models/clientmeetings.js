@@ -51,6 +51,7 @@ module.exports = {
     editClientMeetingTimeByClientMeetingID: function editClientMeetingTimeByClientMeetingID(id, newTime) {
         return clientmeetings
             .findOneAndUpdate({_id: id}, {$set: {Date: newTime}}, {new: true})
+            .populate('ClientID')
             .exec()
     },
 

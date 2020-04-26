@@ -112,9 +112,12 @@ module.exports = {
     getSearchStudent: function getSearchStudent(search) {
         return student
             .find({$or:[
-                {Name: {$regex:search}},
-                {Username: {$regex:search}}
+                    {Name: {$regex:search}},
+                    {Username: {$regex:search}}
                 ]})
+            .populate('GroupID')
+            .populate({path: 'GroupID', populate: {path: 'ProposalID'}})
+
     }
 };
 

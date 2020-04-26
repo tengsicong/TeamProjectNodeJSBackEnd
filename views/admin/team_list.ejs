@@ -150,7 +150,7 @@
         } else if (document.getElementById('addStaffUserName').value == '') {
             alert("Please enter a username")
         } else if (!reg.test(document.getElementById('addStaffUserName').value)) {
-            alert("Invalid username, should be a E-mail")
+            alert("Invalid username, should be an E-mail")
         } else {
             let temp = document.createElement("form");
             temp.action = '/admin/add_new_staff';

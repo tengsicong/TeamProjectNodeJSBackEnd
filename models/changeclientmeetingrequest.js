@@ -35,6 +35,7 @@ module.exports = {
     adminRejectClientRequest: function adminRejectClientRequest (requestID, adminName, comment) {
         return changeclientmeetingrequest
             .findOneAndUpdate({_id: requestID}, {$set: {Status: 'rejected', AdminReply: {AdminName: adminName, Date: new Date(), Content: comment}}},{new:true})
+            .populate('ClientID')
             .exec()
     },
 

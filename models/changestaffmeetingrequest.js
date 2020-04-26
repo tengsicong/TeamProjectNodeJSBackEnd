@@ -25,12 +25,14 @@ module.exports = {
     adminApproveStaffRequest: function adminApproveStaffRequest (id) {
         return changestaffmeetingrequest
             .findOneAndUpdate({_id: id},{$set:{Status: 'approved'}})
+            .populate('StaffID')
 
     },
 
     adminRejectStaffRequest: function adminRejectStaffRequest (requestID, adminName, comment) {
         return changestaffmeetingrequest
             .findOneAndUpdate({_id: requestID}, {$set: {Status: 'rejected', AdminReply: {AdminName: adminName, Date: new Date(), Content: comment}}},{new:true})
+            .populate('StaffID')
             .exec()
     },
 };

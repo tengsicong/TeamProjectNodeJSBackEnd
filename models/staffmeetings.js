@@ -45,18 +45,20 @@ module.exports = {
 
     editStaffMeetingTimeByStaffMeetingID: function editStaffMeetingTimeByStaffMeetingID(id, newTime) {
         return staffmeetings
-            .update({_id: id}, {$set: {Date: newTime}}, {new: true})
+            .findOneAndUpdate({_id: id}, {$set: {Date: newTime}}, {new: true})
+            .populate('TemporaryStaffID')
             .exec()
     },
 
     editStaffMeetingNewStaffByStaffMeetingID: function editStaffMeetingNewStaffByStaffMeetingID(id, newStaffID) {
         return staffmeetings
-            .update({_id: id}, {$set: {TemporaryStaffID: newStaffID}}, {new: true})
+            .findOneAndUpdate({_id: id}, {$set: {TemporaryStaffID: newStaffID}}, {new: true})
+            .populate('TemporaryStaffID')
             .exec()
     },
 
     updateStaffMeetingRecordByMeetingID: function updateStaffMeetingRecordByMeetingID(id,rid) {
-        return staffmeetings.update({_id:id},{$set:{RecordID:rid}});
+        return staffmeetings.findOneAndUpdate({_id:id},{$set:{RecordID:rid}});
     },
 
 

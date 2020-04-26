@@ -9,6 +9,8 @@ const flash = require('connect-flash');
 const config = require('config-lite')(__dirname);
 const routes = require('./routes');
 const pkg = require('./package');
+const bodyParser = require('body-parser');
+
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -19,6 +21,7 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(bodyParser());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
