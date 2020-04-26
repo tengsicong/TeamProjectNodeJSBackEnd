@@ -31,7 +31,7 @@ router.post('/', function(req, res) {
     }
 
     Promise.all([method])
-        .then(function(result,err) {
+        .then(function(result) {
             const person = result[0];
             /*if (staff !== null) {
                 console.log(staff);
@@ -56,7 +56,6 @@ router.post('/', function(req, res) {
             else {
                 res.redirect('/signin?role=' + role);
                 console.log('Invalid username or password');
-                throw error(err);
             }
         })
         .catch(function(err) {
