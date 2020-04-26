@@ -34,7 +34,7 @@ describe('test create proposal',function () {
     it('login client',function (done) {
         client
             .post('/client/myproject/create_project')
-            .send({topic:'myusername01@sheffield.ac.uk', content:'mypassword'})
+            .send({topic:'test', content:'test'})
             .redirects()
             .end(function (err,res) {
                 if(err) {return done(err)}

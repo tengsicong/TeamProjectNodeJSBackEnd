@@ -7,6 +7,7 @@ const teamModel = require('../models/team');
 const stageModel = require('../models/stage');
 const checkStudentLogin = require('../middlewares/check').checkStudentLogin;
 const nodemailer  = require('nodemailer');
+const mongoose = require('mongoose');
 
 const config = require('config-lite')(__dirname);
 let transporter = nodemailer.createTransport(config.transporter);
@@ -124,6 +125,7 @@ router.get('/project_detail', checkStudentLogin, function(req, res) {
         .then(function(result) {
             const student = result[0];
             const proposal = result[1];
+            console.log(proposal);
             res.render('student/project_detail', {
                 pageTitle: 'Project Detail',
                 student: student,
