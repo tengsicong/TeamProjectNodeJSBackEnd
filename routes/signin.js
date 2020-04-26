@@ -57,6 +57,9 @@ router.post('/', function(req, res) {
                 res.redirect('/signin?role=' + role);
                 console.log('Invalid username or password');
             }
+        })
+        .catch(function(err) {
+            console.log("Catch error: " + err);
         });
 });
 
