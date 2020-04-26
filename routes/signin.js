@@ -15,7 +15,7 @@ router.post('/', function(req, res) {
     //console.log('post: ' + role);
     //console.log('u: ' + email);
     //console.log('p: ' + pw);
-    
+
     let method;
     if (role === 'student') {
         method = studentModel.getStudentByUserName(email);
@@ -31,7 +31,7 @@ router.post('/', function(req, res) {
     }
 
     Promise.all([method])
-        .then(function(result) {
+        .then(function(result,err) {
             const person = result[0];
             /*if (staff !== null) {
                 console.log(staff);
@@ -56,6 +56,7 @@ router.post('/', function(req, res) {
             else {
                 res.redirect('/signin?role=' + role);
                 console.log('Invalid username or password');
+                throw error(err);
             }
         })
         .catch(function(err) {

@@ -4,7 +4,7 @@ const clientModel = require('../models/client');
 const proposalModel = require('../models/proposal');
 const teamModel = require('../models/team');
 const mongoose = require('mongoose');
-const nodemailer  = require('nodemailer');
+const nodemailer = require('nodemailer');
 const studentModel = require('../models/student');
 const clientMeetingModel = require('../models/clientmeetings');
 const changeClientMeetingRequestModel = require('../models/changeclientmeetingrequest')
@@ -15,7 +15,7 @@ const config = require('config-lite')(__dirname);
 
 let transporter = nodemailer.createTransport(config.transporter);
 
-router.get('/myproject', checkClientLogin, function (req, res,  next) {
+router.get('/myproject', checkClientLogin, function (req, res, next) {
     Promise.all([
         clientModel.getClientByClientID(req.session.userinfo),
         proposalModel.getProposalByClientID(req.session.userinfo),
@@ -74,20 +74,18 @@ router.post('/myproject/create_project', checkClientLogin, function (req, res, n
         .then(function (result) {
             const admin = result[3];
             const client = result[0];
-            transporter.sendMail({
-                from: config.transporter.auth.user, // sender address
-                to: admin.UserName, // list of receivers
-                subject: 'New proposal from ' + client.Name + ' was created', // Subject line
-                text: client.Name + ' created ' + proposal.Topic + '\n Content:' + proposal.Content, // plain text body
-                html: 'Hi, <br>' + client.Name + ' created a new proposal <b>' + proposal.Topic + '</b><br>' +
-                    '<p>' + proposal.Content + ' <br>Please check and handle it!</p><br>' +
-                    'Team Project', // html body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
-            });
+            const asyncSendMail = async function(){
+                for (let i = 0; i < admin.length; i++) {
+                    let to = ''
+                    to = to + admin[i].UserName + ',';
+                    await transporter.sendMail({
+                        from: config.transporter.auth.user, // sender address
+                        to: admin.UserName, // list of receivers
+                        subject: 'New proposal from ' + client.Name + ' was created', // Subject line
+                        text: client.Name + 'has created a new proposal.',
+                    });
+                }}
+            asyncSendMail().then();
             res.redirect('/client/myproject/project_pending?id=' + proposal._id)
         })
         .catch(next)
@@ -158,20 +156,18 @@ router.post('/myproject/project_pending', checkClientLogin, function (req, res, 
             });
             const addComment = proposalModel.addProposalComment(proposal._id, reply);
             addComment.then(function () {
-                transporter.sendMail({
-                    from: config.transporter.auth.user, // sender address
-                    to: admin.UserName, // list of receivers
-                    subject: 'New comment for ' + proposal.Topic, // Subject line
-                    text: client.Name + ' add new comment for ' + proposal.Topic + '\n Comment:' + comment, // plain text body
-                    html: 'Hi, '+admin.Name+'<br>' + client.Name + ' added new comments for <b>' + proposal.Topic + '</b><br>' +
-                        '<p>' + comment + ' <br>Please check it!</p><br>' +
-                        'Team Project', // html body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
-                });
+                const asyncSendMail = async function(){
+                    for (let i = 0; i < admin.length; i++) {
+                        let to = ''
+                        to = to + admin[i].UserName + ',';
+                        await transporter.sendMail({
+                            from: config.transporter.auth.user, // sender address
+                            to: admin.UserName, // list of receivers
+                            subject: 'New comment for ' + proposal.Topic, // Subject line
+                            text: client.Name + ' add new comment for ' + proposal.Topic, // plain text body
+                        });
+                    }}
+                asyncSendMail().then();
                 res.redirect('/client/myproject/project_pending?id=' + proposalID)
             });
         })
@@ -220,20 +216,18 @@ router.post('/myproject/project_rejected', checkClientLogin, function (req, res,
             });
             const addComment = proposalModel.addProposalComment(proposal._id, reply);
             addComment.then(function () {
-                transporter.sendMail({
-                    from: config.transporter.auth.user, // sender address
-                    to: admin.UserName, // list of receivers
-                    subject: 'New comment for ' + proposal.Topic, // Subject line
-                    text: client.Name + ' add new comment for ' + proposal.Topic + '\n Comment:' + comment, // plain text body
-                    html: 'Hi, '+admin.Name+'<br>' + client.Name + ' added new comments for <b>' + proposal.Topic + '</b><br>' +
-                        '<p>' + comment + ' <br>Please check it!</p><br>' +
-                        'Team Project', // html body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
-                });
+                const asyncSendMail = async function(){
+                    for (let i = 0; i < admin.length; i++) {
+                        let to = ''
+                        to = to + admin[i].UserName + ',';
+                        await transporter.sendMail({
+                            from: config.transporter.auth.user, // sender address
+                            to: admin.UserName, // list of receivers
+                            subject: 'New comment for ' + proposal.Topic, // Subject line
+                            text: client.Name + ' add new comment for ' + proposal.Topic, // plain text body
+                        });
+                    }}
+                asyncSendMail().then();
                 res.redirect('/client/myproject/project_rejected?id=' + proposalID)
             });
         })
@@ -241,7 +235,7 @@ router.post('/myproject/project_rejected', checkClientLogin, function (req, res,
 })
 
 
-router.get('/edit_project',  checkClientLogin, function (req, res, next) {
+router.get('/edit_project', checkClientLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         proposalModel.getProposalByProposalID(proposalID),
@@ -290,19 +284,18 @@ router.post('/delete_project', checkClientLogin, function (req, res, next) {
             const admin = result[2];
             const client = result[0];
             const proposal = result[1];
-            transporter.sendMail({
-                from: config.transporter.auth.user, // sender address
-                to: admin.UserName, // list of receivers
-                subject: 'Delete ' + proposal.Topic, // Subject line
-                text: client.Name + ' delete ' + proposal.Topic, // plain text body
-                html: 'Hi, '+admin.Name+'<br>' + client.Name + ' has deleted <b>' + proposal.Topic + '</b><br>' +
-                    'Team Project', // html body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
-            });
+            const asyncSendMail = async function(){
+                for (let i = 0; i < admin.length; i++) {
+                    let to = ''
+                    to = to + admin[i].UserName + ',';
+                    await transporter.sendMail({
+                        from: config.transporter.auth.user, // sender address
+                        to: admin.UserName, // list of receivers
+                        subject: 'Delete ' + proposal.Topic, // Subject line
+                        text: client.Name + ' delete ' + proposal.Topic, // plain text body
+                    });
+                }}
+            asyncSendMail().then();
             res.redirect('/client/myproject')
         })
         .catch(next)
@@ -405,23 +398,18 @@ router.post('/myteam/teammark', checkClientLogin, function (req, res, next) {
             const students = team.StudentID;
             const client = result[1];
             const proposal = result[2];
-            for(let i=0;i<students.length;i++){
-               const studentEmail = students[i].UserName;
-               const studentName = students[i].Name;
-                transporter.sendMail({
+            const asyncSendMail = async function(){
+            for (let i = 0; i < students.length; i++) {
+                let to = ''
+                to = to + students[i].UserName + ',';
+                await transporter.sendMail({
                     from: config.transporter.auth.user, // sender address
-                    to: studentEmail, // list of receivers
+                    to: to, // list of receivers
                     subject: 'Client Mark for your project ' + proposal.Topic, // Subject line
                     text: client.Name + ' gave client mark for your project ' + proposal.Topic, // plain text body
-                    html: 'Hi, '+studentName+'<br>' + client.Name + ' marked for your project <b>' + proposal.Topic + '</b><br>' +
-                        'Team Project', // html body
-                }, function(error, info) {
-                    if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
                 });
-            }
+            }}
+            asyncSendMail().then();
             res.redirect('/client/myteam/teampage?id=' + teamid);
         })
     })
@@ -475,20 +463,18 @@ router.post('/mytimetable', checkClientLogin, function (req, res, next) {
                 }
             }
             changeClientMeetingRequestModel.createChangeClientMeetingRequest(request);
-            transporter.sendMail({
-                from: config.transporter.auth.user, // sender address
-                to: admin.UserName, // list of receivers
-                subject: 'New change client meeting request from ' + client.Name, // Subject line
-                text: 'Client '+ client.Name + ' send new change meeting request for ' + 'SSIT Team '+result[0].GroupID.TeamName +' Client Meeting '+ result[0].MeetingNumber+ '\n Reason:' + reason, // plain text body
-                html: 'Hi, '+admin.Name+'<br>' + client.Name + ' send new change meeting request for <b>' + 'SSIT Team '+result[0].GroupID.TeamName +' Client Meeting '+ result[0].MeetingNumber + '</b><br>Reason: ' +
-                    '<p>' + reason + ' <br>Please check it!</p><br>' +
-                    'Team Project', // html body
-            }, function(error, info) {
-                if(error)
-                    return console.log(error);
-                console.log(`Message: ${info.messageId}`);
-                console.log(`sent: ${info.response}`);
-            });
+            const asyncSendMail = async function(){
+                for (let i = 0; i < admin.length; i++) {
+                    let to = ''
+                    to = to + admin[i].UserName + ',';
+                    await transporter.sendMail({
+                        from: config.transporter.auth.user, // sender address
+                        to: admin, // list of receivers
+                        subject: 'New change client meeting request from ' + client.Name, // Subject line
+                        text: 'Client ' + client.Name + ' send new change meeting request.',
+                    });
+                }}
+                asyncSendMail().then();
             res.redirect('/client/mytimetable')
         });
 });
