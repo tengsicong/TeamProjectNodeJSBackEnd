@@ -321,3 +321,45 @@ describe('Staff:  test marking',function () {
             })
     })
 })
+
+
+describe('Staff:  test discussion detail',function () {
+    const staff = request.agent(app);
+    const staffID = '5e95b7a191b306cd2ebc527e';
+    it('Staff login',function (done) {
+        staff
+            .post('/signin?role=staff')
+            .send({email:'astratton@sheffield.ac.uk', password:'123456'})
+            .redirects()
+            .end(function (err) {
+                if(err) {return done(err)}
+                else{
+                    should.not.exist(err)
+                    done()}
+            })
+    })
+
+    it('Send discussion reply',function (done) {
+        staff
+            .post('/staff/discussion_detail?id=5e908960b9f622760a6cf6a8')
+            .send({reply:'unit_test'})
+            .redirects()
+            .end(function (err) {
+                if(err) {return done(err)}
+                else{
+                    should.not.exist(err)
+                    done()}
+            })
+    })
+
+    it('Staff signout',function (done) {
+        staff
+            .get('/signout')
+            .end(function (err) {
+                if(err) {return done(err)}
+                else{
+                    should.not.exist(err)
+                    done()}
+            })
+    })
+})
