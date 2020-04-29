@@ -175,7 +175,7 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
     const MeetingId = req.query.seq;
     for(let i=0;i<present.length;i++)
         present[i]%=3;
-    console.log(present);
+    console.log(req.body);
     staffModel.getStaffMeetingByMeetingID(MeetingId)
         .then(function (result) {
             meeting = result;
@@ -202,8 +202,9 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
                 recordModel.deleteStaffMeetingRecordByRecordID(RecordID).then();
             }
             let email = [];
-            for(let i=0;i<studentList.length;i++)
-                email[i] = result.StudentID[i].UserName;
+            console.log(result);
+            for(let i=0;i<present.length;i++)
+                email[i] = result.GroupID.StudentID[i].UserName;
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com',
                 to: email,
@@ -267,6 +268,7 @@ router.get('/meeting_detail_post', checkStaffLogin, function(req, res) {
                 if(record == null)
                 {
                     record = {
+                        Present: [9,9,9,9,9,9,9],
                         LastMeetingNote:'',
                         AchievePlan:'',
                         Change:9,
@@ -307,7 +309,7 @@ router.post('/my_timetable', checkStaffLogin, function (req, res) {
     let meetingidList = meetingchange.split('-');
     let meetingID = meetingidList[1];
     let staffchangeID ;
-
+    console.log(meetingchange);
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
     const adminstatus = adminModel.getAllAdmin();
     const staffID = staffModel.getStaffByName(staffchange)
@@ -431,8 +433,7 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
     const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
     let studentList = [];
-    // console.log(teamcontent);
-    // console.log(teamselect);
+    console.log(req.body);
 
     staffModel.getAllocatedTeamByTeamID(teamid)
         .then(function(result){
@@ -455,7 +456,6 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
                     indiselect[i*2],
                     indiselect[i*2+1],
                 ];
-                console.log(score);
                 reason =[
                 indicontent[i*2],
                 indicontent[i*2+1],
