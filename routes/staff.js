@@ -94,7 +94,6 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
     .then(function (result) {
         ////console.log(result);
         let primaryMeetingResult = result[0];
-        let adminemail = result[1];
         let staffchangeID = result[2]._id;
         let nowStaff = primaryMeetingResult.StaffID;
         if(primaryMeetingResult.TemporaryStaffID != null)
@@ -112,14 +111,14 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
                 Content: changereason,
             }
         };
-        console.log('-------');
-        console.log(result[1]);
-        console.log('-------');
+        let adminemail = [];
+        for(let i = 0;i < result[1].length;i++)
+            adminemail[i] = result[1][i].UserName;
         transporter.sendMail({
-            from: 'ssit_group3@outlook.com',
+            from: 'klxsxweng@gmail.com',
             to: adminemail,
             subject: "SSIT Team Project: a new staff meeting changing request",
-            text: "You have a new staff meeting changing request from Staff " + result[0].StaffID.Name + " .",
+            text: "pre You have a new staff meeting changing request from Staff " + result[0].StaffID.Name + " .",
         });
         staffModel.createMeetingChangeRequest(newRequest)
             .then(function () {
@@ -306,21 +305,15 @@ router.post('/my_timetable', checkStaffLogin, function (req, res) {
     let meetingID = meetingidList[1];
     let staffchangeID ;
     //console.log(meetingchange);
-    const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
-    const adminstatus = adminModel.getAllAdmin();
-    const staffID = staffModel.getStaffByName(staffchange);
-    staffID.then(function (result) {
-        staffchangeID = result._id;
-    })
-    let adminemail = [];
-    adminstatus.then(function (result) {
-        for(var i=0;i<result.size;i++)
-            adminemail[i] = result[i].UserName;
-    })
 
-    primary_meeting.then(function (result) {
+    Promise.all([
+        staffModel.getStaffMeetingByMeetingID(meetingID),
+        adminModel.getAllAdmin(),
+        staffModel.getStaffByName(staffchange),
+    ])
+        .then(function (result) {
         ////console.log(result);
-        primaryMeetingResult = result;
+        primaryMeetingResult = result[0];
         let nowStaff = primaryMeetingResult.StaffID;
         if(primaryMeetingResult.TemporaryStaffID != null)
             nowStaff = primaryMeetingResult.TemporaryStaffID;
@@ -371,11 +364,15 @@ router.post('/my_timetable', checkStaffLogin, function (req, res) {
                 }
             }
         }
+        let adminemail = [];
+        for(let i = 0;i < result[1].length;i++)
+            adminemail[i] = result[1][i].UserName;
+        console.log('-----' + adminemail + '-------');
         transporter.sendMail({
-            from: 'ssit_group3@outlook.com',
+            from: 'klxsxweng@gmail.com',
             to: adminemail,
             subject: "SSIT Team Project: a new staff meeting changing request",
-            text: "You have a new staff meeting changing request from Staff " + result.StaffID.Name + " .",
+            text: "pre You have a new staff meeting changing request from Staff " + result[0].StaffID.Name + " .",
         });
         staffModel.createMeetingChangeRequest(newRequest)
             .then(function () {

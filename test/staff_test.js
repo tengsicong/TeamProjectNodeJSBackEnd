@@ -342,7 +342,7 @@ describe('Staff:  test discussion detail',function () {
 
     it('Send discussion reply',function (done) {
         staff
-            .post('/staff/discussion_detail?id=5e908960b9f622760a6cf6a8')
+            .post('/staff/discussion_details?id=5e908960b9f622760a6cf6a8')
             .send({reply:'unit_test'})
             .redirects()
             .end(function (err) {
