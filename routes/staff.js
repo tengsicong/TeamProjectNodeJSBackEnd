@@ -57,7 +57,7 @@ router.get('/project_detail', checkStaffLogin, function(req, res) {
             let groupMember;
             groupMember = '';
             let stage=result[2];
-            console.log(allTeams[teamID]);
+            //console.log(allTeams[teamID]);
             const max = allTeams[teamID].StudentID.length;
             for (let j = 0; j < max; j++) {
                 groupMember = groupMember + allTeams[teamID].StudentID[j].Name;
@@ -85,7 +85,7 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
     let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
-    console.log(timechange);
+    //console.log(timechange);
     let staffchangeID ;
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
 
@@ -101,7 +101,7 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
     })
 
     primary_meeting.then(function (result) {
-        //console.log(result);
+        ////console.log(result);
         let primaryMeetingResult = result;
         let nowStaff = primaryMeetingResult.StaffID;
         if(primaryMeetingResult.TemporaryStaffID != null)
@@ -148,7 +148,7 @@ router.get('/meeting_detail_pre', checkStaffLogin, function(req, res) {
             let nowStaff = meeting.StaffID;
             if(meeting.TemporaryStaffID != null) {
                 nowStaff = meeting.TemporaryStaffID;
-                //console.log(meeting);
+                ////console.log(meeting);
                 let nowtime = new Date();
                 res.render('staff/meeting_detail_pre',{
                     meeting : meeting,
@@ -175,7 +175,7 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
     const MeetingId = req.query.seq;
     for(let i=0;i<present.length;i++)
         present[i]%=3;
-    console.log(req.body);
+    //console.log(req.body);
     staffModel.getStaffMeetingByMeetingID(MeetingId)
         .then(function (result) {
             meeting = result;
@@ -202,7 +202,7 @@ router.post('/meeting_detail_post', checkStaffLogin, function(req,res) {
                 recordModel.deleteStaffMeetingRecordByRecordID(RecordID).then();
             }
             let email = [];
-            console.log(result);
+            //console.log(result);
             for(let i=0;i<present.length;i++)
                 email[i] = result.GroupID.StudentID[i].UserName;
             transporter.sendMail({
@@ -309,10 +309,10 @@ router.post('/my_timetable', checkStaffLogin, function (req, res) {
     let meetingidList = meetingchange.split('-');
     let meetingID = meetingidList[1];
     let staffchangeID ;
-    console.log(meetingchange);
+    //console.log(meetingchange);
     const primary_meeting = staffModel.getStaffMeetingByMeetingID(meetingID);
     const adminstatus = adminModel.getAllAdmin();
-    const staffID = staffModel.getStaffByName(staffchange)
+    const staffID = staffModel.getStaffByName(staffchange);
     staffID.then(function (result) {
         staffchangeID = result._id;
     })
@@ -323,14 +323,14 @@ router.post('/my_timetable', checkStaffLogin, function (req, res) {
     })
 
     primary_meeting.then(function (result) {
-        //console.log(result);
+        ////console.log(result);
         primaryMeetingResult = result;
         let nowStaff = primaryMeetingResult.StaffID;
         if(primaryMeetingResult.TemporaryStaffID != null)
             nowStaff = primaryMeetingResult.TemporaryStaffID;
         let newRequest;
         if(staffchangeID == null){
-            console.log('no staff');
+            //console.log('no staff');
             newRequest = {
                 _id: mongoose.Types.ObjectId(),
                 MeetingID: meetingID,
@@ -345,7 +345,7 @@ router.post('/my_timetable', checkStaffLogin, function (req, res) {
             }
         }
         else if(timechange == null || timechange === '') {
-            console.log('no time');
+            //console.log('no time');
             newRequest = {
                 _id:mongoose.Types.ObjectId(),
                 MeetingID:meetingID,
@@ -411,7 +411,7 @@ router.get('/my_timetable', checkStaffLogin, function(req, res) {
                 meetingStaff[i] = (meetingList[i].TemporaryStaffID == null)? meetingList[i].StaffID:meetingList[i].TemporaryStaffID;
                 delnumber+=(meetingList[i].GroupID.ProposalID == null);
             }
-            console.log(meetingList);
+            //console.log(meetingList);
             res.render('staff/my_timetable', {
                 pageTitle: 'My Timetable',
                 username: staff.Name,
@@ -433,7 +433,7 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
     const indicontent = req.body.t2;
     const teamid = mongoose.Types.ObjectId(req.query.id);
     let studentList = [];
-    console.log(req.body);
+    //console.log(req.body);
 
     staffModel.getAllocatedTeamByTeamID(teamid)
         .then(function(result){
@@ -444,6 +444,7 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
              let email = [];
             for(let i=0;i<studentList.length;i++)
                 email[i] = result.StudentID[i].UserName;
+            console.log(email);
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com',
                 to: email,
@@ -462,7 +463,7 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
                 ];
                 staffModel.updateIndeMark(studentList[i]._id,score,reason)
                     .then(function () {
-                        //console.log(studentList[i]._id);
+                        ////console.log(studentList[i]._id);
                     })
             }
     })
@@ -511,7 +512,7 @@ router.get('/marking', checkStaffLogin, function(req, res) {
                 'Poor',
             ];
             const scores = [5,5,5,5,5,5,5,10,5];
-            //console.log(teamID);
+            ////console.log(teamID);
             res.render('staff/marking', {
                 pageTitle: 'Marking',
                 username: staff.Name,
@@ -552,7 +553,7 @@ router.get('/discussion', checkStaffLogin, function(req, res) {
             };
 
             completedQA().then(function(qa) {
-                //console.log(qa);
+                ////console.log(qa);
                 res.render('staff/discussion', {
                     pageTitle: 'Discussion',
                     username: staff.Name,
@@ -569,7 +570,7 @@ router.get('/discussion_details', checkStaffLogin, function(req, res) {
     routePromise.then(function(staff) {
         const detailPromise = qaModel.getQAByQAID(questionID);
         detailPromise.then(function(qa){
-            //console.log(qa);
+            ////console.log(qa);
             res.render('staff/discussion_details', {
                 pageTitle: qa.Topic + ' - Discussion Details',
                 username: staff.Name,
@@ -587,7 +588,7 @@ router.post('/discussion_details', checkStaffLogin, function(req, res) {
     routePromise.then(function(staff) {
         const detailPromise = qaModel.getQAByQAID(questionID);
         detailPromise.then(function(qa){
-            console.log(qa);
+            //console.log(qa);
             const updatePromise = qaModel.updateReplyByQAID(qa._id, {
                 Author: staff.Name,
                 Comment: reply,
@@ -604,9 +605,9 @@ router.post('/discussion_details', checkStaffLogin, function(req, res) {
                             'Team Project', // html body
                 }, function(error, info) {
                     if(error)
-                        return console.log(error);
-                    console.log(`Message: ${info.messageId}`);
-                    console.log(`sent: ${info.response}`);
+                        return //console.log(error);
+                    //console.log(`Message: ${info.messageId}`);
+                    //console.log(`sent: ${info.response}`);
                 });
                 res.redirect('discussion_details?id=' + qa._id);
             });

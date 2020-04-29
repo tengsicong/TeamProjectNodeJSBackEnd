@@ -128,7 +128,7 @@ describe('Staff: Stage 0 test',function () {
 
 describe('Staff: Stage 1 test mytimetable post',function () {
     const staff = request.agent(app);
-    const staffID = mongoose.Types.ObjectId('5e95b7a191b306cd2ebc527e');
+    const staffName = 'Ben Hawker';
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -145,7 +145,7 @@ describe('Staff: Stage 1 test mytimetable post',function () {
     it('Send change meeting request',function (done) {
         staff
             .post('/staff/my_timetable')
-            .send({timechange:new Date(), changestaff:staffID, meetingID:'123-5e7aaa02c35155e53fe5c97e',t1:'test_test'})
+            .send({timechange:new Date(), changestaff:staffName, meetingID:'123-5e7aaa02c35155e53fe5c97e',t1:'test_test'})
             .redirects()
             .end(function (err) {
                 if(err) {return done(err)}
@@ -173,7 +173,7 @@ describe('Staff: Stage 1 test mytimetable post',function () {
 describe('Staff:  test meeting detail pre',function () {
 
     const staff = request.agent(app);
-    const staffID = '5e95b7a191b306cd2ebc527e';
+    const staffName = 'Ben Hawker';
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -190,7 +190,7 @@ describe('Staff:  test meeting detail pre',function () {
     it('Send change meeting request',function (done) {
         staff
             .post('/staff/meeting_detail_pre?seq=5e7aaa02c35155e53fe5c97e')
-            .send({timechange:new Date(), staffchange:staffID,changereason:'test_test'})
+            .send({timechange:new Date(), staffchange:staffName,changereason:'test_test'})
             .redirects()
             .end(function (err) {
                 if(err) {return done(err)}
