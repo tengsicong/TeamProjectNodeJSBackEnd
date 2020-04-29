@@ -10,6 +10,7 @@ const staffID = '5e95b7a191b306cd2ebc527e';
 describe('Staff: Stage 0 test',function () {
     const  staff= request.agent(app);
     const meetingID = '5e7aaa02c35155e53fe5c97e';
+    
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -129,6 +130,7 @@ describe('Staff: Stage 0 test',function () {
 describe('Staff: Stage 1 test mytimetable post',function () {
     const staff = request.agent(app);
     const staffName = 'Ben Hawker';
+
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -155,7 +157,6 @@ describe('Staff: Stage 1 test mytimetable post',function () {
             })
     })
 
-
     it('Staff signout',function (done) {
         staff
             .get('/signout')
@@ -171,9 +172,9 @@ describe('Staff: Stage 1 test mytimetable post',function () {
 })
 
 describe('Staff:  test meeting detail pre',function () {
-
     const staff = request.agent(app);
     const staffName = 'Ben Hawker';
+
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -214,7 +215,7 @@ describe('Staff:  test meeting detail pre',function () {
 
 describe('Staff:  test meeting detail post',function () {
     const staff = request.agent(app);
-    const staffID = '5e95b7a191b306cd2ebc527e';
+
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -255,7 +256,7 @@ describe('Staff:  test meeting detail post',function () {
 
 describe('Staff:  test marking',function () {
     const staff = request.agent(app);
-    const staffID = '5e95b7a191b306cd2ebc527e';
+
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
@@ -325,7 +326,7 @@ describe('Staff:  test marking',function () {
 
 describe('Staff:  test discussion detail',function () {
     const staff = request.agent(app);
-    const staffID = '5e95b7a191b306cd2ebc527e';
+
     it('Staff login',function (done) {
         staff
             .post('/signin?role=staff')
