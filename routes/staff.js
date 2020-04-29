@@ -444,7 +444,7 @@ router.post('/marking', checkStaffLogin, function (req,res,next) {
              let email = [];
             for(let i=0;i<studentList.length;i++)
                 email[i] = result.StudentID[i].UserName;
-            console.log(email);
+            //console.log(email);
             transporter.sendMail({
                 from: 'ssit_group3@outlook.com',
                 to: email,
