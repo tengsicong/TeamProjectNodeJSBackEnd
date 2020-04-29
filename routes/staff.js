@@ -85,24 +85,17 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
     let timechange = req.body.timechange;
     let staffchange = req.body.staffchange;
     let changereason = req.body.changereason;
-    //console.log(timechange);
-    let staffchangeID ;
-    const primary_meeting = staffModel.getStaffMeetingByMeetingID(req.query.seq);
 
-    const staffID = staffModel.getStaffByName(staffchange);
-    staffID.then(function (result) {
-        staffchangeID = result._id;
-    });
-
-    let adminemail = [];
-    adminstatus.then(function (result) {
-        for(var i=0;i<result.size;i++)
-            adminemail[i] = result[i].UserName;
-    })
-
-    primary_meeting.then(function (result) {
+    Promise.all([
+        staffModel.getStaffMeetingByMeetingID(req.query.seq),
+        adminModel.getAllAdmin(),
+        staffModel.getStaffByName(staffchange),
+    ])
+    .then(function (result) {
         ////console.log(result);
-        let primaryMeetingResult = result;
+        let primaryMeetingResult = result[0];
+        let adminemail = result[1];
+        let staffchangeID = result[2]._id;
         let nowStaff = primaryMeetingResult.StaffID;
         if(primaryMeetingResult.TemporaryStaffID != null)
             nowStaff = primaryMeetingResult.TemporaryStaffID;
@@ -119,11 +112,14 @@ router.post('/meeting_detail_pre', checkStaffLogin, function(req,res) {
                 Content: changereason,
             }
         };
+        console.log('-------');
+        console.log(result[1]);
+        console.log('-------');
         transporter.sendMail({
             from: 'ssit_group3@outlook.com',
             to: adminemail,
             subject: "SSIT Team Project: a new staff meeting changing request",
-            text: "You have a new staff meeting changing request from Staff " + result.StaffID.Name + " .",
+            text: "You have a new staff meeting changing request from Staff " + result[0].StaffID.Name + " .",
         });
         staffModel.createMeetingChangeRequest(newRequest)
             .then(function () {
