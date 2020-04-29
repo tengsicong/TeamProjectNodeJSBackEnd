@@ -989,20 +989,20 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
             const proposal = result[1];
             const asyncSendMail = async function(){
                 await transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'SSIT Team Project: project deleted', // Subject line
-                text: 'Your project: ' + proposal.Topic + ' has been deleted. ', // plain text body
-            } );}
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: project deleted', // Subject line
+                    text: 'Your project: ' + proposal.Topic + ' has been deleted. ', // plain text body
+                } );}
             asyncSendMail().then();
 
-    Promise.all([
-        clientModel.deleteProposalFromClientListByProposalID(client._id,proposalID),
-        proposalModel.deleteProposal(proposalID)
-    ])
-        .then(function (result) {
-            res.redirect('/admin/project_list')
-        })
+            Promise.all([
+                clientModel.deleteProposalFromClientListByProposalID(client._id,proposalID),
+                proposalModel.deleteProposal(proposalID)
+            ])
+                .then(function (result) {
+                    res.redirect('/admin/project_list')
+                })
         })
         .catch(next)
 });
