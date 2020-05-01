@@ -8,53 +8,61 @@
                 <table width="100%">
                     <tr>
                         <td width="70%"><h2 style="color:#629aa9">Student list</h2></td>
-                        <td width="10%"><input id="search" type="search" placeholder="student name..."></td>
-
+                        <td width="10%"><input id="search" type="search" placeholder="student name..." onfocus="this.placeholder=''" onblur="this.placeholder='student name...'"></td>
                         <td width="10%">
-<!--                                <button onclick="getSearchPage()" type="button" class="btn btn-primary">search</button>-->
                             <button onclick="getSearchPage()" type="button" class="btn btn-primary">search</button>
-<!--                            <input id="btn" class="btn btn-primary" type="button" value="search">-->
-                        </td>
-                        <td width="10%">
-                            <button data-toggle="modal" data-target="#add_new_student" data-whatever="@AddNewStudent"
-                                    class="btn btn-primary" style="float:right;">addstudent
-                            </button>
-                            <div class="modal fade" id="add_new_student" tabindex="-1" role="dialog"
-                                 aria-labelledby="exampleModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title" id="exampleModalLabel">addstudent</h3>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group" style="align-items: center">
-                                                <h4>student's name:</h4>
-                                                <br>
-                                                <input class="form-control" id="addStudentName" style="width: 100%">
-
-                                            </div>
-                                            <div class="form-group" style="align-items: center">
-                                                <h4>student's username(should be a E-mail format):</h4>
-                                                <br>
-                                                <input class="form-control" id="addStudentUserName" style="width: 100%">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="addNewStudent()">
-                                                Set
-                                            </button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </td>
                     </tr>
                 </table>
             </div>
             <br/>
+                <div class="blank-page widget-shadow scroll">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <h2><b>Add a student</b></h2>
+                                <p>Click button to add students.</p>
+                            </td>
+
+                            <td width="10%">
+                                <button data-toggle="modal" data-target="#add_new_student" data-whatever="@AddNewStudent"
+                                        class="btn btn-primary" style="float:right;">addstudent
+                                </button>
+                                <div class="modal fade" id="add_new_student" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="exampleModalLabel">addstudent</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group" style="align-items: center">
+                                                    <h4>student's name:</h4>
+                                                    <br>
+                                                    <input class="form-control" id="addStudentName" style="width: 100%">
+
+                                                </div>
+                                                <div class="form-group" style="align-items: center">
+                                                    <h4>student's username(should be a E-mail format):</h4>
+                                                    <br>
+                                                    <input class="form-control" id="addStudentUserName" style="width: 100%">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="addNewStudent()">
+                                                    Set
+                                                </button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             <ul id="list">
                 <div class="blank-page widget-shadow" data-example-id="contextual-table" style="margin-top:10px">
                     <div class="table" width="100%">

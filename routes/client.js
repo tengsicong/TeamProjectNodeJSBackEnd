@@ -102,7 +102,6 @@ router.get('/myproject/project_approved', checkClientLogin, function (req, res, 
     ])
         .then(function (result) {
             const stage = result[3][0];
-            console.log(result[1])
             res.render('client/project_approved', {
                 proposal: result[0],
                 pageTitle: result[0].Topic,

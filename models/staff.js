@@ -72,7 +72,7 @@ module.exports = {
         return team
             .findById(id)
             .populate('StaffID','Name')
-            .populate('StudentID','Name StaffMark StaffFeedback')
+            .populate('StudentID')
             .populate('Representer','Name')
             .populate('ProposalID','Content')
             .populate({path: 'ProposalID', populate: {path: 'ClientID'}})

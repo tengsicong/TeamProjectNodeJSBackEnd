@@ -6,11 +6,26 @@
             <div>
                 <table width="100%">
                     <tr>
-                        <td width="70%"><h2 style="color:#629aa9">Student list</h2></td>
-                        <td width="10%"><input id="search" type="search" placeholder="student name..."></td>
+                        <td width="75%"><h2 style="color:#629aa9">Student list</h2></td>
+                        <td width="10%"><input id="search" type="search" placeholder="<%= searchCondition %>" onfocus="this.placeholder=''" onblur="this.placeholder='...'"></td>
                         <td width="10%">
                             <button onclick="getSearchPage()" type="button" class="btn btn-primary">search</button>
                         </td>
+                        <td style="float: right">
+                            <button onclick="{ location.href='./student_list'}" type="button" class="btn btn-danger">clean</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+            <div class="blank-page widget-shadow scroll">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <h2><b>Add a student</b></h2>
+                            <p>Click button to add students.</p>
+                        </td>
+
                         <td width="10%">
                             <button data-toggle="modal" data-target="#add_new_student" data-whatever="@AddNewStudent"
                                     class="btn btn-primary" style="float:right;">addstudent
@@ -27,6 +42,7 @@
                                                 <h4>student's name:</h4>
                                                 <br>
                                                 <input class="form-control" id="addStudentName" style="width: 100%">
+
                                             </div>
                                             <div class="form-group" style="align-items: center">
                                                 <h4>student's username(should be a E-mail format):</h4>
@@ -49,7 +65,6 @@
                     </tr>
                 </table>
             </div>
-            <br/>
             <ul id="list">
                 <div class="blank-page widget-shadow" data-example-id="contextual-table" style="margin-top:10px">
                     <div class="table" width="100%">
