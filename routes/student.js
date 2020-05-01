@@ -88,7 +88,6 @@ router.get('/student_qa_detail', checkStudentLogin, function(req, res) {
         .then(function(result) {
             const student = result[0];
             const qa = result[1];
-            console.log(qa)
             res.render('student/student_qa_detail', {
                 pageTitle: 'Question Detail',
                 student: student,
@@ -125,7 +124,6 @@ router.get('/project_detail', checkStudentLogin, function(req, res) {
         .then(function(result) {
             const student = result[0];
             const proposal = result[1];
-            console.log(proposal);
             res.render('student/project_detail', {
                 pageTitle: 'Project Detail',
                 student: student,
@@ -225,7 +223,6 @@ router.post('/set_people_preference', checkStudentLogin, function (req, res) {
             studentModel.deletePeopleLikeByStudentID((req.session.userinfo)),
         ]).then();
     }
-    console.log(array.length)
     if(array.length != 0) {
         studentModel.deletePeopleDontLikeByStudentID(req.session.userinfo).then();
         array.forEach(function (element) {
@@ -301,8 +298,6 @@ router.post('/marking_teammate', checkStudentLogin, function(req, res) {
 router.post('/post_reply', checkStudentLogin, function(req, res) {
     const reply = req.body.reply;
     const name = req.body.name;
-    console.log(name);
-    console.log(reply);
     const id = mongoose.Types.ObjectId(req.query.id);
     studentStaffQAModel.postReplyByQAID(id, name, reply).then();
     res.redirect('/student/student_qa_detail?id=' + id);

@@ -66,7 +66,7 @@ router.get('/edit_team', checkAdminLogin, function (req, res) {
 });
 
 /* GET new team page. */
-router.get('/new_team', checkAdminLogin,function (req, res) {
+router.get('/new_team', checkAdminLogin, function (req, res) {
     const Tid = mongoose.Types.ObjectId(req.query.id);
 
     Promise.all([
@@ -182,17 +182,17 @@ router.post('/submit_editteam', checkAdminLogin, function (req, res) {
                 for (let j = 0; j < prestaffmeetingID.length; j++) {
                     staffMeetingModel.deletePreStaffMeeting(prestaffmeetingID[j]).then();
                 }
-                    staffModel.addNewStaffGroupID(staffID, Tid)
+                staffModel.addNewStaffGroupID(staffID, Tid)
                 for (let j = 0; j < studentIDArray.length; j++) {
-                    studentModel.addNewStudentGroupID((studentIDArray[j]),Tid )
+                    studentModel.addNewStudentGroupID((studentIDArray[j]), Tid)
                 }
-                    res.redirect('/admin/team_list')
+                res.redirect('/admin/team_list')
             })
 
     });
 });
 
-router.get('/team_list', checkAdminLogin,function (req, res) {
+router.get('/team_list', checkAdminLogin, function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         teamModel.getAllTeam(),
@@ -207,7 +207,7 @@ router.get('/team_list', checkAdminLogin,function (req, res) {
             });
         });
 });
-router.get('/student_list', checkAdminLogin,function (req, res) {
+router.get('/student_list', checkAdminLogin, function (req, res) {
 
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -329,8 +329,8 @@ router.get('/timetable_change', checkAdminLogin, function (req, res) {
                 admin: admin,
                 allStaff: allStaff,
                 allTeam: allTeam,
-                allClientMeeting : allClientMeeting,
-                allStaffMeeting : allStaffMeeting,
+                allClientMeeting: allClientMeeting,
+                allStaffMeeting: allStaffMeeting,
                 changeStaffMeetingRequest: changeStaffMeetingRequest,
                 changeClientMeetingRequest: changeClientMeetingRequest,
             });
@@ -338,7 +338,7 @@ router.get('/timetable_change', checkAdminLogin, function (req, res) {
 });
 
 
-router.post('/client_timetable_change', checkAdminLogin,function (req, res) {
+router.post('/client_timetable_change', checkAdminLogin, function (req, res) {
     const changeClientMeetingID = mongoose.Types.ObjectId(req.body.client_meetingid);
     const changeClientMeetingDate = req.body.client_changetime;
     const changeClientMeetingPlace = req.body.client_place;
@@ -346,16 +346,16 @@ router.post('/client_timetable_change', checkAdminLogin,function (req, res) {
         clientMeetingModel.getClientMeetingByMeetingID(changeClientMeetingID),
     ])
         .then(function (result) {
-            if(changeClientMeetingPlace == ''){
-                clientMeetingModel.updateClientMeetingByMeetingID(changeClientMeetingID,changeClientMeetingDate,result[0].Place)
-            }else{
-                clientMeetingModel.updateClientMeetingByMeetingID(changeClientMeetingID,changeClientMeetingDate,changeClientMeetingPlace)
+            if (changeClientMeetingPlace == '') {
+                clientMeetingModel.updateClientMeetingByMeetingID(changeClientMeetingID, changeClientMeetingDate, result[0].Place)
+            } else {
+                clientMeetingModel.updateClientMeetingByMeetingID(changeClientMeetingID, changeClientMeetingDate, changeClientMeetingPlace)
             }
         })
     res.redirect('/admin/timetable_change');
 });
 
-router.post('/staff_timetable_change', checkAdminLogin,function (req, res) {
+router.post('/staff_timetable_change', checkAdminLogin, function (req, res) {
     const changeStaffMeetingID = mongoose.Types.ObjectId(req.body.staff_meetingid);
     const changeStaffMeetingDate = req.body.staff_changetime;
     const changeStaffMeetingPlace = req.body.staff_place;
@@ -364,42 +364,42 @@ router.post('/staff_timetable_change', checkAdminLogin,function (req, res) {
         staffMeetingModel.getStaffMeetingByMeetingID(changeStaffMeetingID),
     ])
         .then(function (result) {
-            if(changeStaffMeetingDate == '' ){
-                if(changeStaffMeetingPlace == ''){
-                staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,result[0].Date,result[0].Place,TempStaffID)
-                } else if(changeStaffMeetingPlace != ''){
-                    if(TempStaffID!='none'){
-                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,result[0].Date,changeStaffMeetingPlace,TempStaffID)
-                    }else{
-                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID,result[0].Date,changeStaffMeetingPlace)
+            if (changeStaffMeetingDate == '') {
+                if (changeStaffMeetingPlace == '') {
+                    staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID, result[0].Date, result[0].Place, TempStaffID)
+                } else if (changeStaffMeetingPlace != '') {
+                    if (TempStaffID != 'none') {
+                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID, result[0].Date, changeStaffMeetingPlace, TempStaffID)
+                    } else {
+                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID, result[0].Date, changeStaffMeetingPlace)
                     }
                 }
-            }else if(changeStaffMeetingDate != ''){
-                if(changeStaffMeetingPlace == ''){
-                    if(TempStaffID!='none'){
-                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,result[0].Place,TempStaffID)
+            } else if (changeStaffMeetingDate != '') {
+                if (changeStaffMeetingPlace == '') {
+                    if (TempStaffID != 'none') {
+                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID, changeStaffMeetingDate, result[0].Place, TempStaffID)
                     } else {
-                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,result[0].Place)
+                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID, changeStaffMeetingDate, result[0].Place)
                     }
-                } else if(changeStaffMeetingPlace != ''){
-                    if(TempStaffID!='none'){
-                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,changeStaffMeetingPlace,TempStaffID)
+                } else if (changeStaffMeetingPlace != '') {
+                    if (TempStaffID != 'none') {
+                        staffMeetingModel.updateStaffMeetingWithTempStaffByMeetingID(changeStaffMeetingID, changeStaffMeetingDate, changeStaffMeetingPlace, TempStaffID)
                     } else {
-                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID,changeStaffMeetingDate,changeStaffMeetingPlace)
+                        staffMeetingModel.updateStaffMeetingByMeetingID(changeStaffMeetingID, changeStaffMeetingDate, changeStaffMeetingPlace)
                     }
                 }
             }
         })
-        res.redirect('/admin/timetable_change');
+    res.redirect('/admin/timetable_change');
 });
 
-router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
+router.post('/staff_request_reject', checkAdminLogin, function (req, res) {
     console.log('srr')
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
     adminModel.getAdminByID(req.session.userinfo).then(function (result) {
         changeStaffMeetingRequestModel.adminRejectStaffRequest(requestID, result.Name, reason).then(
-            function(staffChange){
+            function (staffChange) {
                 const asyncSendMail = async function () {
                     await transporter.sendMail({
                         from: 'ssit_group3@outlook.com', // sender address
@@ -416,13 +416,13 @@ router.post('/staff_request_reject',checkAdminLogin, function (req, res) {
     })
 })
 
-router.post('/client_request_reject', checkAdminLogin,function (req, res) {
+router.post('/client_request_reject', checkAdminLogin, function (req, res) {
     console.log('crr')
     const requestID = mongoose.Types.ObjectId(req.body.requestID);
     const reason = req.body.reason;
     adminModel.getAdminByID(req.session.userinfo).then(function (result) {
         changeClientMeetingRequestModel.adminRejectClientRequest(requestID, result.Name, reason).then(
-            function(clientChange){
+            function (clientChange) {
                 const asyncSendMail = async function () {
                     await transporter.sendMail({
                         from: 'ssit_group3@outlook.com', // sender address
@@ -436,11 +436,11 @@ router.post('/client_request_reject', checkAdminLogin,function (req, res) {
                 asyncSendMail().then();
                 res.redirect('/admin/timetable_change')
             }
-            )
+        )
     })
 })
 
-router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
+router.get('/staff_request_approve', checkAdminLogin, function (req, res) {
     console.log('sra')
     const requestID = mongoose.Types.ObjectId(req.query.id);
     changeStaffMeetingRequestModel.adminApproveStaffRequest(requestID).then(function (result) {
@@ -463,47 +463,47 @@ router.get('/staff_request_approve', checkAdminLogin,function (req, res) {
             Promise.all([
                 staffMeetingModel.editStaffMeetingNewStaffByStaffMeetingID(staffMeetingID, newStaff)
             ])
-           .then(
-            function (newResult) {
-                const newStaffID = newResult[0].TemporaryStaffID;
-                const newStaffUserName = newStaffID.UserName;
-                const asyncSendMail = async function () {
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        // from: '1010870945@qq.com',
-                        to: newStaffUserName, // list of receivers
-                        subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
-                        text: 'Hi,' + newStaffID.Name + '!' + '\n You have a new change of meeting.', // plain text body
-                        html: 'Hi, <br> <b>' + newStaffID.Name + '</b>!' + '\n You have a new change of a meeting.',// html body
-                    }).then(console.log);
-                }
-                asyncSendMail().then();
-            })
+                .then(
+                    function (newResult) {
+                        const newStaffID = newResult[0].TemporaryStaffID;
+                        const newStaffUserName = newStaffID.UserName;
+                        const asyncSendMail = async function () {
+                            await transporter.sendMail({
+                                from: 'ssit_group3@outlook.com', // sender address
+                                // from: '1010870945@qq.com',
+                                to: newStaffUserName, // list of receivers
+                                subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
+                                text: 'Hi,' + newStaffID.Name + '!' + '\n You have a new change of meeting.', // plain text body
+                                html: 'Hi, <br> <b>' + newStaffID.Name + '</b>!' + '\n You have a new change of a meeting.',// html body
+                            }).then(console.log);
+                        }
+                        asyncSendMail().then();
+                    })
         }
         if (result.NewMeetingTime != undefined) {
             const newMeetingTime = result.NewMeetingTime;
             staffMeetingModel.editStaffMeetingTimeByStaffMeetingID(staffMeetingID, newMeetingTime).then(
-            function (newResult) {
-                const newStaffID = newResult.TemporaryStaffID;
-                const asyncSendMail = async function () {
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        // from: '1010870945@qq.com',
-                        to: newStaffID.UserName, // list of receivers
-                        subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
-                        text: 'Hi,' + newStaffID.Name + '!' + '\n You have a new change of meeting.', // plain text body
-                        html: 'Hi, <br> <b>' + newStaffID.Name + '</b>!' + '\n You have a new change of a meeting.',// html body
-                    }).then(console.log);
+                function (newResult) {
+                    const newStaffID = newResult.TemporaryStaffID;
+                    const asyncSendMail = async function () {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            // from: '1010870945@qq.com',
+                            to: newStaffID.UserName, // list of receivers
+                            subject: 'SSIT Team Project: Update Meeting Change! ', // Subject line
+                            text: 'Hi,' + newStaffID.Name + '!' + '\n You have a new change of meeting.', // plain text body
+                            html: 'Hi, <br> <b>' + newStaffID.Name + '</b>!' + '\n You have a new change of a meeting.',// html body
+                        }).then(console.log);
+                    }
+                    asyncSendMail().then();
                 }
-                asyncSendMail().then();
-            }
             )
         }
     })
     res.redirect('/admin/timetable_change')
 })
 
-router.get('/client_request_approve',checkAdminLogin, function (req, res) {
+router.get('/client_request_approve', checkAdminLogin, function (req, res) {
     console.log('cra')
     const requestID = mongoose.Types.ObjectId(req.query.id);
     changeClientMeetingRequestModel.adminApproveClientRequest(requestID).then(function (result) {
@@ -542,7 +542,7 @@ router.get('/project_list', checkAdminLogin, function (req, res, next) {
         });
 });
 
-router.get('/edit_project', checkAdminLogin,function (req, res, next) {
+router.get('/edit_project', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -559,7 +559,7 @@ router.get('/edit_project', checkAdminLogin,function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_approved',checkAdminLogin, function (req, res, next) {
+router.get('/project_approved', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -584,7 +584,7 @@ router.get('/project_approved',checkAdminLogin, function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_pending', checkAdminLogin,function (req, res, next) {
+router.get('/project_pending', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -602,7 +602,7 @@ router.get('/project_pending', checkAdminLogin,function (req, res, next) {
         .catch(next);
 });
 
-router.get('/project_rejected',checkAdminLogin, function (req, res, next) {
+router.get('/project_rejected', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -620,7 +620,7 @@ router.get('/project_rejected',checkAdminLogin, function (req, res, next) {
         .catch(next);
 });
 
-router.get('/student_detail', checkAdminLogin,function (req, res, next) {
+router.get('/student_detail', checkAdminLogin, function (req, res, next) {
     const studentID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
@@ -644,34 +644,34 @@ router.get('/student_detail', checkAdminLogin,function (req, res, next) {
 });
 
 //edit project
-    router.post('/edit_project', checkAdminLogin,function (req, res, next) {
-        const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
-        const topic = req.body.topic;
-        const content = req.body.content;
-        newDate = new Date();
-        let proposal = {
-            _id: proposalID,
-            Topic: topic,
-            Content: content,
-            Date: newDate,
-        }
-        Promise.all([
-            proposalModel.adminEditProposal(proposal),
-            clientModel.getClientByProposalID(proposalID),
-            teamModel.getGroupByProposalID(proposalID),
-        ])
+router.post('/edit_project', checkAdminLogin, function (req, res, next) {
+    const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
+    const topic = req.body.topic;
+    const content = req.body.content;
+    newDate = new Date();
+    let proposal = {
+        _id: proposalID,
+        Topic: topic,
+        Content: content,
+        Date: newDate,
+    }
+    Promise.all([
+        proposalModel.adminEditProposal(proposal),
+        clientModel.getClientByProposalID(proposalID),
+        teamModel.getGroupByProposalID(proposalID),
+    ])
 
-            .then(function (result) {
-                const client = result[1];
-                const team = result[2];
-                const asyncSendMail = async function(){
-                    await transporter.sendMail({
+        .then(function (result) {
+            const client = result[1];
+            const team = result[2];
+            const asyncSendMail = async function () {
+                await transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: client.UserName, // list of receivers
                     subject: 'SSIT Team Project: project edited', // Subject line
-                    text: 'Your project: ' + topic + ' has been edited. ' , // plain text body
-                } ).then();
-                for(let i=0;i<team.length;i++) {
+                    text: 'Your project: ' + topic + ' has been edited. ', // plain text body
+                }).then();
+                for (let i = 0; i < team.length; i++) {
                     for (let j = 0; j < team[i].StudentID.length; j++) {
                         await transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
@@ -686,14 +686,15 @@ router.get('/student_detail', checkAdminLogin,function (req, res, next) {
                             text: 'Your project: ' + topic + ' has been edited. ', // plain text body
                         }).then();
                     }
-                }}
-                asyncSendMail().then();
-                res.redirect('/admin/project_list')
-            })
-            .catch(next)
-    });
+                }
+            }
+            asyncSendMail().then();
+            res.redirect('/admin/project_list')
+        })
+        .catch(next)
+});
 
-router.get('/pending_approved',checkAdminLogin, function (req, res, next) {
+router.get('/pending_approved', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const newDate = new Date();
     let proposal = {
@@ -710,20 +711,21 @@ router.get('/pending_approved',checkAdminLogin, function (req, res, next) {
         .then(function (result) {
             const client = result[1];
             const proposal1 = result[2];
-            const asyncSendMail = async function(){
+            const asyncSendMail = async function () {
                 await transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'SSIT Team Project: project status changed', // Subject line
-                text: 'Your project: ' + proposal1.Topic + ' has been approved. ', // plain text body
-            } );}
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: project status changed', // Subject line
+                    text: 'Your project: ' + proposal1.Topic + ' has been approved. ', // plain text body
+                });
+            }
             asyncSendMail().then();
             res.redirect('/admin/project_approved?id=' + req.query.id)
         })
         .catch(next)
 });
 
-router.get('/pending_rejected', checkAdminLogin,function (req, res, next) {
+router.get('/pending_rejected', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const newDate = new Date();
     let proposal = {
@@ -740,20 +742,21 @@ router.get('/pending_rejected', checkAdminLogin,function (req, res, next) {
         .then(function (result) {
             const client = result[1];
             const proposal1 = result[2];
-            const asyncSendMail = async function(){
+            const asyncSendMail = async function () {
                 await transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'SSIT Team Project: project status changed', // Subject line
-                text: 'Your project: ' + proposal1.Topic + 'has been rejected. ', // plain text body
-            } );}
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: project status changed', // Subject line
+                    text: 'Your project: ' + proposal1.Topic + 'has been rejected. ', // plain text body
+                });
+            }
             asyncSendMail().then();
             res.redirect('/admin/project_rejected?id=' + req.query.id)
         })
         .catch(next)
 });
 
-router.get('/rejected_pending',checkAdminLogin, function (req, res, next) {
+router.get('/rejected_pending', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     const newDate = new Date();
     let proposal = {
@@ -770,20 +773,21 @@ router.get('/rejected_pending',checkAdminLogin, function (req, res, next) {
         .then(function (result) {
             const client = result[1];
             const proposal1 = result[2];
-            const asyncSendMail = async function(){
+            const asyncSendMail = async function () {
                 await transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'SSIT Team Project: project status changed', // Subject line
-                text: 'Your project: ' + proposal1.Topic + 'has been pending. ', // plain text body
-            } );}
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: project status changed', // Subject line
+                    text: 'Your project: ' + proposal1.Topic + 'has been pending. ', // plain text body
+                });
+            }
             asyncSendMail().then();
             res.redirect('/admin/project_pending?id=' + req.query.id)
         })
         .catch(next)
 });
 
-router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
+router.get('/approved_pending', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.query.id);
     Promise.all([
         teamModel.getGroupByProposalID(proposalID),
@@ -794,50 +798,52 @@ router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
             const teams = result[0];
             const client = result[1];
             const proposal = result[2];
-            const asyncSendMail = async function(){
+            const asyncSendMail = async function () {
                 await transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'SSIT Team Project: project status changed', // Subject line
-                text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
-            } );
-            for(let i=0;i<teams.length;i++) {
-                for (let j = 0; j < teams[i].StudentID.length; j++) {
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: teams[i].StudentID[j].UserName, // list of receivers
-                        subject: 'SSIT Team Project: project status changed', // Subject line
-                        text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
-                    });
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: teams[i].StaffID.UserName, // list of receivers
-                        subject: 'SSIT Team Project: project status changed', // Subject line
-                        text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
-                    });
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: project status changed', // Subject line
+                    text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
+                });
+                for (let i = 0; i < teams.length; i++) {
+                    for (let j = 0; j < teams[i].StudentID.length; j++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: teams[i].StudentID[j].UserName, // list of receivers
+                            subject: 'SSIT Team Project: project status changed', // Subject line
+                            text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
+                        });
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: teams[i].StaffID.UserName, // list of receivers
+                            subject: 'SSIT Team Project: project status changed', // Subject line
+                            text: 'Your project: ' + proposal.Topic + ' has been pending. ', // plain text body
+                        });
+                    }
                 }
-            }}
+            }
             asyncSendMail().then();
 
-            for(let i=0;i<teams.length;i++){
-            proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
-            teamModel.deleteTeamProposalByGroupID(teams[i]._id);
-            Promise.all([
-                clientModel.getClientByProposalID(proposalID),
-                clientMeetingModel.getClientMeetingByGroupID(teams[i]._id),
-            ])
-                .then(function (result) {
-                    const clientID = result[0]._id;
-                    clientModel.deleteGroupFromClientListByGroupID(clientID, teams[i]._id);
-                    const meetings = result[1]
-                    for (let j = 0; j < meetings.length; j++) {
-                        const meetingid = meetings[j]._id;
-                        changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
-                    }
-                    clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
-                    ;
-                })
-        }})
+            for (let i = 0; i < teams.length; i++) {
+                proposalModel.deleteProposalTeamByGroupID(proposalID, teams[i]._id);
+                teamModel.deleteTeamProposalByGroupID(teams[i]._id);
+                Promise.all([
+                    clientModel.getClientByProposalID(proposalID),
+                    clientMeetingModel.getClientMeetingByGroupID(teams[i]._id),
+                ])
+                    .then(function (result) {
+                        const clientID = result[0]._id;
+                        clientModel.deleteGroupFromClientListByGroupID(clientID, teams[i]._id);
+                        const meetings = result[1]
+                        for (let j = 0; j < meetings.length; j++) {
+                            const meetingid = meetings[j]._id;
+                            changeClientMeetingRequestModel.deleteChangeClientMeetingRequestByMeetingID(meetingid);
+                        }
+                        clientMeetingModel.deleteClientMeetingByGroupID(teams[i]._id);
+                        ;
+                    })
+            }
+        })
     const newDate = new Date();
     let proposal = {
         _id: proposalID,
@@ -851,7 +857,7 @@ router.get('/approved_pending', checkAdminLogin,function (req, res, next) {
         .catch(next)
 });
 
-router.post('/project_pending', checkAdminLogin,function (req, res, next) {
+router.post('/project_pending', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     const replyDate = new Date();
@@ -872,13 +878,14 @@ router.post('/project_pending', checkAdminLogin,function (req, res, next) {
             const client = result[2];
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                const asyncSendMail = async function(){
+                const asyncSendMail = async function () {
                     await transporter.sendMail({
-                    from: 'ssit_group3@outlook.com', // sender address
-                    to: client.UserName, // list of receivers
-                    subject: 'SSIT Team Project: new comment received', // Subject line
-                    text: admin.Name + ' has made a comment in your project: ' + proposal.Topic + '.', // plain text body
-                } );}
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: client.UserName, // list of receivers
+                        subject: 'SSIT Team Project: new comment received', // Subject line
+                        text: admin.Name + ' has made a comment in your project: ' + proposal.Topic + '.', // plain text body
+                    });
+                }
                 asyncSendMail().then();
                 res.redirect('/admin/project_pending?id=' + proposalID)
             })
@@ -886,7 +893,7 @@ router.post('/project_pending', checkAdminLogin,function (req, res, next) {
         .catch(next)
 });
 
-router.post('/project_rejected', checkAdminLogin,function (req, res, next) {
+router.post('/project_rejected', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     const comment = req.body.comment;
     const replyDate = new Date();
@@ -907,13 +914,14 @@ router.post('/project_rejected', checkAdminLogin,function (req, res, next) {
             const client = result[2];
             const addComment = proposalModel.addProposalComment(result[1]._id, reply);
             addComment.then(function () {
-                const asyncSendMail = async function(){
+                const asyncSendMail = async function () {
                     await transporter.sendMail({
-                    from: 'ssit_group3@outlook.com', // sender address
-                    to: client.UserName, // list of receivers
-                    subject: 'SSIT Team Project: new comment received', // Subject line
-                    text: admin.Name + ' has made a comment in your project: ' + proposal.Topic + '.', // plain text body
-                } );}
+                        from: 'ssit_group3@outlook.com', // sender address
+                        to: client.UserName, // list of receivers
+                        subject: 'SSIT Team Project: new comment received', // Subject line
+                        text: admin.Name + ' has made a comment in your project: ' + proposal.Topic + '.', // plain text body
+                    });
+                }
                 asyncSendMail().then();
                 res.redirect('/admin/project_rejected?id=' + proposalID)
             })
@@ -922,7 +930,7 @@ router.post('/project_rejected', checkAdminLogin,function (req, res, next) {
 });
 
 //delete team
-router.post('/delete_team', checkAdminLogin,function (req, res, next) {
+router.post('/delete_team', checkAdminLogin, function (req, res, next) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
     const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
     proposalModel.deleteProposalTeamByGroupID(proposalId, teamID);
@@ -946,30 +954,31 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
             }
             clientMeetingModel.deleteClientMeetingByGroupID(teamID);
             ;
-            const asyncSendMail = async function(){
+            const asyncSendMail = async function () {
                 await transporter.sendMail({
                     from: 'ssit_group3@outlook.com', // sender address
                     to: client.UserName, // list of receivers
                     subject: 'SSIT Team Project: team deleted', // Subject line
-                    text: 'Your team ' + teams.TeamName + ' has been deleted from project: '+ proposal.Topic+'.', // plain text body
-                } );
-                if(teams.StaffID!==undefined || teams.StudentID!==undefined){
+                    text: 'Your team ' + teams.TeamName + ' has been deleted from project: ' + proposal.Topic + '.', // plain text body
+                });
+                if (teams.StaffID !== undefined || teams.StudentID !== undefined) {
                     await transporter.sendMail({
                         from: 'ssit_group3@outlook.com', // sender address
                         to: teams.StaffID.UserName, // list of receivers
                         subject: 'SSIT Team Project: team deleted', // Subject line
-                        text: 'Your team ' + teams.TeamName + ' has been deleted from project: '+ proposal.Topic+'.', // plain text body
+                        text: 'Your team ' + teams.TeamName + ' has been deleted from project: ' + proposal.Topic + '.', // plain text body
                     });
                     for (let i = 0; i < teams.StudentID.length; i++) {
                         await transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
                             to: teams.StudentID[i].UserName, // list of receivers
                             subject: 'SSIT Team Project: team deleted', // Subject line
-                            text: 'Your team ' + teams.TeamName + ' has been deleted from project: '+ proposal.Topic+'.', // plain text body
+                            text: 'Your team ' + teams.TeamName + ' has been deleted from project: ' + proposal.Topic + '.', // plain text body
                         });
                     }
+                } else {
                 }
-                else{}}
+            }
             asyncSendMail().then();
             res.redirect('/admin/project_approved?id=' + proposalId)
         })
@@ -978,7 +987,7 @@ router.post('/delete_team', checkAdminLogin,function (req, res, next) {
 
 
 //delete project
-router.post('/delete_project', checkAdminLogin,function (req, res, next) {
+router.post('/delete_project', checkAdminLogin, function (req, res, next) {
     const proposalID = mongoose.Types.ObjectId(req.body.proposalID);
     Promise.all([
         clientModel.getClientByProposalID(proposalID),
@@ -987,27 +996,28 @@ router.post('/delete_project', checkAdminLogin,function (req, res, next) {
         .then(function (result) {
             const client = result[0];
             const proposal = result[1];
-            const asyncSendMail = async function(){
+            const asyncSendMail = async function () {
                 await transporter.sendMail({
-                from: 'ssit_group3@outlook.com', // sender address
-                to: client.UserName, // list of receivers
-                subject: 'SSIT Team Project: project deleted', // Subject line
-                text: 'Your project: ' + proposal.Topic + ' has been deleted. ', // plain text body
-            } );}
+                    from: 'ssit_group3@outlook.com', // sender address
+                    to: client.UserName, // list of receivers
+                    subject: 'SSIT Team Project: project deleted', // Subject line
+                    text: 'Your project: ' + proposal.Topic + ' has been deleted. ', // plain text body
+                });
+            }
             asyncSendMail().then();
 
-    Promise.all([
-        clientModel.deleteProposalFromClientListByProposalID(client._id,proposalID),
-        proposalModel.deleteProposal(proposalID)
-    ])
-        .then(function (result) {
-            res.redirect('/admin/project_list')
-        })
+            Promise.all([
+                clientModel.deleteProposalFromClientListByProposalID(client._id, proposalID),
+                proposalModel.deleteProposal(proposalID)
+            ])
+                .then(function (result) {
+                    res.redirect('/admin/project_list')
+                })
         })
         .catch(next)
 });
 
-router.post('/allocate_team', checkAdminLogin,function (req, res) {
+router.post('/allocate_team', checkAdminLogin, function (req, res) {
     const teamID = mongoose.Types.ObjectId(req.body.teamID);
     const proposalId = mongoose.Types.ObjectId(req.body.proposalID);
     proposalModel.updateGroupOfProposalListByGroupID(proposalId, teamID);
@@ -1053,34 +1063,35 @@ router.post('/allocate_team', checkAdminLogin,function (req, res) {
                     const client = result[0];
                     const teams = result[1];
                     const proposal = result[2];
-                    const asyncSendMail = async function(){
+                    const asyncSendMail = async function () {
                         await transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
                             to: client.UserName, // list of receivers
                             subject: 'SSIT Team Project: team allocated', // Subject line
                             text: 'Your project: ' + proposal.Topic + ' has been allocated a new team. ', // plain text body
-                        } );
+                        });
                         await transporter.sendMail({
                             from: 'ssit_group3@outlook.com', // sender address
                             to: teams.StaffID.UserName, // list of receivers
                             subject: 'SSIT Team Project: team allocated', // Subject line
-                            text: 'Your team has been allocated a project: '+ proposal.Topic, // plain text body
+                            text: 'Your team has been allocated a project: ' + proposal.Topic, // plain text body
                         });
                         for (let i = 0; i < teams.StudentID[i].length; i++) {
                             await transporter.sendMail({
                                 from: 'ssit_group3@outlook.com', // sender address
                                 to: teams.StudentID[i].UserName, // list of receivers
                                 subject: 'SSIT Team Project: team allocated', // Subject line
-                                text: 'Your team has been allocated a project: '+ proposal.Topic, // plain text body
+                                text: 'Your team has been allocated a project: ' + proposal.Topic, // plain text body
                             });
-                        }}
+                        }
+                    }
                     asyncSendMail().then();
                 })
             res.redirect('/admin/project_approved?id=' + proposalId);
         });
 });
 
-router.get('/change_stage', checkAdminLogin,function (req, res) {
+router.get('/change_stage', checkAdminLogin, function (req, res) {
     Promise.all([
         adminModel.getAdminByID(req.session.userinfo),
         stageModel.getStage(),
@@ -1096,7 +1107,7 @@ router.get('/change_stage', checkAdminLogin,function (req, res) {
         })
 });
 
-router.post('/change_stage', checkAdminLogin, function (req,res) {
+router.post('/change_stage', checkAdminLogin, function (req, res) {
     const stage = req.body.stage;
     Promise.all([
         stageModel.changeStage(stage),
@@ -1104,84 +1115,88 @@ router.post('/change_stage', checkAdminLogin, function (req,res) {
         studentModel.getAllStudent(),
         staffModel.getAllStaff(),
     ])
-    .then(function (result) {
-        const client = result[1];
-        const student = result[2];
-        const staff = result[3];
-        const asyncSendMail = async function(){
-            if(stage==0){
-            for(let i=0; i < client.length;i++){
-                let to = ''
-                to = to + client[i].UserName + ',';
-                await transporter.sendMail({
-                    from: 'ssit_group3@outlook.com', // sender address
-                    to: to, // list of receivers
-                    subject: 'SSIT Team Project: stage changed', // Subject line
-                    text: 'Stage has been changed to: ' + stage+'. Now you can create, edit and delete your projects.', // plain text body
-                } ).then();
-            }}
-            if(stage==1){
-                for(let i=0; i < client.length;i++){
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: client[i].UserName, // list of receivers
-                        subject: 'SSIT Team Project: stage changed', // Subject line
-                        text: 'Stage has been changed to: ' + stage+'. Now you cannot create your projects.', // plain text body
-                    } ).then();}
-
-                for(let j=0; j< student.length; j++){
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: student[j].UserName, // list of receivers
-                        subject: 'SSIT Team Project: stage changed', // Subject line
-                        text: 'Stage has been changed to: ' + stage + '.', // plain text body
-                            } ).then();}
-
-                for(let k=0; k< staff.length; k++){
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: staff[k].UserName, // list of receivers
-                        subject: 'SSIT Team Project: stage changed', // Subject line
-                        text: 'Stage has been changed to: ' + stage + '.', // plain text body
-                            } ).then();}
+        .then(function (result) {
+            const client = result[1];
+            const student = result[2];
+            const staff = result[3];
+            const asyncSendMail = async function () {
+                if (stage == 0) {
+                    for (let i = 0; i < client.length; i++) {
+                        let to = ''
+                        to = to + client[i].UserName + ',';
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: to, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '. Now you can create, edit and delete your projects.', // plain text body
+                        }).then();
+                    }
                 }
-            if(stage==2){
+                if (stage == 1) {
+                    for (let i = 0; i < client.length; i++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: client[i].UserName, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '. Now you cannot create your projects.', // plain text body
+                        }).then();
+                    }
 
-                for(let i=0; i < client.length;i++){
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: client[i].UserName, // list of receivers
-                        subject: 'SSIT Team Project: stage changed', // Subject line
-                        text: 'Stage has been changed to: ' + stage+'. Now you can mark your students.', // plain text body
-                    } ).then();}
+                    for (let j = 0; j < student.length; j++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: student[j].UserName, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '.', // plain text body
+                        }).then();
+                    }
 
-                    for(let j=0; j< student.length; j++){
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: student[j].UserName, // list of receivers
-                        subject: 'SSIT Team Project: stage changed', // Subject line
-                        text: 'Stage has been changed to: ' + stage + '.', // plain text body
-                    } ).then();}
+                    for (let k = 0; k < staff.length; k++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: staff[k].UserName, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '.', // plain text body
+                        }).then();
+                    }
+                }
+                if (stage == 2) {
 
-                for(let k=0; k< staff.length; k++){
-                    await transporter.sendMail({
-                        from: 'ssit_group3@outlook.com', // sender address
-                        to: staff[k].UserName, // list of receivers
-                        subject: 'SSIT Team Project: stage changed', // Subject line
-                        text: 'Stage has been changed to: ' + stage + '. Now you can mark for your students.', // plain text body
-                    } ).then();}
+                    for (let i = 0; i < client.length; i++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: client[i].UserName, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '. Now you can mark your students.', // plain text body
+                        }).then();
+                    }
+
+                    for (let j = 0; j < student.length; j++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: student[j].UserName, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '.', // plain text body
+                        }).then();
+                    }
+
+                    for (let k = 0; k < staff.length; k++) {
+                        await transporter.sendMail({
+                            from: 'ssit_group3@outlook.com', // sender address
+                            to: staff[k].UserName, // list of receivers
+                            subject: 'SSIT Team Project: stage changed', // Subject line
+                            text: 'Stage has been changed to: ' + stage + '. Now you can mark for your students.', // plain text body
+                        }).then();
+                    }
                 }
 
-        }
-        asyncSendMail().then();
+            }
+            asyncSendMail().then();
 
 
-
-
-        res.redirect('/admin/change_stage')
-    })
+            res.redirect('/admin/change_stage')
+        })
 });
-
 
 
 module.exports = router;
