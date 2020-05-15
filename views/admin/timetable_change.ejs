@@ -178,8 +178,10 @@
                         <select class="form-control" style="width: 60%" id="staff_meetingid" name="staff_meetingid">
                             <option value="none">-</option>
                             <%for(let i = 0; i < allStaffMeeting.length; i++){%>
+                            <%if(allStaffMeeting[i].GroupID!= undefined){%>
                             <%if(allStaffMeeting[i].GroupID.ProposalID!= undefined){%>
                             <option value="<%= allStaffMeeting[i]._id%>">SSIT Team <%=allStaffMeeting[i].GroupID.TeamName %> Staff Meeting <%= allStaffMeeting[i].MeetingNumber%></option>
+                            <% }%>
                             <%}}%>
                         </select>
                     </div>
