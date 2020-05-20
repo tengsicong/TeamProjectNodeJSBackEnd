@@ -1,7 +1,5 @@
 # Project exclude paths
 /node_modules/
-config/*
-config/*
 npm-debug.log
 node_modules
 coverage
